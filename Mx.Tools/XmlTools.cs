@@ -1,8 +1,7 @@
-﻿using System.Text;
-
-namespace Mx.Peppol.Xml
+﻿namespace Mx.Tools
 {
     using System.IO;
+    using System.Text;
     using System.Xml;
     using System.Xml.Serialization;
 
@@ -29,6 +28,13 @@ namespace Mx.Peppol.Xml
                 string result = r.ReadOuterXml();
                 writer.WriteRaw(result);
             }
+        }
+
+        public static TObject Read<TObject>(Stream s)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(TObject));
+            var result = (TObject) ser.Deserialize(s);
+            return result;
         }
     }
 }

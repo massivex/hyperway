@@ -12,6 +12,7 @@ namespace Mx.Peppol.Sbdh
     using Mx.Peppol.Sbdh.Lang;
     using Mx.Peppol.Xml;
     using Mx.Peppol.Xml.Sbdh;
+    using Mx.Tools;
 
     public class SbdhWriter
     {

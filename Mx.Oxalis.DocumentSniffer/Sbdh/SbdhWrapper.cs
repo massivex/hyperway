@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Oxalis.DocumentSniffer.Sbdh
 {
     using System.IO;
 
-    using Mx.Oxalis.Commons.Interop;
-    using Mx.Peppol.Common.Interop;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Sbdh;
-    using Mx.Peppol.Xml;
+    using Mx.Tools;
 
     /**
      * Takes a document and wraps it together with headers into a StandardBusinessDocument.

@@ -1,18 +1,15 @@
-﻿namespace Mx.Certificates.Validator.Xml
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Mx.Certificates.Validator.Xml
 {
-    using System.Collections.Generic;
     using System.Xml.Serialization;
 
-    public class ValidatorType
+    public class JunctionType
     {
-        public ValidatorType()
-        {
-            this.Rules = new List<ValidationRule>();
-        }
-
-        public string Name { get; set; }
-
-        public int? Timeout { get; set; }
+        [XmlAttribute("type")]
+        public JunctionEnum Type { get; set; }
 
         [XmlArrayItem("Cached", typeof(CachedType))]
         [XmlArrayItem("Chain", typeof(ChainType))]
@@ -31,23 +28,6 @@
         [XmlArrayItem("Signing", typeof(SigningType))]
         [XmlArrayItem("Try", typeof(TryType))]
         [XmlArrayItem("ValidatorReference", typeof(ValidatorReferenceType))]
-        public IList<ValidationRule> Rules { get; set; }
-
-        public string ValidatorReference { get; set; }
-
-        public bool ShouldSerializeName()
-        {
-            return !string.IsNullOrWhiteSpace(this.Name);
-        }
-
-        public bool ShouldSerializeTimeout()
-        {
-            return this.Timeout != null;
-        }
-
-        public bool ShouldSerializeValidatorReference()
-        {
-            return !string.IsNullOrWhiteSpace(this.ValidatorReference);
-        }
+        public List<object> Rules { get; set; }
     }
 }

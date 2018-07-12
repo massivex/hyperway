@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Mx.Certificates.Validator.Api
 {
-    using System.Security.Cryptography.X509Certificates;
 
-    using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
+    using Org.BouncyCastle.Asn1.X509;
+    using Org.BouncyCastle.X509;
 
     /**
      * Defines bucket for certificate allowing customized storage of certificates.
@@ -21,6 +21,6 @@ namespace Mx.Certificates.Validator.Api
          * @return Certificate if found, otherwise null.
          * @throws CertificateBucketException
          */
-        X509Certificate findBySubject(X500DistinguishedName principal); // throws CertificateBucketException;
+        X509Certificate findBySubject(X509Name principal); // throws CertificateBucketException;
     }
 }

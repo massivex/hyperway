@@ -11,7 +11,8 @@ namespace Mx.Certificates.Validator.Xml
         public ValidatorRecipe()
         {
             this.Validators = new List<ValidatorType>();
-            this.CertificateBuckets = new List<CertificateBucketXml>();
+            this.CertificateBuckets = new List<CertificateBucketType>();
+            this.KeyStores = new List<KeyStoreType>();
         }
 
         [XmlAttribute("name")]
@@ -24,6 +25,9 @@ namespace Mx.Certificates.Validator.Xml
         public IList<ValidatorType> Validators { get; set; }
 
         [XmlElement("CertificateBucket")]
-        public IList<CertificateBucketXml> CertificateBuckets { get; set; }
+        public IList<CertificateBucketType> CertificateBuckets { get; set; }
+
+        [XmlElement("KeyStore")]
+        public IList<KeyStoreType> KeyStores { get; set; }
     }
 }

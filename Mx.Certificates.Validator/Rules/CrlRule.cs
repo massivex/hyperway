@@ -14,23 +14,23 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Extension;
 
-    public class CrlRule : ValidatorRule
+    public class CRLRule : ValidatorRule
     {
 
         private const string CRL_EXTENSION = "2.5.29.31";
 
         private CrlFetcher crlFetcher;
 
-        public CrlRule(CrlFetcher crlFetcher)
+        public CRLRule(CrlFetcher crlFetcher)
         {
             this.crlFetcher = crlFetcher;
         }
 
-        public CrlRule(CrlCache crlCache)
+        public CRLRule(CrlCache crlCache)
             : this(new SimpleCachingCrlFetcher(crlCache))
         {}
 
-        public CrlRule()
+        public CRLRule()
         {
             this.crlFetcher = new SimpleCachingCrlFetcher(new SimpleCrlCache());
         }

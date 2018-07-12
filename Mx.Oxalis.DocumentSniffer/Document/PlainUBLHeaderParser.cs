@@ -7,8 +7,8 @@ namespace Mx.Oxalis.DocumentSniffer.Document
 
     using Mx.Oxalis.DocumentSniffer.Identifier;
     using Mx.Oxalis.DocumentSniffer.Parsers;
-    using Mx.Peppol.Common.Interop;
     using Mx.Peppol.Common.Model;
+    using Mx.Tools;
 
     /**
      * Parses the common PEPPOL header information, enough to decide document type and profile

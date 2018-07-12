@@ -7,7 +7,7 @@ namespace Mx.Peppol.Sbdh
     using System.Xml;
 
     using Mx.Peppol.Common.Model;
-    using Mx.Peppol.Xml;
+    using Mx.Tools;
 
     public class SbdWriter : IDisposable
     {

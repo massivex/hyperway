@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Mx.Peppol.Security.Api
 {
-    using System.Security.Cryptography.X509Certificates;
-
     using Mx.Peppol.Common.Code;
+
+    using Org.BouncyCastle.X509;
 
     public interface CertificateValidator
     {
