@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mx.Peppol.Commons\Mx.Peppol.Common.csproj" />
+    <ProjectReference Include="..\Mx.Peppol.Mode\Mx.Peppol.Mode.csproj" />
+    <ProjectReference Include="..\Mx.Peppol.Security\Mx.Peppol.Security.csproj" />
+  </ItemGroup>
+
+</Project>
