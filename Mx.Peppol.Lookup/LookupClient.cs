@@ -25,7 +25,7 @@ namespace Mx.Peppol.Lookup
 
         private CertificateValidator validator;
 
-        internal LookupClient(
+        public LookupClient(
             MetadataLocator locator,
             MetadataProvider provider,
             MetadataFetcher fetcher,
