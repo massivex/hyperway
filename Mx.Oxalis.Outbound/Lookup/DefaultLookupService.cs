@@ -13,6 +13,9 @@ namespace Mx.Oxalis.Outbound.Lookup
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup;
     using Mx.Peppol.Lookup.Api;
+    using Mx.Peppol.Security.Lang;
+
+    using zipkin4net;
 
     public class DefaultLookupService : LookupService
     {
@@ -42,10 +45,15 @@ namespace Mx.Oxalis.Outbound.Lookup
             {
                 return lookupClient.getEndpoint(header, transportProfiles);
             }
-            catch (Exception e) when (e is LookupException || e is PeppolSecurityException || e is EndpointNotFoundException e) {
+            catch (Exception e) when (e is LookupException || e is PeppolSecurityException || e is EndpointNotFoundException) {
                 throw new OxalisTransmissionException(e.Message, e);
             }
 
+        }
+
+        public Endpoint lookup(Header header, Trace root)
+        {
+            return lookup(header);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Oxalis.Outbound.Transmission
 {
@@ -11,13 +10,11 @@ namespace Mx.Oxalis.Outbound.Transmission
     using Mx.Oxalis.Api.Outbound;
     using Mx.Oxalis.Api.Transformer;
     using Mx.Oxalis.Commons;
-    using Mx.Oxalis.Commons.Interop;
     using Mx.Oxalis.DocumentSniffer;
     using Mx.Oxalis.DocumentSniffer.Identifier;
     using Mx.Oxalis.DocumentSniffer.Sbdh;
-    using Mx.Peppol.Common.Interop;
     using Mx.Peppol.Common.Model;
-    using Mx.Peppol.Common.Util;
+    using Mx.Tools;
 
     using zipkin4net;
 
@@ -30,8 +27,6 @@ namespace Mx.Oxalis.Outbound.Transmission
         private readonly ContentDetector contentDetector;
 
         private readonly LookupService lookupService;
-
-        private readonly Trace tracer;
 
         private bool allowOverride;
 
@@ -56,12 +51,10 @@ namespace Mx.Oxalis.Outbound.Transmission
          */
         private PeppolStandardBusinessHeader effectiveStandardBusinessHeader;
 
-        // TODO: check @Inject
-        public TransmissionRequestBuilder(ContentDetector contentDetector, LookupService lookupService, Trace tracer)
+        public TransmissionRequestBuilder(ContentDetector contentDetector, LookupService lookupService)
         {
             this.contentDetector = contentDetector;
             this.lookupService = lookupService;
-            this.tracer = tracer;
         }
 
         public void reset()

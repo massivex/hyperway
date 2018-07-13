@@ -14,6 +14,6 @@ namespace Mx.Peppol.Lookup.Locator
             return lookup(ParticipantIdentifier.of(identifier));
         }
 
-        public Uri lookup(ParticipantIdentifier participantIdentifier);
+        public abstract Uri lookup(ParticipantIdentifier participantIdentifier);
     }
 }

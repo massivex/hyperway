@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
-    using System.Security.Cryptography.X509Certificates;
-
     using Mx.Peppol.Common.Api;
+
+    using Org.BouncyCastle.X509;
 
     public class Signed<T> : PotentiallySigned<T>
     {

@@ -5,8 +5,14 @@ using System.Text;
 namespace Mx.Peppol.Mode
 {
     using System.IO;
+    using System.Runtime.CompilerServices;
+
+    using Autofac;
+    using Autofac.Core;
 
     using Microsoft.Extensions.Configuration;
+
+    using Mx.Peppol.Common.Lang;
 
     public class Mode
     {
@@ -19,17 +25,17 @@ namespace Mx.Peppol.Mode
 
         private String identifier;
 
-        public static Mode of(String identifier)
+        private IContainer container;
+
+        public static Mode of(String identifier, IContainer container)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
             var config = builder.Build();
-
-            return of(config, identifier);
+            return of(config, identifier, container);
         }
 
-        public static Mode of(IConfigurationRoot config, String identifier)
+        public static Mode of(IConfigurationRoot config, String identifier, IContainer container)
         {
             // Config referenceConfig = ConfigFactory.defaultReference();
 
@@ -57,13 +63,14 @@ namespace Mx.Peppol.Mode
             //    result = result.withFallback(referenceConfig.getConfig("mode.default"));
             //}
 
-            return new Mode(config, identifier);
+            return new Mode(config, identifier, container);
         }
 
-        private Mode(IConfigurationRoot config, String identifier)
+        private Mode(IConfigurationRoot config, String identifier, IContainer container)
         {
             this.config = config;
             this.identifier = identifier;
+            this.container = container;
         }
 
         public String getIdentifier()
@@ -82,14 +89,25 @@ namespace Mx.Peppol.Mode
         //}
 
         //@SuppressWarnings({ "unchecked", "unused"})
-        //public <T> T initiate(String key, Class<T> type) throws PeppolLoadingException
-        //    {
-        //    try {
-        //            return (T)initiate(Class.forName(getString(key)));
-        //        } catch (ClassNotFoundException e) {
-        //        throw new PeppolLoadingException(String.format("Unable to initiate '%s'", getString(key)), e);
-        //    }
+        public T initiate<T>()
+        {
+            return this.container.Resolve<T>();
+        }
     }
+    //        public T initiate<T>(String key) where T : class // throws PeppolLoadingException
+//        {
+//            try
+//            {
+//                var typeName = getString(
+//                return this.container.Resolve<>())
+//                var typeName = getString(key);
+//                var targetType = Type.GetType(typeName);
+//                return (T) Activator.CreateInstance(targetType ?? throw new InvalidOperationException());
+////                return (T)initiate(Class.forName(getString(key)));
+//            } catch (Exception e) {
+//                throw new PeppolLoadingException(String.Format("Unable to initiate '{0}'", this.getString(key)), e);
+//            }
+//        }
 
     //public <T> T initiate(Class<T> cls) throws PeppolLoadingException
     //{

@@ -17,7 +17,7 @@ namespace Mx.Peppol.Lookup.Fetcher
             timeout = int.Parse(mode.getString("s"));
         }
 
-        public virtual FetcherResponse fetch(Uri uri);
+        public abstract FetcherResponse fetch(Uri uri);
     }
 
 }

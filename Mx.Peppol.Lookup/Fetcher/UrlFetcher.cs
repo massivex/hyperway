@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Fetcher
 {
     using System.IO;
     using System.Net;
-    using System.Net.Sockets;
-    using System.Threading;
 
-    using Mx.Peppol.Common.Interop;
     using Mx.Peppol.Lookup.Api;
     using Mx.Peppol.Mode;
+    using Mx.Tools;
 
     public class UrlFetcher : AbstractFetcher
     {

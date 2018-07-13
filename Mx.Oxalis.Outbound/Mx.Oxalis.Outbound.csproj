@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mx.Certificates.Validator\Mx.Certificates.Validator.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Oxalis.Api.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Commons\Mx.Oxalis.Commons.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.DocumentSniffer\Mx.Oxalis.DocumentSniffer.csproj" />

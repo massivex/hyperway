@@ -5,16 +5,15 @@
     using Mx.Oxalis.Api.Lang;
     using Mx.Oxalis.Api.Outbound;
     using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.Commons.Interop;
     using Mx.Oxalis.Commons.IO;
     using Mx.Oxalis.Commons.Tracing;
-    using Mx.Peppol.Common.Interop;
     using Mx.Peppol.Common.Model;
 
     using zipkin4net;
 
     using Mx.Peppol.Sbdh;
     using Mx.Peppol.Sbdh.Lang;
+    using Mx.Tools;
 
     public class TransmissionRequestFactory : Traceable
     {

@@ -10,6 +10,7 @@ namespace Mx.Peppol.Lookup
     using Mx.Peppol.Common.Code;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup.Api;
+    using Mx.Peppol.Security.Api;
 
     public class LookupClient
     {
@@ -24,7 +25,7 @@ namespace Mx.Peppol.Lookup
 
         private CertificateValidator validator;
 
-        LookupClient(
+        internal LookupClient(
             MetadataLocator locator,
             MetadataProvider provider,
             MetadataFetcher fetcher,
@@ -46,7 +47,7 @@ namespace Mx.Peppol.Lookup
 
             foreach (ServiceReference serviceReference in this.getServiceReferences(participantIdentifier))
             {
-                documentTypeIdentifiers.add(serviceReference.getDocumentTypeIdentifier());
+                documentTypeIdentifiers.Add(serviceReference.getDocumentTypeIdentifier());
             }
 
             return documentTypeIdentifiers;
@@ -66,7 +67,7 @@ namespace Mx.Peppol.Lookup
             catch (FileNotFoundException e)
             {
                 throw new LookupException(
-                    String.format("Receiver (%s) not found.", participantIdentifier.toString()),
+                    String.Format("Receiver ({0}) not found.", participantIdentifier),
                     e);
             }
 

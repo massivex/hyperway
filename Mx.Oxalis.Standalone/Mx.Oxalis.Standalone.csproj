@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mx.Oxalis.Outbound\Mx.Oxalis.Outbound.csproj" />
+    <ProjectReference Include="..\Mx.Oxalis.Statistics\Mx.Oxalis.Statistics.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,21 @@
 
   <ItemGroup>
     <Folder Include="conf\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="conf\invoice_003.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="conf\openPEPPOL-digital-ID-AP.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="conf\oxalis.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="conf\peppol-keystore.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

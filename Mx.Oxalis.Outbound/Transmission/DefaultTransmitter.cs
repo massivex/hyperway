@@ -27,7 +27,7 @@ namespace Mx.Oxalis.Outbound.Transmission
      * @author thore
      * @author erlend
      */
-    class DefaultTransmitter : Traceable, Transmitter
+    public class DefaultTransmitter : Transmitter
     {
 
         /**
@@ -44,14 +44,11 @@ namespace Mx.Oxalis.Outbound.Transmission
 
         private readonly LookupService lookupService;
 
-        // TODO: @Inject
         public DefaultTransmitter(
             MessageSenderFactory messageSenderFactory,
             StatisticsService statisticsService,
             TransmissionVerifier transmissionVerifier,
-            LookupService lookupService,
-            Trace tracer)
-            : base(tracer)
+            LookupService lookupService)
         {
             this.messageSenderFactory = messageSenderFactory;
             this.statisticsService = statisticsService;

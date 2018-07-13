@@ -89,7 +89,7 @@ namespace Mx.Peppol.Lookup.Locator
             hostnameGenerator = new DynamicHostnameGenerator(prefix, hostname, digestAlgorithm, encoding);
         }
 
-        public Uri lookup(ParticipantIdentifier participantIdentifier) // throws LookupException
+        public override Uri lookup(ParticipantIdentifier participantIdentifier) // throws LookupException
         {
             // Create hostname for participant identifier.
             string hostname = hostnameGenerator.generate(participantIdentifier).ReplaceAll("=*", "");

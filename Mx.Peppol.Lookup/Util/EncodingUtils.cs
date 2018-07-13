@@ -53,41 +53,4 @@ namespace Mx.Peppol.Lookup.Util
         }
 
     }
-
-    public class Base64Encoding : IBaseEncoding
-    {
-
-        /// <summary>
-        ///   Decodes a Base16 string as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
-        /// </summary>
-        /// <param name="inData"> An Base16 encoded string. </param>
-        /// <returns> Decoded data </returns>
-        public static byte[] FromBase16String(this string inData)
-        {
-            return inData.ToCharArray().FromBase16CharArray(0, inData.Length);
-        }
-
-        /// <summary>
-        ///   Decodes a Base16 char array as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
-        /// </summary>
-        /// <param name="inData"> An Base16 encoded char array. </param>
-        /// <param name="offset"> An offset in inData. </param>
-        /// <param name="length"> The number of elements of inData to decode. </param>
-        /// <returns> Decoded data </returns>
-        public static byte[] FromBase16CharArray(this char[] inData, int offset, int length)
-        {
-            byte[] res = new byte[length / 2];
-
-            int inPos = offset;
-            int outPos = 0;
-
-            while (inPos < offset + length)
-            {
-                res[outPos++] = (byte)((_base16ReverseAlphabet[inData[inPos++]] << 4) + _base16ReverseAlphabet[inData[inPos++]]);
-            }
-
-            return res;
-        }
-    }
-
 }

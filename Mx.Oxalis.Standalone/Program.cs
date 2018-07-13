@@ -3,22 +3,20 @@
 namespace Mx.Oxalis.Standalone
 {
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    using System.Threading;
 
     using Autofac;
 
     using CommandLine;
 
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Transmission;
+    using Mx.Certificates.Validator;
     using Mx.Oxalis.Outbound;
     using Mx.Peppol.Common.Model;
+
+    using Org.BouncyCastle.X509;
 
     class Program
     {
@@ -127,10 +125,11 @@ namespace Mx.Oxalis.Standalone
                 {
                     String destinationString = options.DestinationUrl;
 
-                    X509Certificate certificate = X509Certificate.CreateFromCertFile(options.DestinationCertificate);
-                    //try (InputStream inputStream = new FileInputStream(destinationCertificate.value(optionSet))) {
-                    //    certificate = Validator.getCertificate(inputStream);
-                    //}
+                    X509Certificate certificate;
+                    using (Stream inputStream = File.Open(options.DestinationCertificate, FileMode.Open, FileAccess.Read)) {
+                        certificate = Validator.getCertificate(inputStream);
+                    }
+
                     parameters.Endpoint = Endpoint.of(
                         TransportProfile.AS2_1_0,
                         new Uri(destinationString),

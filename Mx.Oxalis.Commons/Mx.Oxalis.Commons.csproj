@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Oxalis.Api.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Sbdh\Mx.Peppol.Sbdh.csproj" />
   </ItemGroup>
 

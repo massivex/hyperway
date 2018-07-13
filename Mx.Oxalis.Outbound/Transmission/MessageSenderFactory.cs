@@ -18,7 +18,7 @@ namespace Mx.Oxalis.Outbound.Transmission
      *
      * @author erlend
      */
-    class MessageSenderFactory
+    public class MessageSenderFactory
     {
 
         private static readonly log4net.ILog LOGGER = log4net.LogManager.GetLogger(typeof(MessageSenderFactory));
