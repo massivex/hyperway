@@ -9,6 +9,6 @@ namespace Mx.Certificates.Validator.Xml
     public class ValidatorReferenceType
     {
         [XmlText]
-        public string Reference { get; set; }
+        public string Value { get; set; }
     }
 }

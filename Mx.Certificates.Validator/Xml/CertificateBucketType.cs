@@ -21,7 +21,7 @@
         public IList<CertificateReferenceType> CertificateReferences { get; set; }
 
         [XmlElement("CertificateStartsWith")]
-        public IList<CertificateStartsWith> CertificateStartsWiths { get; set; }
+        public IList<CertificateStartsWithType> CertificateStartsWiths { get; set; }
 
         public List<object> getCertificateOrCertificateReferenceOrCertificateStartsWith()
         {

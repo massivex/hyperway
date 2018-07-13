@@ -5,16 +5,11 @@ using System.Text;
 namespace Mx.Certificates.Validator.Util
 {
     using System.Net;
-    using System.Security.Cryptography;
-    using System.Security.Cryptography.X509Certificates;
     using System.Text.RegularExpressions;
 
     using Mx.Certificates.Validator.Api;
 
-    using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.X509;
-
-    using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
     /**
      * Simple implementation of CRL fetcher, which caches downloaded CRLs. If a CRL is not cached, or the Next update-
@@ -33,7 +28,7 @@ namespace Mx.Certificates.Validator.Util
         }
 
 
-        public X509Certificate2 get(String url) // throws CertificateValidationException
+        public X509Crl get(String url) // throws CertificateValidationException
         {
             X509Crl crl = crlCache.get(url);
             if (crl == null)
@@ -41,13 +36,12 @@ namespace Mx.Certificates.Validator.Util
                 // Not in cache
                 crl = download(url);
             }
-            else if (crl.NextUpdate != null
-                     && crl.NextUpdate.getTime() < System.DateTime.Now.currentTimeMillis())
+            else if (crl.NextUpdate != null && crl.NextUpdate.Value < System.DateTime.Now)
             {
                 // Outdated
                 crl = download(url);
             }
-            else if (crl.getNextUpdate() == null)
+            else if (crl.NextUpdate == null)
             {
                 // No action.
             }

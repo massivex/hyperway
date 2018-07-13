@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Xml.Serialization;
 
-    public class ChainType : ValidationRule
+    public class ChainType
     {
         [XmlElement("RootBucketReference")]
         public string RootBucketReference { get; set; }

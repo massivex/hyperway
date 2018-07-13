@@ -8,6 +8,9 @@ namespace Mx.Peppol.Lookup.Util
 
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup.Api;
+    using Mx.Tools.Encoding;
+
+    using Org.BouncyCastle.Security;
 
     public class DynamicHostnameGenerator
     {
@@ -20,7 +23,7 @@ namespace Mx.Peppol.Lookup.Util
         //        Security.addProvider(new BouncyCastleProvider());
         //}
 
-        private Encoding encoding;
+        private IBaseEncoding encoding;
 
         /**
          * Prefix for generated hostname.
@@ -38,38 +41,30 @@ namespace Mx.Peppol.Lookup.Util
         private String digestAlgorithm;
 
         public DynamicHostnameGenerator(String prefix, String hostname, String digestAlgorithm)
+        : this(prefix, hostname, digestAlgorithm, new Base16Encoding())
+        {
+           
+        }
+
+        public DynamicHostnameGenerator(String prefix, String hostname, String digestAlgorithm, IBaseEncoding encoding)
         {
             this.prefix = prefix;
             this.hostname = hostname;
             this.digestAlgorithm = digestAlgorithm;
-
-            // this(prefix, hostname, digestAlgorithm, Encoding.base16());
+            this.encoding = encoding;
         }
-
-        // TODO: support more encodings
-        //private DynamicHostnameGenerator(String prefix, String hostname, String digestAlgorithm, Encoding encoding)
-        //{
-        //    this.prefix = prefix;
-        //    this.hostname = hostname;
-        //    this.digestAlgorithm = digestAlgorithm;
-        //    this.encoding = encoding;
-        //}
 
         public String generate(ParticipantIdentifier participantIdentifier) // throws LookupException
         {
             string receiverHash;
             try
             {
-                var sha1 = SHA1.Create();
-                byte[] inputBytes = Encoding.ASCII.GetBytes(participantIdentifier.getIdentifier());
-                byte[] outputBytes = sha1.ComputeHash(inputBytes);
-                receiverHash = BitConverter.ToString(outputBytes).ToLowerInvariant().Replace("-", "").ToLower();
-                //// Create digest based on participant identifier.
-                //MessageDigest md = MessageDigest.getInstance(digestAlgorithm, BouncyCastleProvider.PROVIDER_NAME);
-                //byte[] digest = md.digest(participantIdentifier.getIdentifier().getBytes(StandardCharsets.UTF_8));
+                // Create digest based on participant identifier.
+                var utf8Identifier = Encoding.UTF8.GetBytes(participantIdentifier.getIdentifier());
+                byte[] digest = DigestUtilities.CalculateDigest(this.digestAlgorithm, utf8Identifier);
 
                 // Create hex of digest.
-                // receiverHash = encoding.encode(digest).toLowerCase();
+                 receiverHash = encoding.ToString(digest).ToLowerInvariant();
             }
             catch (Exception e)
             {

@@ -6,7 +6,7 @@ namespace Mx.Certificates.Validator.Xml
 {
     using System.Xml.Serialization;
 
-    public class TryType
+    public class ExtensibleType
     {
         [XmlArrayItem("Cached", typeof(CachedType))]
         [XmlArrayItem("Chain", typeof(ChainType))]

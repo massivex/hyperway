@@ -7,6 +7,7 @@ namespace Mx.Peppol.Lookup
     using Mx.Peppol.Lookup.Api;
     using Mx.Peppol.Mode;
     using Mx.Peppol.Security.Api;
+    using Mx.Peppol.Security.Util;
 
     public class LookupClientBuilder
     {

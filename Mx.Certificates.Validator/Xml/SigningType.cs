@@ -2,7 +2,7 @@
 {
     using System.Xml.Serialization;
 
-    public class SigningType : ValidationRule
+    public class SigningType
     {
         [XmlAttribute("type")]
         public string Type { get; set; }
@@ -11,10 +11,10 @@
     public enum SigningEnum
     {
         [XmlEnum("PUBLIC_SIGNED")]
-        PublicSigned,
+        PUBLIC_SIGNED,
 
         [XmlEnum("SELF_SIGNED")]
-        SelfSigned
+        SELF_SIGNED
 
     }
 }

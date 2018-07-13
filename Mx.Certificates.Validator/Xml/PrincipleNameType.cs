@@ -3,13 +3,13 @@
     using System.Collections.Generic;
     using System.Xml.Serialization;
 
-    public class PrincipleNameType : ValidationRule
+    public class PrincipleNameType
     {
         [XmlAttribute("field")]
         public string Field { get; set; }
 
         [XmlAttribute("principal")]
-        public PrincipalEnum Principal { get; set; }
+        public PrincipalEnum? Principal { get; set; }
 
         [XmlElement("Value")]
         public List<string> Values { get; set; }
@@ -21,9 +21,9 @@
     public enum PrincipalEnum
     {
         [XmlEnum("SUBJECT")]
-        Subject,
+        SUBJECT,
 
         [XmlEnum("ISSUER")]
-        Issuer
+        ISSUER
     }
 }

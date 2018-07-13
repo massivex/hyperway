@@ -40,6 +40,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zipkin4net", "zipkin4net", 
 		third-party\zipkin4net\zipkin4net.pdb = third-party\zipkin4net\zipkin4net.pdb
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "arsoft-tools", "arsoft-tools", "{1B048BBE-6536-4565-8386-7521A2AD1D9B}"
+	ProjectSection(SolutionItems) = preProject
+		third-party\arsoft-tools\ARSoft.Tools.Net.deps.json = third-party\arsoft-tools\ARSoft.Tools.Net.deps.json
+		third-party\arsoft-tools\ARSoft.Tools.Net.dll = third-party\arsoft-tools\ARSoft.Tools.Net.dll
+		third-party\arsoft-tools\ARSoft.Tools.Net.pdb = third-party\arsoft-tools\ARSoft.Tools.Net.pdb
+		third-party\arsoft-tools\LICENSE = third-party\arsoft-tools\LICENSE
+		third-party\arsoft-tools\NOTICE = third-party\arsoft-tools\NOTICE
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +117,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B2272C1E-EF9A-4128-ACAD-6F8171ACA59D} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
+		{1B048BBE-6536-4565-8386-7521A2AD1D9B} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D75CE61-314B-4F6D-94CA-5B353E0E9A8A}

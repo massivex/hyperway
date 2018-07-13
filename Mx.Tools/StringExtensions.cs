@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     public static class StringExtensions
     {
@@ -30,6 +31,11 @@
 
             var values = items.Select(x => x.ToString()).ToArray();
             return string.Join(", ", values);
+        }
+
+        public static string ReplaceAll(this string input, string pattern, string replacement)
+        {
+            return Regex.Replace(input, pattern, replacement);
         }
     }
 }

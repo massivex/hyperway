@@ -46,16 +46,19 @@ namespace Mx.Certificates.Validator
 
             Dictionary<String, ValidatorRule> rulesMap = new Dictionary<string, ValidatorRule>();
 
+            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
             foreach (ValidatorType validatorType in recipe.Validators)
             {
+
+
                 ValidatorRule validatorRule = parse(
-                    validatorType.getCachedOrChainOrClazz(),
+                    validatorType.Rules.OfTypes(typeFilter),
                     objectStorage,
                     JunctionEnum.AND);
 
                 if (validatorType.Timeout != null)
                 {
-                    validatorRule = new CachedValidatorRule(validatorRule, validatorType.Timeout);
+                    validatorRule = new CachedValidatorRule(validatorRule, validatorType.Timeout ?? -1);
                 }
 
                 String name = validatorType.Name == null ? "default" : validatorType.Name;
@@ -126,7 +129,7 @@ namespace Mx.Certificates.Validator
 
 
         private static ValidatorRule parse(
-            List<Object> rules,
+            IEnumerable<Object> rules,
             Dictionary<string, object> objectStorage,
             JunctionEnum junctionEnum) // throws CertificateValidationException
         {
@@ -242,14 +245,15 @@ namespace Mx.Certificates.Validator
 
         private static ValidatorRule parse(CachedType rule, Dictionary<string, object> objectStorage) // throws CertificateValidationException
         {
+            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
             return new CachedValidatorRule(
-                parse(rule.getCachedOrChainOrClazz(), objectStorage, JunctionEnum.AND),
-                rule.getTimeout());
+                parse(rule.Rules.OfTypes(typeFilter), objectStorage, JunctionEnum.AND),
+                rule.Timeout);
         }
 
         private static ValidatorRule parse(ChainType rule, Dictionary<string, object> objectStorage)
         {
-            return new ChainType(
+            return new ChainRule(
                 getBucket(rule.RootBucketReference, objectStorage),
                 getBucket(rule.IntermediateBucketReference, objectStorage),
                 rule.Policies.ToArray());
@@ -307,15 +311,16 @@ namespace Mx.Certificates.Validator
             }
             else
             {
-                return new ExpirationSoonRule(expirationType.Millis);
+                return new ExpirationSoonRule(expirationType.Millis ?? -1);
             }
         }
 
         private static ValidatorRule parse(HandleErrorType optionalType, Dictionary<String, Object> objectStorage)
             //  throws CertificateValidationException
         {
+            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
             List<ValidatorRule> validatorRules = new List<ValidatorRule>();
-            foreach (Object o in optionalType.getCachedOrChainOrClazz())
+            foreach (Object o in optionalType.Rules.OfTypes(typeFilter))
             {
                 validatorRules.Add(parse(o, objectStorage));
             }
@@ -326,12 +331,13 @@ namespace Mx.Certificates.Validator
         private static ValidatorRule parse(JunctionType junctionType, Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            return parse(junctionType.getCachedOrChainOrClazz(), objectStorage, junctionType.Type);
+            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
+            return parse(junctionType.Rules.OfTypes(typeFilter), objectStorage, junctionType.Type);
         }
 
         private static ValidatorRule parse(KeyUsageType keyUsageType)
         {
-            List<KeyUsage> keyUsages = keyUsageType.Identifier;
+            List<Util.KeyUsage> keyUsages = keyUsageType.Identifier;
             Org.BouncyCastle.Asn1.X509.KeyUsage[] result = new Org.BouncyCastle.Asn1.X509.KeyUsage[keyUsages.Count];
 
             for (int i = 0; i < result.Length; i++)
@@ -350,44 +356,52 @@ namespace Mx.Certificates.Validator
         private static ValidatorRule parse(RuleReferenceType ruleReferenceType, Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            if (!objectStorage.containsKey(ruleReferenceType.getValue()))
+            if (!objectStorage.ContainsKey(ruleReferenceType.Value))
+            {
                 throw new CertificateValidationException(
-                    String.format("Rule for '%s' not found.", ruleReferenceType.getValue()));
+                    String.Format("Rule for '{0}' not found.", ruleReferenceType.Value));
+            }
 
-            return (ValidatorRule)objectStorage.get(ruleReferenceType.getValue());
+            return (ValidatorRule)objectStorage[ruleReferenceType.Value];
         }
 
         // uppressWarnings("unchecked")
         private static ValidatorRule parse(PrincipleNameType principleNameType, Dictionary<String, Object> objectStorage)
         {
             PrincipalNameProvider<String> principalNameProvider;
-            if (principleNameType.getReference() != null)
+            if (principleNameType.Reference != null)
+            {
                 principalNameProvider =
-                    (PrincipalNameProvider<String>)objectStorage.get(principleNameType.getReference().getValue());
+                    (PrincipalNameProvider<String>)objectStorage[principleNameType.Reference];
+            }
             else
-                principalNameProvider = new SimplePrincipalNameProvider(principleNameType.getValue());
+            {
+                principalNameProvider = new SimplePrincipalNameProvider(principleNameType.Values);
+            }
 
             return new PrincipalNameRule(
-                principleNameType.getField(),
+                principleNameType.Field,
                 principalNameProvider,
-                principleNameType.getPrincipal() != null
-                    ? PrincipalNameRule.Principal.valueOf(principleNameType.getPrincipal().toString())
-                    : PrincipalNameRule.Principal.SUBJECT);
+                principleNameType.Principal ?? PrincipalEnum.SUBJECT);
         }
 
         private static ValidatorRule parse(SigningType signingType)
         {
-            if (signingType.getType().equals(SigningEnum.SELF_SIGNED))
-                return SigningType.SelfSignedOnly();
+            if (signingType.Type.Equals(SigningEnum.SELF_SIGNED.ToString()))
+            {
+                return SigningRule.SelfSignedOnly();
+            }
             else
-                return SigningType.PublicSignedOnly();
+            {
+                return SigningRule.PublicSignedOnly();
+            }
         }
 
         private static ValidatorRule parse(TryType tryType, Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            for (Object rule :
-            tryType.getCachedOrChainOrClazz()) {
+            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
+            foreach (Object rule in tryType.Rules.OfTypes(typeFilter)) {
                 try
                 {
                     return parse(rule, objectStorage);
@@ -403,15 +417,16 @@ namespace Mx.Certificates.Validator
 
         private static ValidatorRule parse(
                 ValidatorReferenceType validatorReferenceType,
-                Map<String, Object> objectStorage)
+                Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            String identifier = String.format("#validator::%s", validatorReferenceType.getValue());
-            if (!objectStorage.containsKey(identifier))
-                throw new CertificateValidationException(
-                    String.format("Unable to find validator '%s'.", validatorReferenceType.getValue()));
+            String identifier = $"#validator::{validatorReferenceType.Value}";
+            if (!objectStorage.ContainsKey(identifier))
+            {
+                throw new CertificateValidationException($"Unable to find validator '{validatorReferenceType.Value}'.");
+            }
 
-            return (ValidatorRule)objectStorage.get(identifier);
+            return (ValidatorRule)objectStorage[identifier];
         }
 
         // HELPERS

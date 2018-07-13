@@ -5,9 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Mx.Peppol.Commons\Mx.Peppol.Common.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Mode\Mx.Peppol.Mode.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Security\Mx.Peppol.Security.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ARSoft.Tools.Net">
+      <HintPath>..\third-party\arsoft-tools\ARSoft.Tools.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

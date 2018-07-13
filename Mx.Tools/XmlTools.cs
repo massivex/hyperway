@@ -13,7 +13,7 @@
             XmlWriterSettings settings = new XmlWriterSettings
                                              {
                                                  OmitXmlDeclaration = true,
-                                                 Encoding = Encoding.UTF8
+                                                 Encoding = System.Text.Encoding.UTF8
                                              };
             XmlWriter w = XmlWriter.Create(writer, settings);
             s.Serialize(w, obj);

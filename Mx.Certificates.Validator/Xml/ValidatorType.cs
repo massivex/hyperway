@@ -3,35 +3,16 @@
     using System.Collections.Generic;
     using System.Xml.Serialization;
 
-    public class ValidatorType
+    public class ValidatorType : ExtensibleType
     {
         public ValidatorType()
         {
-            this.Rules = new List<ValidationRule>();
+            this.Rules = new List<object>();
         }
 
         public string Name { get; set; }
 
-        public int? Timeout { get; set; }
-
-        [XmlArrayItem("Cached", typeof(CachedType))]
-        [XmlArrayItem("Chain", typeof(ChainType))]
-        [XmlArrayItem("Class", typeof(ClassType))]
-        [XmlArrayItem("CriticalExtensionRecognized", typeof(CriticalExtensionRecognizedType))]
-        [XmlArrayItem("CriticalExtensionRequired", typeof(CriticalExtensionRequiredType))]
-        [XmlArrayItem("CRL", typeof(CRLType))]
-        [XmlArrayItem("Dummy", typeof(DummyType))]
-        [XmlArrayItem("Expiration", typeof(ExpirationType))]
-        [XmlArrayItem("Junction", typeof(JunctionType))]
-        [XmlArrayItem("KeyUsage", typeof(KeyUsageType))]
-        [XmlArrayItem("OCSP", typeof(OCSPType))]
-        [XmlArrayItem("HandleError", typeof(HandleErrorType))]
-        [XmlArrayItem("PrincipleName", typeof(PrincipleNameType))]
-        [XmlArrayItem("RuleReference", typeof(RuleReferenceType))]
-        [XmlArrayItem("Signing", typeof(SigningType))]
-        [XmlArrayItem("Try", typeof(TryType))]
-        [XmlArrayItem("ValidatorReference", typeof(ValidatorReferenceType))]
-        public IList<ValidationRule> Rules { get; set; }
+        public long? Timeout { get; set; }
 
         public string ValidatorReference { get; set; }
 

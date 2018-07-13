@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Mx.Certificates.Validator
 {
+    using Mx.Certificates.Validator.Api;
+    using Mx.Certificates.Validator.Structure;
+
     /**
      * Builder for creation of validators.
      */
@@ -20,7 +23,7 @@ namespace Mx.Certificates.Validator
             return new ValidatorBuilder();
         }
 
-        private List<ValidatorRule> validatorRules = new ArrayList<>();
+        private List<ValidatorRule> validatorRules = new List<ValidatorRule>();
 
         private ValidatorBuilder()
         {
@@ -35,7 +38,7 @@ namespace Mx.Certificates.Validator
          */
         public ValidatorBuilder addRule(ValidatorRule validatorRule)
         {
-            validatorRules.add(validatorRule);
+            validatorRules.Add(validatorRule);
             return this;
         }
 
@@ -46,10 +49,12 @@ namespace Mx.Certificates.Validator
          */
         public Validator build()
         {
-            if (validatorRules.size() == 1)
-                return new Validator(validatorRules.get(0));
+            if (validatorRules.Count == 1)
+            {
+                return new Validator(validatorRules[0]);
+            }
 
-            return new Validator(Junction.and(validatorRules.toArray(new ValidatorRule[validatorRules.size()])));
+            return new Validator(Junction.and(validatorRules.ToArray()));
         }
     }
 

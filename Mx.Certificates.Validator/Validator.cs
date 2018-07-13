@@ -16,7 +16,7 @@ namespace Mx.Certificates.Validator
     public class Validator : ValidatorRule
     {
 
-        private static CertificateFactory certFactory;
+        private static X509CertificateParser certFactory;
 
         public static X509Certificate getCertificate(byte[] cert) // throws CertificateValidationException
         {
@@ -28,9 +28,11 @@ namespace Mx.Certificates.Validator
             try
             {
                 if (certFactory == null)
-                    certFactory = CertificateFactory.getInstance("X.509");
+                {
+                    certFactory = new X509CertificateParser();
+                }
 
-                return (X509Certificate)certFactory.generateCertificate(inputStream);
+                return (X509Certificate)certFactory.ReadCertificate(inputStream);
             }
             catch (CertificateException e)
             {

@@ -1,8 +1,9 @@
 ﻿namespace Mx.Certificates.Validator.Xml
 {
+    using System.Collections.Generic;
     using System.Xml.Serialization;
 
-    public class CachedType : ValidationRule
+    public class CachedType : ExtensibleType
     {
         [XmlAttribute("name")]
         public int Name { get; set; }
