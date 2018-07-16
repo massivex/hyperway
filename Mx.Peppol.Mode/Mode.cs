@@ -5,6 +5,7 @@ using System.Text;
 namespace Mx.Peppol.Mode
 {
     using System.IO;
+    using System.Linq;
     using System.Runtime.CompilerServices;
 
     using Autofac;
@@ -27,61 +28,140 @@ namespace Mx.Peppol.Mode
 
         private IContainer container;
 
-        public static Mode of(String identifier, IContainer container)
+        public Mode()
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            return of(config, identifier, container);
+            this.config = new ConfigurationBuilder().AddJsonFile("oxalis.json").Build();
+            this.Parse();
         }
 
-        public static Mode of(IConfigurationRoot config, String identifier, IContainer container)
+
+        public OxalisConfig Defaults { get; set; }
+
+        public string GetValue(string key)
         {
-            // Config referenceConfig = ConfigFactory.defaultReference();
+            key = key.Replace(".", ":");
+            var value = this.config[key];
+            if (value == null)
+            {
+                value = this.config["defaults:" + key];
+            }
 
-            // Config result = ConfigFactory.systemProperties().withFallback(config).withFallback(referenceConfig);
-
-            // Loading configuration based on identifier.
-            //if (identifier != null)
-            //{
-            //    if (referenceConfig.hasPath(String.format("mode.%s", identifier)))
-            //    {
-            //        result = result.withFallback(referenceConfig.getConfig(String.Format("mode.{0}", identifier)));
-            //    }
-            //}
-
-            //// Load inherited configuration.
-            //if (result.hasPath("inherit"))
-            //{
-            //    result = result.withFallback(
-            //        referenceConfig.getConfig(String.Format("mode.{0}", result.getString("inherit"))));
-            //}
-
-            //// Load default configuration.
-            //if (referenceConfig.hasPath("mode.default"))
-            //{
-            //    result = result.withFallback(referenceConfig.getConfig("mode.default"));
-            //}
-
-            return new Mode(config, identifier, container);
+            return value;
         }
 
-        private Mode(IConfigurationRoot config, String identifier, IContainer container)
+        private void Parse()
         {
-            this.config = config;
-            this.identifier = identifier;
-            this.container = container;
+            this.Defaults = new OxalisConfig();
+            this.Defaults.Transports = new List<TransportConfig>();
+
+            var transports = this.GetSection(this.config, "defaults", "transport")?.GetChildren();
+            if (transports != null)
+            {
+                foreach (var item in transports)
+                {
+                    var values = item.GetChildren().ToList();
+                    var transportConfig = new TransportConfig();
+                    transportConfig.Profile = this.GetString(values, "profile");
+                    transportConfig.Weight = this.GetInt(values, "weight");
+                    transportConfig.Sender = this.GetString(values, "sender");
+                    this.Defaults.Transports.Add(transportConfig);
+                }
+            }
         }
+
+        private IConfigurationSection GetSection(IConfigurationRoot sectionRoot, params string[] path)
+        {
+            var curChildren = sectionRoot.GetChildren().ToList();
+            if (path.Length == 0)
+            {
+                return null;
+            }
+
+            IConfigurationSection curSection = null;
+            for (int i = 0; i < path.Length; i++)
+            {
+                curSection = curChildren.FirstOrDefault(x => x.Key == path[i]);
+                if (curSection == null)
+                {
+                    return null;
+                }
+                curChildren = curSection.GetChildren().ToList();
+            }
+
+            return curSection;
+        }
+
+        private int GetInt(IList<IConfigurationSection> section, string key, int defaultValue = 99999)
+        {
+            var intText = this.GetString(section, key);
+            if (string.IsNullOrWhiteSpace(intText))
+            {
+                return defaultValue;
+            }
+
+            return Convert.ToInt32(intText);
+        }
+
+        private string GetString(IList<IConfigurationSection> sections, string key)
+        {
+            return sections.Where(x => x.Key == key).Select(x => x?.Value).FirstOrDefault();
+        }
+
+        //public static Mode of(String identifier, IContainer container)
+        //{
+        //    var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.json");
+        //    var config = builder.Build();
+        //    return of(config, identifier, container);
+        //}
+
+        //public static Mode of(IConfigurationRoot config, String identifier, IContainer container)
+        //{
+        //    // Config referenceConfig = ConfigFactory.defaultReference();
+
+        //    // Config result = ConfigFactory.systemProperties().withFallback(config).withFallback(referenceConfig);
+
+        //    // Loading configuration based on identifier.
+        //    //if (identifier != null)
+        //    //{
+        //    //    if (referenceConfig.hasPath(String.format("mode.%s", identifier)))
+        //    //    {
+        //    //        result = result.withFallback(referenceConfig.getConfig(String.Format("mode.{0}", identifier)));
+        //    //    }
+        //    //}
+
+        //    //// Load inherited configuration.
+        //    //if (result.hasPath("inherit"))
+        //    //{
+        //    //    result = result.withFallback(
+        //    //        referenceConfig.getConfig(String.Format("mode.{0}", result.getString("inherit"))));
+        //    //}
+
+        //    //// Load default configuration.
+        //    //if (referenceConfig.hasPath("mode.default"))
+        //    //{
+        //    //    result = result.withFallback(referenceConfig.getConfig("mode.default"));
+        //    //}
+
+        //    return new Mode(config, identifier, container);
+        //}
+
+        //private Mode(IConfigurationRoot config, String identifier, IContainer container)
+        //{
+        //    this.config = config;
+        //    this.identifier = identifier;
+        //    this.container = container;
+        //}
 
         public String getIdentifier()
         {
             return this.identifier;
         }
 
-        public String getString(String key)
-        {
-            return this.config[key];
-        }
+        //public String getString(String key)
+        //{
+
+        //}
 
         //public Config getConfig()
         //{
@@ -95,19 +175,19 @@ namespace Mx.Peppol.Mode
         }
     }
     //        public T initiate<T>(String key) where T : class // throws PeppolLoadingException
-//        {
-//            try
-//            {
-//                var typeName = getString(
-//                return this.container.Resolve<>())
-//                var typeName = getString(key);
-//                var targetType = Type.GetType(typeName);
-//                return (T) Activator.CreateInstance(targetType ?? throw new InvalidOperationException());
-////                return (T)initiate(Class.forName(getString(key)));
-//            } catch (Exception e) {
-//                throw new PeppolLoadingException(String.Format("Unable to initiate '{0}'", this.getString(key)), e);
-//            }
-//        }
+    //        {
+    //            try
+    //            {
+    //                var typeName = getString(
+    //                return this.container.Resolve<>())
+    //                var typeName = getString(key);
+    //                var targetType = Type.GetType(typeName);
+    //                return (T) Activator.CreateInstance(targetType ?? throw new InvalidOperationException());
+    ////                return (T)initiate(Class.forName(getString(key)));
+    //            } catch (Exception e) {
+    //                throw new PeppolLoadingException(String.Format("Unable to initiate '{0}'", this.getString(key)), e);
+    //            }
+    //        }
 
     //public <T> T initiate(Class<T> cls) throws PeppolLoadingException
     //{
@@ -123,5 +203,23 @@ namespace Mx.Peppol.Mode
     //        }
     //    }
     //}
+
+    public class OxalisConfig
+    {
+        public List<TransportConfig> Transports { get; set; }
+    }
+
+    public class TransportConfig
+    {
+        public TransportConfig()
+        {
+            // Default behaviour
+            this.Enabled = true;
+        }
+        public string Profile { get; set; }
+        public string Sender { get; set; }
+        public int Weight { get; set; }
+        public bool Enabled { get; set; }
+    }
 
 }

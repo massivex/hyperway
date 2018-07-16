@@ -38,20 +38,20 @@ namespace Mx.Peppol.Lookup
             return newInstance(mode).certificateValidator();
         }
 
-        public static LookupClientBuilder forMode(String modeIdentifier, IContainer container) // throws PeppolLoadingException
-        {
-            return forMode(Mode.of(modeIdentifier, container));
-        }
+        //public static LookupClientBuilder forMode(String modeIdentifier, IContainer container) // throws PeppolLoadingException
+        //{
+        //    return forMode(Mode.of(modeIdentifier, container));
+        //}
 
-        public static LookupClientBuilder forProduction(IContainer container) // throws PeppolLoadingException
-        {
-            return forMode(Mode.PRODUCTION, container);
-        }
+        //public static LookupClientBuilder forProduction(IContainer container) // throws PeppolLoadingException
+        //{
+        //    return forMode(Mode.PRODUCTION, container);
+        //}
 
-        public static LookupClientBuilder forTest(IContainer container) // throws PeppolLoadingException
-        {
-            return forMode(Mode.TEST, container);
-        }
+        //public static LookupClientBuilder forTest(IContainer container) // throws PeppolLoadingException
+        //{
+        //    return forMode(Mode.TEST, container);
+        //}
 
         LookupClientBuilder(Mode mode)
         {

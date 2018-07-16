@@ -49,7 +49,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "arsoft-tools", "arsoft-tool
 		third-party\arsoft-tools\NOTICE = third-party\arsoft-tools\NOTICE
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mx.Oxalis.Statistics", "Mx.Oxalis.Statistics\Mx.Oxalis.Statistics.csproj", "{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.Statistics", "Mx.Oxalis.Statistics\Mx.Oxalis.Statistics.csproj", "{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Xml.BdxSmp201605", "Mx.Xml.BdxSmp201605\Mx.Xml.BdxSmp201605.csproj", "{04D00E78-06B9-4284-9D8B-49243C2DCFD6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Xml.CertValidator", "Mx.Xml.CertValidator\Mx.Xml.CertValidator.csproj", "{C9947BFB-8953-4F1E-96E4-31F2D45FB7E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "liquid", "liquid", "{D114C553-8D1F-40BC-B47D-1319F3C55DB8}"
+	ProjectSection(SolutionItems) = preProject
+		third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll = third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +126,14 @@ Global
 		{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D00E78-06B9-4284-9D8B-49243C2DCFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D00E78-06B9-4284-9D8B-49243C2DCFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D00E78-06B9-4284-9D8B-49243C2DCFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D00E78-06B9-4284-9D8B-49243C2DCFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9947BFB-8953-4F1E-96E4-31F2D45FB7E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9947BFB-8953-4F1E-96E4-31F2D45FB7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9947BFB-8953-4F1E-96E4-31F2D45FB7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9947BFB-8953-4F1E-96E4-31F2D45FB7E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +141,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B2272C1E-EF9A-4128-ACAD-6F8171ACA59D} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
 		{1B048BBE-6536-4565-8386-7521A2AD1D9B} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
+		{D114C553-8D1F-40BC-B47D-1319F3C55DB8} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D75CE61-314B-4F6D-94CA-5B353E0E9A8A}

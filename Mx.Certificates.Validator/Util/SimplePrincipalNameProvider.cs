@@ -26,7 +26,7 @@ namespace Mx.Certificates.Validator.Util
 
         public SimplePrincipalNameProvider(IEnumerable<String> expected)
         {
-            this.expected = this.expected.ToList();
+            this.expected = expected.ToList();
         }
 
         public bool validate(String value)

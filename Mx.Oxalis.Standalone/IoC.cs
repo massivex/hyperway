@@ -27,7 +27,13 @@ namespace Mx.Oxalis.Standalone
     using Mx.Peppol.Lookup;
     using Mx.Peppol.Lookup.Api;
     using Mx.Peppol.Lookup.Locator;
+    using Mx.Peppol.Lookup.Reader;
+    using Mx.Peppol.Lookup.Util;
+    using Mx.Peppol.Mode;
     using Mx.Peppol.Security.Api;
+    using Mx.Peppol.Security.Util;
+
+    using Org.BouncyCastle.Math.EC;
 
     class IoC
     {
@@ -39,30 +45,41 @@ namespace Mx.Oxalis.Standalone
             builder.RegisterType<OxalisOutboundComponent>().AsSelf();
             builder.RegisterType<TransmissionRequestBuilder>().AsSelf();
             builder.RegisterType<NoSbdhParser>().As<ContentDetector>();
-            builder.RegisterType<DefaultLookupService>().As<LookupService>();
+
+            // Lookup module registration
+            builder.RegisterModule(new LookupModule());
 
             builder.RegisterType<LookupClient>().AsSelf();
             builder.RegisterType<BdxlLocator>().As<MetadataLocator>();
+            builder.RegisterType<MultiReader>().As<MetadataReader>();
+            builder.RegisterType<DifiCertificateValidator>().As<CertificateValidator>();
+
             builder.RegisterType<MetadataProvider>().AsSelf();
-            builder.RegisterType<MetadataFetcher>().AsSelf();
-            builder.RegisterType<MetadataReader>().AsSelf();
-            builder.RegisterType<CertificateValidator>().AsSelf();
+            
 
             builder.RegisterType<DefaultTransmitter>().As<Transmitter>();
             builder.RegisterType<MessageSenderFactory>().AsSelf();
             builder.RegisterType<NoopStatisticsService>().As<StatisticsService>();
             builder.RegisterType<DefaultTransmissionVerifier>().As<TransmissionVerifier>();
+            builder.RegisterType<TransmissionRequestBuilder>().AsSelf();
+
+            builder.RegisterType<Mx.Peppol.Lookup.Provider.DefaultProvider>().As<MetadataProvider>();
 
             builder.Register(
                 (c) =>
                     {
-                        var config = c.Resolve<Config>();
+                        var config = c.Resolve<Mode>();
                         return config.Defaults.Transports.Where(x => x.Enabled).OrderBy(x => x.Weight)
                             .Select(x => TransportProfile.of(x.Profile)).ToList();
-                    }).Keyed<List<TransportProfile>>("prioritized");
+                    }).Keyed<List<TransportProfile>>("prioritized")
+                .As<List<TransportProfile>>();
             // prioritized
 
-            builder.RegisterType<Config>().AsSelf();
+            builder.RegisterType<Bdxr201605Reader>()
+                .Keyed<Bdxr201605Reader>("reader-protocols")
+                .As<MetadataReader>();
+
+            builder.RegisterType<Mode>().AsSelf();
 
             Container = builder.Build();
         }

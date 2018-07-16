@@ -19,13 +19,12 @@
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\third-party\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="LiquidTechnologies.Runtime.Standard20">
+      <HintPath>..\third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll</HintPath>
+    </Reference>
     <Reference Include="zipkin4net">
       <HintPath>..\third-party\zipkin4net\zipkin4net.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="conf\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +38,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="conf\peppol-keystore.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="pki-peppol-test.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="oxalis.json">

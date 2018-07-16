@@ -30,7 +30,7 @@ namespace Mx.Peppol.Security.Util
 
             try
             {
-                var file = new FileInfo(mode.getString("security.pki"));
+                var file = new FileInfo(mode.GetValue("security.pki"));
                 this.validator = ValidatorLoader.newInstance().build(file);
             }
             catch (ValidatorParsingException e)
@@ -45,7 +45,7 @@ namespace Mx.Peppol.Security.Util
             try
             {
                 this.validator.validate(
-                    this.mode.getString(String.Format("security.validator.{0}", service.ToString())),
+                    this.mode.GetValue(String.Format("security.validator.{0}", service.ToString())),
                     certificate);
             }
             catch (CertificateValidationException e)

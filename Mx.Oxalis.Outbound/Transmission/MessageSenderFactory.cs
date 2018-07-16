@@ -12,6 +12,9 @@ namespace Mx.Oxalis.Outbound.Transmission
     using Mx.Oxalis.Api.Outbound;
     using Mx.Oxalis.Commons.Interop;
     using Mx.Peppol.Common.Model;
+    using Mx.Peppol.Mode;
+
+    using Org.BouncyCastle.Math.EC;
 
     /**
      * Factory orchestrating available implementations of transport profiles.
@@ -31,10 +34,10 @@ namespace Mx.Oxalis.Outbound.Transmission
          */
         private readonly IComponentContext injector;
 
-    /**
-     * Map of configurations for supported transport profiles.
-     */
-    private readonly Dictionary<TransportProfile, TransportConfig> configMap;
+        /**
+         * Map of configurations for supported transport profiles.
+         */
+        private readonly Dictionary<TransportProfile, TransportConfig> configMap;
 
         /**
          * Prioritized list of supported transport profiles.
@@ -42,25 +45,16 @@ namespace Mx.Oxalis.Outbound.Transmission
         private readonly List<TransportProfile> prioritizedTransportProfiles;
 
         // @Inject
-        public MessageSenderFactory(IComponentContext injector, Config config)
+        public MessageSenderFactory(IComponentContext injector, Mode config)
         {
             this.injector = injector;
 
-            this.configMap = config.Defaults.Transports
-                .Where(x => x.Enabled)
-                .OrderBy(x => x.Weight)
-                .ToDictionary(
-                    t => TransportProfile.of(t.Profile),
-                    x => x
-                );
+            this.configMap = config.Defaults.Transports.Where(x => x.Enabled).OrderBy(x => x.Weight)
+                .ToDictionary(t => TransportProfile.of(t.Profile), x => x);
 
-            this.prioritizedTransportProfiles = config.Defaults
-                .Transports
-                .Where(x => x.Enabled)
-                .OrderBy(x => x.Weight)
-                .Select(x => TransportProfile.of(x.Profile))
-                .ToList();
-            
+            this.prioritizedTransportProfiles = config.Defaults.Transports.Where(x => x.Enabled).OrderBy(x => x.Weight)
+                .Select(x => TransportProfile.of(x.Profile)).ToList();
+
             //// Construct map of configuration for detected transport profiles.
             //configMap = config.getObject("transport").keySet().stream()
             //        .map(key->config.getConfig(String.format("transport.%s", key)))
@@ -76,8 +70,7 @@ namespace Mx.Oxalis.Outbound.Transmission
 
             // Logging list of prioritized transport profiles supported.
             LOGGER.Info("Prioritized list of transport profiles:");
-            this.prioritizedTransportProfiles
-                    .ForEach( tp => LOGGER.InfoFormat("=> {0}", tp.getIdentifier() ));
+            this.prioritizedTransportProfiles.ForEach(tp => LOGGER.InfoFormat("=> {0}", tp.getIdentifier()));
         }
 
         /**
@@ -105,24 +98,21 @@ namespace Mx.Oxalis.Outbound.Transmission
                     $"Transport protocol '{transportProfile.getIdentifier()}' not supported.");
             }
 
-            return this.configMap
-                       .Where(x => x.Key.Equals(transportProfile))
-                       .Select(x => x.Value.Sender)
-                       .First();
-    }
+            return this.configMap.Where(x => x.Key.Equals(transportProfile)).Select(x => x.Value.Sender).First();
+        }
 
-    /**
-     * Fetch MessageSender implementing from provided transport profile.
-     *
-     * @param transportProfile Identifier of transport profile used to fetch MessageSender.
-     * @return MessageSender implementing the transport profile requested.
-     * @throws OxalisTransmissionException Thrown when loading of implementation fails or implementation is not found.
-     */
-    public MessageSender getMessageSender(TransportProfile transportProfile) // throws OxalisTransmissionException
-    {
-        return this.injector.ResolveNamed<MessageSender>(this.getSender(transportProfile));
-        // getInstance(Key.get(MessageSender.class, Names.named(getSender(transportProfile))));
+        /**
+         * Fetch MessageSender implementing from provided transport profile.
+         *
+         * @param transportProfile Identifier of transport profile used to fetch MessageSender.
+         * @return MessageSender implementing the transport profile requested.
+         * @throws OxalisTransmissionException Thrown when loading of implementation fails or implementation is not found.
+         */
+        public MessageSender getMessageSender(TransportProfile transportProfile) // throws OxalisTransmissionException
+        {
+            return this.injector.ResolveNamed<MessageSender>(this.getSender(transportProfile));
+            // getInstance(Key.get(MessageSender.class, Names.named(getSender(transportProfile))));
+        }
     }
-}
 
 }

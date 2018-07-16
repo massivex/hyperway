@@ -7,12 +7,19 @@
   <ItemGroup>
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.2" />
     <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mx.Certificates.Validator\Mx.Certificates.Validator.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Commons\Mx.Peppol.Common.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Mode\Mx.Peppol.Mode.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

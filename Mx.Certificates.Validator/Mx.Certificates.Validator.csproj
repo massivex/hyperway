@@ -5,12 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Xml\**" />
+    <EmbeddedResource Remove="Xml\**" />
+    <None Remove="Xml\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.2" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mx.Tools\Mx.Tools.csproj" />
+    <ProjectReference Include="..\Mx.Xml.CertValidator\Mx.Xml.CertValidator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LiquidTechnologies.Runtime.Standard20">
+      <HintPath>..\third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

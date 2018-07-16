@@ -8,18 +8,42 @@ namespace Mx.Certificates.Validator
 {
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
 
     using Mx.Certificates.Validator.Api;
     using Mx.Certificates.Validator.Lang;
     using Mx.Certificates.Validator.Rules;
     using Mx.Certificates.Validator.Structure;
     using Mx.Certificates.Validator.Util;
-    using Mx.Certificates.Validator.Xml;
     using Mx.Tools;
+    using Mx.Xml.tns;
 
     using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.Crypto.Tls;
     using Org.BouncyCastle.X509;
+
+    using CachedType = Mx.Xml.tns.CachedType;
+    using CertificateBucketType = Mx.Xml.tns.CertificateBucketType;
+    using CertificateReferenceType = Mx.Xml.tns.CertificateReferenceType;
+    using CertificateStartsWithType = Mx.Xml.tns.CertificateStartsWithType;
+    using ChainType = Mx.Xml.tns.ChainType;
+    using CriticalExtensionRecognizedType = Mx.Xml.tns.CriticalExtensionRecognizedType;
+    using CriticalExtensionRequiredType = Mx.Xml.tns.CriticalExtensionRequiredType;
+    using CRLType = Mx.Xml.tns.CRLType;
+    using ExpirationType = Mx.Xml.tns.ExpirationType;
+    using HandleErrorType = Mx.Xml.tns.HandleErrorType;
+    using JunctionType = Mx.Xml.tns.JunctionType;
+    using KeyStoreType = Mx.Xml.tns.KeyStoreType;
+    using KeyUsageType = Mx.Xml.tns.KeyUsageType;
+    using OCSPType = Mx.Xml.tns.OCSPType;
+    using PrincipleNameType = Mx.Xml.tns.PrincipleNameType;
+    using RuleReferenceType = Mx.Xml.tns.RuleReferenceType;
+    using SigningType = Mx.Xml.tns.SigningType;
+    using TryType = Mx.Xml.tns.TryType;
+    using ValidatorRecipe = Mx.Xml.tns.ValidatorRecipe;
+    using ValidatorReferenceType = Mx.Xml.tns.ValidatorReferenceType;
+    using ValidatorType = Mx.Xml.tns.ValidatorType;
+
     /// using Xml = Mx.Certificates.Validator.Xml;
 
 
@@ -39,29 +63,29 @@ namespace Mx.Certificates.Validator
         public static ValidatorGroup
             parse(Stream inputStream, Dictionary<String, Object> objectStorage) // throws ValidatorParsingException
         {
-            ValidatorRecipe recipe = XmlTools.Read<ValidatorRecipe>(inputStream);
+            ValidatorRecipe recipe = new ValidatorRecipe(); // XmlTools.Read<ValidatorRecipe>(inputStream);
+            recipe.FromXmlStream(inputStream);
 
             loadKeyStores(recipe, objectStorage);
             loadBuckets(recipe, objectStorage);
 
             Dictionary<String, ValidatorRule> rulesMap = new Dictionary<string, ValidatorRule>();
 
-            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
-            foreach (ValidatorType validatorType in recipe.Validators)
+            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType) };
+            foreach (ValidatorType validatorType in recipe.Validator)
             {
-
-
+                var rules = validatorType.ExtensibleTypeData[0].ExtensibleType_Type_Group.ToList();
                 ValidatorRule validatorRule = parse(
-                    validatorType.Rules.OfTypes(typeFilter),
+                    rules,
                     objectStorage,
-                    JunctionEnum.AND);
+                    Enumerations.JunctionEnum.AND);
 
-                if (validatorType.Timeout != null)
+                if (validatorType.ValidatorTypeData.Timeout != null)
                 {
-                    validatorRule = new CachedValidatorRule(validatorRule, validatorType.Timeout ?? -1);
+                    validatorRule = new CachedValidatorRule(validatorRule, validatorType.ValidatorTypeData.Timeout ?? -1);
                 }
 
-                String name = validatorType.Name == null ? "default" : validatorType.Name;
+                String name = validatorType.ValidatorTypeData.Name == null ? "default" : validatorType.ValidatorTypeData.Name;
                 rulesMap.Add(name, validatorRule);
                 objectStorage.Add(String.Format("#validator::{0}", name), validatorRule);
             }
@@ -77,11 +101,11 @@ namespace Mx.Certificates.Validator
                 ValidatorRecipe recipe,
                 Dictionary<String, Object> objectStorage) // throws CertificateValidationException
         {
-            foreach (KeyStoreType keyStoreType in recipe.KeyStores)
+            foreach (KeyStoreType keyStoreType in recipe.KeyStore)
             {
                 var key = String.Format("#keyStore::{0}", keyStoreType.Name ?? "default");
                 var value = new KeyStoreCertificateBucket(
-                    Convert.FromBase64String(keyStoreType.Value).ToStream(),
+                    Convert.FromBase64String(keyStoreType.PrimitiveValue.Base64Encoded).ToStream(),
                     keyStoreType.Password);
 
                 objectStorage.Add(key, value);
@@ -93,29 +117,28 @@ namespace Mx.Certificates.Validator
                 ValidatorRecipe recipe,
                 Dictionary<String, Object> objectStorage) // throws CertificateValidationException
         {
-            foreach (CertificateBucketType certificateBucketType in recipe.CertificateBuckets)
+            foreach (CertificateBucketType certificateBucketType in recipe.CertificateBucket)
             {
                 SimpleCertificateBucket certificateBucket = new SimpleCertificateBucket();
 
-                foreach (Object o in certificateBucketType
-                    .getCertificateOrCertificateReferenceOrCertificateStartsWith())
+                foreach (CertificateBucketType_Group o in certificateBucketType.CertificateBucketType_Group)
                 {
-                    if (o is Xml.CertificateType)
+                    if (!string.IsNullOrWhiteSpace(o.Certificate))
                     {
-                        certificateBucket.add(Validator.getCertificate(((Xml.CertificateType)o).AsBuffer()));
+                        certificateBucket.add(Validator.getCertificate(Convert.FromBase64String(o.Certificate)));
                     }
-                    else if (o is CertificateReferenceType)
+                    else if (o.CertificateReference != null)
                     {
-                        CertificateReferenceType c = (CertificateReferenceType)o;
-                        foreach (X509Certificate certificate in getKeyStore(c.KeyStore, objectStorage).toSimple(c.Value))
+                        CertificateReferenceType c = o.CertificateReference;
+                        foreach (X509Certificate certificate in getKeyStore(c.KeyStore, objectStorage).toSimple(c.PrimitiveValue))
                         {
                             certificateBucket.add(certificate);
                         }
                     }
-                    else /* if (o instanceof CertificateStartsWithType) */
+                    else if (o.CertificateStartsWith != null)
                     {
-                        CertificateStartsWithType c = (CertificateStartsWithType)o;
-                        foreach (X509Certificate certificate in getKeyStore(c.KeyStore, objectStorage).startsWith(c.Value))
+                        CertificateStartsWithType c = o.CertificateStartsWith;
+                        foreach (X509Certificate certificate in getKeyStore(c.KeyStore, objectStorage).startsWith(c.PrimitiveValue))
                         {
                             certificateBucket.add(certificate);
                         }
@@ -129,22 +152,22 @@ namespace Mx.Certificates.Validator
 
 
         private static ValidatorRule parse(
-            IEnumerable<Object> rules,
+            IEnumerable<ExtensibleType_Type_Group> rules,
             Dictionary<string, object> objectStorage,
-            JunctionEnum junctionEnum) // throws CertificateValidationException
+            Enumerations.JunctionEnum junctionEnum) // throws CertificateValidationException
         {
             List<ValidatorRule> ruleList = new List<ValidatorRule>();
 
-            foreach (Object rule in rules)
+            foreach (ExtensibleType_Type_Group rule in rules)
             {
                 ruleList.Add(parse(rule, objectStorage));
 
-                if (junctionEnum == JunctionEnum.AND)
+                if (junctionEnum == Enumerations.JunctionEnum.AND)
                 {
                     return Junction.and(ruleList.ToArray());
                 }
 
-                if (junctionEnum == JunctionEnum.OR)
+                if (junctionEnum == Enumerations.JunctionEnum.OR)
                 {
                     return Junction.or(ruleList.ToArray());
                 }
@@ -156,99 +179,108 @@ namespace Mx.Certificates.Validator
             throw new InvalidOperationException("Rules list cannot be empty");
         }
 
-        private static ValidatorRule parse(Object rule, Dictionary<String, Object> objectStorage)
+        private static ValidatorRule parse(ExtensibleType_Type_Group rule, Dictionary<String, Object> objectStorage)
             //  throws CertificateValidationException
         {
-            if (rule is CachedType)
+            var node = rule.ChoiceSelectedElement;
+            if (node == "Cached")
             {
-                return parse((CachedType)rule, objectStorage);
+                return parse(rule.Cached, objectStorage);
             }
 
-            if (rule is ChainType)
+            if (node == "Chain")
             {
-                return parse((ChainType)rule, objectStorage);
+                return parse(rule.Chain, objectStorage);
             }
 
-            if (rule is ClassType)
+            if (node == "Class")
             {
-                return parse((ClassType)rule);
+                throw new NotSupportedException();
+                // return parse(rule.class_);
             }
 
-            if (rule is CriticalExtensionRecognizedType)
+            if (node == "CriticalExtensionRecognized")
             {
-                return parse((CriticalExtensionRecognizedType)rule);
+                return parse(rule.CriticalExtensionRecognized);
             }
 
-            if (rule is CriticalExtensionRequiredType)
+            if (node == "CriticalExtensionRequired")
             {
-                return parse((CriticalExtensionRequiredType)rule);
+                return parse(rule.CriticalExtensionRequired);
             }
 
-            if (rule is CRLType)
+            if (node == "CRL")
             {
-                return parse((CRLType)rule, objectStorage);
+                return parse(rule.CRL, objectStorage);
             }
 
-            if (rule is DummyType)
+            //if (rule is DummyType)
+            //{
+            //    return parse((DummyType)rule);
+            //}
+
+            if (node == "Expiration")
             {
-                return parse((DummyType)rule);
+                return parse(rule.Expiration);
             }
 
-            if (rule is ExpirationType)
+            if (node == "Junction")
             {
-                return parse((ExpirationType)rule);
+                return parse(rule.Junction, objectStorage);
             }
 
-            if (rule is JunctionType)
+            if (node == "KeyUsage")
             {
-                return parse((JunctionType)rule, objectStorage);
+                return parse(rule.KeyUsage);
             }
 
-            if (rule is KeyUsageType)
+            if (node == "OCSP")
             {
-                return parse((KeyUsageType)rule);
+                return parse(rule.OCSP, objectStorage);
             }
 
-            if (rule is OCSPType)
+            if (node == "HandleError")
             {
-                return parse((OCSPType)rule, objectStorage);
+                return parse(rule.HandleError, objectStorage);
             }
 
-            if (rule is HandleErrorType)
+            if (node == "PrincipleName")
             {
-                return parse((HandleErrorType)rule, objectStorage);
+                return parse(rule.PrincipleName, objectStorage);
             }
 
-            if (rule is PrincipleNameType)
+            if (node == "RuleReferenceT")
             {
-                return parse((PrincipleNameType)rule, objectStorage);
+                return parse(rule.RuleReference, objectStorage);
             }
 
-            if (rule is RuleReferenceType)
+            if (node == "Signing")
             {
-                return parse((RuleReferenceType)rule, objectStorage);
+                return parse(rule.Signing);
             }
 
-            if (rule is SigningType)
+            if (node == "Try")
             {
-                return parse((SigningType)rule);
+                return parse(rule.try_, objectStorage);
             }
 
-            if (rule is TryType)
+            if (node == "ValidatorReference")
             {
-                return parse((TryType)rule, objectStorage);
+                return parse(rule.ValidatorReference, objectStorage);
             }
-            
             // if (rule instanceof ValidatorReferenceType)
-            return parse((ValidatorReferenceType)rule, objectStorage);
+            // return parse((ValidatorReferenceType)rule, objectStorage);
+
+            throw new NotSupportedException($"Nodo '{node}' non supportato");
         }
 
         private static ValidatorRule parse(CachedType rule, Dictionary<string, object> objectStorage) // throws CertificateValidationException
         {
-            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
+            var filteredRules = rule.ExtensibleTypeData[0].ExtensibleType_Type_Group.ToList();
+            
             return new CachedValidatorRule(
-                parse(rule.Rules.OfTypes(typeFilter), objectStorage, JunctionEnum.AND),
-                rule.Timeout);
+                parse(filteredRules, objectStorage, Enumerations.JunctionEnum.AND),
+                rule.CachedTypeData.Timeout);
         }
 
         private static ValidatorRule parse(ChainType rule, Dictionary<string, object> objectStorage)
@@ -256,30 +288,30 @@ namespace Mx.Certificates.Validator
             return new ChainRule(
                 getBucket(rule.RootBucketReference, objectStorage),
                 getBucket(rule.IntermediateBucketReference, objectStorage),
-                rule.Policies.ToArray());
+                rule.Policy.ToArray());
         }
 
-        private static ValidatorRule parse(ClassType rule) // throws CertificateValidationException
-        {
-            try
-            {
-                var classType = Type.GetType(rule.Value);
-                Debug.Assert(classType != null, nameof(classType) + " != null");
-                return (ValidatorRule)Activator.CreateInstance(classType);
-            }
-            catch (Exception e) {
-                throw new CertificateValidationException($"Unable to load rule '{rule.Value}'.", e);
-            }
-        }
+        //private static ValidatorRule parse(ClassType rule) // throws CertificateValidationException
+        //{
+        //    try
+        //    {
+        //        var classType = Type.GetType(rule.Value);
+        //        Debug.Assert(classType != null, nameof(classType) + " != null");
+        //        return (ValidatorRule)Activator.CreateInstance(classType);
+        //    }
+        //    catch (Exception e) {
+        //        throw new CertificateValidationException($"Unable to load rule '{rule.Value}'.", e);
+        //    }
+        //}
 
         private static ValidatorRule parse(CriticalExtensionRecognizedType rule)
         {
-            return new CriticalExtensionRecognizedRule(rule.Values.ToArray());
+            return new CriticalExtensionRecognizedRule(rule.Value.ToArray());
         }
 
         private static ValidatorRule parse(CriticalExtensionRequiredType rule)
         {
-            return new CriticalExtensionRequiredRule(rule.Values.ToArray());
+            return new CriticalExtensionRequiredRule(rule.Value.ToArray());
         }
 
         private static ValidatorRule parse(CRLType rule, Dictionary<String, Object> objectStorage)
@@ -298,14 +330,14 @@ namespace Mx.Certificates.Validator
             return new CRLRule((CrlFetcher)objectStorage["crlFetcher"]);
         }
 
-        private static ValidatorRule parse(DummyType dummyType)
-        {
-            return new DummyRule(dummyType.Value);
-        }
+        //private static ValidatorRule parse(DummyType dummyType)
+        //{
+        //    return new DummyRule(dummyType.Value);
+        //}
 
         private static ValidatorRule parse(ExpirationType expirationType)
         {
-            if (expirationType.Millis == null)
+            if (expirationType.Millis == 0)
             {
                 return new ExpirationRule();
             }
@@ -318,9 +350,9 @@ namespace Mx.Certificates.Validator
         private static ValidatorRule parse(HandleErrorType optionalType, Dictionary<String, Object> objectStorage)
             //  throws CertificateValidationException
         {
-            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
             List<ValidatorRule> validatorRules = new List<ValidatorRule>();
-            foreach (Object o in optionalType.Rules.OfTypes(typeFilter))
+            var filteredRules = optionalType.ExtensibleTypeData[0].ExtensibleType_Type_Group.ToList();
+            foreach (var o in filteredRules)
             {
                 validatorRules.Add(parse(o, objectStorage));
             }
@@ -331,13 +363,13 @@ namespace Mx.Certificates.Validator
         private static ValidatorRule parse(JunctionType junctionType, Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
-            return parse(junctionType.Rules.OfTypes(typeFilter), objectStorage, junctionType.Type);
+            var filteredRules = junctionType.ExtensibleTypeData[0].ExtensibleType_Type_Group.ToList();
+            return parse(filteredRules, objectStorage, junctionType.JunctionTypeData.Type);
         }
 
         private static ValidatorRule parse(KeyUsageType keyUsageType)
         {
-            List<Util.KeyUsage> keyUsages = keyUsageType.Identifier;
+            var keyUsages = keyUsageType.Identifier.ToList();
             Org.BouncyCastle.Asn1.X509.KeyUsage[] result = new Org.BouncyCastle.Asn1.X509.KeyUsage[keyUsages.Count];
 
             for (int i = 0; i < result.Length; i++)
@@ -350,19 +382,19 @@ namespace Mx.Certificates.Validator
 
         private static ValidatorRule parse(OCSPType ocspType, Dictionary<String, Object> objectStorage)
         {
-            return new OCSPRule(getBucket(ocspType.IntermediateBucketReference.Value, objectStorage));
+            return new OCSPRule(getBucket(ocspType.IntermediateBucketReference, objectStorage));
         }
 
         private static ValidatorRule parse(RuleReferenceType ruleReferenceType, Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            if (!objectStorage.ContainsKey(ruleReferenceType.Value))
+            if (!objectStorage.ContainsKey(ruleReferenceType.PrimitiveValue))
             {
                 throw new CertificateValidationException(
-                    String.Format("Rule for '{0}' not found.", ruleReferenceType.Value));
+                    String.Format("Rule for '{0}' not found.", ruleReferenceType));
             }
 
-            return (ValidatorRule)objectStorage[ruleReferenceType.Value];
+            return (ValidatorRule)objectStorage[ruleReferenceType.PrimitiveValue];
         }
 
         // uppressWarnings("unchecked")
@@ -372,22 +404,22 @@ namespace Mx.Certificates.Validator
             if (principleNameType.Reference != null)
             {
                 principalNameProvider =
-                    (PrincipalNameProvider<String>)objectStorage[principleNameType.Reference];
+                    (PrincipalNameProvider<String>)objectStorage[principleNameType.Reference.PrimitiveValue];
             }
             else
             {
-                principalNameProvider = new SimplePrincipalNameProvider(principleNameType.Values);
+                principalNameProvider = new SimplePrincipalNameProvider(principleNameType.Value);
             }
 
             return new PrincipalNameRule(
                 principleNameType.Field,
                 principalNameProvider,
-                principleNameType.Principal ?? PrincipalEnum.SUBJECT);
+                principleNameType.Principal ?? Enumerations.PrincipalEnum.SUBJECT);
         }
 
         private static ValidatorRule parse(SigningType signingType)
         {
-            if (signingType.Type.Equals(SigningEnum.SELF_SIGNED.ToString()))
+            if (signingType.Type.Equals(Enumerations.SigningEnum.SELF_SIGNED.ToString()))
             {
                 return SigningRule.SelfSignedOnly();
             }
@@ -400,8 +432,8 @@ namespace Mx.Certificates.Validator
         private static ValidatorRule parse(TryType tryType, Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            Type[] typeFilter = new Type[] { typeof(CachedType), typeof(ChainType), typeof(ClassType) };
-            foreach (Object rule in tryType.Rules.OfTypes(typeFilter)) {
+            var filteredRules = tryType.ExtensibleTypeData[0].ExtensibleType_Type_Group.ToList();
+            foreach (var rule in filteredRules) {
                 try
                 {
                     return parse(rule, objectStorage);
@@ -420,10 +452,10 @@ namespace Mx.Certificates.Validator
                 Dictionary<String, Object> objectStorage)
             // throws CertificateValidationException
         {
-            String identifier = $"#validator::{validatorReferenceType.Value}";
+            String identifier = $"#validator::{validatorReferenceType.PrimitiveValue}";
             if (!objectStorage.ContainsKey(identifier))
             {
-                throw new CertificateValidationException($"Unable to find validator '{validatorReferenceType.Value}'.");
+                throw new CertificateValidationException($"Unable to find validator '{validatorReferenceType.PrimitiveValue}'.");
             }
 
             return (ValidatorRule)objectStorage[identifier];

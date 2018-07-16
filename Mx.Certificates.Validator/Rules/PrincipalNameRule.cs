@@ -7,8 +7,8 @@ namespace Mx.Certificates.Validator.Rules
 {
 
     using Mx.Certificates.Validator.Api;
-    using Mx.Certificates.Validator.Xml;
     using Mx.Tools;
+    using Mx.Xml.tns;
 
     using Org.BouncyCastle.Asn1;
     using Org.BouncyCastle.Asn1.Crmf;
@@ -27,27 +27,27 @@ namespace Mx.Certificates.Validator.Rules
 
         protected PrincipalNameProvider<String> provider;
 
-        protected PrincipalEnum principal;
+        protected Enumerations.PrincipalEnum principal;
 
         public PrincipalNameRule(PrincipalNameProvider<String> provider)
-            : this(null, provider, PrincipalEnum.SUBJECT)
+            : this(null, provider, Enumerations.PrincipalEnum.SUBJECT)
         {
 
         }
 
-        public PrincipalNameRule(PrincipalNameProvider<String> provider, PrincipalEnum principal)
+        public PrincipalNameRule(PrincipalNameProvider<String> provider, Enumerations.PrincipalEnum principal)
             : this(null, provider, principal)
         {
 
         }
 
         public PrincipalNameRule(String field, PrincipalNameProvider<String> provider)
-            : this(field, provider, PrincipalEnum.SUBJECT)
+            : this(field, provider, Enumerations.PrincipalEnum.SUBJECT)
         {
 
         }
 
-        public PrincipalNameRule(String field, PrincipalNameProvider<String> provider, PrincipalEnum principal)
+        public PrincipalNameRule(String field, PrincipalNameProvider<String> provider, Enumerations.PrincipalEnum principal)
         {
             this.field = field;
             this.provider = provider;
@@ -59,7 +59,7 @@ namespace Mx.Certificates.Validator.Rules
             try
             {
                 X509Name current;
-                if (principal.Equals(PrincipalEnum.SUBJECT))
+                if (principal.Equals(Enumerations.PrincipalEnum.SUBJECT))
                 {
                     current = getSubject(certificate);
                 }

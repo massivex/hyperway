@@ -12,11 +12,15 @@
     <ProjectReference Include="..\Mx.Peppol.Commons\Mx.Peppol.Common.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Mode\Mx.Peppol.Mode.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Security\Mx.Peppol.Security.csproj" />
+    <ProjectReference Include="..\Mx.Xml.BdxSmp201605\Mx.Xml.BdxSmp201605.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="ARSoft.Tools.Net">
       <HintPath>..\third-party\arsoft-tools\ARSoft.Tools.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="LiquidTechnologies.Runtime.Standard20">
+      <HintPath>..\third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll</HintPath>
     </Reference>
   </ItemGroup>
 

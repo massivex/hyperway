@@ -57,6 +57,7 @@ namespace Mx.Oxalis.Standalone
 
         private static void RunInScope(ILifetimeScope scope, Options options)
         {
+            var elenco = scope.ResolveKeyed<List<TransportProfile>>("prioritized");
             // bootstraps the Oxalis outbound module
             OxalisOutboundComponent oxalisOutboundComponent = scope.Resolve<OxalisOutboundComponent>();
             TransmissionParameters parameters = new TransmissionParameters(oxalisOutboundComponent);

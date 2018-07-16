@@ -14,7 +14,7 @@ namespace Mx.Peppol.Lookup.Fetcher
 
         public AbstractFetcher(Mode mode)
         {
-            timeout = int.Parse(mode.getString("s"));
+            timeout = int.Parse(mode.GetValue("lookup.fetcher.timeouts"));
         }
 
         public abstract FetcherResponse fetch(Uri uri);

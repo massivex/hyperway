@@ -41,7 +41,6 @@ namespace Mx.Certificates.Validator
         public ValidatorGroup build(Stream inputStream) // throws ValidatorParsingException
         {
             return ValidatorLoaderParser.parse(inputStream, new Dictionary<string, object>(this.objectStorage));
+        }
     }
-}
-
 }

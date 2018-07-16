@@ -32,10 +32,10 @@ namespace Mx.Peppol.Lookup.Locator
 
         public BdxlLocator(Mode mode)
         : this(
-                mode.getString("lookup.locator.bdxl.prefix"),
-                mode.getString("lookup.locator.hostname"),
-                mode.getString("lookup.locator.bdxl.algorithm"),
-                EncodingUtils.get(mode.getString("lookup.locator.bdxl.encoding")))
+                mode.GetValue("lookup.locator.bdxl.prefix"),
+                mode.GetValue("lookup.locator.hostname"),
+                mode.GetValue("lookup.locator.bdxl.algorithm"),
+                EncodingUtils.get(mode.GetValue("lookup.locator.bdxl.encoding")))
         {
            
         }

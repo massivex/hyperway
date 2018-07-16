@@ -1,6 +1,22 @@
 ﻿{
-	"mode": "TEST",
-	"defaults": {
+  "defaults": {
+    "lookup": {
+      "locator": {
+        "hostname": "",
+        "bdxl": {
+          "prefix": "",
+          "algorithm": "SHA-256",
+          "encoding": "base32"
+        },
+        "busdox": {
+          "prefix": "B-",
+          "algorithm": "MD5"
+        }
+      },
+      "fetcher": {
+        "timeouts": 10000
+      }  
+    },
     "transport": {
       "as2_sha1": {
         "profile": "busdox-transport-as2-ver1p0",
@@ -12,6 +28,23 @@
         "sender": "oxalis-as2",
         "weight": 2000
       }
+    },
+    "security": {
+      "pki": "pki-peppol-test.xml"
+    } 
+  },
+  "PRODUCTION": {
+    "lookup": {
+      "locator": {
+        "hostname": "edelivery.tech.ec.europa.eu"
+      }
     }
-	}
+  },
+  "TEST": {
+    "lookup": {
+      "locator": {
+        "hostname": "acc.edelivery.tech.ec.europa.eu"
+      }
+    }
+  }
 }
