@@ -6,6 +6,7 @@ namespace Mx.Oxalis.As2.Util
 {
     using System.Collections;
     using System.IO;
+    using System.Security.Cryptography;
 
     using Mx.Mime;
     using Mx.Oxalis.Api.Lang;
@@ -17,6 +18,7 @@ namespace Mx.Oxalis.As2.Util
     using Org.BouncyCastle.Cms;
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.Crypto.Operators;
+    using Org.BouncyCastle.Pkcs;
     using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Store;
@@ -97,6 +99,7 @@ namespace Mx.Oxalis.As2.Util
             // used is taken from the key - in this RSA with PKCS1Padding
             //
             CmsAttributeTableGenerator cmsAttrGenerator = new SimpleAttributeTableGenerator(new AttributeTable(signedAttrs));
+
             Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(digestMethod.getMethod(), this.privateKey);
             try
 

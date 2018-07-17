@@ -8,9 +8,10 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<SystemTimestampProvider>().Keyed<TimestampProvider>("system").As<TimestampProvider>()
+            builder.RegisterType<SystemTimestampProvider>()
+                .Keyed<TimestampProvider>("system")
+                .As<TimestampProvider>()
                 .InstancePerLifetimeScope();
-            // oxalis.timestamp.service
         }
     }
 }

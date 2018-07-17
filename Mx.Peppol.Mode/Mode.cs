@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Mode
 {
-    using System.IO;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     using Autofac;
-    using Autofac.Core;
 
     using Microsoft.Extensions.Configuration;
-
-    using Mx.Peppol.Common.Lang;
 
     public class Mode
     {

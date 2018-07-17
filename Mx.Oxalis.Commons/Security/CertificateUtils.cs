@@ -12,7 +12,7 @@ namespace Mx.Oxalis.Commons.Security
     public class CertificateUtils
     {
 
-        private static readonly Regex PATTERN_CN = new Regex("CN=([^,]*),");
+        private static readonly Regex PATTERN_CN = new Regex("CN=([^,]+)");
 
         public static String extractCommonName(X509Certificate certificate)
         {

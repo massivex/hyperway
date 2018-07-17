@@ -15,7 +15,7 @@
       },
       "fetcher": {
         "timeouts": 10000
-      }  
+      }
     },
     "transport": {
       "as2_sha1": {
@@ -31,7 +31,17 @@
     },
     "security": {
       "pki": "pki-peppol-test.xml"
-    } 
+    },
+    "oxalis": {
+      "keystore": {
+        "path": "./conf/test-keystore.pfx",
+        "password": "test",
+        "key": {
+          "alias": "ap",
+          "password": "test"
+        }
+      }
+    }
   },
   "PRODUCTION": {
     "lookup": {

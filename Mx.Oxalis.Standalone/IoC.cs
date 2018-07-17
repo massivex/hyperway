@@ -16,8 +16,11 @@ namespace Mx.Oxalis.Standalone
     using Mx.Oxalis.Api.Transformer;
     using Mx.Oxalis.Api.Transmission;
     using Mx.Oxalis.As2.Outbound;
+    using Mx.Oxalis.As2.Util;
     using Mx.Oxalis.Commons.Interop;
+    using Mx.Oxalis.Commons.Security;
     using Mx.Oxalis.Commons.Statistics;
+    using Mx.Oxalis.Commons.Timestamp;
     using Mx.Oxalis.Commons.Transmission;
     using Mx.Oxalis.DocumentSniffer.Document;
     using Mx.Oxalis.Outbound;
@@ -48,10 +51,18 @@ namespace Mx.Oxalis.Standalone
             builder.RegisterType<NoSbdhParser>().As<ContentDetector>();
 
             // Lookup module registration
+            builder.RegisterModule(new ModeModule());               // Configuration
+            builder.RegisterModule(new CertificateModule());        // Keystore
             builder.RegisterModule(new LookupModule());
             builder.RegisterModule(new TransmissionModule());
             builder.RegisterModule(new As2OutboundModule());
+            builder.RegisterModule(new TimestampModule());
             
+
+
+            // Manual registration
+            builder.RegisterType<SMimeMessageFactory>().AsSelf().InstancePerLifetimeScope();
+            //
 
             builder.RegisterType<LookupClient>().AsSelf();
             builder.RegisterType<BdxlLocator>().As<MetadataLocator>();
@@ -81,8 +92,6 @@ namespace Mx.Oxalis.Standalone
             builder.RegisterType<Bdxr201605Reader>()
                 .Keyed<Bdxr201605Reader>("reader-protocols")
                 .As<MetadataReader>();
-
-            builder.RegisterType<Mode>().AsSelf();
 
             Container = builder.Build();
         }
