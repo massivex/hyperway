@@ -18,6 +18,7 @@
                                              };
             XmlWriter w = XmlWriter.Create(writer, settings);
             s.Serialize(w, obj);
+            w.Flush();
         }
 
         public static void AddXmlFragment(Stream s, XmlTextWriter writer)
@@ -33,6 +34,7 @@
                     {
                         string result = r.ReadOuterXml();
                         writer.WriteRaw(result);
+                        writer.Flush();
                         contentFound = true;
                         break;
                     }

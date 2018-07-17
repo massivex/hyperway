@@ -29,10 +29,11 @@ namespace Mx.Peppol.Sbdh
         {
             this.writer.WriteStartDocument();
             // writer.WriteStartDocument("UTF-8", "1.0");
-            this.writer.WriteStartElement("", Ns.QNAME_SBD.LocalPart, Ns.SBDH);
-            this.writer.WriteQualifiedName(
-                Ns.QNAME_SBDH.LocalPart,
-                Ns.QNAME_SBDH.NamespaceUri); // .WriteDefaultNamespace(Ns.SBDH);
+            this.writer.WriteStartElement("", Ns.QNAME_SBD.LocalPart, Ns.QNAME_SBD.NamespaceUri);
+            // this.writer.WriteStartElement("", Ns.QNAME_SBDH.LocalPart, Ns.QNAME_SBDH.NamespaceUri);
+            //this.writer.WriteQualifiedName(
+            //    Ns.QNAME_SBDH.LocalPart,
+            //    Ns.QNAME_SBDH.NamespaceUri); // .WriteDefaultNamespace(Ns.SBDH);
             SbdhWriter.write(this.writer, header);
         }
 
@@ -57,8 +58,10 @@ namespace Mx.Peppol.Sbdh
 
         private void finalizeDocument() // throws SbdhException
         {
-            this.writer.WriteEndElement();
-            this.writer.WriteEndDocument();
+            this.writer.WriteRaw("</StandardBusinessDocument>");
+            this.writer.Flush();
+            //this.writer.WriteEndElement();
+            //this.writer.WriteEndDocument();
         }
 
 

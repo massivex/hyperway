@@ -32,13 +32,20 @@ namespace Mx.Oxalis.Commons
          */
         public static Header parse(Stream inputStream)
         {
-            try {
+            try
+            {
                 using (SbdReader sbdReader = SbdReader.newInstance(inputStream))
                 {
                     return sbdReader.getHeader();
                 }
-            } catch (Exception ex) when (ex is SbdhException || ex is IOException) { 
+            }
+            catch (Exception ex) when (ex is SbdhException || ex is IOException)
+            {
                 throw new InvalidOperationException(ex.Message, ex);
+            }
+            finally
+            {
+                inputStream.Seek(0, SeekOrigin.Begin);
             }
         }
     }
