@@ -59,31 +59,13 @@ namespace Mx.Peppol.Sbdh
         {
             this.writer.WriteEndElement();
             this.writer.WriteEndDocument();
-
-            //    ExceptionUtil.perform(SbdhException.class, new PerformAction()
-            //{
-            //    @Override
-            //            public void action() throws Exception {
-            //        writer.writeEndElement();
-            //        writer.writeEndDocument();
-            //    }
-            //});
         }
 
 
         public void Dispose() // throws IOException
         {
             this.finalizeDocument();
-            this.writer.Dispose();
-
-            //    ExceptionUtil.perform(IOException.class, new PerformAction()
-            //{
-            //    @Override
-            //            public void action() throws Exception {
-            //        finalizeDocument();
-            //        writer.close();
-            //    }
-            //});
+            // you MUST keep input stream open for further tasks
         }
     }
 }

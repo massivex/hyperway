@@ -70,7 +70,7 @@ namespace Mx.Oxalis.DocumentSniffer.Document
             try
             {
                 // TODO: Verificare il tipo di path che viene restituito
-                var value = ((IEnumerable<object>)this.document.XPathEvaluate(s, this.nsResolver)).OfType<XText>().Single().Value;
+                var value = ((IEnumerable<object>)this.document.XPathEvaluate(s, this.nsResolver)).OfType<XElement>().Single().Value;
                 // XElement element = this.document.x
                 // String value = xPath.evaluate(s, document);
                 if (value == null)

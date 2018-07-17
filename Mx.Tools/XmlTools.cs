@@ -1,5 +1,6 @@
 ﻿namespace Mx.Tools
 {
+    using System;
     using System.IO;
     using System.Text;
     using System.Xml;
@@ -23,10 +24,24 @@
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreProcessingInstructions = true;
+            bool contentFound = false;
             using (XmlReader r = XmlReader.Create(s, settings))
             {
-                string result = r.ReadOuterXml();
-                writer.WriteRaw(result);
+                while (r.Read())
+                {
+                    if (r.NodeType == XmlNodeType.Element)
+                    {
+                        string result = r.ReadOuterXml();
+                        writer.WriteRaw(result);
+                        contentFound = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!contentFound)
+            {
+                throw new InvalidOperationException("Unable to find an element inside input stream");
             }
         }
 

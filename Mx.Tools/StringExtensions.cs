@@ -12,6 +12,11 @@
             return value.Equals(other, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static byte[] ToUtf8(this string value)
+        {
+            return System.Text.Encoding.UTF8.GetBytes(value);
+        }
+
         public static String ToStringValues<T>(this T[] items)
         {
             if (items == null)

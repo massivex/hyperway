@@ -17,6 +17,12 @@
         public static byte[] ToBuffer(this Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
+            if (input.CanSeek)
+            {
+                // Ensure stream position when seeking is enabled
+                input.Seek(0, SeekOrigin.Begin);
+            }
+            
             using (MemoryStream ms = new MemoryStream())
             {
                 int read;

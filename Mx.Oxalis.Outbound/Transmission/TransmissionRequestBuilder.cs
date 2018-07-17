@@ -158,8 +158,7 @@ namespace Mx.Oxalis.Outbound.Transmission
             }
 
             // Calculates the effectiveStandardBusinessHeader to be used
-            this.effectiveStandardBusinessHeader =
-                this.makeEffectiveSbdh(optionalParsedSbdh, this.suppliedHeaderFields);
+            this.effectiveStandardBusinessHeader = this.makeEffectiveSbdh(optionalParsedSbdh, this.suppliedHeaderFields);
 
             // If the endpoint has not been overridden by the caller, look up the endpoint address in
             // the SMP using the data supplied in the payload

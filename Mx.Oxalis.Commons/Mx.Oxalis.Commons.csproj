@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mx.Mime\Mx.Mime.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Oxalis.Api.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Sbdh\Mx.Peppol.Sbdh.csproj" />
   </ItemGroup>

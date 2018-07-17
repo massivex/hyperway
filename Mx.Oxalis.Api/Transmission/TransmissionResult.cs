@@ -26,7 +26,7 @@
          */
         TransportProfile getProtocol();
 
-        List<Receipt> getReceipts();
+        IList<Receipt> getReceipts();
 
         Receipt primaryReceipt();
     }

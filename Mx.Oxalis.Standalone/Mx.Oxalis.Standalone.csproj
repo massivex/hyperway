@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mx.Oxalis.As2\Mx.Oxalis.As2.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Outbound\Mx.Oxalis.Outbound.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Statistics\Mx.Oxalis.Statistics.csproj" />
   </ItemGroup>

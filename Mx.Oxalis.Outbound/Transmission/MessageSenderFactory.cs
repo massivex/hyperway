@@ -110,7 +110,7 @@ namespace Mx.Oxalis.Outbound.Transmission
          */
         public MessageSender getMessageSender(TransportProfile transportProfile) // throws OxalisTransmissionException
         {
-            return this.injector.ResolveNamed<MessageSender>(this.getSender(transportProfile));
+            return this.injector.ResolveKeyed<MessageSender>(this.getSender(transportProfile));
             // getInstance(Key.get(MessageSender.class, Names.named(getSender(transportProfile))));
         }
     }

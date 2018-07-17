@@ -15,6 +15,7 @@ namespace Mx.Oxalis.Standalone
     using Mx.Oxalis.Api.Statistics;
     using Mx.Oxalis.Api.Transformer;
     using Mx.Oxalis.Api.Transmission;
+    using Mx.Oxalis.As2.Outbound;
     using Mx.Oxalis.Commons.Interop;
     using Mx.Oxalis.Commons.Statistics;
     using Mx.Oxalis.Commons.Transmission;
@@ -48,6 +49,9 @@ namespace Mx.Oxalis.Standalone
 
             // Lookup module registration
             builder.RegisterModule(new LookupModule());
+            builder.RegisterModule(new TransmissionModule());
+            builder.RegisterModule(new As2OutboundModule());
+            
 
             builder.RegisterType<LookupClient>().AsSelf();
             builder.RegisterType<BdxlLocator>().As<MetadataLocator>();
@@ -57,7 +61,6 @@ namespace Mx.Oxalis.Standalone
             builder.RegisterType<MetadataProvider>().AsSelf();
             
 
-            builder.RegisterType<DefaultTransmitter>().As<Transmitter>();
             builder.RegisterType<MessageSenderFactory>().AsSelf();
             builder.RegisterType<NoopStatisticsService>().As<StatisticsService>();
             builder.RegisterType<DefaultTransmissionVerifier>().As<TransmissionVerifier>();
