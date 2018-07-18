@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using log4net;
 
-using Mx.Mime;
+using MimeKit;
+
 using Mx.Oxalis.As2.Model;
 using Mx.Tools;
 using Mx.Tools.Encoding;
@@ -35,12 +37,12 @@ public class MdnMimeMessageInspector
         this.mdnMimeMessage = mdnMimeMessage;
     }
 
-    public List<MimeBody> getSignedMultiPart()
+    public List<MimeEntity> getSignedMultiPart()
     {
         try
         {
             // return (MimeMultipart)mdnMimeMessage.getContent();
-            return this.mdnMimeMessage.GetBodyPartList();
+            return this.mdnMimeMessage.BodyParts.ToList();
         }
         catch (Exception e)
         {
@@ -52,13 +54,13 @@ public class MdnMimeMessageInspector
      * The multipart/report should contain both a text/plain part with textual information and
      * a message/disposition-notification part that should be examined for error/failure/warning.
      */
-    public List<MimeBody> getMultipartReport()
+    public List<MimeEntity> getMultipartReport()
     {
         try
         {
-            MimeBody bodyPart = getSignedMultiPart()[0];
-            List<MimeBody> multipartReport = bodyPart.GetBodyPartList();
-            if (!containsIgnoreCase(bodyPart.GetContentMainType(), "multipart/report"))
+            MimeEntity bodyPart = getSignedMultiPart()[0];
+            List<MimeEntity> multipartReport = (bodyPart as Multipart).ToList();
+            if (!containsIgnoreCase(bodyPart.Headers[HeaderId.ContentType], "multipart/report"))
             {
                 throw new InvalidOperationException("The first body part of the first part of the signed message is not a multipart/report");
             }
@@ -73,7 +75,7 @@ public class MdnMimeMessageInspector
     /**
      * We assume that the first text/plain part is the one containing any textual information.
      */
-    public MimeBody getPlainTextBodyPart()
+    public MimeEntity getPlainTextBodyPart()
     {
         return getPartFromMultipartReport("text/plain");
     }
@@ -82,9 +84,9 @@ public class MdnMimeMessageInspector
      * We search for the first message/disposition-notification part.
      * If we don't find one of that type we assume that part 2 is the right one.
      */
-    public MimeBody getMessageDispositionNotificationPart()
+    public MimeEntity getMessageDispositionNotificationPart()
     {
-        MimeBody bp = getPartFromMultipartReport("message/disposition-notification");
+        MimeEntity bp = getPartFromMultipartReport("message/disposition-notification");
         if (bp == null) bp = getBodyPartAt(1); // the second part should be machine readable
         return bp;
     }
@@ -94,15 +96,15 @@ public class MdnMimeMessageInspector
      *
      * @param contentType the mime type to look for
      */
-    private MimeBody getPartFromMultipartReport(String contentType)
+    private MimeEntity getPartFromMultipartReport(String contentType)
     {
         try
         {
-            List<MimeBody> multipartReport = getMultipartReport();
+            List<MimeEntity> multipartReport = getMultipartReport();
             for (int t = 0; t < multipartReport.Count; t++)
             {
-                MimeBody bp = multipartReport[t]; //.getBodyPart(t);
-                if (containsIgnoreCase(bp.GetContentMainType(), contentType))
+                MimeEntity bp = multipartReport[t]; //.getBodyPart(t);
+                if (containsIgnoreCase(bp.Headers[HeaderId.ContentType], contentType))
                 {
                     return bp;
                 }
@@ -120,7 +122,7 @@ public class MdnMimeMessageInspector
      *
      * @param position starts at 0 for the first, 1 for the second, etc
      */
-    private MimeBody getBodyPartAt(int position)
+    private MimeEntity getBodyPartAt(int position)
     {
         return getMultipartReport()[position];
     }
@@ -128,7 +130,7 @@ public class MdnMimeMessageInspector
     public String getPlainTextPartAsText()
     {
 
-        return getPlainTextBodyPart().GetText();
+        return getPlainTextBodyPart().ToString();
     }
 
     public Dictionary<String, String> getMdnFields()
@@ -137,7 +139,7 @@ public class MdnMimeMessageInspector
         try
         {
 
-            MimeBody bp = getMessageDispositionNotificationPart();
+            MimeEntity bp = getMessageDispositionNotificationPart();
             bool contentIsBase64Encoded = false;
 
             //
@@ -150,7 +152,10 @@ public class MdnMimeMessageInspector
             // does not have an early history involving 7-bit restriction.
             // There is no need to use the Content Transfer Encodings of MIME."
             //
-            String[] contentTransferEncodings = bp.GetAllFieldValue("Content-Transfer-Encoding");
+            String[] contentTransferEncodings = bp
+                .Headers[HeaderId.ContentTransferEncoding]
+                .Split(new[] { "\r\n" }, StringSplitOptions.None);
+            // GetAllFieldValue("Content-Transfer-Encoding");
             if (contentTransferEncodings != null && contentTransferEncodings.Length > 0)
             {
                 if (contentTransferEncodings.Length > 1)
@@ -172,7 +177,12 @@ public class MdnMimeMessageInspector
                 }
             }
 
-            byte[] content = bp.GetBuffer();
+            byte[] content;
+            using (var m = new MemoryStream())
+            {
+                bp.WriteTo(m, true);
+                content = m.ToArray();
+            }
             if (content != null)
             {
                 // InputStream contentInputStream = (InputStream)content;

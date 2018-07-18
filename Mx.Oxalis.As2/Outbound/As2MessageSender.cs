@@ -9,7 +9,8 @@
 
     using log4net;
 
-    using Mx.Mime;
+    using MimeKit;
+
     using Mx.Oxalis.Api.Lang;
     using Mx.Oxalis.Api.Model;
     using Mx.Oxalis.Api.Outbound;
@@ -117,7 +118,7 @@
                 HttpPost httpPost;
 
                 // Create the body part of the MIME message containing our content to be transmitted.
-                MimeMessage mimeBodyPart = MimeMessageHelper.createMimeBodyPart(
+                MimeEntity mimeBodyPart = MimeMessageHelper.createMimeBodyPart(
                     this.transmissionRequest.getPayload(),
                     "application/xml");
 
@@ -141,7 +142,7 @@
                 httpPost = new HttpPost(this.transmissionRequest.getEndpoint().getAddress());
 
                 // Get all headers in S/MIME message.
-                var headers = signedMimeMessage.GetHeaders();
+                var headers = signedMimeMessage.Headers;
                 // List<javax.mail.Header> headers = Collections.list(signedMimeMessage.getAllHeaders());
 
 
@@ -149,11 +150,11 @@
                     // Tag for tracing.
                     .Peek(
                         x => span.Record(
-                            Annotations.Tag(x.GetName(), x.GetValue()))) // span.tag(h.getName(), h.getValue()))
+                            Annotations.Tag(x.Field, x.Value))) // span.tag(h.getName(), h.getValue()))
                     // Add headers to httpPost object (remove new lines according to HTTP 1.1).
-                    .Peek(x => httpPost.AddHeader(x.GetName(), x.GetValue().Replace("\r\n\t", string.Empty)))
+                    .Peek(x => httpPost.AddHeader(x.Field, x.Value.Replace("\r\n\t", string.Empty)))
                     // Collect header names....
-                    .Map(x => x.GetName())
+                    .Map(x => x.Field)
                     // ... in a list.
                     .ToList();
 
@@ -272,7 +273,7 @@
                 // Add headers to MIME Message
                 foreach (var headerName in response.Headers.AllKeys)
                 {
-                    mimeMessage.SetFieldValue(headerName, response.Headers[headerName], null);
+                    mimeMessage.Headers.Add(headerName, response.Headers[headerName]);
                 }
 
                 SMimeReader sMimeReader = new SMimeReader(mimeMessage);
@@ -289,9 +290,10 @@
                 //InputStream digestInputStream = new DigestInputStream(sMimeReader.getBodyInputStream(), messageDigest);
 
                 // Reading report
-                MimeMessage mimeMultipart = new MimeMessage();
-                mimeMultipart.SetContentType(mimeMessage.GetContentType());
-                mimeMultipart.LoadBody(digest, Encoding.ASCII);
+                Multipart mimeMultipart = new Multipart();
+                mimeMultipart.Add(MimeEntity.Load(digest.ToStream()));
+                // mimeMultipart.SetContentType(mimeMessage.GetContentType());
+                // mimeMultipart.LoadBody(digest, Encoding.ASCII);
 
 
                 // new ByteArrayDataSource(digestInputStream, mimeMessage.getContentType()));
@@ -336,15 +338,15 @@
                 }
 
                 // Read structured content
-                MimeBody mimeBodyPart = mdnMimeMessageInspector.getMessageDispositionNotificationPart();
-                var internetHeaders = mimeBodyPart.GetHeaders();
+                MimeEntity mimeBodyPart = mdnMimeMessageInspector.getMessageDispositionNotificationPart();
+                var internetHeaders = mimeBodyPart.Headers;
                 // InternetHeaders internetHeaders = new InternetHeaders((InputStream)mimeBodyPart.getContent());
 
                 // Fetch timestamp if set
                 DateTime date = t3.getDate();
-                if (internetHeaders.Any(x => x.GetName() == MdnHeader.DATE))
+                if (internetHeaders.Any(x => x.Field == MdnHeader.DATE))
                 {
-                    var dateText = internetHeaders.First(x => x.GetName() == MdnHeader.DATE).GetValue();
+                    var dateText = internetHeaders.First(x => x.Field == MdnHeader.DATE).Value;
                     date = As2DateUtil.RFC822.parse(dateText);
                 }
 

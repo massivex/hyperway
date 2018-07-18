@@ -5,23 +5,24 @@ using System.Text;
 namespace Mx.Oxalis.As2.Util
 {
     using System.Collections;
-    using System.Collections.ObjectModel;
     using System.IO;
-    
+    using System.Linq;
+
     using log4net;
 
+    using MimeKit;
+
     using Mx.Mime;
-    using Mx.Oxalis.Api.Model;
     using Mx.Oxalis.As2.Model;
     using Mx.Oxalis.Commons.BouncyCastle;
-    using Mx.Tools;
     using Mx.Tools.Encoding;
 
     using Org.BouncyCastle.Cms;
-    using Org.BouncyCastle.Security;
+    using Org.BouncyCastle.Crypto.Paddings;
     using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509.Store;
 
+    using MimeMessage = MimeKit.MimeMessage;
     using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
     /**
@@ -93,14 +94,19 @@ namespace Mx.Oxalis.As2.Util
 
                 // MessageDigest messageDigest = BcHelper.getMessageDigest(algorithm.getAlgorithm());
 
-                List<MimeBody> mimeMultipart = mimeMessage.GetBodyPartList();
+                List<MimeEntity> mimeMultipart = mimeMessage.BodyParts.ToList();
 
-                MimeBody bodyPart = mimeMultipart[0];
+                MimeEntity bodyPart = mimeMultipart[0];
 
                 // ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 // bodyPart.writeTo(baos); // Writes the entire contents of first multipart, including the MIME headers
-
-                byte[] content = bodyPart.GetBuffer(); //.toByteArray();
+                byte[] content;
+                using (var m = new MemoryStream())
+                {
+                    bodyPart.WriteTo(m, true);
+                    content = m.ToArray();
+                }
+                //byte[] content = bodyPart.WriteTo(); //.toByteArray();
                 // messageDigest.update(content);
                 //String digestAsString = new String(Base64.encode(messageDigest.digest()));
                 var digest = BcHelper.Hash(content, algorithm.getAlgorithm());
@@ -150,13 +156,13 @@ namespace Mx.Oxalis.As2.Util
         {
             try
             {
-
+                // TODO: Fix LOG
                 // at this stage we should have a javax.mail.internet.MimeMessage with content type text/plain
-                log.Debug("Verifying " + mimeMessage.GetType().Name + " with content type " + mimeMessage.GetContentType());
+                // log.Debug("Verifying " + mimeMessage.GetType().Name + " with content type " + mimeMessage.GetContentType());
 
                 // the contents of this should be a multipart MimeMultipart that is signed
-                List<MimeBody> bodies = this.mimeMessage.GetBodyPartList();
-                String contentType = this.mimeMessage.GetContentSubType();
+                List<MimeEntity> bodies = this.mimeMessage.BodyParts.ToList();
+                String contentType = this.mimeMessage.Headers[HeaderId.ContentType];
 
                 if (!contentType.StartsWith("multipart/signed"))
                 {
@@ -178,7 +184,14 @@ namespace Mx.Oxalis.As2.Util
             {
                 // MimeMessageHelper.dumpMimePartToFile("/tmp/parseSignedMessage.txt", mimeMessage);
                 // CmsTypedStream s = new CmsTypedStream(mimeMessage.GetBuffer().ToStream());
-                var messageContent = mimeMessage.GetBuffer();
+                byte[] data;
+                using (var m = new MemoryStream())
+                {
+                    this.mimeMessage.WriteTo(m);
+                    data = m.ToArray();
+                }
+
+                var messageContent = data;
                 smimeSignedParser = new SmimeSignedParser(messageContent);
                     //new JcaDigestCalculatorProviderBuilder().build(),
                     //(MimeMultipart)mimeMessage.getContent());

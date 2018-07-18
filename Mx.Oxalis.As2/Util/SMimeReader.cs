@@ -7,16 +7,18 @@ namespace Mx.Oxalis.As2.Util
     using System.Collections;
     using System.Diagnostics;
     using System.IO;
-    using System.Net.Mime;
 
-    using Mx.Mime;
+    using MimeKit;
+
     using Mx.Oxalis.As2.Code;
     using Mx.Tools;
+
+    using ContentType = System.Net.Mime.ContentType;
 
     public class SMimeReader : IDisposable
     {
 
-        private List<MimeBody> mimeMultipart;
+        private Multipart mimeMultipart;
 
         private byte[] signature;
 
@@ -24,22 +26,30 @@ namespace Mx.Oxalis.As2.Util
 
         public SMimeReader(MimeMessage mimeMessage) // throws MessagingException, IOException
         {
-            this.mimeMultipart = mimeMessage.GetBodyPartList();
+            this.mimeMultipart = mimeMessage.Body as Multipart;
 
+            MimeEntity mime = this.mimeMultipart[1];
             // Extracting signature
-            signature = this.mimeMultipart[1].GetBuffer(); //  ByteStreams.toByteArray(((InputStream)mimeMultipart.getBodyPart(1).getContent()));
+            using (var m = new MemoryStream())
+            {
+                mime.WriteTo(m, true);
+                m.Seek(0, SeekOrigin.Begin);
+                this.signature = m.GetBuffer();
+
+            }
+            // signature = this.mimeMultipart[1].WriteTo(). GetBuffer(); //  ByteStreams.toByteArray(((InputStream)mimeMultipart.getBodyPart(1).getContent()));
 
             // Extracting DNO
-            String[] dno = mimeMessage.GetAllFieldValue(As2Header.DISPOSITION_NOTIFICATION_OPTIONS);
+            String[] dno = mimeMessage.Headers[As2Header.DISPOSITION_NOTIFICATION_OPTIONS].Split(new[] { "\\r\\n" }, StringSplitOptions.None);
 
             // if (dno == null)
             // throw new IllegalStateException("Unable to extract dno.");
-            var contentType = new ContentType(mimeMessage.GetContentType());
+            var contentType = new ContentType(mimeMessage.Headers[HeaderId.ContentType]);
             String algorithm = contentType.Parameters?["micalg"];
             if (algorithm == null)
             {
                 throw new InvalidOperationException(
-                    "micalg parameter not found in Content-Type header: " + mimeMessage.GetContentType());
+                    "micalg parameter not found in Content-Type header: " + contentType);
             }
 
             sMimeDigestMethod = SMimeDigestMethod.findByIdentifier(algorithm);
@@ -79,7 +89,15 @@ namespace Mx.Oxalis.As2.Util
 
         public byte[] getBody() // throws MessagingException, IOException
         {
-            return mimeMultipart[0].GetBuffer();
+            byte[] result;
+            using (var m = new MemoryStream())
+            {
+                mimeMultipart[0].WriteTo(m, true);
+                m.Seek(0, SeekOrigin.Begin);
+                result = m.GetBuffer();
+            }
+
+            return result;
         }
 
 

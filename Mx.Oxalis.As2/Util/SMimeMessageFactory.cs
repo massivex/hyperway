@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Oxalis.As2.Util
 {
-    using System.Collections;
-    using System.IO;
-    using System.Security.Cryptography;
-
-    using Mx.Mime;
     using Mx.Oxalis.Api.Lang;
-    using Mx.Peppol.Common.Model;
     using Mx.Tools;
-
     using Org.BouncyCastle.Asn1;
     using Org.BouncyCastle.Asn1.Cms;
     using Org.BouncyCastle.Cms;
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.Crypto.Operators;
-    using Org.BouncyCastle.Pkcs;
     using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Store;
+    using System.Collections;
+    using System.IO;
+
+    using MimeKit;
+    using MimeKit.Cryptography;
 
     public class SMimeMessageFactory
     {
@@ -50,10 +46,9 @@ namespace Mx.Oxalis.As2.Util
          * @param msg      holds the payload of the message
          * @param mimeType the MIME type to be used as the "Content-Type"
          */
-        public MimeMessage
-            createSignedMimeMessage(
+        public MimeMessage createSignedMimeMessage(
                 string msg,
-                MimeType mimeType,
+                string mimeType,
                 SMimeDigestMethod digestMethod) // throws OxalisTransmissionException
         {
             var msgData = Encoding.Default.GetBytes(msg);
@@ -65,10 +60,10 @@ namespace Mx.Oxalis.As2.Util
          */
         public MimeMessage createSignedMimeMessage(
             Stream inputStream,
-            MimeType mimeType,
+            string mimeType,
             SMimeDigestMethod digestMethod) // throws OxalisTransmissionException
         {
-            MimeMessage mimeBodyPart = MimeMessageHelper.createMimeBodyPart(inputStream, mimeType.ToString());
+            MimeEntity mimeBodyPart = MimeMessageHelper.createMimeBodyPart(inputStream, mimeType);
             return createSignedMimeMessage(mimeBodyPart, digestMethod);
         }
 
@@ -76,9 +71,19 @@ namespace Mx.Oxalis.As2.Util
          * Creates an S/MIME message using the supplied MimeBodyPart. The signature is generated using the private key
          * as supplied in the constructor. Our certificate, which is required to verify the signature is enclosed.
          */
-        public MimeMessage createSignedMimeMessage(MimeMessage mimeBodyPart, SMimeDigestMethod digestMethod)
+        public MimeMessage createSignedMimeMessage(MimeEntity mimeBodyPart, SMimeDigestMethod digestMethod)
             // throws OxalisTransmissionException
         {
+
+            using (var ctx = new OxalisSecureMimeContext())
+            {
+                var message = new MimeMessage();
+                // Note: this assumes that "Alice" has an S/MIME certificate with an X.509
+                // Subject Email identifier that matches her email address. If she doesn't,
+                // try using a SecureMailboxAddress which allows you to specify the
+                // fingerprint of her certificate to use for lookups.
+                message.Body = ApplicationPkcs7Mime.Encrypt(ctx, message.To.Mailboxes, mimeBodyPart);
+            }
 
             //
             // S/MIME capabilities are required, but we simply supply an empty vector
@@ -144,7 +149,13 @@ namespace Mx.Oxalis.As2.Util
             //
             // Signs the supplied MimeBodyPart
             //
-            var data = mimeBodyPart.GetBuffer();
+            byte[] data;
+            using (var m = new MemoryStream())
+            {
+                mimeBodyPart.WriteTo(m);
+                data = m.ToArray();
+            }
+            // var data = mimeBodyPart.GetBuffer();
             CmsProcessableByteArray cmsContent = new CmsProcessableByteArray(data);
             CmsSignedData mimeMultipart;
             try
@@ -167,8 +178,10 @@ namespace Mx.Oxalis.As2.Util
             
             try
             {
+                // TODO: not implemented
+                throw new NotImplementedException();
                 // mimeMessage.LoadBody(mimeMultipart); // v.getContentType());
-                mimeMessage.LoadBody(mimeMultipart.GetEncoded(), Encoding.ASCII);
+                // mimeMessage.LoadBody(mimeMultipart.GetEncoded());
             }
             catch (Exception e)
             {

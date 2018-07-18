@@ -6,10 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="MimeKit" Version="2.0.5" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mx.Mime\Mx.Mime.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Oxalis.Api.csproj" />
     <ProjectReference Include="..\Mx.Oxalis.Commons\Mx.Oxalis.Commons.csproj" />
   </ItemGroup>

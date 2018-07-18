@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Oxalis.As2.Util
 {
-    using System.ComponentModel;
     using System.IO;
     using System.Linq;
 
     using log4net;
 
-    using Mx.Mime;
+    using MimeKit;
+
     using Mx.Oxalis.Commons.BouncyCastle;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
@@ -35,9 +34,7 @@ namespace Mx.Oxalis.As2.Util
             {
                 //Properties properties = System.getProperties();
                 //Session session = Session.getDefaultInstance(properties, null);
-                var msg = new MimeMessage();
-                var data = Encoding.UTF8.GetString(inputStream.ToBuffer());
-                msg.LoadBody(data);
+                var msg = MimeMessage.Load(inputStream);
                 return msg;
                 // return new MimeMessage(session, inputStream);
             }
@@ -75,13 +72,13 @@ namespace Mx.Oxalis.As2.Util
          * do a successful MIME decoding.  If MimeType can not be extracted from the HTTP headers we
          * still try to do a successful decoding using the payload directly.
          */
-        public static MimeMessage createMimeMessageAssistedByHeaders(Stream inputStream, MimeField[] headers)
+        public static MimeMessage createMimeMessageAssistedByHeaders(Stream inputStream, HeaderList headers)
             // throws MessagingException
         {
             String mimeType = null;
             String contentType = headers
-                .Where(x => x.GetName() == MimeConst.ContentType)
-                .Select(x => x.GetValue())
+                .Where(x => x.Id == HeaderId.ContentType)
+                .Select(x => x.Value)
                 .FirstOrDefault();
             if (contentType != null)
             {
@@ -106,9 +103,10 @@ namespace Mx.Oxalis.As2.Util
             }
             
             
-            foreach (MimeField header in headers)
+            foreach (var header in headers)
             {
-                mimeMessage.SetFieldValue(header.GetName(), header.GetValue(), header.GetCharset());
+                mimeMessage.Headers.Add(header.Clone());
+                // mimeMessage.SetFieldValue(header.Field, header.Value, header.GetCharset());
                 // mimeMessage.addHeader(header.getName(), header.getValue());
             }
 
@@ -145,20 +143,24 @@ namespace Mx.Oxalis.As2.Util
             // MimeMessage mimeMessage = new MimeMessage(Session.getDefaultInstance(System.getProperties()));
             // mimeMultipart
             //mimeMessage.setContent(mimeMultipart);
+            Multipart mimeMultipart = Multipart.Load(ParserOptions.Default, dataSource.ToStream(), false) as Multipart;
+            // mimeMultipart.Prepare();
             MimeMessage m = new MimeMessage();
-            m.LoadBody(dataSource, Encoding.UTF8);
+            // m.LoadBody(dataSource, Encoding.UTF8);
+            m.Body = mimeMultipart;
             return m;
         }
 
-        public static MimeMessage createMimeBodyPart(Stream inputStream, String mimeType)
+        public static MimeEntity createMimeBodyPart(Stream inputStream, String mimeType)
         {
-            var mimeBodyPart = new MimeMessage();
+            // var mimeMessage = new MimeMessage();
             
             // ByteArrayDataSource byteArrayDataSource;
-
+            MimeEntity bodyPart;
             try
             {
-                mimeBodyPart.LoadBody(inputStream.ToBuffer().ToUtf8String());
+                bodyPart = MimeEntity.Load(ContentType.Parse(mimeType), inputStream);                
+                // mimeBodyPart.LoadBody(inputStream.ToBuffer().ToUtf8String());
                 // byteArrayDataSource = new ByteArrayDataSource(inputStream, mimeType);
             }
             catch (IOException e)
@@ -178,32 +180,40 @@ namespace Mx.Oxalis.As2.Util
             //    throw new IllegalStateException("Unable to set data handler on mime body part." + e.getMessage(), e);
             //}
 
-            try
-            {
-                mimeBodyPart.SetFieldValue(MimeConst.ContentType, mimeType, null); // .setHeader("Content-Type", mimeType);
-                mimeBodyPart.SetFieldValue(MimeConst.TransferEncoding, "binary", null); // .setHeader("Content-Transfer-Encoding", "binary");
-                                                                                  //  No content-transfer-encoding needed for http
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException("Unable to set headers." + e.Message, e);
-            }
+            //try
+            //{
+            //    bodyPart.SetFieldValue(MimeConst.ContentType, mimeType, null); // .setHeader("Content-Type", mimeType);
+            //    bodyPart.SetFieldValue(MimeConst.TransferEncoding, "binary", null); // .setHeader("Content-Transfer-Encoding", "binary");
+            //                                                                      //  No content-transfer-encoding needed for http
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new InvalidOperationException("Unable to set headers." + e.Message, e);
+            //}
 
-            return mimeBodyPart;
+            return bodyPart;
         }
 
         /**
          * Calculates sha1 mic based on the MIME body part.
          */
-        public static Digest calculateMic(MimeBody bodyPart, SMimeDigestMethod digestMethod)
+        public static Digest calculateMic(MimeEntity bodyPart, SMimeDigestMethod digestMethod)
         {
             try
             {
-                
-                // MessageDigest md = BCHelper.getMessageDigest(digestMethod.getIdentifier());
-                var digest = BcHelper.Hash(bodyPart.GetBuffer(), digestMethod.getAlgorithm());
-                // bodyPart.writeTo(new DigestOutputStream(ByteStreams.nullOutputStream(), md));
+                byte[] digest;
+                using (var m = new MemoryStream())
+                {
+                    bodyPart.WriteTo(m);
+                    m.Seek(0, SeekOrigin.Begin);
+                    digest = BcHelper.Hash(m.GetBuffer(), digestMethod.getAlgorithm());
+                    
+                }
                 return Digest.of(digestMethod.getDigestMethod(), digest);
+                // MessageDigest md = BCHelper.getMessageDigest(digestMethod.getIdentifier());
+
+                // bodyPart.writeTo(new DigestOutputStream(ByteStreams.nullOutputStream(), md));
+
             }
             catch (IOException e)
             {
