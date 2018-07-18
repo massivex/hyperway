@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Oxalis.Commons.BouncyCastle
 {
     using System.IO;
 
-    using Mx.Mime;
-    using Mx.Tools;
+    using MimeKit;
 
     using Org.BouncyCastle.Cms;
 
@@ -49,17 +46,19 @@ namespace Mx.Oxalis.Commons.BouncyCastle
     {
         Object message;
 
-        MimeBody content;
+        MimeEntity content;
 
-        private static Stream getInputStream(MimeBody bodyPart) // throws MessagingException
+        private static Stream getInputStream(MimeEntity bodyPart) // throws MessagingException
         {
-            if (bodyPart.GetContentMainType() == "multipart/signed")
+            if (bodyPart.Headers[HeaderId.ContentType] == "multipart/signed")
             {
                 throw new InvalidOperationException(
                     "attempt to create signed data object from multipart content - use MimeMultipart constructor.");
             }
 
-            return bodyPart.GetBuffer().ToStream();
+            var m = new MemoryStream();
+            bodyPart.WriteTo(m);
+            return m;
         }
 
         private static FileInfo getTmpFile() // throws MessagingException
@@ -69,7 +68,7 @@ namespace Mx.Oxalis.Commons.BouncyCastle
         }
 
         private static CmsTypedStream getSignedInputStream(
-                MimeBody bodyPart,
+                MimeEntity bodyPart,
                 string defaultContentTransferEncoding,
                 FileInfo backingFile)
             // throws MessagingException
@@ -80,7 +79,10 @@ namespace Mx.Oxalis.Commons.BouncyCastle
             //}
 
             //Stream input = 
-            return new CmsTypedStream(bodyPart.GetBuffer().ToStream());
+            var m = new MemoryStream();
+            bodyPart.WriteTo(m, true);
+            m.Seek(0, SeekOrigin.Begin);
+            return new CmsTypedStream(m);
         }
 
         //static SmimeSigneParser
@@ -258,7 +260,7 @@ namespace Mx.Oxalis.Commons.BouncyCastle
          * return the content that was signed.
          * @return the signed body part in this message.
          */
-        public MimeBody getContent()
+        public MimeEntity getContent()
         {
             return content;
         }

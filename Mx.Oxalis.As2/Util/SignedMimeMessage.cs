@@ -12,7 +12,6 @@ namespace Mx.Oxalis.As2.Util
 
     using MimeKit;
 
-    using Mx.Mime;
     using Mx.Oxalis.As2.Model;
     using Mx.Oxalis.Commons.BouncyCastle;
     using Mx.Tools.Encoding;

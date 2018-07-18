@@ -60,9 +60,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "liquid", "liquid", "{D114C5
 		third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll = third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mx.Oxalis.As2", "Mx.Oxalis.As2\Mx.Oxalis.As2.csproj", "{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mx.Mime", "Mx.Mime\Mx.Mime.csproj", "{A03D9D78-9CEF-4D41-880B-DBC835CD0B47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.As2", "Mx.Oxalis.As2\Mx.Oxalis.As2.csproj", "{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,10 +140,6 @@ Global
 		{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A03D9D78-9CEF-4D41-880B-DBC835CD0B47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A03D9D78-9CEF-4D41-880B-DBC835CD0B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A03D9D78-9CEF-4D41-880B-DBC835CD0B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A03D9D78-9CEF-4D41-880B-DBC835CD0B47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
