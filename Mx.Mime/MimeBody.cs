@@ -6,6 +6,8 @@ namespace Mx.Mime
     using System.IO;
     using System.Text;
 
+    using Org.BouncyCastle.Crypto.Paddings;
+
     /// <summary>
 	/// 
 	/// </summary>
@@ -165,10 +167,9 @@ namespace Mx.Mime
 
 			this.SetContentType("text/plain");
 			this.SetCharset(aCode.Charset);
-
 		}
 
-		public string GetText()
+        public string GetText()
 		{
 			string encoding = this.GetTransferEncoding();
 			if(encoding == null)
@@ -207,6 +208,24 @@ namespace Mx.Mime
 		{
 			return this.GetName()!=null;
 		}
+
+	    public void ReadFromBytes(byte[] data)
+	    {
+	        //var bs = data;
+	        //byte[] b = new byte[bs.Length];
+	        //bs.Read(b, 0, (int)bs.Length);
+
+	        string encoding = this.GetTransferEncoding();
+	        if (encoding == null)
+	        {
+	            encoding = MimeConst.EncodingBase64;
+	            this.SetTransferEncoding(encoding);
+	        }
+
+	        MimeCode aCode = MimeCodeManager.Instance.GetCode(encoding);
+	        aCode.Charset = this.GetCharset();
+	        this.mContent = aCode.EncodeFromBytes(data) + "\r\n";
+        }
 
 		public void ReadFromFile(string filePathName)
 		{
