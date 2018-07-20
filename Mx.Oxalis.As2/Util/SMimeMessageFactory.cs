@@ -3,18 +3,13 @@ using System.Text;
 
 namespace Mx.Oxalis.As2.Util
 {
-    using Mx.Oxalis.Api.Lang;
     using Mx.Tools;
-    using Org.BouncyCastle.Asn1;
-    using Org.BouncyCastle.Asn1.Cms;
-    using Org.BouncyCastle.Cms;
+
     using Org.BouncyCastle.Crypto;
-    using Org.BouncyCastle.Crypto.Operators;
-    using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509;
-    using Org.BouncyCastle.X509.Store;
-    using System.Collections;
+
     using System.IO;
+    using System.Linq;
 
     using MimeKit;
     using MimeKit.Cryptography;
@@ -26,25 +21,17 @@ namespace Mx.Oxalis.As2.Util
 
         private readonly X509Certificate ourCertificate;
 
-        //   private readonly static Session session = Session.getDefaultInstance(System.getProperties(), null);
+        private readonly Func<OxalisSecureMimeContext> secContentFactory;
 
-        //static {
-        //    BCHelper.registerProvider();
-        //}
-
-        //        @Inject
-
-        public SMimeMessageFactory(AsymmetricKeyParameter privateKey, X509Certificate ourCertificate)
+        public SMimeMessageFactory(AsymmetricKeyParameter privateKey, X509Certificate ourCertificate, Func<OxalisSecureMimeContext> secContentFactory)
         {
             this.privateKey = privateKey;
             this.ourCertificate = ourCertificate;
+            this.secContentFactory = secContentFactory;
         }
 
         /**
          * Creates an S/MIME message from the supplied String, having the supplied MimeType as the "content-type".
-         *
-         * @param msg      holds the payload of the message
-         * @param mimeType the MIME type to be used as the "Content-Type"
          */
         public MimeMessage createSignedMimeMessage(
                 string msg,
@@ -74,167 +61,51 @@ namespace Mx.Oxalis.As2.Util
         public MimeMessage createSignedMimeMessage(MimeEntity mimeBodyPart, SMimeDigestMethod digestMethod)
             // throws OxalisTransmissionException
         {
-
-            using (var ctx = new OxalisSecureMimeContext())
+            MimeMessage message;
+            using (var ctx = this.secContentFactory())
             {
-                var message = new MimeMessage();
-                // Note: this assumes that "Alice" has an S/MIME certificate with an X.509
-                // Subject Email identifier that matches her email address. If she doesn't,
-                // try using a SecureMailboxAddress which allows you to specify the
-                // fingerprint of her certificate to use for lookups.
-                message.Body = ApplicationPkcs7Mime.Encrypt(ctx, message.To.Mailboxes, mimeBodyPart);
+                // Algorithm lookup
+                DigestAlgorithm algorithm;
+                if (digestMethod.Equals(SMimeDigestMethod.sha1))
+                {
+                    algorithm = DigestAlgorithm.Sha1;
+                }
+                else if (digestMethod.Equals(SMimeDigestMethod.sha512))
+                {
+                    algorithm = DigestAlgorithm.Sha512;
+                }
+                else
+                {
+                    throw new NotSupportedException($"Algorithm {digestMethod.getAlgorithm()} not supported");
+                }
+
+                // Signer identification
+                var cmsSigner = new CmsSigner(this.ourCertificate, this.privateKey)
+                {
+                    DigestAlgorithm = algorithm
+                };
+
+                // Create and sign message
+                message = new MimeMessage { Body = mimeBodyPart };
+                message.Body = MultipartSigned.Create(ctx, cmsSigner, mimeBodyPart);
+
+                // Force signed content to be transferred in binary format
+                MimePart xml = (MimePart) message.BodyParts.First();
+                xml.ContentTransferEncoding = ContentEncoding.Binary;
             }
 
-            //
-            // S/MIME capabilities are required, but we simply supply an empty vector
-            //
-            Asn1EncodableVector signedAttrs = new Asn1EncodableVector();
 
-            //
-            // create the generator for creating an smime/signed message
-            //
-            CmsSignedDataGenerator
-                smimeSignedGenerator =
-                    new CmsSignedDataGenerator(); // SMIMESignedGenerator("binary"); //also see CMSSignedGenerator ?
-
-            //
-            // add a signer to the generator - this specifies we are using SHA1 and
-            // adding the smime attributes above to the signed attributes that
-            // will be generated as part of the signature. The encryption algorithm
-            // used is taken from the key - in this RSA with PKCS1Padding
-            //
-            CmsAttributeTableGenerator cmsAttrGenerator = new SimpleAttributeTableGenerator(new AttributeTable(signedAttrs));
-
-            Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(digestMethod.getMethod(), this.privateKey);
-            try
-
+            // Remove unused headers
+            foreach (var header in message.Headers.Select(x => x.Id).ToList())
             {
-                // .setSignedAttributeGenerator(new AttributeTable(signedAttrs))
-                // .setProvider(BouncyCastleProvider.PROVIDER_NAME)
-                //  digestMethod.getMethod(), privateKey, ourCertificate));
-                // .build("SHA1withRSA", privateKey, ourCertificate));
-                var signer = new SignerInfoGeneratorBuilder().WithSignedAttributeGenerator(cmsAttrGenerator)
-                    .Build(signatureFactory, this.ourCertificate);
+                if (header != HeaderId.MessageId && header != HeaderId.MimeVersion && header != HeaderId.ContentType)
+                {
+                    message.Headers.Remove(header);
+                }
 
-                smimeSignedGenerator.AddSignerInfoGenerator(signer);
-            }
-            catch (CertificateEncodingException e)
-            {
-                throw new OxalisTransmissionException($"Certificate encoding problems while adding signer information. {e.Message}", e);
-            }
-            catch (Exception e)
-            {
-                throw new OxalisTransmissionException("Unable to add Signer information. " + e.Message, e);
             }
 
-            //
-            // create a CertStore containing the certificates we want carried
-            // in the signature
-            //
-            IX509Store certs;
-            try
-            {
-                certs = X509StoreFactory.Create(
-                    "Certificate/Collection",
-                    new X509CollectionStoreParameters(new ArrayList() { this.ourCertificate }));
-            }
-            catch (CertificateEncodingException e)
-            {
-                throw new OxalisTransmissionException(
-                    "Unable to create CertStore with our certificate. " + e.Message,
-                    e);
-            }
-            smimeSignedGenerator.AddCertificates(certs);
-
-            //
-            // Signs the supplied MimeBodyPart
-            //
-            byte[] data;
-            using (var m = new MemoryStream())
-            {
-                mimeBodyPart.WriteTo(m);
-                data = m.ToArray();
-            }
-            // var data = mimeBodyPart.GetBuffer();
-            CmsProcessableByteArray cmsContent = new CmsProcessableByteArray(data);
-            CmsSignedData mimeMultipart;
-            try
-            {
-                mimeMultipart = smimeSignedGenerator.Generate(cmsContent);
-            }
-            catch (Exception e)
-            {
-                throw new OxalisTransmissionException("Unable to generate signed mime multipart." + e.Message, e);
-            }
-
-            //
-            // Get a Session object and create the mail message
-            //
-            // Properties props = System.getProperties();
-            // Session session = Session.getDefaultInstance(props, null);
-
-            MimeMessage mimeMessage = new MimeMessage();
-            
-            
-            try
-            {
-                // TODO: not implemented
-                throw new NotImplementedException();
-                // mimeMessage.LoadBody(mimeMultipart); // v.getContentType());
-                // mimeMessage.LoadBody(mimeMultipart.GetEncoded());
-            }
-            catch (Exception e)
-            {
-                throw new OxalisTransmissionException($"Unable to  set Content type of MimeMessage. {e.Message}", e);
-            }
-
-            //try
-            //{
-            //    mimeMessage.saveChanges();
-            //}
-            //catch (MessagingException e)
-            //{
-            //    throw new OxalisTransmissionException("Unable to save changes to Mime message. " + e.getMessage(), e);
-            //}
-
-            return mimeMessage;
+            return message;
         }
-
-        //public MimeMessage createSignedMimeMessageNew(
-        //        MimeMessage mimeBodyPart,
-        //        Digest digest,
-        //        SMimeDigestMethod digestMethod)
-        //    // throws OxalisTransmissionException
-        //{
-        //    try
-        //    {
-        //        MimeMultipart mimeMultipart = new MimeMultipart();
-        //        mimeMultipart.setSubType("signed");
-        //        mimeMultipart.addBodyPart(mimeBodyPart);
-
-        //        MimeBodyPart signaturePart = new MimeBodyPart();
-        //        DataSource dataSource = new ByteArrayDataSource(
-        //            SMimeBC.createSignature(digest.getValue(), digestMethod, privateKey, ourCertificate),
-        //            "application/pkcs7-signature");
-        //        signaturePart.setDataHandler(new DataHandler(dataSource));
-        //        signaturePart.setHeader(
-        //            "Content-Type",
-        //            "application/pkcs7-signature; name=smime.p7s; smime-type=signed-data");
-        //        signaturePart.setHeader("Content-Transfer-Encoding", "base64");
-        //        signaturePart.setHeader("Content-Disposition", "attachment; filename=\"smime.p7s\"");
-        //        signaturePart.setHeader("Content-Description", "S/MIME Cryptographic Signature");
-        //        mimeMultipart.addBodyPart(signaturePart);
-
-        //        MimeMessage mimeMessage = new MimeMessage(session);
-        //        mimeMessage.setContent(mimeMultipart, mimeMultipart.getContentType());
-        //        mimeMessage.saveChanges();
-
-        //        return mimeMessage;
-        //    }
-        //    catch (OxalisSecurityException e)
-        //    {
-        //        throw new OxalisTransmissionException(e.Message, e);
-        //    }
-        //}
     }
 }

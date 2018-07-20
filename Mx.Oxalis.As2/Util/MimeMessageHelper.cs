@@ -8,6 +8,8 @@ namespace Mx.Oxalis.As2.Util
 
     using log4net;
 
+    using Microsoft.AspNetCore.Http;
+
     using MimeKit;
 
     using Mx.Oxalis.Commons.BouncyCastle;
@@ -72,12 +74,12 @@ namespace Mx.Oxalis.As2.Util
          * do a successful MIME decoding.  If MimeType can not be extracted from the HTTP headers we
          * still try to do a successful decoding using the payload directly.
          */
-        public static MimeMessage createMimeMessageAssistedByHeaders(Stream inputStream, HeaderList headers)
+        public static MimeMessage createMimeMessageAssistedByHeaders(Stream inputStream, IHeaderDictionary headers)
             // throws MessagingException
         {
             String mimeType = null;
             String contentType = headers
-                .Where(x => x.Id == HeaderId.ContentType)
+                .Where(x => x.Key == HeaderId.ContentType.ToHeaderName())
                 .Select(x => x.Value)
                 .FirstOrDefault();
             if (contentType != null)
@@ -105,7 +107,7 @@ namespace Mx.Oxalis.As2.Util
             
             foreach (var header in headers)
             {
-                mimeMessage.Headers.Add(header.Clone());
+                mimeMessage.Headers.Add(header.Key, header.Value);
                 // mimeMessage.SetFieldValue(header.Field, header.Value, header.GetCharset());
                 // mimeMessage.addHeader(header.getName(), header.getValue());
             }
@@ -151,15 +153,23 @@ namespace Mx.Oxalis.As2.Util
             return m;
         }
 
-        public static MimeEntity createMimeBodyPart(Stream inputStream, String mimeType)
+        public static MimePart createMimeBodyPart(Stream inputStream, String mimeType)
         {
             // var mimeMessage = new MimeMessage();
-            
+
             // ByteArrayDataSource byteArrayDataSource;
-            MimeEntity bodyPart;
+            MimePart bodyPart;
             try
             {
-                bodyPart = MimeEntity.Load(ContentType.Parse(mimeType), inputStream);                
+                bodyPart = new MimePart(mimeType);
+                bodyPart.Content = new MimeContent(inputStream, ContentEncoding.Binary);
+                bodyPart.ContentTransferEncoding = ContentEncoding.Binary;
+                
+                //var parseOption = new ParserOptions();
+
+                //parseOption.CharsetEncoding = Encoding.UTF8;
+                //inputStream.Seek(0, SeekOrigin.Begin);
+                //bodyPart = MimeEntity.Load(parseOption, ContentType.Parse(mimeType), inputStream);                
                 // mimeBodyPart.LoadBody(inputStream.ToBuffer().ToUtf8String());
                 // byteArrayDataSource = new ByteArrayDataSource(inputStream, mimeType);
             }
@@ -206,9 +216,10 @@ namespace Mx.Oxalis.As2.Util
                 {
                     bodyPart.WriteTo(m);
                     m.Seek(0, SeekOrigin.Begin);
-                    digest = BcHelper.Hash(m.GetBuffer(), digestMethod.getAlgorithm());
-                    
+                    digest = BcHelper.Hash(m.ToArray(), digestMethod.getAlgorithm());
+                    var test = BitConverter.ToString(digest).Replace("-", "");
                 }
+
                 return Digest.of(digestMethod.getDigestMethod(), digest);
                 // MessageDigest md = BCHelper.getMessageDigest(digestMethod.getIdentifier());
 

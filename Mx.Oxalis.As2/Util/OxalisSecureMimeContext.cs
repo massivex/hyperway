@@ -6,17 +6,24 @@ namespace Mx.Oxalis.As2.Util
 {
     using System.Collections;
 
+    using Autofac.Features.AttributeFilters;
+
     using MimeKit;
     using MimeKit.Cryptography;
 
+    using Mx.Tools;
+
     using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.Crypto;
+    using Org.BouncyCastle.Pkcs;
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Store;
 
     public class OxalisSecureMimeContext : DefaultSecureMimeContext
     {
-        public OxalisSecureMimeContext() : base(new X509Context())
+        public OxalisSecureMimeContext(
+            Pkcs12Store store
+            ) : base(new X509Context(store))
         {
         }
 
@@ -38,6 +45,12 @@ namespace Mx.Oxalis.As2.Util
 
     public class X509Context : IX509CertificateDatabase
     {
+        private readonly Pkcs12Store store;
+
+        public X509Context(Pkcs12Store store)
+        {
+            this.store = store;
+        }
         public ICollection GetMatches(IX509Selector selector)
         {
             throw new NotImplementedException();
@@ -45,7 +58,7 @@ namespace Mx.Oxalis.As2.Util
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public X509CertificateRecord Find(X509Certificate certificate, X509CertificateRecordFields fields)
@@ -63,9 +76,27 @@ namespace Mx.Oxalis.As2.Util
             throw new NotImplementedException();
         }
 
-        public IEnumerable<X509CertificateRecord> Find(MailboxAddress mailbox, DateTime now, bool requirePrivateKey, X509CertificateRecordFields fields)
+        public IEnumerable<X509CertificateRecord> Find(
+            MailboxAddress mailbox,
+            DateTime now,
+            bool requirePrivateKey,
+            X509CertificateRecordFields fields)
         {
-            throw new NotImplementedException();
+            foreach (string alias in this.store.Aliases)
+            {
+                var certs = this.store.GetCertificateChain(alias);
+                foreach (var certificate in certs)
+                {
+                    if (certificate.Certificate.GetCommonName() == mailbox.Address)
+                    {
+                        var record = new X509CertificateRecord(certificate.Certificate);
+                        return new SingletonList<X509CertificateRecord>(record);
+                    }
+                }
+
+            }
+
+            return new List<X509CertificateRecord>();
         }
 
         public IEnumerable<X509CertificateRecord> Find(IX509Selector selector, bool trustedOnly, X509CertificateRecordFields fields)

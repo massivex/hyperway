@@ -23,7 +23,7 @@ namespace Mx.Peppol.Sbdh
             {
                 //                XmlTextWriter streamWriter = SbdhHelper.XML_OUTPUT_FACTORY.createXMLStreamWriter(outputStream, "UTF-8");
 
-                XmlTextWriter streamWriter = new XmlTextWriter(outputStream, Encoding.UTF8);
+                XmlTextWriter streamWriter = new XmlTextWriter(outputStream, XmlTools.Utf8NoBom);
                 streamWriter.WriteStartDocument();
                 write(streamWriter, header);
                 streamWriter.WriteEndDocument();

@@ -57,7 +57,7 @@ namespace Mx.Oxalis.As2.Model
             MatchCollection matches = pattern.Matches(s);
             foreach (Match match in matches)
             {
-                if (match.Groups.Count != 3)
+                if (match.Groups.Count != 4)
                 {
                     throw new InvalidOperationException(
                         "Internal error: Invalid group count in RegEx for parameter match in disposition-notification-options.");
@@ -220,9 +220,9 @@ namespace Mx.Oxalis.As2.Model
 
         public class Importance
         {
-            public static readonly Importance REQUIRED = new Importance("required");
+            public static readonly Importance REQUIRED = new Importance("REQUIRED");
 
-            public static readonly Importance OPTIONAL = new Importance("optional");
+            public static readonly Importance OPTIONAL = new Importance("OPTIONAL");
 
             public static Importance valueOf(string name)
             {

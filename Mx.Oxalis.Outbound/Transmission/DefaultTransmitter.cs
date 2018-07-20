@@ -6,6 +6,8 @@ using zipkin4net.Tracers.Zipkin;
 
 namespace Mx.Oxalis.Outbound.Transmission
 {
+    using System.IO;
+
     using Mx.Oxalis.Api.Lang;
     using Mx.Oxalis.Api.Lookup;
     using Mx.Oxalis.Api.Model;
@@ -14,6 +16,7 @@ namespace Mx.Oxalis.Outbound.Transmission
     using Mx.Oxalis.Api.Transmission;
     using Mx.Oxalis.Commons.Tracing;
     using Mx.Peppol.Common.Model;
+    using Mx.Tools;
 
     using zipkin4net;
 
@@ -141,6 +144,15 @@ namespace Mx.Oxalis.Outbound.Transmission
             {
                 TransportProfile transportProfile = transmissionRequest.getEndpoint().getTransportProfile();
                 MessageSender messageSender = messageSenderFactory.getMessageSender(transportProfile);
+
+                // Testing
+                //transmissionRequest = new DefaultTransmissionRequest(
+                //    transmissionRequest.getHeader(),
+                //    File.ReadAllBytes("c:\\temp\\java.xml").ToStream(),
+                //    transmissionRequest.getEndpoint()
+                //    );                
+                //
+
                 transmissionResponse = messageSender.send(transmissionRequest, span);
             }
             catch (OxalisTransmissionException e)

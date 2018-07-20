@@ -8,14 +8,16 @@
 
     public class XmlTools
     {
+        public static UTF8Encoding Utf8NoBom = new UTF8Encoding(false);
+
         public static void WriteXmlFragment<TObject>(XmlTextWriter writer, TObject obj)
         {
             XmlSerializer s = new XmlSerializer(typeof(TObject));
             XmlWriterSettings settings = new XmlWriterSettings
                                              {
                                                  OmitXmlDeclaration = true,
-                                                 Encoding = System.Text.Encoding.UTF8
-                                             };
+                                                 Encoding = Utf8NoBom
+            };
             XmlWriter w = XmlWriter.Create(writer, settings);
             s.Serialize(w, obj);
             w.Flush();

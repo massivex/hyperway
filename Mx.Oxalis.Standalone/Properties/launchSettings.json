@@ -2,7 +2,7 @@
   "profiles": {
     "Mx.Oxalis.Standalone": {
       "commandName": "Project",
-      "commandLineArgs": "-f conf/invoice_003.xml -r 9908:810418052 -s 9906:1234567891 --repeat 1 -u https://peppol.sediva.it:8443/oxalis/as2 --cert ./conf/openPEPPOL-digital-ID-AP.cer"
+      "commandLineArgs": "-f conf/invoice_003.xml -r 9906:it12345678901 -s 9906:1234567891 --repeat 1 -u https://peppol.sediva.it:8443/oxalis/as2 --cert ./conf/openPEPPOL-digital-ID-AP.cer"
     }
   }
 }

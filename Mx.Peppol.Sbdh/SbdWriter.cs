@@ -21,7 +21,7 @@ namespace Mx.Peppol.Sbdh
 
         private SbdWriter(Stream outputStream, Header header) // throws SbdhException
         {
-            this.writer = new XmlTextWriter(outputStream, Encoding.UTF8);
+            this.writer = new XmlTextWriter(outputStream, XmlTools.Utf8NoBom);
             this.initiateDocument(header);
         }
 

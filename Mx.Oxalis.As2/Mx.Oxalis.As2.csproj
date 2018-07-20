@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.1" />
     <PackageReference Include="MimeKit" Version="2.0.5" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.2" />
   </ItemGroup>

@@ -24,5 +24,7 @@ namespace Mx.Tools.Http
         public Uri Url { get;  }
         public WebHeaderCollection Headers { get; }
         public byte[] Entity { get; set; }
+
+        public string Host { get; set; }
     }
 }

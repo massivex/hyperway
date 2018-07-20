@@ -93,6 +93,7 @@ namespace Mx.Oxalis.Standalone
                 .Keyed<Bdxr201605Reader>("reader-protocols")
                 .As<MetadataReader>();
 
+
             Container = builder.Build();
         }
     }

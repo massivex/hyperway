@@ -8,8 +8,6 @@
     public class TransmissionIdentifier : AbstractSimpleIdentifier
     {
 
-        private static readonly long serialVersionUID = 5280858533226027168L;
-
         private static readonly Regex RFC2822 = new Regex("^<(.+?)>$", RegexOptions.Compiled);
 
         public static TransmissionIdentifier generateUUID()

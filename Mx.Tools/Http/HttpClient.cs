@@ -15,6 +15,10 @@ namespace Mx.Tools.Http
         {
 
             var request = WebRequest.CreateHttp(call.Url);
+            foreach (string header in call.Headers.Keys)
+            {
+                request.Headers.Add(header, call.Headers[header]);
+            }
             request.Method = call.Method.ToString();
             if (call.Entity != null && call.Entity.Length > 0)
             {

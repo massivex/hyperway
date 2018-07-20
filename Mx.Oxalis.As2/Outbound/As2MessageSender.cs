@@ -126,7 +126,8 @@
                 SMimeDigestMethod digestMethod =
                     SMimeDigestMethod.findByTransportProfile(
                         this.transmissionRequest.getEndpoint().getTransportProfile());
-
+                var dataTemp = this.transmissionRequest.getPayload().ToBuffer();
+                
                 this.outboundMic = MimeMessageHelper.calculateMic(mimeBodyPart, digestMethod);
                 span.Record(Annotations.Tag("mic", this.outboundMic.ToString()));
                 span.Record(
@@ -136,17 +137,17 @@
                 // signed part of the S/MIME message.
                 MimeMessage signedMimeMessage =
                     this.sMimeMessageFactory.createSignedMimeMessage(mimeBodyPart, digestMethod);
-                // .createSignedMimeMessageNew(mimeBodyPart, outboundMic, digestMethod);
+                
 
                 // Initiate POST request
                 httpPost = new HttpPost(this.transmissionRequest.getEndpoint().getAddress());
 
                 // Get all headers in S/MIME message.
-                var headers = signedMimeMessage.Headers;
+                // var headers = signedMimeMessage.Headers;
                 // List<javax.mail.Header> headers = Collections.list(signedMimeMessage.getAllHeaders());
 
 
-                List<String> headerNames = headers
+                List<String> headerNames = signedMimeMessage.Headers
                     // Tag for tracing.
                     .Peek(
                         x => span.Record(
@@ -158,7 +159,8 @@
                     // ... in a list.
                     .ToList();
 
-
+                signedMimeMessage.Headers.Clear();
+                
                 this.transmissionIdentifier = TransmissionIdentifier.fromHeader(httpPost.Headers[As2Header.MESSAGE_ID]);
 
 
@@ -178,6 +180,7 @@
                 // setEntity(new ByteArrayEntity(m.ToBuffer()));
 
                 // Set all headers specific to AS2 (not MIME).
+                httpPost.Host = "skynet.sediva.it";
                 httpPost.Headers.Add(As2Header.AS2_FROM, this.fromIdentifier);
                 httpPost.Headers.Add(
                     As2Header.AS2_TO,
@@ -187,7 +190,7 @@
                     As2Header.DISPOSITION_NOTIFICATION_OPTIONS,
                     As2DispositionNotificationOptions.getDefault(digestMethod).toString());
                 httpPost.Headers.Add(As2Header.AS2_VERSION, As2Header.VERSION);
-                httpPost.Headers.Add(As2Header.SUBJECT, "AS2 message from OXALIS");
+                httpPost.Headers.Add(As2Header.SUBJECT, "AS2 message from HYPERWAY");
                 httpPost.Headers.Add(As2Header.DATE, As2DateUtil.RFC822.getFormat(DateTime.Now));
                 return httpPost;
             }

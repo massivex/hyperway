@@ -22,8 +22,7 @@ namespace Mx.Oxalis.Outbound.Transformer
             {
                 // ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 var xml = new XmlTextWriter(m, Encoding.UTF8);
-
-
+                xml.Formatting = Formatting.None;
                 using (var sbdWriter = SbdWriter.newInstance(m, header))
                 {
                     XmlTools.AddXmlFragment(inputStream, xml);
