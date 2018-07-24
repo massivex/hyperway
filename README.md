@@ -1,18 +1,22 @@
-# Hyperway
+# Hyperway - PEPPOL Access Point implementation
 <p align="center">
-  <img width="180" height="180" src="https://skynet.sediva.it/img/peppol/hyperway-logo.png">
+  <img width="600" height="217" src="https://github.com/massivex/hyperway/blob/master/logo.png?raw=true">
 </p>
 
 This repository contains the [PEPPOL](http://www.peppol.eu/) Access Point, named **Hyperway**,
 inspired on [OXALIS](https://github.com/difi/oxalis) written in JAVA.
 
+Hyperway, is an open-source plug-and-play software package, for developing access points also available as binary code (download and run). 
+
 Hyperway is a C# PEPPOL implementation written to enhance OXALIS performance keeping cross-platform support.
 
 Hyperway is written in .NET Standard 2.0, supports .NET Core 2.0 and runs on Linux, Windows and Mac.
 
-The Hyperway system can be used used as a complete standalone PEPPOL solution or as an API component from your own code.
+Hyperway can be used used as a complete standalone PEPPOL solution or as an API component from your own code.
 
-It comes with a basic command line tool for sending messages (```hyperway-standalone```) capable of sending multiple files.
+It comes with a basic command line tool for sending messages (```Mx.Hyperway.Standalone```) capable of sending multiple files.
+
+**[Commercial support available for installation or customization](http://hub.sediva.it/)**
 
 ## Roadmap
 v. 1.0 - WIP
@@ -35,6 +39,7 @@ v. 1.0 - WIP
 * [BouncyCastle](https://www.bouncycastle.org/) for crypto and security services
 * [Autofac](https://autofac.org/) as inversion of control container
 * [log4net](https://logging.apache.org/log4net/release/features.html) for logging
+* [arsort-tools](https://github.com/alexreinert/ARSoft.Tools.Net) for DNS client/server
 
 
 ## Installation
