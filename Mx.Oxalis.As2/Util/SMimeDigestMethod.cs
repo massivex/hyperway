@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
+    using System;
+    using System.Collections.Generic;
+
     using Mx.Peppol.Common.Code;
     using Mx.Peppol.Common.Model;
 
@@ -64,32 +63,32 @@ namespace Mx.Oxalis.As2.Util
 
         public String getIdentifier()
         {
-            return identifier[0];
+            return this.identifier[0];
         }
 
         public String getMethod()
         {
-            return method;
+            return this.method;
         }
 
         public String getAlgorithm()
         {
-            return algorithm;
+            return this.algorithm;
         }
 
         public Asn1Object getOid()
         {
-            return oid;
+            return this.oid;
         }
 
         public DigestMethod getDigestMethod()
         {
-            return digestMethod;
+            return this.digestMethod;
         }
 
         public TransportProfile getTransportProfile()
         {
-            return transportProfile;
+            return this.transportProfile;
         }
 
         public static IEnumerable<SMimeDigestMethod> values()

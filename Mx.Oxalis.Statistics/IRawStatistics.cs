@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Statistics
+﻿namespace Mx.Hyperway.Statistics
 {
-    using Mx.Oxalis.Api.Model;
+    using System;
+
+    using Mx.Hyperway.Api.Model;
     using Mx.Peppol.Common.Model;
 
     public interface IRawStatistics

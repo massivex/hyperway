@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Lang
+﻿namespace Mx.Hyperway.Api.Lang
 {
-    public class EvidenceException : OxalisException
+    using System;
+
+    public class EvidenceException : HyperwayException
     {
 
         public EvidenceException(String message, Exception cause)

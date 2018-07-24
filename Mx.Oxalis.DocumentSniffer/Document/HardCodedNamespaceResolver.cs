@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Document
+﻿namespace Mx.Hyperway.DocumentSniffer.Document
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Xml;
 

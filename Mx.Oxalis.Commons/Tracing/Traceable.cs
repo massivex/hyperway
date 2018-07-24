@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using zipkin4net;
-
-namespace Mx.Oxalis.Commons.Tracing
+﻿namespace Mx.Hyperway.Commons.Tracing
 {
+    using zipkin4net;
+
     public abstract class Traceable
     {
 

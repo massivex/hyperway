@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Identifier
+﻿namespace Mx.Hyperway.DocumentSniffer.Identifier
 {
+    using System;
+    using System.Text;
     using System.Text.RegularExpressions;
 
     using Mx.Peppol.Common.Model;

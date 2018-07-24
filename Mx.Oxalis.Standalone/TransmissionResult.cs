@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Standalone
+﻿namespace Mx.Hyperway.Standalone
 {
-    using Mx.Oxalis.Api.Model;
+    using Mx.Hyperway.Api.Model;
 
     public class TransmissionResult
     {
@@ -22,12 +18,12 @@ namespace Mx.Oxalis.Standalone
 
         public long getDuration()
         {
-            return duration;
+            return this.duration;
         }
 
         public TransmissionIdentifier getTransmissionIdentifier()
         {
-            return transmissionIdentifier;
+            return this.transmissionIdentifier;
         }
     }
 

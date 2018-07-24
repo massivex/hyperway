@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Transformer
+﻿namespace Mx.Hyperway.Api.Transformer
 {
     using System.IO;
 
@@ -10,6 +6,6 @@ namespace Mx.Oxalis.Api.Transformer
 
     public interface ContentDetector
     {
-        Header parse(Stream inputStream); // throws OxalisContentException;
+        Header parse(Stream inputStream);
     }
 }

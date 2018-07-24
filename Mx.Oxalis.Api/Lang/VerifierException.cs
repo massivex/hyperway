@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Lang
+﻿namespace Mx.Hyperway.Api.Lang
 {
-    public class VerifierException : OxalisTransmissionException
+    using System;
+
+    public class VerifierException : HyperwayTransmissionException
     {
 
         private readonly Reason reason;
@@ -21,7 +19,7 @@ namespace Mx.Oxalis.Api.Lang
 
         public Reason getReason()
         {
-            return reason;
+            return this.reason;
         }
 
         public enum Reason

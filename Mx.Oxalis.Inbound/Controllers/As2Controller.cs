@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Mx.Oxalis.Inbound.Controllers
+﻿namespace Mx.Hyperway.Inbound.Controllers
 {
+    using System;
+
     using log4net;
 
     using Microsoft.AspNetCore.Http;
@@ -9,8 +9,8 @@ namespace Mx.Oxalis.Inbound.Controllers
 
     using MimeKit;
 
-    using Mx.Oxalis.As2.Lang;
-    using Mx.Oxalis.As2.Util;
+    using Mx.Hyperway.As2.Lang;
+    using Mx.Hyperway.As2.Util;
 
     using zipkin4net;
 
@@ -35,13 +35,19 @@ namespace Mx.Oxalis.Inbound.Controllers
             this.sMimeMessageFactory = sMimeMessageFactory;
         }
 
+        [HttpGet]
+        public ContentResult doGet()
+        {
+            return new ContentResult() { StatusCode = StatusCodes.Status200OK, Content = "Hello AS2 world\n" };
+        }
+
         /**
          * Receives the POST'ed AS2 message.
          * <p>
          * Important to note that the HTTP headers contains the MIME headers for the payload.
          * Since the the request can only be read once, using getReader()/getInputStream()
          */
-        [HttpPost("/")]
+        [HttpPost]
         protected ContentResult doPost()
         {
             var headers = this.httpContext.Request.Headers;
@@ -97,7 +103,7 @@ namespace Mx.Oxalis.Inbound.Controllers
                     span.Record(Annotations.ServerSend());
 
                 }
-                catch (OxalisAs2InboundException e)
+                catch (HyperwayAs2InboundException e)
                 {
                     String identifier = Guid.NewGuid().ToString();
                     LOGGER.ErrorFormat("Error [{0}] {1}", identifier, e);

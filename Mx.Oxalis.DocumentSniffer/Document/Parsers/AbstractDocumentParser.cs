@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Parsers
+﻿namespace Mx.Hyperway.DocumentSniffer.Document.Parsers
 {
-    using Mx.Oxalis.DocumentSniffer.Document;
-    using Mx.Oxalis.DocumentSniffer.Identifier;
-    using Mx.Peppol.Common.Model;
-
+    using System;
     using System.Xml.Linq;
+
+    using Mx.Hyperway.DocumentSniffer.Identifier;
+    using Mx.Peppol.Common.Model;
 
     /**
      * Abstract implementation based on the PlainUBLParser to retrieve information from PEPPOL documents.
@@ -37,7 +33,7 @@ namespace Mx.Oxalis.DocumentSniffer.Parsers
             XElement element;
             try
             {
-                element = parser.retrieveElementForXpath(xPathExpr);
+                element = this.parser.retrieveElementForXpath(xPathExpr);
             }
             catch (Exception ex)
             {

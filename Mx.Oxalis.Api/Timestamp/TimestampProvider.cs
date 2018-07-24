@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Timestamp
+﻿namespace Mx.Hyperway.Api.Timestamp
 {
-    using Mx.Oxalis.Api.Model;
+    using Mx.Hyperway.Api.Model;
 
     using zipkin4net;
 

@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mx.Oxalis.As2\Mx.Oxalis.As2.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Outbound\Mx.Oxalis.Outbound.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Statistics\Mx.Oxalis.Statistics.csproj" />
+    <ProjectReference Include="..\Mx.Oxalis.As2\Mx.Hyperway.As2.csproj" />
+    <ProjectReference Include="..\Mx.Oxalis.Outbound\Mx.Hyperway.Outbound.csproj" />
+    <ProjectReference Include="..\Mx.Oxalis.Statistics\Mx.Hyperway.Statistics.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +44,7 @@
     <None Update="pki-peppol-test.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="oxalis.json">
+    <None Update="hyperway.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

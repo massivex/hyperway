@@ -20,19 +20,19 @@
     "transport": {
       "as2_sha1": {
         "profile": "busdox-transport-as2-ver1p0",
-        "sender": "oxalis-as2",
+        "sender": "hyperway-as2",
         "weight": 1000
       },
       "as2_sha512": {
         "profile": "busdox-transport-as2-ver1p0r1",
-        "sender": "oxalis-as2",
+        "sender": "hyperway-as2",
         "weight": 2000
       }
     },
     "security": {
       "pki": "pki-peppol-test.xml"
     },
-    "oxalis": {
+    "hyperway": {
       "keystore": {
         "path": "./conf/test-keystore.pfx",
         "password": "test",

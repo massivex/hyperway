@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Code
+﻿namespace Mx.Hyperway.As2.Code
 {
+    using System;
+    using System.Collections.Generic;
+
     public class DispositionType
     {
         public static readonly DispositionType PROCESSED = new DispositionType("processed");
@@ -33,7 +32,7 @@ namespace Mx.Oxalis.As2.Code
 
         public String ToString()
         {
-            return code;
+            return this.code;
         }
 
         public static IEnumerable<DispositionType> values()

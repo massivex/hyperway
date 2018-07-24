@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Identifier
+﻿namespace Mx.Hyperway.DocumentSniffer.Identifier
 {
+    using System;
     using System.Linq;
 
     using Mx.Peppol.Icd;

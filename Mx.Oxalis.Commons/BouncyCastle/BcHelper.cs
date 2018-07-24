@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.BouncyCastle
+﻿namespace Mx.Hyperway.Commons.BouncyCastle
 {
-    using System.IO;
-
-    using Mx.Peppol.Common.Code;
-
     using Org.BouncyCastle.Crypto;
-    using Org.BouncyCastle.Crypto.Digests;
     using Org.BouncyCastle.Security;
 
     public class BcHelper

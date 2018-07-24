@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Mx.Oxalis.Inbound.Controllers
+﻿namespace Mx.Hyperway.Inbound.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
 

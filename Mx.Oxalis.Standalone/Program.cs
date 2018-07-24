@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Mx.Oxalis.Standalone
+﻿namespace Mx.Hyperway.Standalone
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
@@ -13,7 +12,7 @@ namespace Mx.Oxalis.Standalone
     using CommandLine;
 
     using Mx.Certificates.Validator;
-    using Mx.Oxalis.Outbound;
+    using Mx.Hyperway.Outbound;
     using Mx.Peppol.Common.Model;
 
     using Org.BouncyCastle.X509;
@@ -58,9 +57,9 @@ namespace Mx.Oxalis.Standalone
         private static void RunInScope(ILifetimeScope scope, Options options)
         {
             var elenco = scope.ResolveKeyed<List<TransportProfile>>("prioritized");
-            // bootstraps the Oxalis outbound module
-            OxalisOutboundComponent oxalisOutboundComponent = scope.Resolve<OxalisOutboundComponent>();
-            TransmissionParameters parameters = new TransmissionParameters(oxalisOutboundComponent);
+            // bootstraps the outbound module
+            HyperwayOutboundComponent hyperwayOutboundComponent = scope.Resolve<HyperwayOutboundComponent>();
+            TransmissionParameters parameters = new TransmissionParameters(hyperwayOutboundComponent);
 
             // Verifies the existence of a directory in which transmission evidence is stored.
             DirectoryInfo evidencePath = options.Evidence == null ? null : new DirectoryInfo(options.Evidence);

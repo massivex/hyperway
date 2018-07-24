@@ -1,18 +1,17 @@
-﻿using System;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+
+    using MimeKit;
+    using MimeKit.Cryptography;
+
     using Mx.Tools;
 
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.X509;
-
-    using System.IO;
-    using System.Linq;
-
-    using MimeKit;
-    using MimeKit.Cryptography;
 
     public class SMimeMessageFactory
     {
@@ -21,9 +20,9 @@ namespace Mx.Oxalis.As2.Util
 
         private readonly X509Certificate ourCertificate;
 
-        private readonly Func<OxalisSecureMimeContext> secContentFactory;
+        private readonly Func<HyperwaySecureMimeContext> secContentFactory;
 
-        public SMimeMessageFactory(AsymmetricKeyParameter privateKey, X509Certificate ourCertificate, Func<OxalisSecureMimeContext> secContentFactory)
+        public SMimeMessageFactory(AsymmetricKeyParameter privateKey, X509Certificate ourCertificate, Func<HyperwaySecureMimeContext> secContentFactory)
         {
             this.privateKey = privateKey;
             this.ourCertificate = ourCertificate;
@@ -36,10 +35,10 @@ namespace Mx.Oxalis.As2.Util
         public MimeMessage createSignedMimeMessage(
                 string msg,
                 string mimeType,
-                SMimeDigestMethod digestMethod) // throws OxalisTransmissionException
+                SMimeDigestMethod digestMethod)
         {
             var msgData = Encoding.Default.GetBytes(msg);
-            return createSignedMimeMessage(msgData.ToStream(), mimeType, digestMethod);
+            return this.createSignedMimeMessage(msgData.ToStream(), mimeType, digestMethod);
         }
 
         /**
@@ -48,10 +47,10 @@ namespace Mx.Oxalis.As2.Util
         public MimeMessage createSignedMimeMessage(
             Stream inputStream,
             string mimeType,
-            SMimeDigestMethod digestMethod) // throws OxalisTransmissionException
+            SMimeDigestMethod digestMethod)
         {
             MimeEntity mimeBodyPart = MimeMessageHelper.createMimeBodyPart(inputStream, mimeType);
-            return createSignedMimeMessage(mimeBodyPart, digestMethod);
+            return this.createSignedMimeMessage(mimeBodyPart, digestMethod);
         }
 
         /**
@@ -59,7 +58,6 @@ namespace Mx.Oxalis.As2.Util
          * as supplied in the constructor. Our certificate, which is required to verify the signature is enclosed.
          */
         public MimeMessage createSignedMimeMessage(MimeEntity mimeBodyPart, SMimeDigestMethod digestMethod)
-            // throws OxalisTransmissionException
         {
             MimeMessage message;
             using (var ctx = this.secContentFactory())

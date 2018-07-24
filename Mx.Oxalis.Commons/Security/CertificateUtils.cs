@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.Security
+﻿namespace Mx.Hyperway.Commons.Security
 {
+    using System;
     using System.Text.RegularExpressions;
 
     using Org.BouncyCastle.Asn1.X509;

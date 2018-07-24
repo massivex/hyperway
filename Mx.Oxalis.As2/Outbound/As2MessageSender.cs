@@ -1,30 +1,28 @@
-﻿namespace Mx.Oxalis.As2.Outbound
+﻿namespace Mx.Hyperway.As2.Outbound
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Text;
 
     using log4net;
 
     using MimeKit;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Timestamp;
-    using Mx.Oxalis.As2.Code;
-    using Mx.Oxalis.As2.Model;
-    using Mx.Oxalis.As2.Util;
-    using Mx.Oxalis.Commons.BouncyCastle;
-    using Mx.Oxalis.Commons.Security;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Model;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Timestamp;
+    using Mx.Hyperway.As2.Code;
+    using Mx.Hyperway.As2.Model;
+    using Mx.Hyperway.As2.Util;
+    using Mx.Hyperway.Commons.BouncyCastle;
+    using Mx.Hyperway.Commons.Security;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
     using Mx.Tools.Http;
 
-    using Org.BouncyCastle.Security;
     using Org.BouncyCastle.X509;
 
     using zipkin4net;
@@ -83,8 +81,7 @@
             return this.send(transmissionRequest, this.root);
         }
 
-        public TransmissionResponse
-            send(TransmissionRequest transmissionRequest, Trace root) // throws OxalisTransmissionException
+        public TransmissionResponse send(TransmissionRequest transmissionRequest, Trace root)
         {
             this.transmissionRequest = transmissionRequest;
 
@@ -95,7 +92,7 @@
             {
                 return this.sendHttpRequest(this.prepareHttpRequest());
             }
-            catch (OxalisTransmissionException e)
+            catch (HyperwayTransmissionException e)
             {
                 this.root.Record(Annotations.Tag("exception", e.Message));
                 throw e;
@@ -106,8 +103,7 @@
             }
         }
 
-        // @SuppressWarnings("unchecked")
-        protected HttpPost prepareHttpRequest() // throws OxalisTransmissionException
+        protected HttpPost prepareHttpRequest()
         {
             Trace span = this.root.Child();
             span.Record(Annotations.ServiceName("request"));
@@ -196,7 +192,7 @@
             }
             catch (Exception e)
             {
-                throw new OxalisTransmissionException("Unable to stream S/MIME message into byte array output stream");
+                throw new HyperwayTransmissionException("Unable to stream S/MIME message into byte array output stream");
             }
             finally
             {
@@ -204,10 +200,9 @@
             }
         }
 
-        protected TransmissionResponse sendHttpRequest(HttpPost httpPost) // throws OxalisTransmissionException
+        protected TransmissionResponse sendHttpRequest(HttpPost httpPost)
         {
             Trace span = this.root.Child();
-            // tracer.newChild(root.context()).name("execute").start();
             span.Record(Annotations.ServiceName("execute"));
 
             try
@@ -223,7 +218,7 @@
             catch (Exception e)
             {
                 span.Record(Annotations.Tag("exception", e.Message));
-                throw new OxalisTransmissionException(this.transmissionRequest.getEndpoint().getAddress(), e);
+                throw new HyperwayTransmissionException(this.transmissionRequest.getEndpoint().getAddress(), e);
             }
             finally
             {
@@ -231,7 +226,7 @@
             }
         }
 
-        protected TransmissionResponse handleResponse(HttpResponse httpResponse) // throws OxalisTransmissionException
+        protected TransmissionResponse handleResponse(HttpResponse httpResponse)
         {
             Trace span = this.root.Child();
             // tracer.newChild(root.context()).name("response").start();
@@ -264,7 +259,7 @@
                 string contentTypeHeader = response.Headers["Content-Type"];
                 if (string.IsNullOrWhiteSpace(contentTypeHeader))
                 {
-                    throw new OxalisTransmissionException(
+                    throw new HyperwayTransmissionException(
                         "No Content-Type header in response, probably a server error.");
                 }
 
@@ -320,7 +315,7 @@
                 // the response message does not match its certificate published by the SMP
                 if (!this.transmissionRequest.getEndpoint().getCertificate().Equals(certificate))
                 {
-                    throw new OxalisTransmissionException(
+                    throw new HyperwayTransmissionException(
                         String.Format(
                             "Certificate in MDN ('{0}') does not match certificate from SMP ('{1}').",
                             certificate.SubjectDN.ToString(), // .getSubjectX500Principal().getName(),
@@ -337,7 +332,7 @@
                 if (!mdnMimeMessageInspector.isOkOrWarning(new Mic(this.outboundMic)))
                 {
                     LOGGER.ErrorFormat("AS2 transmission failed with some error message '{0}'.", msg);
-                    throw new OxalisTransmissionException(String.Format("AS2 transmission failed : {0}", msg));
+                    throw new HyperwayTransmissionException(String.Format("AS2 transmission failed : {0}", msg));
                 }
 
                 // Read structured content
@@ -365,11 +360,11 @@
             }
             catch (TimestampException e)
             {
-                throw new OxalisTransmissionException(e.Message, e);
+                throw new HyperwayTransmissionException(e.Message, e);
             }
             catch (Exception e)
             {
-                throw new OxalisTransmissionException("Unable to parse received content.", e);
+                throw new HyperwayTransmissionException("Unable to parse received content.", e);
             }
             finally
             {
@@ -378,7 +373,7 @@
             }
         }
 
-        protected void handleFailedRequest(HttpResponse response) // throws OxalisTransmissionException
+        protected void handleFailedRequest(HttpResponse response)
         {
             byte[] entity = response.Entity.Content; // Any results?
             try
@@ -386,7 +381,7 @@
                 if (entity == null)
                 {
                     // No content returned
-                    throw new OxalisTransmissionException(
+                    throw new HyperwayTransmissionException(
                         String.Format(
                             "Request failed with rc={0}, no content returned in HTTP response",
                             response.StatusCode));
@@ -394,7 +389,7 @@
                 else
                 {
                     String contents = response.Entity.GetText();
-                    throw new OxalisTransmissionException(
+                    throw new HyperwayTransmissionException(
                         String.Format(
                             "Request failed with rc={0}, contents received ({1} characters): {2}",
                             response.StatusCode,
@@ -404,7 +399,7 @@
             }
             catch (IOException e)
             {
-                throw new OxalisTransmissionException(
+                throw new HyperwayTransmissionException(
                     String.Format(
                         "Request failed with rc={0}, ERROR while retrieving the contents of the response: {1}",
                         response.StatusCode,

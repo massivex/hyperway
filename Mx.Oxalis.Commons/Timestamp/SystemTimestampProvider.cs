@@ -1,9 +1,9 @@
-﻿namespace Mx.Oxalis.Commons.Timestamp
+﻿namespace Mx.Hyperway.Commons.Timestamp
 {
     using System;
 
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Timestamp;
+    using Mx.Hyperway.Api.Model;
+    using Mx.Hyperway.Api.Timestamp;
 
     using zipkin4net;
 
@@ -17,7 +17,7 @@
 
         public Timestamp generate(byte[] content, Direction direction, Trace span)
         {
-            return generate(content, direction);
+            return this.generate(content, direction);
         }
     }
 }

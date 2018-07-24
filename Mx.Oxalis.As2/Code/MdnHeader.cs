@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Code
+﻿namespace Mx.Hyperway.As2.Code
 {
+    using System;
 
     public class MdnHeader
     {
@@ -15,7 +12,7 @@ namespace Mx.Oxalis.As2.Code
         public static readonly String DISPOSITION = "Disposition";
         public static readonly String RECEIVED_CONTENT_MIC = "Received-Content-Mic";
         public static readonly String DATE = "Date";
-        public static readonly String ORIGINAL_CONTENT_HEADER = "X-Oxalis-Original-Content-Header";
+        public static readonly String ORIGINAL_CONTENT_HEADER = "X-Hyperway-Original-Content-Header";
 
     }
 

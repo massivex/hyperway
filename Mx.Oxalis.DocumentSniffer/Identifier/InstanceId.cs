@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Identifier
+﻿namespace Mx.Hyperway.DocumentSniffer.Identifier
 {
+    using System;
+
     using Mx.Peppol.Common.Model;
 
     /**
@@ -18,7 +16,7 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
     /** Creates new InstanceId with random UUID */
     public InstanceId()
     {
-        value = Guid.NewGuid().ToString();
+        this.value = Guid.NewGuid().ToString();
     }
 
     /** Creates new InstanceId with supplied value */
@@ -31,7 +29,7 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
     
     public override String ToString()
     {
-        return value;
+        return this.value;
     }
 
     public InstanceId valueOf(String value)
@@ -41,7 +39,7 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
 
     public InstanceIdentifier toVefa()
     {
-        return InstanceIdentifier.of(value);
+        return InstanceIdentifier.of(this.value);
     }
     }
 

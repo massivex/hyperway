@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Identifier
+﻿namespace Mx.Hyperway.DocumentSniffer.Identifier
 {
+    using System;
     using System.Text.RegularExpressions;
 
-    using Mx.Oxalis.DocumentSniffer.Lang;
+    using Mx.Hyperway.DocumentSniffer.Lang;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Icd.Api;
 
@@ -40,7 +37,7 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
          */
         public ParticipantId(String participantId)
         {
-            peppolParticipantIdValue = parse(participantId);
+            this.peppolParticipantIdValue = parse(participantId);
         }
 
         /**
@@ -73,7 +70,7 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
             }
 
             // Formats the organisation identifier in accordance with what PEPPOL expects.
-            peppolParticipantIdValue = String.Format("{0}:{1}", schemeId.getCode(), organisationId);
+            this.peppolParticipantIdValue = String.Format("{0}:{1}", schemeId.getCode(), organisationId);
         }
 
         /**
@@ -155,8 +152,8 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
             if (!(o is ParticipantId)) return false;
             
             ParticipantId that = (ParticipantId)o;
-            if (peppolParticipantIdValue != null
-                    ? !peppolParticipantIdValue.Equals(that.peppolParticipantIdValue)
+            if (this.peppolParticipantIdValue != null
+                    ? !this.peppolParticipantIdValue.Equals(that.peppolParticipantIdValue)
                     : that.peppolParticipantIdValue != null)
             {
                 return false;
@@ -168,23 +165,23 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
 
         public override int GetHashCode()
         {
-            return peppolParticipantIdValue != null ? peppolParticipantIdValue.GetHashCode() : 0;
+            return this.peppolParticipantIdValue != null ? this.peppolParticipantIdValue.GetHashCode() : 0;
         }
 
         public String stringValue()
         {
-            return peppolParticipantIdValue;
+            return this.peppolParticipantIdValue;
         }
 
 
         public override String ToString()
         {
-            return peppolParticipantIdValue;
+            return this.peppolParticipantIdValue;
         }
 
         public ParticipantIdentifier toVefa()
         {
-            return ParticipantIdentifier.of(peppolParticipantIdValue, ParticipantIdentifier.DEFAULT_SCHEME);
+            return ParticipantIdentifier.of(this.peppolParticipantIdValue, ParticipantIdentifier.DEFAULT_SCHEME);
         }
     }
 

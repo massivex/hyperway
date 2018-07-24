@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Parsers
+﻿namespace Mx.Hyperway.DocumentSniffer.Document.Parsers
 {
-    using Mx.Oxalis.DocumentSniffer.Document;
+    using System;
+
     using Mx.Peppol.Common.Model;
 
     /**
@@ -25,14 +22,14 @@ namespace Mx.Oxalis.DocumentSniffer.Parsers
     public override ParticipantIdentifier getSender()
     {
         String despatchAdvice = "//cac:DespatchSupplierParty/cac:Party/cbc:EndpointID";
-        return participantId(despatchAdvice);
+        return this.participantId(despatchAdvice);
     }
 
     
     public override ParticipantIdentifier getReceiver()
     {
         String despatchAdvice = "//cac:DeliveryCustomerParty/cac:Party/cbc:EndpointID";
-        return participantId(despatchAdvice);
+        return this.participantId(despatchAdvice);
     }
     }
 

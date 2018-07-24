@@ -1,4 +1,4 @@
-﻿namespace Mx.Oxalis.Statistics
+﻿namespace Mx.Hyperway.Statistics
 {
     using System;
 

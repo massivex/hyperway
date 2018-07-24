@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Outbound
+﻿namespace Mx.Hyperway.Api.Outbound
 {
     using System.IO;
 

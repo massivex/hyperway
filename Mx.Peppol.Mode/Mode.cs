@@ -24,12 +24,12 @@ namespace Mx.Peppol.Mode
 
         public Mode()
         {
-            this.config = new ConfigurationBuilder().AddJsonFile("oxalis.json").Build();
+            this.config = new ConfigurationBuilder().AddJsonFile("hyperway.json").Build();
             this.Parse();
         }
 
 
-        public OxalisConfig Defaults { get; set; }
+        public HyperwayConfig Defaults { get; set; }
 
         public string GetValue(string key)
         {
@@ -45,7 +45,7 @@ namespace Mx.Peppol.Mode
 
         private void Parse()
         {
-            this.Defaults = new OxalisConfig();
+            this.Defaults = new HyperwayConfig();
             this.Defaults.Transports = new List<TransportConfig>();
 
             var transports = this.GetSection(this.config, "defaults", "transport")?.GetChildren();
@@ -198,7 +198,7 @@ namespace Mx.Peppol.Mode
     //    }
     //}
 
-    public class OxalisConfig
+    public class HyperwayConfig
     {
         public List<TransportConfig> Transports { get; set; }
     }

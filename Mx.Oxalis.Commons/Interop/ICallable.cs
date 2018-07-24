@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.Interop
+﻿namespace Mx.Hyperway.Commons.Interop
 {
     public interface ICallable<out TResult>
     {

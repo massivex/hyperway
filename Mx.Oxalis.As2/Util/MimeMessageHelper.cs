@@ -1,8 +1,6 @@
-﻿using System;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
+    using System;
     using System.IO;
     using System.Linq;
 
@@ -12,12 +10,10 @@ namespace Mx.Oxalis.As2.Util
 
     using MimeKit;
 
-    using Mx.Oxalis.Commons.BouncyCastle;
+    using Mx.Hyperway.Commons.BouncyCastle;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
     using Mx.Tools.Encoding;
-
-    using Org.BouncyCastle.Security;
 
     public class MimeMessageHelper
     {

@@ -1,8 +1,8 @@
-﻿namespace Mx.Oxalis.Statistics.Model
+﻿namespace Mx.Hyperway.Statistics.Model
 {
     using System;
 
-    using Mx.Oxalis.Api.Model;
+    using Mx.Hyperway.Api.Model;
     using Mx.Peppol.Common.Model;
 
     public abstract class AbstractBuilder<T, TBuild> : IAbstractBuilder
@@ -39,13 +39,13 @@
 
         public T Outbound()
         {
-            this.direction = Api.Model.Direction.OUT;
+            this.direction = Hyperway.Api.Model.Direction.OUT;
             return this.GetThis();
         }
 
         public T Inbound()
         {
-            this.direction = Api.Model.Direction.IN;
+            this.direction = Hyperway.Api.Model.Direction.IN;
             return this.GetThis();
         }
 
@@ -70,7 +70,7 @@
         protected void CheckRequiredFields()
         {
 
-            if (this.direction == Api.Model.Direction.None)
+            if (this.direction == Hyperway.Api.Model.Direction.None)
             {
                 throw new InvalidOperationException("Must specify the direction of the message");
             }

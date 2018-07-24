@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Transformer
+﻿namespace Mx.Hyperway.Outbound.Transformer
 {
+    using System;
     using System.IO;
+    using System.Text;
     using System.Xml;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Transformer;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Transformer;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Sbdh;
     using Mx.Tools;
 
     public class XmlContentWrapper : ContentWrapper
     {
-        public Stream wrap(Stream inputStream, Header header) // throws IOException, OxalisContentException
+        public Stream wrap(Stream inputStream, Header header)
         {
             var m = new MemoryStream();
             try
@@ -33,7 +31,7 @@ namespace Mx.Oxalis.Outbound.Transformer
             }
             catch (Exception e)
             {
-                throw new OxalisContentException("Unable to wrap content into SBDH.", e);
+                throw new HyperwayContentException("Unable to wrap content into SBDH.", e);
             }
 
             m.Seek(0, SeekOrigin.Begin);

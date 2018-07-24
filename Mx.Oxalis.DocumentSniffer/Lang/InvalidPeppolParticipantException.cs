@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Lang
+﻿namespace Mx.Hyperway.DocumentSniffer.Lang
 {
-    using Mx.Oxalis.Api.Lang;
+    using System;
 
-    public class InvalidPeppolParticipantException : OxalisRuntimeException
+    using Mx.Hyperway.Api.Lang;
+
+    public class InvalidPeppolParticipantException : HyperwayRuntimeException
     {
 
         public InvalidPeppolParticipantException(String s)

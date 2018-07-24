@@ -6,7 +6,7 @@
  * message is received from the PEPPOL network by this access point.
  *
 */
-namespace Mx.Oxalis.Api.Model
+namespace Mx.Hyperway.Api.Model
 {
     public enum Direction
     {

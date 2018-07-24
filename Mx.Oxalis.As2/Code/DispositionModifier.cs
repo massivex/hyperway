@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Code
+﻿namespace Mx.Hyperway.As2.Code
 {
-    using Org.BouncyCastle.Asn1.Esf;
+    using System;
+    using System.Collections.Generic;
 
     public class DispositionModifier
     {
@@ -42,7 +39,7 @@ namespace Mx.Oxalis.As2.Code
 
         public String ToString()
         {
-            return code;
+            return this.code;
         }
     }
 

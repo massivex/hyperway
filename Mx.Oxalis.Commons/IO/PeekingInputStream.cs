@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.IO
+﻿namespace Mx.Hyperway.Commons.IO
 {
+    using System.IO;
+
     using Mx.Tools;
 
     /**

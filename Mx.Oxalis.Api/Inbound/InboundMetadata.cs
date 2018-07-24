@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Inbound
+﻿namespace Mx.Hyperway.Api.Inbound
 {
     using System.Security.Cryptography.X509Certificates;
 
-    using Mx.Oxalis.Api.Transmission;
+    using Mx.Hyperway.Api.Transmission;
 
     public interface InboundMetadata : TransmissionResult
     {

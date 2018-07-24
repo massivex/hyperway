@@ -1,13 +1,10 @@
-﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.Outbound.Transformer;
+    using Autofac;
+
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Transformer;
+    using Mx.Hyperway.Outbound.Transformer;
 
     public class TransmissionModule : Module
     {

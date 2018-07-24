@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using zipkin4net.Tracers.Zipkin;
-
-namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
-    using System.IO;
-
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Lookup;
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Statistics;
-    using Mx.Oxalis.Api.Transmission;
-    using Mx.Oxalis.Commons.Tracing;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Lookup;
+    using Mx.Hyperway.Api.Model;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Statistics;
+    using Mx.Hyperway.Api.Transmission;
     using Mx.Peppol.Common.Model;
-    using Mx.Tools;
 
     using zipkin4net;
 
@@ -59,34 +49,29 @@ namespace Mx.Oxalis.Outbound.Transmission
             this.lookupService = lookupService;
         }
 
-        public TransmissionResponse
-            transmit(TransmissionMessage transmissionMessage, Trace root) //  throws OxalisTransmissionException
+        public TransmissionResponse transmit(TransmissionMessage transmissionMessage, Trace root)
         {
             Trace span = root.Child();
             span.Record(Annotations.ServiceName("transmit"));
             span.Record(Annotations.ClientSend());
-            // Span span = tracer.newChild(root.context()).name("transmit").start();
             try
             {
-                return perform(transmissionMessage, span);
+                return this.perform(transmissionMessage, span);
             }
             finally
             {
                 span.Record(Annotations.ClientRecv());
-                // span.finish();
             }
         }
 
-        public TransmissionResponse
-            transmit(TransmissionMessage transmissionMessage) //throws OxalisTransmissionException
+        public TransmissionResponse transmit(TransmissionMessage transmissionMessage)
         {
-            // Span root = tracer.newTrace().name("transmit").start();
             Trace root = Trace.Create();
             root.Record(Annotations.ServiceName("transmit"));
             root.Record(Annotations.ClientSend());
             try
             {
-                return perform(transmissionMessage, root);
+                return this.perform(transmissionMessage, root);
             }
             finally
             {
@@ -96,10 +81,9 @@ namespace Mx.Oxalis.Outbound.Transmission
         }
 
         private TransmissionResponse perform(TransmissionMessage transmissionMessage, Trace root)
-            // throws OxalisTransmissionException
         {
 
-            transmissionVerifier.verify(transmissionMessage.getHeader(), Direction.OUT);
+            this.transmissionVerifier.verify(transmissionMessage.getHeader(), Direction.OUT);
 
             TransmissionRequest transmissionRequest;
             if (transmissionMessage is TransmissionRequest)
@@ -117,12 +101,12 @@ namespace Mx.Oxalis.Outbound.Transmission
                 Endpoint endpoint;
                 try
                 {
-                    endpoint = lookupService.lookup(transmissionMessage.getHeader(), lookupSpan);
+                    endpoint = this.lookupService.lookup(transmissionMessage.getHeader(), lookupSpan);
                     lookupSpan.Record(
                         Annotations.Tag("transport profile", endpoint.getTransportProfile().getIdentifier()));
                     transmissionRequest = new DefaultTransmissionRequest(transmissionMessage, endpoint);
                 }
-                catch (OxalisTransmissionException e)
+                catch (HyperwayTransmissionException e)
                 {
                     lookupSpan.Record(Annotations.Tag("exception", e.Message));
                     throw e;
@@ -143,7 +127,7 @@ namespace Mx.Oxalis.Outbound.Transmission
             try
             {
                 TransportProfile transportProfile = transmissionRequest.getEndpoint().getTransportProfile();
-                MessageSender messageSender = messageSenderFactory.getMessageSender(transportProfile);
+                MessageSender messageSender = this.messageSenderFactory.getMessageSender(transportProfile);
 
                 // Testing
                 //transmissionRequest = new DefaultTransmissionRequest(
@@ -155,7 +139,7 @@ namespace Mx.Oxalis.Outbound.Transmission
 
                 transmissionResponse = messageSender.send(transmissionRequest, span);
             }
-            catch (OxalisTransmissionException e)
+            catch (HyperwayTransmissionException e)
             {
                 span.Record(Annotations.Tag("exception", e.Message));
                 // span.tag("exception", e.getMessage());
@@ -167,7 +151,7 @@ namespace Mx.Oxalis.Outbound.Transmission
                 // span.finish();
             }
 
-            statisticsService.persist(transmissionRequest, transmissionResponse, root);
+            this.statisticsService.persist(transmissionRequest, transmissionResponse, root);
 
             return transmissionResponse;
         }

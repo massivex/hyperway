@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.Security
+﻿namespace Mx.Hyperway.Commons.Security
 {
     using Mx.Peppol.Mode.Configuration;
-    
+
     public enum KeyStoreConf
     {
-        [Setting("oxalis.keystore.path", "oxalis-keystore.jks")]
+        [Setting("hyperway.keystore.path", "hyperway-keystore.pfx")]
         Path,
 
-        [SettingAttribute("oxalis.keystore.password", "changeit")]
+        [Setting("hyperway.keystore.password", "changeit")]
         Password,
 
-        [SettingAttribute("oxalis.keystore.key.alias", "ap")]
+        [Setting("hyperway.keystore.key.alias", "ap")]
         KeyAlias,
 
-        [SettingAttribute("oxalis.keystore.key.password", "changeit")]
+        [Setting("hyperway.keystore.key.password", "changeit")]
         KeyPassword
     }
 }

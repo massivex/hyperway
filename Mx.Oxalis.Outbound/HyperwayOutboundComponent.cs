@@ -1,31 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound
+﻿namespace Mx.Hyperway.Outbound
 {
     using Autofac;
 
-    using Mx.Oxalis.Api.Evidence;
-    using Mx.Oxalis.Api.Lookup;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Outbound.Transmission;
+    using Mx.Hyperway.Api.Evidence;
+    using Mx.Hyperway.Api.Lookup;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Outbound.Transmission;
 
-    public class OxalisOutboundComponent
+    public class HyperwayOutboundComponent
     {
         private readonly IComponentContext context;
 
-        public OxalisOutboundComponent(IComponentContext context)
+        public HyperwayOutboundComponent(IComponentContext context)
         {
             this.context = context;
         }
 
-        // private Injector injector = GuiceModuleLoader.initiate();
-
         /**
          * Retrieves instances of TransmissionRequestBuilder, while not exposing Google Guice to the outside
-         *
-         * @return instance of TransmissionRequestBuilder
          */
         public TransmissionRequestBuilder getTransmissionRequestBuilder()
         {
@@ -35,7 +27,6 @@ namespace Mx.Oxalis.Outbound
         public TransmissionRequestFactory getTransmissionRequestFactory()
         {
             return this.context.Resolve<TransmissionRequestFactory>();
-            //.getInstance(TransmissionRequestFactory.class);
         }
 
         /**
@@ -49,8 +40,6 @@ namespace Mx.Oxalis.Outbound
 
         /**
          * Retrieves instance of DefaultTransmitter, without revealing intern object dependency injection.
-         *
-         * @return instance of Transmitter
          */
         public Transmitter getTransmitter()
         {
@@ -64,21 +53,9 @@ namespace Mx.Oxalis.Outbound
             // return injector.getInstance(EvidenceFactory.class);
         }
 
-        /**
-         * Provides access to the Google Guice injector in order to reuse the component with other components that also uses
-         * Google Guice.
-         *
-         * @return
-         */
-        //public Injector getInjector()
-        //{
-        //    return injector;
-        //}
-
         public TransmissionService getTransmissionService()
         {
             return this.context.Resolve<TransmissionService>();
-            //return injector.getInstance(TransmissionService.class);
         }
     }
 

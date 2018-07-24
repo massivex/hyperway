@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
+    using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
@@ -12,12 +10,11 @@ namespace Mx.Oxalis.As2.Util
 
     using MimeKit;
 
-    using Mx.Oxalis.As2.Model;
-    using Mx.Oxalis.Commons.BouncyCastle;
+    using Mx.Hyperway.As2.Model;
+    using Mx.Hyperway.Commons.BouncyCastle;
     using Mx.Tools.Encoding;
 
     using Org.BouncyCastle.Cms;
-    using Org.BouncyCastle.Crypto.Paddings;
     using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509.Store;
 
@@ -45,9 +42,9 @@ namespace Mx.Oxalis.As2.Util
         public SignedMimeMessage(MimeMessage mimeMessage)
         {
             this.mimeMessage = mimeMessage;
-            verifyContentType();
+            this.verifyContentType();
 
-            parseSignedMessage();
+            this.parseSignedMessage();
         }
 
 
@@ -78,12 +75,12 @@ namespace Mx.Oxalis.As2.Util
 
         public MimeMessage getMimeMessage()
         {
-            return mimeMessage;
+            return this.mimeMessage;
         }
 
         public X509Certificate getSignersX509Certificate()
         {
-            return signersX509Certificate;
+            return this.signersX509Certificate;
         }
 
         public Mic calculateMic(SMimeDigestMethod algorithm)
@@ -93,7 +90,7 @@ namespace Mx.Oxalis.As2.Util
 
                 // MessageDigest messageDigest = BcHelper.getMessageDigest(algorithm.getAlgorithm());
 
-                List<MimeEntity> mimeMultipart = mimeMessage.BodyParts.ToList();
+                List<MimeEntity> mimeMultipart = this.mimeMessage.BodyParts.ToList();
 
                 MimeEntity bodyPart = mimeMultipart[0];
 
@@ -249,7 +246,7 @@ namespace Mx.Oxalis.As2.Util
                 {
                     try
                     {
-                        signersX509Certificate = (X509Certificate) certIt.Current;
+                        this.signersX509Certificate = (X509Certificate) certIt.Current;
 
                         //new JcaX509CertificateConverter()
                         //    .setProvider(BouncyCastleProvider.PROVIDER_NAME)
@@ -277,7 +274,7 @@ namespace Mx.Oxalis.As2.Util
                 }
                 */
 
-                String issuerDN = signersX509Certificate.IssuerDN.ToString();
+                String issuerDN = this.signersX509Certificate.IssuerDN.ToString();
                 log.Debug("Certificate issued by: " + issuerDN);
             }
             else

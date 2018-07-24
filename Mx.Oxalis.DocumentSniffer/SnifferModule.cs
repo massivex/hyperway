@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer
+﻿namespace Mx.Hyperway.DocumentSniffer
 {
     using Autofac;
 
-    using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.Commons.IoC;
-    using Mx.Oxalis.DocumentSniffer.Document;
+    using Mx.Hyperway.Api.Transformer;
+    using Mx.Hyperway.Commons.IoC;
+    using Mx.Hyperway.DocumentSniffer.Document;
 
-    public class SnifferModule : OxalisModule
+    public class SnifferModule : HyperwayModule
     {
         protected override void Load(ContainerBuilder builder)
         {

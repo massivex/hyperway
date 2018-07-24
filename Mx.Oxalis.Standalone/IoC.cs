@@ -1,32 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Standalone
+﻿namespace Mx.Hyperway.Standalone
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Autofac;
 
-    using Microsoft.Extensions.Configuration.Json;
-
-    using Mx.Oxalis.Api.Lookup;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Statistics;
-    using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.Api.Transmission;
-    using Mx.Oxalis.As2.Outbound;
-    using Mx.Oxalis.As2.Util;
-    using Mx.Oxalis.Commons.Interop;
-    using Mx.Oxalis.Commons.Security;
-    using Mx.Oxalis.Commons.Statistics;
-    using Mx.Oxalis.Commons.Timestamp;
-    using Mx.Oxalis.Commons.Transmission;
-    using Mx.Oxalis.DocumentSniffer.Document;
-    using Mx.Oxalis.Outbound;
-    using Mx.Oxalis.Outbound.Lookup;
-    using Mx.Oxalis.Outbound.Transmission;
-    using Mx.Oxalis.Statistics.Service;
+    using Mx.Hyperway.Api.Statistics;
+    using Mx.Hyperway.Api.Transformer;
+    using Mx.Hyperway.Api.Transmission;
+    using Mx.Hyperway.As2.Outbound;
+    using Mx.Hyperway.As2.Util;
+    using Mx.Hyperway.Commons.Security;
+    using Mx.Hyperway.Commons.Statistics;
+    using Mx.Hyperway.Commons.Timestamp;
+    using Mx.Hyperway.Commons.Transmission;
+    using Mx.Hyperway.DocumentSniffer.Document;
+    using Mx.Hyperway.Outbound;
+    using Mx.Hyperway.Outbound.Lookup;
+    using Mx.Hyperway.Outbound.Transmission;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup;
     using Mx.Peppol.Lookup.Api;
@@ -37,8 +28,6 @@ namespace Mx.Oxalis.Standalone
     using Mx.Peppol.Security.Api;
     using Mx.Peppol.Security.Util;
 
-    using Org.BouncyCastle.Math.EC;
-
     class IoC
     {
         public static IContainer Container { get; set; }
@@ -46,7 +35,7 @@ namespace Mx.Oxalis.Standalone
         public static void Setup()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<OxalisOutboundComponent>().AsSelf();
+            builder.RegisterType<HyperwayOutboundComponent>().AsSelf();
             builder.RegisterType<TransmissionRequestBuilder>().AsSelf();
             builder.RegisterType<NoSbdhParser>().As<ContentDetector>();
 

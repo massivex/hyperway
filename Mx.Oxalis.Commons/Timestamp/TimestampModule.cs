@@ -1,8 +1,8 @@
-﻿namespace Mx.Oxalis.Commons.Timestamp
+﻿namespace Mx.Hyperway.Commons.Timestamp
 {
     using Autofac;
 
-    using Mx.Oxalis.Api.Timestamp;
+    using Mx.Hyperway.Api.Timestamp;
 
     public class TimestampModule : Module
     {

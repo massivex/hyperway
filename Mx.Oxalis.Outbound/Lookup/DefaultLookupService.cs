@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Lookup
+﻿namespace Mx.Hyperway.Outbound.Lookup
 {
-    using Autofac;
+    using System;
+    using System.Collections.Generic;
+
     using Autofac.Features.AttributeFilters;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Lookup;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Lookup;
     using Mx.Peppol.Common.Lang;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup;
@@ -39,21 +37,21 @@ namespace Mx.Oxalis.Outbound.Lookup
             this.transportProfiles = transportProfiles.ToArray();
         }
 
-        public Endpoint lookup(Header header) // throws OxalisTransmissionException
+        public Endpoint lookup(Header header)
         {
             try
             {
-                return lookupClient.getEndpoint(header, transportProfiles);
+                return this.lookupClient.getEndpoint(header, this.transportProfiles);
             }
             catch (Exception e) when (e is LookupException || e is PeppolSecurityException || e is EndpointNotFoundException) {
-                throw new OxalisTransmissionException(e.Message, e);
+                throw new HyperwayTransmissionException(e.Message, e);
             }
 
         }
 
         public Endpoint lookup(Header header, Trace root)
         {
-            return lookup(header);
+            return this.lookup(header);
         }
     }
 }

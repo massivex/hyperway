@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.FileSystem
+﻿namespace Mx.Hyperway.Commons.FileSystem
 {
-    using System.IO;
+    using System;
     using System.Text.RegularExpressions;
 
     public class FileUtils

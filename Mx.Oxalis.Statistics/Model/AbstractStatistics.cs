@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace Mx.Oxalis.Statistics.Model
+﻿namespace Mx.Hyperway.Statistics.Model
 {
-    using Mx.Oxalis.Api.Model;
+    using System;
+
+    using Mx.Hyperway.Api.Model;
     using Mx.Peppol.Common.Model;
 
     public abstract class AbstractStatistics : IRawStatistics

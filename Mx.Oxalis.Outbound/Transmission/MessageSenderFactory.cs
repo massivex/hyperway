@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Autofac;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Commons.Interop;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Outbound;
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Mode;
-
-    using Org.BouncyCastle.Math.EC;
 
     /**
      * Factory orchestrating available implementations of transport profiles.
@@ -85,16 +80,12 @@ namespace Mx.Oxalis.Outbound.Transmission
 
         /**
          * Fetch identifier used in named annotation for the implementation of requested transport profile.
-         *
-         * @param transportProfile Identifier of transport profile requested.
-         * @return String used in the named annotation.
-         * @throws OxalisTransmissionException Thrown when transport profile is not supported.
          */
-        public String getSender(TransportProfile transportProfile) // throws OxalisTransmissionException
+        public String getSender(TransportProfile transportProfile)
         {
             if (!this.prioritizedTransportProfiles.Any(x => x.Equals(transportProfile)))
             {
-                throw new OxalisTransmissionException(
+                throw new HyperwayTransmissionException(
                     $"Transport protocol '{transportProfile.getIdentifier()}' not supported.");
             }
 
@@ -103,15 +94,10 @@ namespace Mx.Oxalis.Outbound.Transmission
 
         /**
          * Fetch MessageSender implementing from provided transport profile.
-         *
-         * @param transportProfile Identifier of transport profile used to fetch MessageSender.
-         * @return MessageSender implementing the transport profile requested.
-         * @throws OxalisTransmissionException Thrown when loading of implementation fails or implementation is not found.
          */
-        public MessageSender getMessageSender(TransportProfile transportProfile) // throws OxalisTransmissionException
+        public MessageSender getMessageSender(TransportProfile transportProfile)
         {
             return this.injector.ResolveKeyed<MessageSender>(this.getSender(transportProfile));
-            // getInstance(Key.get(MessageSender.class, Names.named(getSender(transportProfile))));
         }
     }
 

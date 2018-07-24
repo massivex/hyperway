@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Lookup;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.Commons;
-    using Mx.Oxalis.DocumentSniffer;
-    using Mx.Oxalis.DocumentSniffer.Identifier;
-    using Mx.Oxalis.DocumentSniffer.Sbdh;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Lookup;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Transformer;
+    using Mx.Hyperway.Commons;
+    using Mx.Hyperway.DocumentSniffer;
+    using Mx.Hyperway.DocumentSniffer.Identifier;
+    using Mx.Hyperway.DocumentSniffer.Sbdh;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
 
@@ -112,7 +111,7 @@ namespace Mx.Oxalis.Outbound.Transmission
             return this;
         }
 
-        public TransmissionRequest build(Trace root) // throws OxalisTransmissionException, OxalisContentException
+        public TransmissionRequest build(Trace root)
         {
             Trace span = root.Child();
             span.Record(Annotations.ServiceName("build"));
@@ -142,10 +141,10 @@ namespace Mx.Oxalis.Outbound.Transmission
          *
          * @return Prepared transmission request.
          */
-        public TransmissionRequest build() // throws OxalisTransmissionException, OxalisContentException
+        public TransmissionRequest build()
         {
             if (this.payload.Length < 2)
-                throw new OxalisTransmissionException("You have forgotten to provide payload");
+                throw new HyperwayTransmissionException("You have forgotten to provide payload");
 
             PeppolStandardBusinessHeader optionalParsedSbdh = null;
             try
@@ -202,7 +201,7 @@ namespace Mx.Oxalis.Outbound.Transmission
          */
         PeppolStandardBusinessHeader makeEffectiveSbdh(
             PeppolStandardBusinessHeader optionalParsedSbdh,
-            PeppolStandardBusinessHeader peppolSbdhSuppliedByCaller) // throws OxalisContentException
+            PeppolStandardBusinessHeader peppolSbdhSuppliedByCaller)
 
         {
             PeppolStandardBusinessHeader effectiveSbdh;
@@ -254,7 +253,7 @@ namespace Mx.Oxalis.Outbound.Transmission
 
 
         private PeppolStandardBusinessHeader parsePayLoadAndDeduceSbdh(
-            PeppolStandardBusinessHeader optionallyParsedSbdh) // throws OxalisContentException
+            PeppolStandardBusinessHeader optionallyParsedSbdh)
         {
             if (optionallyParsedSbdh != null)
             {

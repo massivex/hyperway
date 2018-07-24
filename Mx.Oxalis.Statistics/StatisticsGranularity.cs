@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Statistics
+﻿namespace Mx.Hyperway.Statistics
 {
+    using System;
+
     using Mx.Tools;
 
     public class StatisticsGranularity
@@ -25,7 +23,7 @@ namespace Mx.Oxalis.Statistics
 
         public String getAbbreviation()
         {
-            return abbreviation;
+            return this.abbreviation;
         }
 
         public static StatisticsGranularity valueForAbbreviation(String abbreviation)

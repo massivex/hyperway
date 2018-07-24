@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Mx.Oxalis.Commons.BouncyCastle
+﻿namespace Mx.Hyperway.Commons.BouncyCastle
 {
+    using System;
     using System.IO;
 
     using MimeKit;
@@ -262,7 +261,7 @@ namespace Mx.Oxalis.Commons.BouncyCastle
          */
         public MimeEntity getContent()
         {
-            return content;
+            return this.content;
         }
 
         /**
@@ -294,7 +293,7 @@ namespace Mx.Oxalis.Commons.BouncyCastle
          */
         public Object getContentWithSignature()
         {
-            return message;
+            return this.message;
         }
 
         //private void drainContent()

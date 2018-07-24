@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Timestamp
+﻿namespace Mx.Hyperway.Api.Timestamp
 {
+    using System;
+
     using Mx.Peppol.Common.Model;
 
     public class Timestamp
@@ -39,7 +37,7 @@ namespace Mx.Oxalis.Api.Timestamp
          */
         public DateTime getDate()
         {
-            return date;
+            return this.date;
         }
 
         /**
@@ -49,7 +47,7 @@ namespace Mx.Oxalis.Api.Timestamp
          */
         public Receipt getReceipt()
         {
-            return receipt;
+            return this.receipt;
         }
     }
 }

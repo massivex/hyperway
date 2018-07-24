@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.Security
+﻿namespace Mx.Hyperway.Commons.Security
 {
-    using System.ComponentModel;
+    using System;
     using System.IO;
 
     using Autofac;
 
-    using Mx.Oxalis.Api.Lang;
+    using Mx.Hyperway.Api.Lang;
     using Mx.Peppol.Mode.Configuration;
 
     using Org.BouncyCastle.Crypto;
@@ -42,7 +38,7 @@ namespace Mx.Oxalis.Commons.Security
             var fi = new FileInfo(storePath);
             if (!fi.Exists)
             {
-                throw new OxalisLoadingException(
+                throw new HyperwayLoadingException(
                     String.Format("Unable to find keystore at '{0}'.", fi.FullName));
             }
 
@@ -65,13 +61,13 @@ namespace Mx.Oxalis.Commons.Security
 
             if (!keyStore.ContainsAlias(keyAlias))
             {
-                throw new OxalisLoadingException($"Key alias '{keyAlias}' is not found in the key store.");
+                throw new HyperwayLoadingException($"Key alias '{keyAlias}' is not found in the key store.");
             }
 
             AsymmetricKeyEntry privateKey = keyStore.GetKey(keyAlias);
             if (privateKey == null)
             {
-                throw new OxalisLoadingException("Unable to load private key due to wrong password.");
+                throw new HyperwayLoadingException("Unable to load private key due to wrong password.");
             }
 
             return privateKey.Key;
@@ -86,7 +82,7 @@ namespace Mx.Oxalis.Commons.Security
 
             if (!keyStore.ContainsAlias(keyAlias))
             {
-                throw new OxalisLoadingException($"Key alias '{keyAlias}' is not found in the key store.");
+                throw new HyperwayLoadingException($"Key alias '{keyAlias}' is not found in the key store.");
             }
 
             return keyStore.GetCertificate(keyAlias).Certificate;

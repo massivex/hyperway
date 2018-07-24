@@ -1,8 +1,8 @@
-﻿namespace Mx.Oxalis.Statistics.Model
+﻿namespace Mx.Hyperway.Statistics.Model
 {
     using System;
 
-    using Mx.Oxalis.Api.Model;
+    using Mx.Hyperway.Api.Model;
     using Mx.Peppol.Common.Model;
 
     internal interface IAbstractBuilder

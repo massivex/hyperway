@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
-    using System.Collections;
-    using System.Diagnostics;
+    using System;
     using System.IO;
 
     using MimeKit;
 
-    using Mx.Oxalis.As2.Code;
+    using Mx.Hyperway.As2.Code;
     using Mx.Tools;
 
     using ContentType = System.Net.Mime.ContentType;
@@ -52,7 +47,7 @@ namespace Mx.Oxalis.As2.Util
                     "micalg parameter not found in Content-Type header: " + contentType);
             }
 
-            sMimeDigestMethod = SMimeDigestMethod.findByIdentifier(algorithm);
+            this.sMimeDigestMethod = SMimeDigestMethod.findByIdentifier(algorithm);
         }
 
         /**
@@ -92,7 +87,7 @@ namespace Mx.Oxalis.As2.Util
             byte[] result;
             using (var m = new MemoryStream())
             {
-                mimeMultipart[0].WriteTo(m, true);
+                this.mimeMultipart[0].WriteTo(m, true);
                 m.Seek(0, SeekOrigin.Begin);
                 result = m.GetBuffer();
             }
@@ -103,7 +98,7 @@ namespace Mx.Oxalis.As2.Util
 
         public SMimeDigestMethod getDigestMethod()
         {
-            return sMimeDigestMethod;
+            return this.sMimeDigestMethod;
         }
 
         /**
@@ -113,13 +108,13 @@ namespace Mx.Oxalis.As2.Util
          */
         public byte[] getSignature() // throws MessagingException, IOException
         {
-            return signature;
+            return this.signature;
         }
 
         public void Dispose() // throws IOException
         {
-            mimeMultipart = null;
-            signature = null;
+            this.mimeMultipart = null;
+            this.signature = null;
         }
     }
 

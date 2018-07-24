@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
     using System.IO;
 
-    using Mx.Oxalis.Api.Outbound;
+    using Mx.Hyperway.Api.Outbound;
     using Mx.Peppol.Common.Model;
 
     /**
@@ -45,19 +41,19 @@ namespace Mx.Oxalis.Outbound.Transmission
 
         public Endpoint getEndpoint()
         {
-            return endpoint;
+            return this.endpoint;
         }
 
 
         public Header getHeader()
         {
-            return header;
+            return this.header;
         }
 
 
         public Stream getPayload()
         {
-            return payload;
+            return this.payload;
         }
     }
 }

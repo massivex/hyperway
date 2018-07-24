@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer
+﻿namespace Mx.Hyperway.DocumentSniffer
 {
-    using Mx.Oxalis.DocumentSniffer.Identifier;
+    using System;
+    using System.Collections.Generic;
+
+    using Mx.Hyperway.DocumentSniffer.Identifier;
     using Mx.Peppol.Common.Model;
 
     /**
@@ -169,7 +168,7 @@ namespace Mx.Oxalis.DocumentSniffer
         [Obsolete]
         public void setDocumentTypeIdentifier(PeppolDocumentTypeId documentTypeIdentifier)
         {
-            setDocumentTypeIdentifier(documentTypeIdentifier.toVefa());
+            this.setDocumentTypeIdentifier(documentTypeIdentifier.toVefa());
         }
 
         public void setDocumentTypeIdentifier(DocumentTypeIdentifier documentTypeIdentifier)

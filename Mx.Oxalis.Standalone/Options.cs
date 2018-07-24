@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Standalone
+﻿namespace Mx.Hyperway.Standalone
 {
+    using System.Collections.Generic;
+
     using CommandLine;
 
     class Options

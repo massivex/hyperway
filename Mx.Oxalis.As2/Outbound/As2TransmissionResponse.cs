@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Outbound
+﻿namespace Mx.Hyperway.As2.Outbound
 {
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Timestamp;
-    using Mx.Oxalis.Api.Transmission;
+    using System;
+    using System.Collections.Generic;
+
+    using Mx.Hyperway.Api.Model;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Timestamp;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
 
@@ -51,7 +49,7 @@ namespace Mx.Oxalis.As2.Outbound
             this.timestamp = date;
 
             List<Receipt> receipts = new List<Receipt>();
-            receipts.Add(receipt);
+            receipts.Add(this.receipt);
             if (timestamp.getReceipt() != null)
             {
                 receipts.Add(timestamp.getReceipt());
@@ -63,22 +61,22 @@ namespace Mx.Oxalis.As2.Outbound
 
         public Header getHeader()
         {
-            return transmissionRequest.getHeader();
+            return this.transmissionRequest.getHeader();
         }
 
         public TransmissionIdentifier getTransmissionIdentifier()
         {
-            return transmissionIdentifier;
+            return this.transmissionIdentifier;
         }
 
         public byte[] getNativeEvidenceBytes()
         {
-            return primaryReceipt().getValue();
+            return this.primaryReceipt().getValue();
         }
 
         public TransportProfile getProtocol()
         {
-            return getEndpoint().getTransportProfile();
+            return this.getEndpoint().getTransportProfile();
         }
 
         public IList<Receipt> getReceipts()
@@ -89,19 +87,19 @@ namespace Mx.Oxalis.As2.Outbound
 
         public Endpoint getEndpoint()
         {
-            return transmissionRequest.getEndpoint();
+            return this.transmissionRequest.getEndpoint();
         }
 
 
         public Receipt primaryReceipt()
         {
-            return receipt;
+            return this.receipt;
         }
 
 
         public Digest getDigest()
         {
-            return digest;
+            return this.digest;
         }
 
 
@@ -113,7 +111,7 @@ namespace Mx.Oxalis.As2.Outbound
 
         public DateTime getTimestamp()
         {
-            return timestamp;
+            return this.timestamp;
         }
     }
 

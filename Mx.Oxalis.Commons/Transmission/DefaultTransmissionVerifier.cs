@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons.Transmission
+﻿namespace Mx.Hyperway.Commons.Transmission
 {
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Transmission;
+    using Mx.Hyperway.Api.Model;
+    using Mx.Hyperway.Api.Transmission;
     using Mx.Peppol.Common.Model;
 
     public class DefaultTransmissionVerifier : TransmissionVerifier

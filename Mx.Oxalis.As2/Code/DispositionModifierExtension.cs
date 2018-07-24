@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Code
+﻿namespace Mx.Hyperway.As2.Code
 {
+    using System;
+
     public class DispositionModifierExtension
     {
         public static readonly DispositionModifierExtension UNSUPPORTED_FORMAT =
@@ -72,7 +70,7 @@ namespace Mx.Oxalis.As2.Code
 
         public String ToString()
         {
-            return value;
+            return this.value;
         }
     }
 }

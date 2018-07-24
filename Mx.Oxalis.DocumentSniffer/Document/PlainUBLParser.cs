@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Document
+﻿namespace Mx.Hyperway.DocumentSniffer.Document
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Xml;
     using System.Xml.Linq;
@@ -29,22 +27,22 @@ namespace Mx.Oxalis.DocumentSniffer.Document
 
         public String localName()
         {
-            return document.Document.Root.Name.LocalName;
+            return this.document.Document.Root.Name.LocalName;
         }
 
         public String rootNameSpace()
         {
-            return document.Document.Root.Name.NamespaceName;
+            return this.document.Document.Root.Name.NamespaceName;
         }
 
         public String ublVersion()
         {
-            return retriveValueForXpath("//cbc:UBLVersionID");
+            return this.retriveValueForXpath("//cbc:UBLVersionID");
         }
 
         public bool canParse()
         {
-            return ("" + rootNameSpace()).StartsWith("urn:oasis:names:specification:ubl:schema:xsd:");
+            return ("" + this.rootNameSpace()).StartsWith("urn:oasis:names:specification:ubl:schema:xsd:");
         }
 
         public XElement retrieveElementForXpath(String s)

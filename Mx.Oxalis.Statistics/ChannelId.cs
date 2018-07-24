@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Statistics
+﻿namespace Mx.Hyperway.Statistics
 {
+    using System;
+
     public class ChannelId
     {
 
@@ -13,7 +11,7 @@ namespace Mx.Oxalis.Statistics
         {
             if (channelId == null)
             {
-                value = "";
+                this.value = "";
             }
             else
                 this.value = channelId;
@@ -27,7 +25,7 @@ namespace Mx.Oxalis.Statistics
 
         public String ToString()
         {
-            return value;
+            return this.value;
         }
     }
 }

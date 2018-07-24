@@ -1,12 +1,11 @@
-﻿using System;
-
-namespace Mx.Oxalis.DocumentSniffer.Document
+﻿namespace Mx.Hyperway.DocumentSniffer.Document
 {
+    using System;
     using System.Xml;
     using System.Xml.Linq;
 
-    using Mx.Oxalis.DocumentSniffer.Identifier;
-    using Mx.Oxalis.DocumentSniffer.Parsers;
+    using Mx.Hyperway.DocumentSniffer.Document.Parsers;
+    using Mx.Hyperway.DocumentSniffer.Identifier;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
 
@@ -29,27 +28,27 @@ namespace Mx.Oxalis.DocumentSniffer.Document
 
     public CustomizationIdentifier fetchCustomizationId()
     {
-        String value = retriveValueForXpath("//cbc:CustomizationID");
+        String value = this.retriveValueForXpath("//cbc:CustomizationID");
         return CustomizationIdentifier.valueOf(value);
     }
 
     public ProcessIdentifier fetchProcessTypeId()
     {
-        String value = retriveValueForXpath("//cbc:ProfileID");
+        String value = this.retriveValueForXpath("//cbc:ProfileID");
         return ProcessIdentifier.of(value);
     }
 
     public PeppolDocumentTypeId fetchDocumentTypeId()
     {
-        CustomizationIdentifier customizationIdentifier = fetchCustomizationId();
-        return new PeppolDocumentTypeId(rootNameSpace(), localName(), customizationIdentifier, ublVersion());
+        CustomizationIdentifier customizationIdentifier = this.fetchCustomizationId();
+        return new PeppolDocumentTypeId(this.rootNameSpace(), this.localName(), customizationIdentifier, this.ublVersion());
     }
 
     public PEPPOLDocumentParser createDocumentParser()
     {
-        String type = localName();
+        String type = this.localName();
 
-        log.Debug("Creating DocumentParser for type : " + localName());
+        log.Debug("Creating DocumentParser for type : " + this.localName());
         
         // despatch advice scenario
         if ("DespatchAdvice".EqualsIgnoreCase(type))

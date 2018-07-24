@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Lookup
+﻿namespace Mx.Hyperway.Outbound.Lookup
 {
     using Autofac;
 
-    using Mx.Oxalis.Api.Lookup;
+    using Mx.Hyperway.Api.Lookup;
     using Mx.Peppol.Lookup.Api;
     using Mx.Peppol.Lookup.Util;
 
@@ -24,7 +20,7 @@ namespace Mx.Oxalis.Outbound.Lookup
                 .As<LookupService>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<OxalisApacheFetcher>().As<MetadataFetcher>();
+            builder.RegisterType<HyperwayHttpFetcher>().As<MetadataFetcher>();
 
             builder.RegisterType<MultiReader>().As<MetadataReader>();
         }

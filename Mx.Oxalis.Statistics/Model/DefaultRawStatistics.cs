@@ -1,4 +1,4 @@
-﻿namespace Mx.Oxalis.Statistics.Model
+﻿namespace Mx.Hyperway.Statistics.Model
 {
     public class DefaultRawStatistics : AbstractStatistics
     {

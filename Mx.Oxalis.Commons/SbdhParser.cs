@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Commons
+﻿namespace Mx.Hyperway.Commons
 {
+    using System;
     using System.IO;
 
     using Mx.Peppol.Common.Model;

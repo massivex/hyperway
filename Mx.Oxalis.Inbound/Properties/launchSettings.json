@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Mx.Oxalis.Inbound": {
+    "Mx.Hyperway.Inbound": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

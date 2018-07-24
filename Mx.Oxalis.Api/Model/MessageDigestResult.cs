@@ -1,4 +1,4 @@
-﻿namespace Mx.Oxalis.Api.Model
+﻿namespace Mx.Hyperway.Api.Model
 {
     using System;
 

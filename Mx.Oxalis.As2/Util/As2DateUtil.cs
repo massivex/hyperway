@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
+    using System;
     using System.Globalization;
 
     /**

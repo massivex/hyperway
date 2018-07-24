@@ -1,4 +1,4 @@
-﻿namespace Mx.Oxalis.Api.Model
+﻿namespace Mx.Hyperway.Api.Model
 {
     using System;
 
@@ -16,8 +16,6 @@
      */
     public class AccessPointIdentifier
     {
-        private static readonly long serialVersionUID = 9092401962608401791L;
-
         private readonly string accessPointIdentifierValue;
 
         /**

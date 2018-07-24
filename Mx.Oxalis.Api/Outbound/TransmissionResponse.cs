@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Outbound
+﻿namespace Mx.Hyperway.Api.Outbound
 {
-    using Mx.Oxalis.Api.Transmission;
+    using System;
+
+    using Mx.Hyperway.Api.Transmission;
     using Mx.Peppol.Common.Model;
 
     public interface TransmissionResponse : TransmissionResult

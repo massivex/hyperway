@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Mx.Oxalis.Outbound.Transmission;
-using Mx.Peppol.Common.Model;
-
-namespace Mx.Oxalis.Standalone
+﻿namespace Mx.Hyperway.Standalone
 {
+    using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Reflection;
 
     using log4net;
-    using log4net.Repository.Hierarchy;
 
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Transmission;
-    using Mx.Oxalis.Commons.FileSystem;
-    using Mx.Oxalis.Commons.Interop;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Commons.FileSystem;
+    using Mx.Hyperway.Commons.Interop;
+    using Mx.Hyperway.Outbound.Transmission;
+    using Mx.Peppol.Common.Model;
 
     using zipkin4net;
 
@@ -50,18 +43,18 @@ namespace Mx.Oxalis.Standalone
                 TransmissionResponse transmissionResponse;
                 long duration = 0;
 
-                if (parameters.UseFactory)
+                if (this.parameters.UseFactory)
                 {
                     using (Stream inputStream = File.Open(this.xmlPayloadFile.FullName, FileMode.Open, FileAccess.Read))
                     {
-                        transmissionResponse = parameters.OxalisOutboundComponent.getTransmissionService()
+                        transmissionResponse = this.parameters.HyperwayOutboundComponent.getTransmissionService()
                             .send(inputStream, span);
                     }
                 }
                 else
                 {
 
-                    TransmissionRequest transmissionRequest = createTransmissionRequest(span);
+                    TransmissionRequest transmissionRequest = this.createTransmissionRequest(span);
 
                     Transmitter transmitter;
                     // Span span1 = tracer.newChild(span.context()).name("get transmitter").start();
@@ -70,7 +63,7 @@ namespace Mx.Oxalis.Standalone
                     span1.Record(Annotations.ClientSend());
                     try
                     {
-                        transmitter = parameters.OxalisOutboundComponent.getTransmitter();
+                        transmitter = this.parameters.HyperwayOutboundComponent.getTransmitter();
                     }
                     finally
                     {
@@ -82,8 +75,8 @@ namespace Mx.Oxalis.Standalone
                     var watch = new Stopwatch();
                     // long start = System.nanoTime();
                     watch.Start();
-                    transmissionResponse = performTransmission(
-                        parameters.EvidencePath, transmitter, transmissionRequest, span);
+                    transmissionResponse = this.performTransmission(
+                        this.parameters.EvidencePath, transmitter, transmissionRequest, span);
                     watch.Stop();
                     
                     // long elapsed = System.nanoTime() - start;
@@ -101,8 +94,7 @@ namespace Mx.Oxalis.Standalone
             }
         }
 
-        protected TransmissionRequest
-            createTransmissionRequest(Trace root) // throws OxalisTransmissionException, IOException 
+        protected TransmissionRequest createTransmissionRequest(Trace root)
         {
             Trace span = root.Child();
             span.Record(Annotations.ServiceName("create transmission request"));
@@ -113,42 +105,42 @@ namespace Mx.Oxalis.Standalone
             {
                 // creates a transmission request builder and enables trace
                 TransmissionRequestBuilder requestBuilder =
-                    parameters.OxalisOutboundComponent.getTransmissionRequestBuilder();
+                    this.parameters.HyperwayOutboundComponent.getTransmissionRequestBuilder();
 
                 requestBuilder.setTransmissionBuilderOverride(true);
 
                 // add receiver participant
-                if (parameters.Receiver != null)
+                if (this.parameters.Receiver != null)
                 {
-                    requestBuilder.receiver(parameters.Receiver);
+                    requestBuilder.receiver(this.parameters.Receiver);
                 }
 
                 // add sender participant
-                if (parameters.Sender != null)
+                if (this.parameters.Sender != null)
                 {
-                    requestBuilder.sender(parameters.Sender);
+                    requestBuilder.sender(this.parameters.Sender);
                 }
 
-                if (parameters.DocType != null)
+                if (this.parameters.DocType != null)
                 {
-                    requestBuilder.documentType(parameters.DocType);
+                    requestBuilder.documentType(this.parameters.DocType);
                 }
 
-                if (parameters.ProcessIdentifier != null)
+                if (this.parameters.ProcessIdentifier != null)
                 {
-                    requestBuilder.processType(parameters.ProcessIdentifier);
+                    requestBuilder.processType(this.parameters.ProcessIdentifier);
                 }
 
                 // Supplies the payload
-                using (Stream inputStream = File.Open(xmlPayloadFile.FullName, FileMode.Open, FileAccess.Read))
+                using (Stream inputStream = File.Open(this.xmlPayloadFile.FullName, FileMode.Open, FileAccess.Read))
                 {
                     requestBuilder.payLoad(inputStream);
                 }
 
                 // Overrides the destination URL if so requested
-                if (parameters.Endpoint != null)
+                if (this.parameters.Endpoint != null)
                 {
-                    Endpoint endpoint = parameters.Endpoint;
+                    Endpoint endpoint = this.parameters.Endpoint;
                     requestBuilder.overrideAs2Endpoint(endpoint);
                 }
 
@@ -176,7 +168,7 @@ namespace Mx.Oxalis.Standalone
             DirectoryInfo evidencePath,
             Transmitter transmitter,
             TransmissionRequest transmissionRequest,
-            Trace root) // throws OxalisTransmissionException, IOException
+            Trace root)
         {
             // Span span = tracer.newChild(root.context()).name("transmission").start();
             Trace span = root.Child();
@@ -204,7 +196,7 @@ namespace Mx.Oxalis.Standalone
                         transmissionResponse.getTransmissionIdentifier(),
                         durationInMs));
 
-                saveEvidence(transmissionResponse, evidencePath, span);
+                this.saveEvidence(transmissionResponse, evidencePath, span);
 
                 return transmissionResponse;
             }
@@ -228,7 +220,7 @@ namespace Mx.Oxalis.Standalone
             {
                 // saveEvidence(transmissionResponse, "-rem-evidence.xml",
                 // transmissionResponse::getRemEvidenceBytes, evidencePath);
-                saveEvidence(
+                this.saveEvidence(
                     transmissionResponse,
                     "-as2-mdn.txt",
                     transmissionResponse.getNativeEvidenceBytes(),

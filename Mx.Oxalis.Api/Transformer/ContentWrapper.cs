@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Transformer
+﻿namespace Mx.Hyperway.Api.Transformer
 {
     using System.IO;
 
@@ -11,7 +7,7 @@ namespace Mx.Oxalis.Api.Transformer
     public interface ContentWrapper
     {
 
-        Stream wrap(Stream inputStream, Header header); // throws IOException, OxalisContentException;
+        Stream wrap(Stream inputStream, Header header);
 
     }
 }

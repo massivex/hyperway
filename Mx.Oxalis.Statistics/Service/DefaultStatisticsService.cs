@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Statistics.Service
+﻿namespace Mx.Hyperway.Statistics.Service
 {
-    using log4net;
-    using log4net.Repository.Hierarchy;
+    using System;
 
-    using Mx.Oxalis.Api.Inbound;
-    using Mx.Oxalis.Api.Model;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Statistics;
-    using Mx.Oxalis.Commons.Security;
-    using Mx.Oxalis.Commons.Tracing;
-    using Mx.Oxalis.Statistics.Model;
+    using log4net;
+
+    using Mx.Hyperway.Api.Inbound;
+    using Mx.Hyperway.Api.Model;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Statistics;
+    using Mx.Hyperway.Commons.Security;
+    using Mx.Hyperway.Statistics.Model;
 
     using Org.BouncyCastle.X509;
 
@@ -45,7 +41,7 @@ namespace Mx.Oxalis.Statistics.Service
             try
             {
                 RawStatisticsBuilder builder = new RawStatisticsBuilder()
-                    .AccessPointIdentifier(ourAccessPointIdentifier).Direction(Direction.OUT)
+                    .AccessPointIdentifier(this.ourAccessPointIdentifier).Direction(Direction.OUT)
                     .DocumentType(transmissionResponse.getHeader().getDocumentType())
                     .Sender(transmissionResponse.getHeader().getSender())
                     .Receiver(transmissionResponse.getHeader().getReceiver())
@@ -67,7 +63,7 @@ namespace Mx.Oxalis.Statistics.Service
                 }
 
                 DefaultRawStatistics rawStatistics = builder.Build();
-                rawStatisticsRepository.persist(rawStatistics);
+                this.rawStatisticsRepository.persist(rawStatistics);
             }
             catch (Exception ex)
             {
@@ -87,12 +83,12 @@ namespace Mx.Oxalis.Statistics.Service
             try
             {
                 DefaultRawStatistics rawStatistics = new RawStatisticsBuilder()
-                    .AccessPointIdentifier(ourAccessPointIdentifier).Direction(Direction.IN)
+                    .AccessPointIdentifier(this.ourAccessPointIdentifier).Direction(Direction.IN)
                     .DocumentType(inboundMetadata.getHeader().getDocumentType())
                     .Sender(inboundMetadata.getHeader().getSender()).Receiver(inboundMetadata.getHeader().getReceiver())
                     .Profile(inboundMetadata.getHeader().getProcess()).Channel(new ChannelId("AS2")).Build();
 
-                rawStatisticsRepository.persist(rawStatistics);
+                this.rawStatisticsRepository.persist(rawStatistics);
             }
             catch (Exception e)
             {

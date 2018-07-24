@@ -1,67 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Mx.Oxalis.DocumentSniffer;
-using Mx.Peppol.Common.Model;
-
-namespace Mx.Oxalis.DocumentSniffer.Document
+﻿namespace Mx.Hyperway.DocumentSniffer.Document
 {
+    using System;
     using System.IO;
     using System.Xml.Linq;
-    using System.Xml.XPath;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.DocumentSniffer.Parsers;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Transformer;
+    using Mx.Hyperway.DocumentSniffer.Document.Parsers;
+    using Mx.Peppol.Common.Model;
 
     /**
      * Parses UBL based documents, which are not wrapped within an SBDH, extracting data and
      * creating a PeppolStandardBusinessHeader.
-     *
-     * @author steinar
-     * @author thore
      */
-    // TODO: Check IoC Registration
-    // @Singleton
-    // @Type("legacy")
     public class NoSbdhParser : ContentDetector
     {
-
-        // private static readonly DocumentBuilderFactory documentBuilderFactory;
-
-        //static {
-        //    documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        //    documentBuilderFactory.setNamespaceAware(true);
-
-        //    try {
-        //        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        //    } catch (ParserConfigurationException e) {
-        //        throw new IllegalStateException("Unable to configure DOM parser for secure processing.", e);
-        //    }
-        //}
 
         /**
          * Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
          * should not be wrapped in an SBDH.
-         *
-         * @param inputStream UBL XML data without an SBDH.
-         * @return an instance of Header populated with data from the UBL XML document.
          */
-        // @Override
-        public Header parse(Stream inputStream) // throws OxalisContentException
+        public Header parse(Stream inputStream)
         {
-            return originalParse(inputStream).toVefa();
+            return this.originalParse(inputStream).toVefa();
         }
 
         /**
          * Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
          * should not be wrapped in an SBDH.
-         *
-         * @param inputStream UBL XML data without an SBDH.
-         * @return an instance of PeppolStandardBusinessHeader populated with data from the UBL XML document.
          */
-        public PeppolStandardBusinessHeader originalParse(Stream inputStream) // throws OxalisContentException
+        public PeppolStandardBusinessHeader originalParse(Stream inputStream)
         {
             try
             {
@@ -124,7 +92,7 @@ namespace Mx.Oxalis.DocumentSniffer.Document
             }
             catch (Exception e)
             {
-                throw new OxalisContentException("Unable to parse document " + e.Message, e);
+                throw new HyperwayContentException("Unable to parse document " + e.Message, e);
             }
         }
     }

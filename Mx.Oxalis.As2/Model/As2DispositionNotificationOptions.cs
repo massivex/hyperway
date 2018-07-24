@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Model
+﻿namespace Mx.Hyperway.As2.Model
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Text.RegularExpressions;
 
     using log4net;
 
-    using Microsoft.Extensions.FileSystemGlobbing;
-
-    using Mx.Oxalis.As2.Util;
+    using Mx.Hyperway.As2.Util;
     using Mx.Tools;
 
     public class As2DispositionNotificationOptions
@@ -29,7 +25,7 @@ namespace Mx.Oxalis.As2.Model
 
         public List<Parameter> getParameterList()
         {
-            return parameterList;
+            return this.parameterList;
         }
 
         public static As2DispositionNotificationOptions getDefault(SMimeDigestMethod digestMethod)
@@ -87,7 +83,7 @@ namespace Mx.Oxalis.As2.Model
 
         Parameter getParameterFor(Attribute attribute)
         {
-            foreach (Parameter parameter in parameterList)
+            foreach (Parameter parameter in this.parameterList)
             {
                 if (parameter.getAttribute() == attribute)
                 {
@@ -105,7 +101,7 @@ namespace Mx.Oxalis.As2.Model
          */
         public Parameter getSignedReceiptMicalg()
         {
-            return getParameterFor(Attribute.SIGNED_RECEIPT_MICALG);
+            return this.getParameterFor(Attribute.SIGNED_RECEIPT_MICALG);
         }
 
         /**
@@ -113,19 +109,19 @@ namespace Mx.Oxalis.As2.Model
          */
         public String getPreferredSignedReceiptMicAlgorithmName()
         {
-            String preferredAlgorithm = "" + getSignedReceiptMicalg().getTextValue(); // text value could be "sha1, md5"
+            String preferredAlgorithm = "" + this.getSignedReceiptMicalg().getTextValue(); // text value could be "sha1, md5"
             return preferredAlgorithm.Split(',')[0].Trim();
         }
 
         public Parameter getSignedReceiptProtocol()
         {
-            return getParameterFor(Attribute.SIGNED_RECEIPT_PROTOCOL);
+            return this.getParameterFor(Attribute.SIGNED_RECEIPT_PROTOCOL);
         }
 
         // @Override
         public String toString()
         {
-            return String.Format("{0}; {1}", getSignedReceiptProtocol(), getSignedReceiptMicalg());
+            return String.Format("{0}; {1}", this.getSignedReceiptProtocol(), this.getSignedReceiptMicalg());
         }
 
         public class Parameter
@@ -139,17 +135,17 @@ namespace Mx.Oxalis.As2.Model
 
             public Attribute getAttribute()
             {
-                return attribute;
+                return this.attribute;
             }
 
             public Importance getImportance()
             {
-                return importance;
+                return this.importance;
             }
 
             public String getTextValue()
             {
-                return textValue;
+                return this.textValue;
             }
 
             public Parameter(Attribute attribute, Importance importance, String textValue)
@@ -163,8 +159,8 @@ namespace Mx.Oxalis.As2.Model
 
             public override String ToString()
             {
-                StringBuilder sb = new StringBuilder("").Append(attribute).Append("=").Append(importance)
-                    .Append(",").Append(textValue);
+                StringBuilder sb = new StringBuilder("").Append(this.attribute).Append("=").Append(this.importance)
+                    .Append(",").Append(this.textValue);
 
                 return sb.ToString();
             }
@@ -214,7 +210,7 @@ namespace Mx.Oxalis.As2.Model
             // @Override
             public override string ToString()
             {
-                return text;
+                return this.text;
             }
         }
 

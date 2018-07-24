@@ -1,19 +1,18 @@
-﻿namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
     using System.IO;
 
-    using Mx.Oxalis.Api.Lang;
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Api.Transformer;
-    using Mx.Oxalis.Commons.IO;
-    using Mx.Oxalis.Commons.Tracing;
+    using Mx.Hyperway.Api.Lang;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Api.Transformer;
+    using Mx.Hyperway.Commons.IO;
+    using Mx.Hyperway.Commons.Tracing;
     using Mx.Peppol.Common.Model;
-
-    using zipkin4net;
-
     using Mx.Peppol.Sbdh;
     using Mx.Peppol.Sbdh.Lang;
     using Mx.Tools;
+
+    using zipkin4net;
 
     public class TransmissionRequestFactory : Traceable
     {
@@ -29,7 +28,7 @@
             this.contentWrapper = contentWrapper;
         }
 
-        public TransmissionMessage newInstance(Stream inputStream) // throws IOException, OxalisContentException
+        public TransmissionMessage newInstance(Stream inputStream)
         {
             Trace trace = Trace.Create();
             trace.Record(Annotations.ServiceName(this.GetType().Name));
@@ -46,8 +45,7 @@
             }
         }
 
-        public TransmissionMessage
-            newInstance(Stream inputStream, Trace root) // throws IOException, OxalisContentException
+        public TransmissionMessage newInstance(Stream inputStream, Trace root) 
         {
             var trace = root.Child();
             trace.Record(Annotations.ServiceName(this.GetType().Name));
@@ -63,7 +61,7 @@
             }
         }
 
-        private TransmissionMessage perform(Stream inputStream, Trace root) // throws IOException, OxalisContentException
+        private TransmissionMessage perform(Stream inputStream, Trace root)
         {
             PeekingInputStream peekingInputStream = new PeekingInputStream(inputStream);
 
@@ -104,10 +102,10 @@
                     header = this.contentDetector.parse(payload.ToStream());
                     span.Record(Annotations.Tag("identifier", header.getIdentifier().getIdentifier()));
                 }
-                catch (OxalisContentException ex)
+                catch (HyperwayContentException ex)
                 {
                     span.Record(Annotations.Tag("exception", ex.Message));
-                    throw new OxalisContentException(ex.Message, ex);
+                    throw new HyperwayContentException(ex.Message, ex);
                 }
                 finally
                 {
@@ -123,7 +121,7 @@
                 {
                     wrappedContent = this.contentWrapper.wrap(payload.ToStream(), header);
                 }
-                catch (OxalisContentException ex)
+                catch (HyperwayContentException ex)
                 {
                     span.Record(Annotations.Tag("exception", ex.Message));
                     throw;

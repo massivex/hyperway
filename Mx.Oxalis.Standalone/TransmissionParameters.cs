@@ -1,15 +1,15 @@
-﻿namespace Mx.Oxalis.Standalone
+﻿namespace Mx.Hyperway.Standalone
 {
     using System.IO;
 
-    using Mx.Oxalis.Outbound;
+    using Mx.Hyperway.Outbound;
     using Mx.Peppol.Common.Model;
 
     public class TransmissionParameters
     {
-        public TransmissionParameters(OxalisOutboundComponent oxalisOutboundComponent)
+        public TransmissionParameters(HyperwayOutboundComponent hyperwayOutboundComponent)
         {
-            this.OxalisOutboundComponent = oxalisOutboundComponent;
+            this.HyperwayOutboundComponent = hyperwayOutboundComponent;
         }
 
         public ParticipantIdentifier Receiver { get; set; }
@@ -23,7 +23,7 @@
         public DirectoryInfo EvidencePath { get; set; }
 
 
-        public OxalisOutboundComponent OxalisOutboundComponent { get; }
+        public HyperwayOutboundComponent HyperwayOutboundComponent { get; }
 
         public bool UseFactory { get; set; }
 

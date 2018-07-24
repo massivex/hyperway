@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Mx.Oxalis.Statistics.Model
+﻿namespace Mx.Hyperway.Statistics.Model
 {
-    using System.Xml.XPath;
+    using System;
 
     using Mx.Peppol.Common.Model;
 

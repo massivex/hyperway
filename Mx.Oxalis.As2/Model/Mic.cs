@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Model
+﻿namespace Mx.Hyperway.As2.Model
 {
-    using Mx.Oxalis.As2.Util;
+    using System;
+
+    using Mx.Hyperway.As2.Util;
     using Mx.Peppol.Common.Model;
     using Mx.Tools.Encoding;
 
@@ -42,7 +40,7 @@ namespace Mx.Oxalis.As2.Model
 
         public override string ToString()
         {
-            return String.Format("{0}, {1}", digestAsString, algorithm.getIdentifier());
+            return String.Format("{0}, {1}", this.digestAsString, this.algorithm.getIdentifier());
         }
 
         
@@ -53,14 +51,14 @@ namespace Mx.Oxalis.As2.Model
 
             Mic mic = (Mic)o;
 
-            if (!digestAsString.Equals(mic.digestAsString)) return false;
-            return algorithm.Equals(mic.algorithm);
+            if (!this.digestAsString.Equals(mic.digestAsString)) return false;
+            return this.algorithm.Equals(mic.algorithm);
         }
 
         public override int GetHashCode()
         {
-            int result = digestAsString.GetHashCode();
-            result = 31 * result + algorithm.GetHashCode();
+            int result = this.digestAsString.GetHashCode();
+            result = 31 * result + this.algorithm.GetHashCode();
             return result;
         }
     }

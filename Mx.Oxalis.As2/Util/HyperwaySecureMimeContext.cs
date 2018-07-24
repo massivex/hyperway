@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Util
+﻿namespace Mx.Hyperway.As2.Util
 {
+    using System;
     using System.Collections;
-
-    using Autofac.Features.AttributeFilters;
+    using System.Collections.Generic;
 
     using MimeKit;
     using MimeKit.Cryptography;
@@ -19,9 +15,9 @@ namespace Mx.Oxalis.As2.Util
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Store;
 
-    public class OxalisSecureMimeContext : DefaultSecureMimeContext
+    public class HyperwaySecureMimeContext : DefaultSecureMimeContext
     {
-        public OxalisSecureMimeContext(
+        public HyperwaySecureMimeContext(
             Pkcs12Store store
             ) : base(new X509Context(store))
         {

@@ -5,21 +5,21 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Peppol.Common", "Mx.Peppol.Commons\Mx.Peppol.Common.csproj", "{C21D0A54-026D-49CF-9768-213455420C92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.Outbound", "Mx.Oxalis.Outbound\Mx.Oxalis.Outbound.csproj", "{C6B986B5-11B5-421F-9D14-42BF25F49542}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.Outbound", "Mx.Oxalis.Outbound\Mx.Hyperway.Outbound.csproj", "{C6B986B5-11B5-421F-9D14-42BF25F49542}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.Api", "Mx.Oxalis.Api\Mx.Oxalis.Api.csproj", "{983124B6-62AF-4977-915B-550BC1093075}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.Api", "Mx.Oxalis.Api\Mx.Hyperway.Api.csproj", "{983124B6-62AF-4977-915B-550BC1093075}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.Commons", "Mx.Oxalis.Commons\Mx.Oxalis.Commons.csproj", "{0263D4AF-35CC-4916-9B87-153024625547}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.Commons", "Mx.Oxalis.Commons\Mx.Hyperway.Commons.csproj", "{0263D4AF-35CC-4916-9B87-153024625547}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Peppol.Sbdh", "Mx.Peppol.Sbdh\Mx.Peppol.Sbdh.csproj", "{D243000B-A8F5-46D4-A3EF-30D7D341AEEA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Peppol.Xml", "Mx.Peppol.Xml\Mx.Peppol.Xml.csproj", "{4D037571-D981-4DFF-ADC7-2A5F29C1C3BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.DocumentSniffer", "Mx.Oxalis.DocumentSniffer\Mx.Oxalis.DocumentSniffer.csproj", "{1E248AAD-BBF6-48E9-B1C8-C5D250E70A2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.DocumentSniffer", "Mx.Oxalis.DocumentSniffer\Mx.Hyperway.DocumentSniffer.csproj", "{1E248AAD-BBF6-48E9-B1C8-C5D250E70A2A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Peppol.Icd", "Mx.Peppol.Icd\Mx.Peppol.Icd.csproj", "{8326811D-4227-44BD-90AA-E4E073937F76}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.Standalone", "Mx.Oxalis.Standalone\Mx.Oxalis.Standalone.csproj", "{31A7B55B-BA82-4C78-BA75-877F0590BE00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.Standalone", "Mx.Oxalis.Standalone\Mx.Hyperway.Standalone.csproj", "{31A7B55B-BA82-4C78-BA75-877F0590BE00}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Peppol.Lookup", "Mx.Peppol.Lookup\Mx.Peppol.Lookup.csproj", "{C135DC72-3E23-472D-8023-EF2672CC58DB}"
 EndProject
@@ -49,7 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "arsoft-tools", "arsoft-tool
 		third-party\arsoft-tools\NOTICE = third-party\arsoft-tools\NOTICE
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.Statistics", "Mx.Oxalis.Statistics\Mx.Oxalis.Statistics.csproj", "{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.Statistics", "Mx.Oxalis.Statistics\Mx.Hyperway.Statistics.csproj", "{545ED9D0-DD17-4D0A-9DC3-B3B9AF9ECCC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Xml.BdxSmp201605", "Mx.Xml.BdxSmp201605\Mx.Xml.BdxSmp201605.csproj", "{04D00E78-06B9-4284-9D8B-49243C2DCFD6}"
 EndProject
@@ -60,9 +60,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "liquid", "liquid", "{D114C5
 		third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll = third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Oxalis.As2", "Mx.Oxalis.As2\Mx.Oxalis.As2.csproj", "{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.As2", "Mx.Oxalis.As2\Mx.Hyperway.As2.csproj", "{6C2420D1-D6D0-4AE7-95CC-0C3CB2AEF842}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mx.Oxalis.Inbound", "Mx.Oxalis.Inbound\Mx.Oxalis.Inbound.csproj", "{1979FCE2-CB61-458C-84D4-900C429CA69D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Hyperway.Inbound", "Mx.Oxalis.Inbound\Mx.Hyperway.Inbound.csproj", "{1979FCE2-CB61-458C-84D4-900C429CA69D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

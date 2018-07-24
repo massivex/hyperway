@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Api.Evidence
+﻿namespace Mx.Hyperway.Api.Evidence
 {
     using System.IO;
 
-    using Mx.Oxalis.Api.Transmission;
+    using Mx.Hyperway.Api.Transmission;
 
     // @FunctionalInterface
     // TODO: FunctionalInterface

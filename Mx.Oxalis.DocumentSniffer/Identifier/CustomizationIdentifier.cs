@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.DocumentSniffer.Identifier
+﻿namespace Mx.Hyperway.DocumentSniffer.Identifier
 {
+    using System;
+
     /**
      * Represents a PEPPOL Customization Identifier contained within a PEPPOL Document Identifier.
      *
@@ -33,19 +31,19 @@ namespace Mx.Oxalis.DocumentSniffer.Identifier
             if (this == o) return true;
             if (!(o is CustomizationIdentifier)) return false;
             CustomizationIdentifier that = (CustomizationIdentifier)o;
-            return value.Equals(that.value);
+            return this.value.Equals(that.value);
         }
 
 
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return this.value.GetHashCode();
         }
 
 
         public override String ToString()
         {
-            return value;
+            return this.value;
         }
     }
 }

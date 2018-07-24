@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Mx.Oxalis.DocumentSniffer.Sbdh
+﻿namespace Mx.Hyperway.DocumentSniffer.Sbdh
 {
+    using System;
     using System.IO;
 
     using Mx.Peppol.Common.Model;

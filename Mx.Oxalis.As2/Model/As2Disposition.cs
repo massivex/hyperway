@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Model
+﻿namespace Mx.Hyperway.As2.Model
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Text.RegularExpressions;
 
-    using Microsoft.Extensions.FileSystemGlobbing;
-
-    using Mx.Oxalis.As2.Code;
     using Mx.Tools;
 
     /**
@@ -39,22 +34,22 @@ namespace Mx.Oxalis.As2.Model
 
         public ActionMode getActionMode()
         {
-            return actionMode;
+            return this.actionMode;
         }
 
         public SendingMode getSendingMode()
         {
-            return sendingMode;
+            return this.sendingMode;
         }
 
         public DispositionType getDispositionType()
         {
-            return dispositionType;
+            return this.dispositionType;
         }
 
         public DispositionModifier getDispositionModifier()
         {
-            return dispositionModifier;
+            return this.dispositionModifier;
         }
 
         public As2Disposition(ActionMode actionMode, SendingMode sendingMode, DispositionType dispositionType)
@@ -122,11 +117,11 @@ namespace Mx.Oxalis.As2.Model
         public String ToString()
         {
             StringBuilder sb = new StringBuilder(
-                actionMode.getTextValue() + "/" + sendingMode.getTextValue() + "; " + dispositionType.getTextValue());
-            if (dispositionModifier != null)
+                this.actionMode.getTextValue() + "/" + this.sendingMode.getTextValue() + "; " + this.dispositionType.getTextValue());
+            if (this.dispositionModifier != null)
             {
                 sb.Append('/');
-                sb.Append(dispositionModifier.ToString());
+                sb.Append(this.dispositionModifier.ToString());
             }
 
             return sb.ToString();
@@ -186,7 +181,7 @@ namespace Mx.Oxalis.As2.Model
 
             public String getTextValue()
             {
-                return textValue;
+                return this.textValue;
             }
 
             public static IEnumerable<ActionMode> values()
@@ -224,7 +219,7 @@ namespace Mx.Oxalis.As2.Model
 
             public String getTextValue()
             {
-                return textValue;
+                return this.textValue;
             }
 
             public static IEnumerable<SendingMode> values()
@@ -270,7 +265,7 @@ namespace Mx.Oxalis.As2.Model
 
             public String getTextValue()
             {
-                return textValue;
+                return this.textValue;
             }
 
         }
@@ -313,12 +308,12 @@ namespace Mx.Oxalis.As2.Model
 
             public Prefix getPrefix()
             {
-                return prefix;
+                return this.prefix;
             }
 
             public String getDispositionModifierExtension()
             {
-                return dispositionModifierExtension;
+                return this.dispositionModifierExtension;
             }
 
             public static DispositionModifier authenticationFailedError()
@@ -378,7 +373,7 @@ namespace Mx.Oxalis.As2.Model
 
             public String ToString()
             {
-                return prefix + ": " + dispositionModifierExtension;
+                return this.prefix + ": " + this.dispositionModifierExtension;
             }
         }
     }

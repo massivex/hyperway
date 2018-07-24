@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace Mx.Oxalis.DocumentSniffer.Parsers
+﻿namespace Mx.Hyperway.DocumentSniffer.Document.Parsers
 {
-    using Mx.Oxalis.DocumentSniffer.Document;
+    using System;
+
     using Mx.Peppol.Common.Model;
 
     /**

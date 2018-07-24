@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Code
+﻿namespace Mx.Hyperway.As2.Code
 {
+    using System;
+
     public class As2Header
     {
 

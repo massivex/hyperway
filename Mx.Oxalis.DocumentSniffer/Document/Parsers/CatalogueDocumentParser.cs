@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace Mx.Oxalis.DocumentSniffer.Parsers
+﻿namespace Mx.Hyperway.DocumentSniffer.Document.Parsers
 {
-    using Mx.Oxalis.DocumentSniffer.Document;
+    using System;
+
     using Mx.Peppol.Common.Model;
 
     /**
@@ -21,7 +20,7 @@ namespace Mx.Oxalis.DocumentSniffer.Parsers
     public override ParticipantIdentifier getSender()
     {
         String catalogue = "//cac:ProviderParty/cbc:EndpointID";
-        return participantId(catalogue);
+        return this.participantId(catalogue);
     }
 
     public override ParticipantIdentifier getReceiver()

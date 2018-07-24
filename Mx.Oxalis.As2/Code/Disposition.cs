@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.As2.Code
+﻿namespace Mx.Hyperway.As2.Code
 {
+    using System;
+    using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    using Mx.Oxalis.Api.Lang;
+    using Mx.Hyperway.Api.Lang;
     using Mx.Tools;
 
     public class Disposition
@@ -125,27 +123,27 @@ namespace Mx.Oxalis.As2.Code
 
         public DispositionType getType()
         {
-            return type;
+            return this.type;
         }
 
         public DispositionModifier getModifier()
         {
-            return modifier;
+            return this.modifier;
         }
 
         public DispositionModifierExtension getExtension()
         {
-            return extension;
+            return this.extension;
         }
 
         public override string ToString()
         {
-            if (modifier == null)
+            if (this.modifier == null)
             {
-                return String.Format("{0}; {1}", SENT_AUTOMATICALLY, type);
+                return String.Format("{0}; {1}", SENT_AUTOMATICALLY, this.type);
             }
 
-            return String.Format("{0}; {1}/{2}: {3}", SENT_AUTOMATICALLY, type, modifier, extension);
+            return String.Format("{0}; {1}/{2}: {3}", SENT_AUTOMATICALLY, this.type, this.modifier, this.extension);
         }
     }
 

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Oxalis.Outbound.Transmission
+﻿namespace Mx.Hyperway.Outbound.Transmission
 {
     using System.IO;
 
-    using Mx.Oxalis.Api.Outbound;
-    using Mx.Oxalis.Commons.Tracing;
+    using Mx.Hyperway.Api.Outbound;
+    using Mx.Hyperway.Commons.Tracing;
 
     using zipkin4net;
-    using zipkin4net.Tracers.Zipkin;
 
     // TODO: Register as singleton
     public class DefaultTransmissionService : Traceable, TransmissionService
@@ -30,15 +25,14 @@ namespace Mx.Oxalis.Outbound.Transmission
             this.transmitter = transmitter;
         }
 
-        public TransmissionResponse
-            send(Stream inputStream) // throws IOException, OxalisTransmissionException, OxalisContentException
+        public TransmissionResponse send(Stream inputStream)
         {
             var trace = Trace.Create();
             trace.Record(Annotations.ServiceName("TransmissionService"));
             trace.Record(Annotations.ClientSend());
             try
             {
-                return send(inputStream, trace);
+                return this.send(inputStream, trace);
             }
             finally
             {
@@ -46,12 +40,9 @@ namespace Mx.Oxalis.Outbound.Transmission
             }
         }
 
-        public TransmissionResponse
-            send(
-                Stream inputStream,
-                Trace trace) // throws IOException, OxalisTransmissionException, OxalisContentException
+        public TransmissionResponse send(Stream inputStream, Trace trace)
         {
-            return transmitter.transmit(transmissionRequestFactory.newInstance(inputStream, trace), trace);
+            return this.transmitter.transmit(this.transmissionRequestFactory.newInstance(inputStream, trace), trace);
         }
     }
 

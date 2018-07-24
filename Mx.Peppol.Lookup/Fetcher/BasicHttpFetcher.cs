@@ -10,9 +10,9 @@ namespace Mx.Peppol.Lookup.Fetcher
     using Mx.Peppol.Mode;
     using Mx.Tools;
 
-    public class BasicApacheFetcher : AbstractFetcher
+    public class BasicHttpFetcher : AbstractFetcher
     {
-        public BasicApacheFetcher(Mode mode)
+        public BasicHttpFetcher(Mode mode)
             : base(mode)
         {
 
