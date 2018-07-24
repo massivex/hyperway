@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Hyperway.Api.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Api\Mx.Hyperway.Api.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Mode\Mx.Peppol.Mode.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Sbdh\Mx.Peppol.Sbdh.csproj" />
   </ItemGroup>

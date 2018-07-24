@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Hyperway.Api.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Commons\Mx.Hyperway.Commons.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Api\Mx.Hyperway.Api.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Commons\Mx.Hyperway.Commons.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,9 +11,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mx.Certificates.Validator\Mx.Certificates.Validator.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Api\Mx.Hyperway.Api.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Commons\Mx.Hyperway.Commons.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.DocumentSniffer\Mx.Hyperway.DocumentSniffer.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Api\Mx.Hyperway.Api.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Commons\Mx.Hyperway.Commons.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.DocumentSniffer\Mx.Hyperway.DocumentSniffer.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Lookup\Mx.Peppol.Lookup.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Sbdh\Mx.Peppol.Sbdh.csproj" />
   </ItemGroup>

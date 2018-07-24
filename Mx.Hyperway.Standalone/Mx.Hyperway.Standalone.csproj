@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mx.Oxalis.As2\Mx.Hyperway.As2.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Outbound\Mx.Hyperway.Outbound.csproj" />
-    <ProjectReference Include="..\Mx.Oxalis.Statistics\Mx.Hyperway.Statistics.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.As2\Mx.Hyperway.As2.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Outbound\Mx.Hyperway.Outbound.csproj" />
+    <ProjectReference Include="..\Mx.Hyperway.Statistics\Mx.Hyperway.Statistics.csproj" />
   </ItemGroup>
 
   <ItemGroup>
