@@ -56,12 +56,6 @@
         /**
          * Constructor expecting resources needed to perform transmission using AS2. All task required to be done once for
          * all requests using this instance is done here.
-         *
-         * @param httpClientProvider  Provider of HTTP clients.
-         * @param certificate         Certificate of sender.
-         * @param sMimeMessageFactory Factory prepared to create S/MIME messages using our private key.
-         * @param timestampProvider   Provider used to fetch timestamps.
-         * @param tracer              Tracing tool.
          */
         // @Inject
         public As2MessageSender(
@@ -108,7 +102,6 @@
             Trace span = this.root.Child();
             span.Record(Annotations.ServiceName("request"));
             span.Record(Annotations.ClientSend());
-            // tracer.newChild(root.context()).name("request").start();
             try
             {
                 HttpPost httpPost;
@@ -138,11 +131,6 @@
                 // Initiate POST request
                 httpPost = new HttpPost(this.transmissionRequest.getEndpoint().getAddress());
 
-                // Get all headers in S/MIME message.
-                // var headers = signedMimeMessage.Headers;
-                // List<javax.mail.Header> headers = Collections.list(signedMimeMessage.getAllHeaders());
-
-
                 List<String> headerNames = signedMimeMessage.Headers
                     // Tag for tracing.
                     .Peek(
@@ -150,9 +138,7 @@
                             Annotations.Tag(x.Field, x.Value))) // span.tag(h.getName(), h.getValue()))
                     // Add headers to httpPost object (remove new lines according to HTTP 1.1).
                     .Peek(x => httpPost.AddHeader(x.Field, x.Value.Replace("\r\n\t", string.Empty)))
-                    // Collect header names....
                     .Map(x => x.Field)
-                    // ... in a list.
                     .ToList();
 
                 signedMimeMessage.Headers.Clear();
@@ -166,14 +152,6 @@
                     signedMimeMessage.WriteTo(m);
                     httpPost.Entity = m.ToBuffer();
                 }
-
-                // signedMimeMessage.writeTo(byteArrayOutputStream, headerNames.toArray(new String[headerNames.size()]));
-
-
-                // Inserts the S/MIME message to be posted. Make sure we pass the same content type as the
-                // SignedMimeMessage, it'll end up as content-type HTTP header
-
-                // setEntity(new ByteArrayEntity(m.ToBuffer()));
 
                 // Set all headers specific to AS2 (not MIME).
                 httpPost.Host = "skynet.sediva.it";

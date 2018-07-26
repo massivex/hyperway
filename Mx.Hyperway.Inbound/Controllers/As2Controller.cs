@@ -48,7 +48,7 @@
          * Since the the request can only be read once, using getReader()/getInputStream()
          */
         [HttpPost]
-        protected ContentResult doPost()
+        public ContentResult doPost()
         {
             var headers = this.httpContext.Request.Headers;
             var messageId = headers["message-id"];

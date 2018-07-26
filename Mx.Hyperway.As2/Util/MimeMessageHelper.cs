@@ -51,9 +51,14 @@
             try
             {
                 // TODO: ByteArrayDataSource with mimeType not implmemented
-                throw new NotImplementedException("unable to " + mimeType);
-                // ByteArrayDataSource dataSource = new ByteArrayDataSource(contents, mimeType);
-                // return multipartMimeMessage(dataSource);
+                var message = MimeMessage.Load(contents);
+                var messageMimeType = message.Headers[HeaderId.ContentType];
+                if (messageMimeType != mimeType)
+                {
+                    throw new ArgumentException("Stream doesn't reflect mimeType provided");
+                }
+
+                return message;
             }
             catch (IOException e)
             {
@@ -104,8 +109,6 @@
             foreach (var header in headers)
             {
                 mimeMessage.Headers.Add(header.Key, header.Value);
-                // mimeMessage.SetFieldValue(header.Field, header.Value, header.GetCharset());
-                // mimeMessage.addHeader(header.getName(), header.getValue());
             }
 
             return mimeMessage;
