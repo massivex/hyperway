@@ -14,7 +14,9 @@ Hyperway is written in .NET Standard 2.0, supports .NET Core 2.0 and runs on Lin
 
 Hyperway can be used used as a complete standalone PEPPOL solution or as an API component from your own code.
 
-It comes with a basic command line tool for sending messages (```Mx.Hyperway.Standalone```) capable of sending multiple files.
+Hyperway includes self-test and command line tools to speed up the acceptance test procedure.
+
+Hyperway includes a commercial plug and play web frontend for admins and customers.
 
 **[Commercial support available for installation or customization](http://hub.sediva.it/)**
 
