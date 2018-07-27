@@ -9,6 +9,7 @@
 
     using MimeKit;
 
+    using Mx.Hyperway.As2.Inbound;
     using Mx.Hyperway.As2.Lang;
     using Mx.Hyperway.As2.Util;
 
@@ -19,7 +20,7 @@
     {
         public static readonly ILog LOGGER = LogManager.GetLogger(typeof(As2Controller));
 
-        // private readonly Func<As2InboundHandler> inboundHandlerProvider;
+        private readonly Func<As2InboundHandler> inboundHandlerProvider;
 
         private readonly SMimeMessageFactory sMimeMessageFactory;
 
@@ -27,11 +28,11 @@
 
         public As2Controller(
             IHttpContextAccessor contextAccessor,
-            // Func<As2InboundHandler> inboundHandlerProvider,
+            Func<As2InboundHandler> inboundHandlerProvider,
             SMimeMessageFactory sMimeMessageFactory)
         {
             this.httpContext = contextAccessor.HttpContext;
-            // this.inboundHandlerProvider = inboundHandlerProvider;
+            this.inboundHandlerProvider = inboundHandlerProvider;
             this.sMimeMessageFactory = sMimeMessageFactory;
         }
 
@@ -92,7 +93,7 @@
 
                     span.Record(Annotations.ServerRecv());
                     // TODO: MDN creation
-                    // MimeMessage mdn = inboundHandlerProvider.get().receive(headers, mimeMessage);
+                    MimeMessage mdn = this.inboundHandlerProvider().receive(headers, mimeMessage);
                     span.Record(Annotations.ServerSend());
 
                     // Returns the MDN

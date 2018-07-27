@@ -242,9 +242,11 @@
                 }
 
                 // Read MIME Message
-                MimeMessage mimeMessage = MimeMessageHelper.parseMultipart(
+                Multipart multipart = MimeMessageHelper.parseMultipart(
                     response.Entity.Content.ToStream(),
-                    contentTypeHeader);
+                    contentTypeHeader) as Multipart;
+                MimeMessage mimeMessage = null;
+                throw new NotImplementedException();
 
                 // Add headers to MIME Message
                 foreach (var headerName in response.Headers.AllKeys)
@@ -252,6 +254,7 @@
                     mimeMessage.Headers.Add(headerName, response.Headers[headerName]);
                 }
 
+                
                 SMimeReader sMimeReader = new SMimeReader(mimeMessage);
 
                 // Timestamp of reception of MDN

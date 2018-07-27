@@ -10,9 +10,9 @@
 
         private readonly MemoryStream inputStream;
 
-        public UnclosableInputStream(MemoryStream inputStream)
+        public UnclosableInputStream(Stream inputStream)
         {
-            this.inputStream = inputStream;
+            this.inputStream = (MemoryStream) inputStream;
         }
 
         public override void Close() // throws IOException

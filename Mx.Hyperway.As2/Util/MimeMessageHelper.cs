@@ -46,19 +46,15 @@
          * Creates a MimeMultipart MIME message from an input stream, which does not contain the header "Content-Type:".
          * Thus the mime type must be supplied as an argument.
          */
-        public static MimeMessage parseMultipart(Stream contents, String mimeType)
+        public static Multipart parseMultipart(Stream contents, String mimeType)
         {
             try
             {
-                // TODO: ByteArrayDataSource with mimeType not implmemented
-                var message = MimeMessage.Load(contents);
-                var messageMimeType = message.Headers[HeaderId.ContentType];
-                if (messageMimeType != mimeType)
-                {
-                    throw new ArgumentException("Stream doesn't reflect mimeType provided");
-                }
-
-                return message;
+                var ct = ContentType.Parse(mimeType);
+                // TODO: mimeType check not implmemented
+                var message = MimeEntity.Load(ct, contents);
+                // var message = MimeMessage.Load(contents);
+                return message as Multipart;
             }
             catch (IOException e)
             {
@@ -94,28 +90,30 @@
                 mimeType = contentType;
             }
 
-            MimeMessage mimeMessage;
+            Multipart multipart;
             if (mimeType == null)
             {
                 log.Warn("Headers did not contain MIME content type, trying to decode content type from body.");
-                mimeMessage = MimeMessageHelper.parseMultipart(inputStream);
+                multipart = MimeMessageHelper.parseMultipart(inputStream);
             }
             else
             {
-                mimeMessage = MimeMessageHelper.parseMultipart(inputStream, mimeType);
+                multipart = MimeMessageHelper.parseMultipart(inputStream, mimeType);
             }
             
-            
+            var mimeMessage = new MimeMessage();
             foreach (var header in headers)
             {
                 mimeMessage.Headers.Add(header.Key, header.Value);
             }
 
+            mimeMessage.Body = multipart;
+            
             return mimeMessage;
         }
 
 
-        public static MimeMessage parseMultipart(Stream inputStream)
+        public static Multipart parseMultipart(Stream inputStream)
         {
             try
             {
@@ -129,7 +127,7 @@
             }
         }
 
-        public static MimeMessage parseMultipart(String contents)
+        public static Multipart parseMultipart(String contents)
         {
             var stream = contents.ToUtf8().ToStream();
             // ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(contents.getBytes());

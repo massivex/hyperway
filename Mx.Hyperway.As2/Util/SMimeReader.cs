@@ -2,8 +2,10 @@
 {
     using System;
     using System.IO;
+    using System.Text;
 
     using MimeKit;
+    using MimeKit.Cryptography;
 
     using Mx.Hyperway.As2.Code;
     using Mx.Tools;
@@ -21,7 +23,7 @@
 
         public SMimeReader(MimeMessage mimeMessage) // throws MessagingException, IOException
         {
-            this.mimeMultipart = mimeMessage.Body as Multipart;
+            this.mimeMultipart = mimeMessage.Body as MultipartSigned;
 
             MimeEntity mime = this.mimeMultipart[1];
             // Extracting signature
@@ -52,25 +54,32 @@
 
         /**
          * Extracts headers of body MIME part. Creates headers as done by Bouncycastle.
-         *
-         * @return Headers
          */
-        //public byte[] getBodyHeader() // throws MessagingException, IOException
-        //{
-        //    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        //    LineOutputStream los = new LineOutputStream(outputStream);
+        public byte[] getBodyHeader() // throws MessagingException, IOException
+        {
+            MimeEntity body = this.mimeMultipart[0];
+            var sb = new StringBuilder();
+            foreach (var header in body.Headers)
+            {
+                sb.AppendLine(header.ToString());
+            }
 
-        //    Enumeration hdrLines =
-        //        ((MimeBodyPart)mimeMultipart.getBodyPart(0)).getNonMatchingHeaderLines(new String[] { });
-        //    while (hdrLines.hasMoreElements())
-        //        los.writeln((String)hdrLines.nextElement());
+            sb.AppendLine();
+            return Encoding.Default.GetBytes(sb.ToString());
+            //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            //LineOutputStream los = new LineOutputStream(outputStream);
 
-        //    // The CRLF separator between header and content
-        //    los.writeln();
-        //    los.close();
+            //Enumeration hdrLines =
+            //    ((MimeBodyPart)mimeMultipart.getBodyPart(0)).getNonMatchingHeaderLines(new String[] { });
+            //while (hdrLines.hasMoreElements())
+            //    los.writeln((String)hdrLines.nextElement());
 
-        //    return outputStream.toByteArray();
-        //}
+            //// The CRLF separator between header and content
+            //los.writeln();
+            //los.close();
+
+            //return outputStream.toByteArray();
+        }
 
         /**
          * Extracts content in body MIME part.

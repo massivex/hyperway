@@ -35,7 +35,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="LiquidTechnologies.Runtime.Standard20">
+      <HintPath>..\third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="conf\test-keystore.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="pki-peppol-test.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
