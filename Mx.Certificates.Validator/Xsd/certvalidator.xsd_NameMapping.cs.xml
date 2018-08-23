@@ -1,0 +1,558 @@
+<?xml version="1.0"?>
+<MappingSchema Language="CS" CollectionMapping="Original" NamespacePrefix="Mx.Xml">
+  <Class Name="CachedType" LongName="CachedType" MappedClassColName="CachedTypeCol" MappedClassName="CachedType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+    <Attribute Name="CachedTypeData" DefaultValue="" MappedIsValidMember="m_IsValidCachedTypeData" MappedSetValidName="SetValidCachedTypeData" MappedIsValidName="IsValidCachedTypeData" MappedIsNilMember="m_IsNilCachedTypeData" MappedSetNilName="SetNilCachedTypeData" MappedIsNilName="IsNilCachedTypeData" MappedMemberName="m_CachedTypeData" MappedDisplayName="CachedTypeData" MappedSetterName="CachedTypeData" MappedGetterName="CachedTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CachedType_Type" LongName="CachedType_Type" MappedClassColName="CachedType_TypeCol" MappedClassName="CachedType_Type">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="timeout" DefaultValue="" MappedIsValidMember="m_IsValidTimeout" MappedSetValidName="SetValidTimeout" MappedIsValidName="IsValidTimeout" MappedIsNilMember="m_IsNilTimeout" MappedSetNilName="SetNilTimeout" MappedIsNilName="IsNilTimeout" MappedMemberName="m_Timeout" MappedDisplayName="timeout" MappedSetterName="Timeout" MappedGetterName="Timeout" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CertificateBucketType" LongName="CertificateBucketType" MappedClassColName="CertificateBucketTypeCol" MappedClassName="CertificateBucketType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="name" DefaultValue="" MappedIsValidMember="m_IsValidName" MappedSetValidName="SetValidName" MappedIsValidName="IsValidName" MappedIsNilMember="m_IsNilName" MappedSetNilName="SetNilName" MappedIsNilName="IsNilName" MappedMemberName="m_Name" MappedDisplayName="name" MappedSetterName="Name" MappedGetterName="Name" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CertificateBucketType_Group" DefaultValue="" MappedIsValidMember="m_IsValidCertificateBucketType_Group" MappedSetValidName="SetValidCertificateBucketType_Group" MappedIsValidName="IsValidCertificateBucketType_Group" MappedIsNilMember="m_IsNilCertificateBucketType_Group" MappedSetNilName="SetNilCertificateBucketType_Group" MappedIsNilName="IsNilCertificateBucketType_Group" MappedMemberName="m_CertificateBucketType_Group" MappedDisplayName="CertificateBucketType_Group" MappedSetterName="CertificateBucketType_Group" MappedGetterName="CertificateBucketType_Group">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CertificateBucketType_Group" LongName="CertificateBucketType_Group" MappedClassColName="CertificateBucketType_GroupCol" MappedClassName="CertificateBucketType_Group">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Certificate" DefaultValue="" MappedIsValidMember="m_IsValidCertificate" MappedSetValidName="SetValidCertificate" MappedIsValidName="IsValidCertificate" MappedIsNilMember="m_IsNilCertificate" MappedSetNilName="SetNilCertificate" MappedIsNilName="IsNilCertificate" MappedMemberName="m_Certificate" MappedDisplayName="Certificate" MappedSetterName="Certificate" MappedGetterName="Certificate" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CertificateReference" DefaultValue="" MappedIsValidMember="m_IsValidCertificateReference" MappedSetValidName="SetValidCertificateReference" MappedIsValidName="IsValidCertificateReference" MappedIsNilMember="m_IsNilCertificateReference" MappedSetNilName="SetNilCertificateReference" MappedIsNilName="IsNilCertificateReference" MappedMemberName="m_CertificateReference" MappedDisplayName="CertificateReference" MappedSetterName="CertificateReference" MappedGetterName="CertificateReference">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CertificateStartsWith" DefaultValue="" MappedIsValidMember="m_IsValidCertificateStartsWith" MappedSetValidName="SetValidCertificateStartsWith" MappedIsValidName="IsValidCertificateStartsWith" MappedIsNilMember="m_IsNilCertificateStartsWith" MappedSetNilName="SetNilCertificateStartsWith" MappedIsNilName="IsNilCertificateStartsWith" MappedMemberName="m_CertificateStartsWith" MappedDisplayName="CertificateStartsWith" MappedSetterName="CertificateStartsWith" MappedGetterName="CertificateStartsWith">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CertificateReferenceType" LongName="CertificateReferenceType" MappedClassColName="CertificateReferenceTypeCol" MappedClassName="CertificateReferenceType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="keyStore" DefaultValue="" MappedIsValidMember="m_IsValidKeyStore" MappedSetValidName="SetValidKeyStore" MappedIsValidName="IsValidKeyStore" MappedIsNilMember="m_IsNilKeyStore" MappedSetNilName="SetNilKeyStore" MappedIsNilName="IsNilKeyStore" MappedMemberName="m_KeyStore" MappedDisplayName="keyStore" MappedSetterName="KeyStore" MappedGetterName="KeyStore" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CertificateStartsWithType" LongName="CertificateStartsWithType" MappedClassColName="CertificateStartsWithTypeCol" MappedClassName="CertificateStartsWithType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="keyStore" DefaultValue="" MappedIsValidMember="m_IsValidKeyStore" MappedSetValidName="SetValidKeyStore" MappedIsValidName="IsValidKeyStore" MappedIsNilMember="m_IsNilKeyStore" MappedSetNilName="SetNilKeyStore" MappedIsNilName="IsNilKeyStore" MappedMemberName="m_KeyStore" MappedDisplayName="keyStore" MappedSetterName="KeyStore" MappedGetterName="KeyStore" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ChainType" LongName="ChainType" MappedClassColName="ChainTypeCol" MappedClassName="ChainType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="RootBucketReference" DefaultValue="" MappedIsValidMember="m_IsValidRootBucketReference" MappedSetValidName="SetValidRootBucketReference" MappedIsValidName="IsValidRootBucketReference" MappedIsNilMember="m_IsNilRootBucketReference" MappedSetNilName="SetNilRootBucketReference" MappedIsNilName="IsNilRootBucketReference" MappedMemberName="m_RootBucketReference" MappedDisplayName="RootBucketReference" MappedSetterName="RootBucketReference" MappedGetterName="RootBucketReference" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="IntermediateBucketReference" DefaultValue="" MappedIsValidMember="m_IsValidIntermediateBucketReference" MappedSetValidName="SetValidIntermediateBucketReference" MappedIsValidName="IsValidIntermediateBucketReference" MappedIsNilMember="m_IsNilIntermediateBucketReference" MappedSetNilName="SetNilIntermediateBucketReference" MappedIsNilName="IsNilIntermediateBucketReference" MappedMemberName="m_IntermediateBucketReference" MappedDisplayName="IntermediateBucketReference" MappedSetterName="IntermediateBucketReference" MappedGetterName="IntermediateBucketReference" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Policy" DefaultValue="" MappedIsValidMember="m_IsValidPolicy" MappedSetValidName="SetValidPolicy" MappedIsValidName="IsValidPolicy" MappedIsNilMember="m_IsNilPolicy" MappedSetNilName="SetNilPolicy" MappedIsNilName="IsNilPolicy" MappedMemberName="m_Policy" MappedDisplayName="Policy" MappedSetterName="Policy" MappedGetterName="Policy" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CriticalExtensionRecognizedType" LongName="CriticalExtensionRecognizedType" MappedClassColName="CriticalExtensionRecognizedTypeCol" MappedClassName="CriticalExtensionRecognizedType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Value" DefaultValue="" MappedIsValidMember="m_IsValidValue" MappedSetValidName="SetValidValue" MappedIsValidName="IsValidValue" MappedIsNilMember="m_IsNilValue" MappedSetNilName="SetNilValue" MappedIsNilName="IsNilValue" MappedMemberName="m_Value" MappedDisplayName="Value" MappedSetterName="Value" MappedGetterName="Value" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CriticalExtensionRequiredType" LongName="CriticalExtensionRequiredType" MappedClassColName="CriticalExtensionRequiredTypeCol" MappedClassName="CriticalExtensionRequiredType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Value" DefaultValue="" MappedIsValidMember="m_IsValidValue" MappedSetValidName="SetValidValue" MappedIsValidName="IsValidValue" MappedIsNilMember="m_IsNilValue" MappedSetNilName="SetNilValue" MappedIsNilName="IsNilValue" MappedMemberName="m_Value" MappedDisplayName="Value" MappedSetterName="Value" MappedGetterName="Value" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="CRLType" LongName="CRLType" MappedClassColName="CRLTypeCol" MappedClassName="CRLType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+  </Class>
+  <Class Name="ExpirationType" LongName="ExpirationType" MappedClassColName="ExpirationTypeCol" MappedClassName="ExpirationType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="millis" DefaultValue="" MappedIsValidMember="m_IsValidMillis" MappedSetValidName="SetValidMillis" MappedIsValidName="IsValidMillis" MappedIsNilMember="m_IsNilMillis" MappedSetNilName="SetNilMillis" MappedIsNilName="IsNilMillis" MappedMemberName="m_Millis" MappedDisplayName="millis" MappedSetterName="Millis" MappedGetterName="Millis" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ExtensibleType" LongName="ExtensibleType" MappedClassColName="ExtensibleTypeCol" MappedClassName="ExtensibleType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ExtensibleType_Type" LongName="ExtensibleType_Type" MappedClassColName="ExtensibleType_TypeCol" MappedClassName="ExtensibleType_Type">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="ExtensibleType_Type_Group" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleType_Type_Group" MappedSetValidName="SetValidExtensibleType_Type_Group" MappedIsValidName="IsValidExtensibleType_Type_Group" MappedIsNilMember="m_IsNilExtensibleType_Type_Group" MappedSetNilName="SetNilExtensibleType_Type_Group" MappedIsNilName="IsNilExtensibleType_Type_Group" MappedMemberName="m_ExtensibleType_Type_Group" MappedDisplayName="ExtensibleType_Type_Group" MappedSetterName="ExtensibleType_Type_Group" MappedGetterName="ExtensibleType_Type_Group">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ExtensibleType_Type_Group" LongName="ExtensibleType_Type_Group" MappedClassColName="ExtensibleType_Type_GroupCol" MappedClassName="ExtensibleType_Type_Group">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Cached" DefaultValue="" MappedIsValidMember="m_IsValidCached" MappedSetValidName="SetValidCached" MappedIsValidName="IsValidCached" MappedIsNilMember="m_IsNilCached" MappedSetNilName="SetNilCached" MappedIsNilName="IsNilCached" MappedMemberName="m_Cached" MappedDisplayName="Cached" MappedSetterName="Cached" MappedGetterName="Cached">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Chain" DefaultValue="" MappedIsValidMember="m_IsValidChain" MappedSetValidName="SetValidChain" MappedIsValidName="IsValidChain" MappedIsNilMember="m_IsNilChain" MappedSetNilName="SetNilChain" MappedIsNilName="IsNilChain" MappedMemberName="m_Chain" MappedDisplayName="Chain" MappedSetterName="Chain" MappedGetterName="Chain">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Class" DefaultValue="" MappedIsValidMember="m_IsValidClass" MappedSetValidName="SetValidClass" MappedIsValidName="IsValidClass" MappedIsNilMember="m_IsNilClass" MappedSetNilName="SetNilClass" MappedIsNilName="IsNilClass" MappedMemberName="m_Class" MappedDisplayName="class_" MappedSetterName="class_" MappedGetterName="class_" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CriticalExtensionRecognized" DefaultValue="" MappedIsValidMember="m_IsValidCriticalExtensionRecognized" MappedSetValidName="SetValidCriticalExtensionRecognized" MappedIsValidName="IsValidCriticalExtensionRecognized" MappedIsNilMember="m_IsNilCriticalExtensionRecognized" MappedSetNilName="SetNilCriticalExtensionRecognized" MappedIsNilName="IsNilCriticalExtensionRecognized" MappedMemberName="m_CriticalExtensionRecognized" MappedDisplayName="CriticalExtensionRecognized" MappedSetterName="CriticalExtensionRecognized" MappedGetterName="CriticalExtensionRecognized">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CriticalExtensionRequired" DefaultValue="" MappedIsValidMember="m_IsValidCriticalExtensionRequired" MappedSetValidName="SetValidCriticalExtensionRequired" MappedIsValidName="IsValidCriticalExtensionRequired" MappedIsNilMember="m_IsNilCriticalExtensionRequired" MappedSetNilName="SetNilCriticalExtensionRequired" MappedIsNilName="IsNilCriticalExtensionRequired" MappedMemberName="m_CriticalExtensionRequired" MappedDisplayName="CriticalExtensionRequired" MappedSetterName="CriticalExtensionRequired" MappedGetterName="CriticalExtensionRequired">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CRL" DefaultValue="" MappedIsValidMember="m_IsValidCRL" MappedSetValidName="SetValidCRL" MappedIsValidName="IsValidCRL" MappedIsNilMember="m_IsNilCRL" MappedSetNilName="SetNilCRL" MappedIsNilName="IsNilCRL" MappedMemberName="m_CRL" MappedDisplayName="CRL" MappedSetterName="CRL" MappedGetterName="CRL">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Dummy" DefaultValue="" MappedIsValidMember="m_IsValidDummy" MappedSetValidName="SetValidDummy" MappedIsValidName="IsValidDummy" MappedIsNilMember="m_IsNilDummy" MappedSetNilName="SetNilDummy" MappedIsNilName="IsNilDummy" MappedMemberName="m_Dummy" MappedDisplayName="Dummy" MappedSetterName="Dummy" MappedGetterName="Dummy" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Expiration" DefaultValue="" MappedIsValidMember="m_IsValidExpiration" MappedSetValidName="SetValidExpiration" MappedIsValidName="IsValidExpiration" MappedIsNilMember="m_IsNilExpiration" MappedSetNilName="SetNilExpiration" MappedIsNilName="IsNilExpiration" MappedMemberName="m_Expiration" MappedDisplayName="Expiration" MappedSetterName="Expiration" MappedGetterName="Expiration">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="HandleError" DefaultValue="" MappedIsValidMember="m_IsValidHandleError" MappedSetValidName="SetValidHandleError" MappedIsValidName="IsValidHandleError" MappedIsNilMember="m_IsNilHandleError" MappedSetNilName="SetNilHandleError" MappedIsNilName="IsNilHandleError" MappedMemberName="m_HandleError" MappedDisplayName="HandleError" MappedSetterName="HandleError" MappedGetterName="HandleError">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Junction" DefaultValue="" MappedIsValidMember="m_IsValidJunction" MappedSetValidName="SetValidJunction" MappedIsValidName="IsValidJunction" MappedIsNilMember="m_IsNilJunction" MappedSetNilName="SetNilJunction" MappedIsNilName="IsNilJunction" MappedMemberName="m_Junction" MappedDisplayName="Junction" MappedSetterName="Junction" MappedGetterName="Junction">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="KeyUsage" DefaultValue="" MappedIsValidMember="m_IsValidKeyUsage" MappedSetValidName="SetValidKeyUsage" MappedIsValidName="IsValidKeyUsage" MappedIsNilMember="m_IsNilKeyUsage" MappedSetNilName="SetNilKeyUsage" MappedIsNilName="IsNilKeyUsage" MappedMemberName="m_KeyUsage" MappedDisplayName="KeyUsage" MappedSetterName="KeyUsage" MappedGetterName="KeyUsage">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="OCSP" DefaultValue="" MappedIsValidMember="m_IsValidOCSP" MappedSetValidName="SetValidOCSP" MappedIsValidName="IsValidOCSP" MappedIsNilMember="m_IsNilOCSP" MappedSetNilName="SetNilOCSP" MappedIsNilName="IsNilOCSP" MappedMemberName="m_OCSP" MappedDisplayName="OCSP" MappedSetterName="OCSP" MappedGetterName="OCSP">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="PrincipleName" DefaultValue="" MappedIsValidMember="m_IsValidPrincipleName" MappedSetValidName="SetValidPrincipleName" MappedIsValidName="IsValidPrincipleName" MappedIsNilMember="m_IsNilPrincipleName" MappedSetNilName="SetNilPrincipleName" MappedIsNilName="IsNilPrincipleName" MappedMemberName="m_PrincipleName" MappedDisplayName="PrincipleName" MappedSetterName="PrincipleName" MappedGetterName="PrincipleName">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="RuleReference" DefaultValue="" MappedIsValidMember="m_IsValidRuleReference" MappedSetValidName="SetValidRuleReference" MappedIsValidName="IsValidRuleReference" MappedIsNilMember="m_IsNilRuleReference" MappedSetNilName="SetNilRuleReference" MappedIsNilName="IsNilRuleReference" MappedMemberName="m_RuleReference" MappedDisplayName="RuleReference" MappedSetterName="RuleReference" MappedGetterName="RuleReference">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Signing" DefaultValue="" MappedIsValidMember="m_IsValidSigning" MappedSetValidName="SetValidSigning" MappedIsValidName="IsValidSigning" MappedIsNilMember="m_IsNilSigning" MappedSetNilName="SetNilSigning" MappedIsNilName="IsNilSigning" MappedMemberName="m_Signing" MappedDisplayName="Signing" MappedSetterName="Signing" MappedGetterName="Signing">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Try" DefaultValue="" MappedIsValidMember="m_IsValidTry" MappedSetValidName="SetValidTry" MappedIsValidName="IsValidTry" MappedIsNilMember="m_IsNilTry" MappedSetNilName="SetNilTry" MappedIsNilName="IsNilTry" MappedMemberName="m_Try" MappedDisplayName="try_" MappedSetterName="try_" MappedGetterName="try_">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ValidatorReference" DefaultValue="" MappedIsValidMember="m_IsValidValidatorReference" MappedSetValidName="SetValidValidatorReference" MappedIsValidName="IsValidValidatorReference" MappedIsNilMember="m_IsNilValidatorReference" MappedSetNilName="SetNilValidatorReference" MappedIsNilName="IsNilValidatorReference" MappedMemberName="m_ValidatorReference" MappedDisplayName="ValidatorReference" MappedSetterName="ValidatorReference" MappedGetterName="ValidatorReference">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="HandleErrorType" LongName="HandleErrorType" MappedClassColName="HandleErrorTypeCol" MappedClassName="HandleErrorType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+    <Attribute Name="HandleErrorTypeData" DefaultValue="" MappedIsValidMember="m_IsValidHandleErrorTypeData" MappedSetValidName="SetValidHandleErrorTypeData" MappedIsValidName="IsValidHandleErrorTypeData" MappedIsNilMember="m_IsNilHandleErrorTypeData" MappedSetNilName="SetNilHandleErrorTypeData" MappedIsNilName="IsNilHandleErrorTypeData" MappedMemberName="m_HandleErrorTypeData" MappedDisplayName="HandleErrorTypeData" MappedSetterName="HandleErrorTypeData" MappedGetterName="HandleErrorTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="HandleErrorType_Type" LongName="HandleErrorType_Type" MappedClassColName="HandleErrorType_TypeCol" MappedClassName="HandleErrorType_Type">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+  </Class>
+  <Class Name="IExtensibleType" LongName="IExtensibleType" MappedClassColName="IExtensibleTypeCol" MappedClassName="IExtensibleType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="IReferenceType" LongName="IReferenceType" MappedClassColName="IReferenceTypeCol" MappedClassName="IReferenceType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+  </Class>
+  <Class Name="JunctionType" LongName="JunctionType" MappedClassColName="JunctionTypeCol" MappedClassName="JunctionType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+    <Attribute Name="JunctionTypeData" DefaultValue="" MappedIsValidMember="m_IsValidJunctionTypeData" MappedSetValidName="SetValidJunctionTypeData" MappedIsValidName="IsValidJunctionTypeData" MappedIsNilMember="m_IsNilJunctionTypeData" MappedSetNilName="SetNilJunctionTypeData" MappedIsNilName="IsNilJunctionTypeData" MappedMemberName="m_JunctionTypeData" MappedDisplayName="JunctionTypeData" MappedSetterName="JunctionTypeData" MappedGetterName="JunctionTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="JunctionType_Type" LongName="JunctionType_Type" MappedClassColName="JunctionType_TypeCol" MappedClassName="JunctionType_Type">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="type" DefaultValue="" MappedIsValidMember="m_IsValidType" MappedSetValidName="SetValidType" MappedIsValidName="IsValidType" MappedIsNilMember="m_IsNilType" MappedSetNilName="SetNilType" MappedIsNilName="IsNilType" MappedMemberName="m_Type" MappedDisplayName="type" MappedSetterName="Type" MappedGetterName="Type">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="KeyStoreType" LongName="KeyStoreType" MappedClassColName="KeyStoreTypeCol" MappedClassName="KeyStoreType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="name" DefaultValue="" MappedIsValidMember="m_IsValidName" MappedSetValidName="SetValidName" MappedIsValidName="IsValidName" MappedIsNilMember="m_IsNilName" MappedSetNilName="SetNilName" MappedIsNilName="IsNilName" MappedMemberName="m_Name" MappedDisplayName="name" MappedSetterName="Name" MappedGetterName="Name" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="password" DefaultValue="" MappedIsValidMember="m_IsValidPassword" MappedSetValidName="SetValidPassword" MappedIsValidName="IsValidPassword" MappedIsNilMember="m_IsNilPassword" MappedSetNilName="SetNilPassword" MappedIsNilName="IsNilPassword" MappedMemberName="m_Password" MappedDisplayName="password" MappedSetterName="Password" MappedGetterName="Password" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="KeyUsageType" LongName="KeyUsageType" MappedClassColName="KeyUsageTypeCol" MappedClassName="KeyUsageType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Identifier" DefaultValue="" MappedIsValidMember="m_IsValidIdentifier" MappedSetValidName="SetValidIdentifier" MappedIsValidName="IsValidIdentifier" MappedIsNilMember="m_IsNilIdentifier" MappedSetNilName="SetNilIdentifier" MappedIsNilName="IsNilIdentifier" MappedMemberName="m_Identifier" MappedDisplayName="Identifier" MappedSetterName="Identifier" MappedGetterName="Identifier">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="OCSPType" LongName="OCSPType" MappedClassColName="OCSPTypeCol" MappedClassName="OCSPType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="IntermediateBucketReference" DefaultValue="" MappedIsValidMember="m_IsValidIntermediateBucketReference" MappedSetValidName="SetValidIntermediateBucketReference" MappedIsValidName="IsValidIntermediateBucketReference" MappedIsNilMember="m_IsNilIntermediateBucketReference" MappedSetNilName="SetNilIntermediateBucketReference" MappedIsNilName="IsNilIntermediateBucketReference" MappedMemberName="m_IntermediateBucketReference" MappedDisplayName="IntermediateBucketReference" MappedSetterName="IntermediateBucketReference" MappedGetterName="IntermediateBucketReference" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="PrincipleNameType" LongName="PrincipleNameType" MappedClassColName="PrincipleNameTypeCol" MappedClassName="PrincipleNameType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="field" DefaultValue="" MappedIsValidMember="m_IsValidField" MappedSetValidName="SetValidField" MappedIsValidName="IsValidField" MappedIsNilMember="m_IsNilField" MappedSetNilName="SetNilField" MappedIsNilName="IsNilField" MappedMemberName="m_Field" MappedDisplayName="field" MappedSetterName="Field" MappedGetterName="Field" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="principal" DefaultValue="" MappedIsValidMember="m_IsValidPrincipal" MappedSetValidName="SetValidPrincipal" MappedIsValidName="IsValidPrincipal" MappedIsNilMember="m_IsNilPrincipal" MappedSetNilName="SetNilPrincipal" MappedIsNilName="IsNilPrincipal" MappedMemberName="m_Principal" MappedDisplayName="principal" MappedSetterName="Principal" MappedGetterName="Principal">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Value" DefaultValue="" MappedIsValidMember="m_IsValidValue" MappedSetValidName="SetValidValue" MappedIsValidName="IsValidValue" MappedIsNilMember="m_IsNilValue" MappedSetNilName="SetNilValue" MappedIsNilName="IsNilValue" MappedMemberName="m_Value" MappedDisplayName="Value" MappedSetterName="Value" MappedGetterName="Value" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Reference" DefaultValue="" MappedIsValidMember="m_IsValidReference" MappedSetValidName="SetValidReference" MappedIsValidName="IsValidReference" MappedIsNilMember="m_IsNilReference" MappedSetNilName="SetNilReference" MappedIsNilName="IsNilReference" MappedMemberName="m_Reference" MappedDisplayName="Reference" MappedSetterName="Reference" MappedGetterName="Reference">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ReferenceType" LongName="ReferenceType" MappedClassColName="ReferenceTypeCol" MappedClassName="ReferenceType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+  </Class>
+  <Class Name="RuleReferenceType" LongName="RuleReferenceType" MappedClassColName="RuleReferenceTypeCol" MappedClassName="RuleReferenceType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+  </Class>
+  <Class Name="SigningType" LongName="SigningType" MappedClassColName="SigningTypeCol" MappedClassName="SigningType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="type" DefaultValue="" MappedIsValidMember="m_IsValidType" MappedSetValidName="SetValidType" MappedIsValidName="IsValidType" MappedIsNilMember="m_IsNilType" MappedSetNilName="SetNilType" MappedIsNilName="IsNilType" MappedMemberName="m_Type" MappedDisplayName="type" MappedSetterName="Type" MappedGetterName="Type">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="TryType" LongName="TryType" MappedClassColName="TryTypeCol" MappedClassName="TryType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+    <Attribute Name="TryTypeData" DefaultValue="" MappedIsValidMember="m_IsValidTryTypeData" MappedSetValidName="SetValidTryTypeData" MappedIsValidName="IsValidTryTypeData" MappedIsNilMember="m_IsNilTryTypeData" MappedSetNilName="SetNilTryTypeData" MappedIsNilName="IsNilTryTypeData" MappedMemberName="m_TryTypeData" MappedDisplayName="TryTypeData" MappedSetterName="TryTypeData" MappedGetterName="TryTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="TryType_Type" LongName="TryType_Type" MappedClassColName="TryType_TypeCol" MappedClassName="TryType_Type">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+  </Class>
+  <Class Name="ValidatorRecipe" LongName="ValidatorRecipe" MappedClassColName="ValidatorRecipeCol" MappedClassName="ValidatorRecipe">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="name" DefaultValue="" MappedIsValidMember="m_IsValidName" MappedSetValidName="SetValidName" MappedIsValidName="IsValidName" MappedIsNilMember="m_IsNilName" MappedSetNilName="SetNilName" MappedIsNilName="IsNilName" MappedMemberName="m_Name" MappedDisplayName="name" MappedSetterName="Name" MappedGetterName="Name" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="version" DefaultValue="" MappedIsValidMember="m_IsValidVersion" MappedSetValidName="SetValidVersion" MappedIsValidName="IsValidVersion" MappedIsNilMember="m_IsNilVersion" MappedSetNilName="SetNilVersion" MappedIsNilName="IsNilVersion" MappedMemberName="m_Version" MappedDisplayName="version" MappedSetterName="Version" MappedGetterName="Version" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Validator" DefaultValue="" MappedIsValidMember="m_IsValidValidator" MappedSetValidName="SetValidValidator" MappedIsValidName="IsValidValidator" MappedIsNilMember="m_IsNilValidator" MappedSetNilName="SetNilValidator" MappedIsNilName="IsNilValidator" MappedMemberName="m_Validator" MappedDisplayName="Validator" MappedSetterName="Validator" MappedGetterName="Validator">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CertificateBucket" DefaultValue="" MappedIsValidMember="m_IsValidCertificateBucket" MappedSetValidName="SetValidCertificateBucket" MappedIsValidName="IsValidCertificateBucket" MappedIsNilMember="m_IsNilCertificateBucket" MappedSetNilName="SetNilCertificateBucket" MappedIsNilName="IsNilCertificateBucket" MappedMemberName="m_CertificateBucket" MappedDisplayName="CertificateBucket" MappedSetterName="CertificateBucket" MappedGetterName="CertificateBucket">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="KeyStore" DefaultValue="" MappedIsValidMember="m_IsValidKeyStore" MappedSetValidName="SetValidKeyStore" MappedIsValidName="IsValidKeyStore" MappedIsNilMember="m_IsNilKeyStore" MappedSetNilName="SetNilKeyStore" MappedIsNilName="IsNilKeyStore" MappedMemberName="m_KeyStore" MappedDisplayName="KeyStore" MappedSetterName="KeyStore" MappedGetterName="KeyStore">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ValidatorReferenceType" LongName="ValidatorReferenceType" MappedClassColName="ValidatorReferenceTypeCol" MappedClassName="ValidatorReferenceType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+  </Class>
+  <Class Name="ValidatorType" LongName="ValidatorType" MappedClassColName="ValidatorTypeCol" MappedClassName="ValidatorType">
+    <Description>
+    </Description>
+    <Remarks>This class exists to provide a base into which other interfaces can be placed, this is necessary because each class is either a sequence, choice or all. Without this class classes deriving from this, may contain elements that are part of a sequence and a choice, this would break the library.</Remarks>
+    <Attribute Name="ExtensibleTypeData" DefaultValue="" MappedIsValidMember="m_IsValidExtensibleTypeData" MappedSetValidName="SetValidExtensibleTypeData" MappedIsValidName="IsValidExtensibleTypeData" MappedIsNilMember="m_IsNilExtensibleTypeData" MappedSetNilName="SetNilExtensibleTypeData" MappedIsNilName="IsNilExtensibleTypeData" MappedMemberName="m_ExtensibleTypeData" MappedDisplayName="ExtensibleTypeData" MappedSetterName="ExtensibleTypeData" MappedGetterName="ExtensibleTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+    <Attribute Name="ValidatorTypeData" DefaultValue="" MappedIsValidMember="m_IsValidValidatorTypeData" MappedSetValidName="SetValidValidatorTypeData" MappedIsValidName="IsValidValidatorTypeData" MappedIsNilMember="m_IsNilValidatorTypeData" MappedSetNilName="SetNilValidatorTypeData" MappedIsNilName="IsNilValidatorTypeData" MappedMemberName="m_ValidatorTypeData" MappedDisplayName="ValidatorTypeData" MappedSetterName="ValidatorTypeData" MappedGetterName="ValidatorTypeData">
+      <Description>Holds all the information contained within the element</Description>
+      <Remarks>Because this is a base type, all the objects in it must be contained within a second class. This means all classes supporting this interface can expose use the same interface regardless of how they are extended.</Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ValidatorType_Type" LongName="ValidatorType_Type" MappedClassColName="ValidatorType_TypeCol" MappedClassName="ValidatorType_Type">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="name" DefaultValue="" MappedIsValidMember="m_IsValidName" MappedSetValidName="SetValidName" MappedIsValidName="IsValidName" MappedIsNilMember="m_IsNilName" MappedSetNilName="SetNilName" MappedIsNilName="IsNilName" MappedMemberName="m_Name" MappedDisplayName="name" MappedSetterName="Name" MappedGetterName="Name" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="timeout" DefaultValue="" MappedIsValidMember="m_IsValidTimeout" MappedSetValidName="SetValidTimeout" MappedIsValidName="IsValidTimeout" MappedIsNilMember="m_IsNilTimeout" MappedSetNilName="SetNilTimeout" MappedIsNilName="IsNilTimeout" MappedMemberName="m_Timeout" MappedDisplayName="timeout" MappedSetterName="Timeout" MappedGetterName="Timeout" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Enum Name="JunctionEnum" MappedEnumColName="JunctionEnumCol" MappedEnumName="JunctionEnum">
+    <Value Value="AND" MappedValue="AND" />
+    <Value Value="OR" MappedValue="OR" />
+    <Value Value="XOR" MappedValue="XOR" />
+  </Enum>
+  <Enum Name="PrincipalEnum" MappedEnumColName="PrincipalEnumCol" MappedEnumName="PrincipalEnum">
+    <Value Value="SUBJECT" MappedValue="SUBJECT" />
+    <Value Value="ISSUER" MappedValue="ISSUER" />
+  </Enum>
+  <Enum Name="SigningEnum" MappedEnumColName="SigningEnumCol" MappedEnumName="SigningEnum">
+    <Value Value="PUBLIC_SIGNED" MappedValue="PUBLIC_SIGNED" />
+    <Value Value="SELF_SIGNED" MappedValue="SELF_SIGNED" />
+  </Enum>
+  <Enum Name="KeyUsageEnum" MappedEnumColName="KeyUsageEnumCol" MappedEnumName="KeyUsageEnum">
+    <Value Value="DIGITAL_SIGNATURE" MappedValue="DIGITAL_SIGNATURE" />
+    <Value Value="NON_REPUDIATION" MappedValue="NON_REPUDIATION" />
+    <Value Value="KEY_ENCIPHERMENT" MappedValue="KEY_ENCIPHERMENT" />
+    <Value Value="DATA_ENCIPHERMENT" MappedValue="DATA_ENCIPHERMENT" />
+    <Value Value="KEY_AGREEMENT" MappedValue="KEY_AGREEMENT" />
+    <Value Value="KEY_CERT_SIGN" MappedValue="KEY_CERT_SIGN" />
+    <Value Value="CRL_SIGN" MappedValue="CRL_SIGN" />
+    <Value Value="ENCIPHER_ONLY" MappedValue="ENCIPHER_ONLY" />
+    <Value Value="DECIPHER_ONLY" MappedValue="DECIPHER_ONLY" />
+  </Enum>
+  <Namespace SchemaNamespace="" SchemaAlias="" ClassNamespace="Mx.Xml.CertValidator" />
+  <Namespace SchemaNamespace="http://difi.no/xsd/certvalidator/1.0" SchemaAlias="" ClassNamespace="Mx.Xml.tns" />
+</MappingSchema>

@@ -30,7 +30,12 @@
       }
     },
     "security": {
-      "pki": "pki-peppol-test.xml"
+      "pki": "pki-peppol-test.xml",
+      "validator": {
+        "ALL": "default",
+        "AP": "AP",
+        "SMP": "SMP"
+      }
     },
     "hyperway": {
       "keystore": {

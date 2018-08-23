@@ -31,7 +31,7 @@
             {
                 mime.WriteTo(m, true);
                 m.Seek(0, SeekOrigin.Begin);
-                this.signature = m.GetBuffer();
+                this.signature = m.ToBuffer();
 
             }
             // signature = this.mimeMultipart[1].WriteTo(). GetBuffer(); //  ByteStreams.toByteArray(((InputStream)mimeMultipart.getBodyPart(1).getContent()));
@@ -98,7 +98,7 @@
             {
                 this.mimeMultipart[0].WriteTo(m, true);
                 m.Seek(0, SeekOrigin.Begin);
-                result = m.GetBuffer();
+                result = m.ToBuffer();
             }
 
             return result;

@@ -37,10 +37,10 @@ namespace Mx.Peppol.Lookup.Reader.BdxSmp201605
     {
         private static int RegisterLicense()
         {
-            LiquidTechnologies.Runtime.Standard20.XmlObjectBase.Register("Trial 31/07/2018", "bdx-smp-201605.xsd", "PC3FAEVG6H2XB6CA000000AA");
+            LiquidTechnologies.Runtime.Standard20.XmlObjectBase.Register("MassiveX ", "certvalidator.xsd", "0B5LDL72KPW5J7E6000000AA");
 
-// ##HAND_CODED_BLOCK_START ID="Namespace Declarations"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-// Add Additional namespace declarations here...
+            // ##HAND_CODED_BLOCK_START ID="Namespace Declarations"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+            // Add Additional namespace declarations here...
             LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.SchemaType = LiquidTechnologies.Runtime.Standard20.SchemaType.XSD;
 //            LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.DefaultNamespaceURI = "http://www.fpml.org/2003/FpML-4-0";
 //            LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.NamespaceAliases.Add("dsig", "http://www.w3.org/2000/09/xmldsig#");

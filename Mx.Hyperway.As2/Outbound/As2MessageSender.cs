@@ -9,6 +9,7 @@
     using log4net;
 
     using MimeKit;
+    using MimeKit.Cryptography;
 
     using Mx.Hyperway.Api.Lang;
     using Mx.Hyperway.Api.Model;
@@ -124,8 +125,7 @@
 
                 // Create a complete S/MIME message using the body part containing our content as the
                 // signed part of the S/MIME message.
-                MimeMessage signedMimeMessage =
-                    this.sMimeMessageFactory.createSignedMimeMessage(mimeBodyPart, digestMethod);
+                MimeMessage signedMimeMessage = this.sMimeMessageFactory.createSignedMimeMessage(mimeBodyPart, digestMethod);
                 
 
                 // Initiate POST request

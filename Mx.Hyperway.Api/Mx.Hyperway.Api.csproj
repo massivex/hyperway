@@ -5,13 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mx.Peppol.Commons\Mx.Peppol.Common.csproj" />
+    <PackageReference Include="zipkin4net" Version="1.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="zipkin4net">
-      <HintPath>..\third-party\zipkin4net\zipkin4net.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Mx.Peppol.Commons\Mx.Peppol.Common.csproj" />
   </ItemGroup>
 
 </Project>

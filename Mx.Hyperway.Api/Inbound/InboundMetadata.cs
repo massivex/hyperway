@@ -1,8 +1,8 @@
 ﻿namespace Mx.Hyperway.Api.Inbound
 {
-    using System.Security.Cryptography.X509Certificates;
-
     using Mx.Hyperway.Api.Transmission;
+
+    using Org.BouncyCastle.X509;
 
     public interface InboundMetadata : TransmissionResult
     {

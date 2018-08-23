@@ -13,7 +13,7 @@ using System.Collections.Specialized;
  * WARNING: THIS FILE IS GENERATED
  * Changes made outside of ##HAND_CODED_BLOCK_START blocks will be overwritten
  *
- * Generation  :  by Liquid XML Data Binder 16.1.7.8497
+ * Generation  :  by Liquid XML Data Binder 16.1.9.8572
  * Using Schema: C:\src\massivex\hyperway\Mx.Certificates.Validator\Xsd\certvalidator.xsd
  **********************************************************************************************/
 
@@ -322,7 +322,7 @@ namespace Mx.Xml.CertValidator
     {
         private static int RegisterLicense()
         {
-            LiquidTechnologies.Runtime.Standard20.XmlObjectBase.Register("Trial 31/07/2018", "certvalidator.xsd", "N321NPKX8HMPTW9A000000AA");
+            LiquidTechnologies.Runtime.Standard20.XmlObjectBase.Register("MassiveX ", "certvalidator.xsd", "0B5LDL72KPW5J7E6000000AA");
 
 // ##HAND_CODED_BLOCK_START ID="Namespace Declarations"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
 // Add Additional namespace declarations here...

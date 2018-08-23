@@ -3,6 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
 
     using MimeKit;
     using MimeKit.Cryptography;
@@ -21,8 +23,10 @@
             Pkcs12Store store
             ) : base(new X509Context(store))
         {
+            
         }
 
+        
         //static IX509CertificateDatabase OpenDatabase(string fileName)
         //{
         //    var builder = new SQLiteConnectionStringBuilder();
@@ -43,13 +47,50 @@
     {
         private readonly Pkcs12Store store;
 
+        private List<X509Certificate> certsDb;
+
         public X509Context(Pkcs12Store store)
         {
             this.store = store;
         }
+
+        private List<X509Certificate> GetCerts()
+        {
+            if (this.certsDb == null)
+            {
+                this.certsDb = new List<X509Certificate>();
+                lock (this.certsDb)
+                {
+                    foreach (string alias in this.store.Aliases)
+                    {
+                        if (alias.StartsWith("CN="))
+                        {
+                            continue;
+                        }
+                        var cert = this.store.GetCertificate(alias);
+                        this.certsDb.Add(cert.Certificate);
+                    }
+                }
+            }
+
+            return this.certsDb;
+        }
+
         public ICollection GetMatches(IX509Selector selector)
         {
-            throw new NotImplementedException();
+            var list = new Collection<X509Certificate>();
+            var certs = this.GetCerts();
+            foreach (var cert in certs)
+            {
+                if (selector.Match(cert))
+                {
+                    list.Add(cert);
+                    return list;
+
+                }
+            }
+
+            return list;
         }
 
         public void Dispose()
@@ -59,7 +100,16 @@
 
         public X509CertificateRecord Find(X509Certificate certificate, X509CertificateRecordFields fields)
         {
-            throw new NotImplementedException();
+            var certs = this.GetCerts();
+
+            var cert = certs.IndexOf(certificate);
+            if (cert >= 0)
+            {
+                var record = new X509CertificateRecord(certificate);
+                return record;
+            }
+
+            return null;
         }
 
         public IEnumerable<X509Certificate> FindCertificates(IX509Selector selector)
@@ -78,18 +128,14 @@
             bool requirePrivateKey,
             X509CertificateRecordFields fields)
         {
-            foreach (string alias in this.store.Aliases)
+            var certs = this.GetCerts();
+            foreach (var certificate in certs)
             {
-                var certs = this.store.GetCertificateChain(alias);
-                foreach (var certificate in certs)
+                if (certificate.GetCommonName() == mailbox.Address)
                 {
-                    if (certificate.Certificate.GetCommonName() == mailbox.Address)
-                    {
-                        var record = new X509CertificateRecord(certificate.Certificate);
-                        return new SingletonList<X509CertificateRecord>(record);
-                    }
+                    var record = new X509CertificateRecord(certificate);
+                    return new SingletonList<X509CertificateRecord>(record);
                 }
-
             }
 
             return new List<X509CertificateRecord>();
@@ -97,7 +143,17 @@
 
         public IEnumerable<X509CertificateRecord> Find(IX509Selector selector, bool trustedOnly, X509CertificateRecordFields fields)
         {
-            throw new NotImplementedException();
+            var certs = this.GetCerts();
+            foreach (var certificate in certs)
+            {
+                if (selector.Match(certificate))
+                {
+                    var record = new X509CertificateRecord(certificate);
+                    return new SingletonList<X509CertificateRecord>(record);
+                }
+            }
+
+            return new List<X509CertificateRecord>();
         }
 
         public void Add(X509CertificateRecord record)
@@ -142,7 +198,8 @@
 
         public IX509Store GetCrlStore()
         {
-            throw new NotImplementedException();
+            // Empty Certificate Revocation List
+            return new X509CertificateStore();
         }
     }
 }

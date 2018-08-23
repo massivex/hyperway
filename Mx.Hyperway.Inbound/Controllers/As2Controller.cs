@@ -1,6 +1,11 @@
 ﻿namespace Mx.Hyperway.Inbound.Controllers
 {
     using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     using log4net;
 
@@ -8,12 +13,17 @@
     using Microsoft.AspNetCore.Mvc;
 
     using MimeKit;
+    using MimeKit.Cryptography;
 
+    using Mx.Hyperway.As2.Code;
     using Mx.Hyperway.As2.Inbound;
     using Mx.Hyperway.As2.Lang;
     using Mx.Hyperway.As2.Util;
+    using Mx.Tools;
 
     using zipkin4net;
+
+    using Trace = zipkin4net.Trace;
 
     [Route("api/as2")]
     public class As2Controller
@@ -37,7 +47,7 @@
         }
 
         [HttpGet]
-        public ContentResult doGet()
+        public ContentResult DoGet()
         {
             return new ContentResult() { StatusCode = StatusCodes.Status200OK, Content = "Hello AS2 world\n" };
         }
@@ -49,7 +59,7 @@
          * Since the the request can only be read once, using getReader()/getInputStream()
          */
         [HttpPost]
-        public ContentResult doPost()
+        public void DoPost()
         {
             var headers = this.httpContext.Request.Headers;
             var messageId = headers["message-id"];
@@ -58,7 +68,8 @@
                 var errorResult = new ContentResult();
                 errorResult.StatusCode = StatusCodes.Status400BadRequest;
                 errorResult.Content = "Header field 'Message-ID' not found.";
-                return errorResult;
+                throw new NotSupportedException("error management");
+                // return errorResult;
             }
 
 
@@ -67,40 +78,28 @@
             root.Record(Annotations.ServerRecv());
             root.Record(Annotations.Tag("message-id", messageId));
 
-            // MDC.Add("message-id", request.getHeader("message-id"));
-
             LOGGER.Debug("Receiving HTTP POST request");
-
-            // Read all headers
-            // InternetHeaders headers = copyHttpHeadersIntoMap(request);
-
-            // Receives the data, validates the headers, signature etc., invokes the persistence handler
-            // and finally returns the MdnData to be sent back to the caller
             try
             {
                 // Read MIME message
-
+                var bodyStream = this.httpContext.Request.Body;
+                var bodyData = bodyStream.ToBuffer();
                 MimeMessage mimeMessage =
-                    MimeMessageHelper.createMimeMessageAssistedByHeaders(this.httpContext.Request.Body, headers);
+                    MimeMessageHelper.createMimeMessageAssistedByHeaders(bodyData.ToStream(), headers);
 
                 try
                 {
-                    // Performs the actual reception of the message by parsing the HTTP POST request
-                    // persisting the payload etc.
-
                     Trace span = root.Child();
                     span.Record(Annotations.ServiceName("as2message"));
-
                     span.Record(Annotations.ServerRecv());
-                    // TODO: MDN creation
                     MimeMessage mdn = this.inboundHandlerProvider().receive(headers, mimeMessage);
                     span.Record(Annotations.ServerSend());
 
-                    // Returns the MDN
                     span = root.Child();
                     span.Record(Annotations.ServiceName("mdn"));
                     span.Record(Annotations.ServerRecv());
-                    // TODO: writeMdn(response, mdn, HttpServletResponse.SC_OK);
+
+                    this.writeMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.OK);
                     span.Record(Annotations.ServerSend());
 
                 }
@@ -113,24 +112,21 @@
                     SMimeReader sMimeReader = new SMimeReader(mimeMessage);
 
                     // Begin builder
-                    // TODO: MdnBuilder
-                    // MdnBuilder mdnBuilder = MdnBuilder.newInstance(mimeMessage);
+                    MdnBuilder mdnBuilder = MdnBuilder.newInstance(mimeMessage);
+                    // Original Message-Id
+                    mdnBuilder.addHeader(MdnHeader.ORIGINAL_MESSAGE_ID, headers[As2Header.MESSAGE_ID]);
+                    // Disposition from exception
+                    mdnBuilder.addHeader(MdnHeader.DISPOSITION, e.getDisposition());
+                    mdnBuilder.addText(String.Format("Error [{0}]", identifier), e.Message);
 
-                    //                // Original Message-Id
-                    //                mdnBuilder.addHeader(MdnHeader.ORIGINAL_MESSAGE_ID, headers.getHeader(As2Header.MESSAGE_ID)[0]);
-
-                    //                // Disposition from exception
-                    //                mdnBuilder.addHeader(MdnHeader.DISPOSITION, e.getDisposition());
-                    //                mdnBuilder.addText(String.format("Error [%s]", identifier), e.getMessage());
-
-                    //                // Build and add headers
-                    //                MimeMessage mdn = sMimeMessageFactory.createSignedMimeMessage(
-                    //                        mdnBuilder.build(), sMimeReader.getDigestMethod());
-                    //                  mdn.setHeader(As2Header.AS2_VERSION, As2Header.VERSION);
-                    //                mdn.setHeader(As2Header.AS2_FROM, headers.getHeader(As2Header.AS2_TO)[0]);
-                    //                mdn.setHeader(As2Header.AS2_TO, headers.getHeader(As2Header.AS2_FROM)[0]);
-
-                    //                writeMdn(response, mdn, HttpServletResponse.SC_BAD_REQUEST);
+                    // Build and add headers
+                    MimeMessage mdn = this.sMimeMessageFactory.createSignedMimeMessage(
+                        mdnBuilder.build(),
+                        sMimeReader.getDigestMethod());
+                    mdn.Headers.Add(As2Header.AS2_VERSION, As2Header.VERSION);
+                    mdn.Headers.Add(As2Header.AS2_FROM, headers[As2Header.AS2_TO]);
+                    mdn.Headers.Add(As2Header.AS2_TO, headers[As2Header.AS2_FROM]);
+                    this.writeMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception e)
@@ -142,74 +138,69 @@
                 LOGGER.Error("Attempting to return MDN with explanatory message and HTTP 500 status");
 
                 // TODO: manage failure
-                // writeFailureWithExplanation(request, response, e);
+                writeFailureWithExplanation(this.httpContext.Request, this.httpContext.Response, e);
             }
 
             // MDC.clear();
             root.Record(Annotations.ServerSend());
-            return null;
         }
 
-        //protected void writeMdn(HttpServletResponse response, MimeMessage mdn, int status) //throws MessagingException, IOException
-            //{
-            //    // Set HTTP status.
-            //    response.setStatus(status);
+        /**
+         * If the AS2 message processing failed with an exception, we have an internal error and act accordingly
+         */
+        private void
+            writeFailureWithExplanation(HttpRequest request, HttpResponse response, Exception e) // throws IOException
+        {
+            response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            //    // Add headers and collect header names.
-            //    String[] headers = Collections.list((Enumeration<Header>)mdn.getAllHeaders()).stream()
-            //        .peek(h->response.setHeader(h.getName(), h.getValue())).map(Header::getName).toArray(String[]::new);
+            LOGGER.Error("Internal error: " + e.Message, e);
 
-            //    // Write MDN to response without header names.
-            //    mdn.writeTo(response.getOutputStream(), headers);
-            //}
+            LOGGER.Debug("Request headers");
+            foreach (var header in request.Headers)
+            {
+                LOGGER.DebugFormat("=> {0}: {1}", header.Key, header.Value);
+            }
 
-            /**
-             * Dumps the http request headers of the request
-             */
-            //private void logRequestHeaders(HttpServletRequest request)
-            //{
-            //    LOGGER.debug("Request headers:");
-            //    Collections.list(request.getHeaderNames())
-            //        .forEach(name->LOGGER.debug("=> {}: {}", name, request.getHeader(name)));
-            //}
+            var message = Encoding.ASCII.GetBytes("INTERNAL ERROR!!");
+            response.Body.Write(message, 0, message.Length);
 
-            /**
-             * If the AS2 message processing failed with an exception, we have an internal error and act accordingly
-             */
-            //void writeFailureWithExplanation(HttpServletRequest request, HttpServletResponse response, Exception e)
-            //    //           throws IOException
-            //{
-            //    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-
-            //    LOGGER.error("Internal error: " + e.getMessage(), e);
-
-            //    logRequestHeaders(request);
-
-            //    response.getWriter().write("INTERNAL ERROR!!");
-            //    // Being helpful to those who must read the error logs
-            //    LOGGER.error("\n---------- REQUEST FAILURE INFORMATION ENDS HERE --------------");
-            //}
-
-            /**
-             * Copies the http request headers into an InternetHeaders object, which is more usefull when working with MIME.
-             */
-            //private InternetHeaders copyHttpHeadersIntoMap(HttpServletRequest request)
-            //{
-            //    InternetHeaders internetHeaders = new InternetHeaders();
-            //    Collections.list(request.getHeaderNames())
-            //        .forEach(name->internetHeaders.addHeader(name, request.getHeader(name)));
-            //    return internetHeaders;
-            //}
-
-            /**
-             * Allows for simple http GET requests
-             */
-            //protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            //    //           throws ServletException, IOException
-            //{
-            //    response.setStatus(HttpServletResponse.SC_OK);
-            //    response.getOutputStream().println("Hello AS2 world\n");
-            //}
+            // Being helpful to those who must read the error logs
+            LOGGER.Error("\n---------- REQUEST FAILURE INFORMATION ENDS HERE --------------");
         }
 
+        protected void
+            writeMdn(HttpResponse response, MimeMessage mdn, int status) //throws MessagingException, IOException
+        {
+            response.StatusCode = status;
+
+            foreach (var header in mdn.Headers)
+            {
+                response.Headers.Add(header.Field, header.Value);
+            }
+
+            var contentType = ((MultipartSigned)mdn.Body).Headers[HeaderId.ContentType];
+            response.Headers.Add("Content-Type", this.NormalizeHeaderValue(contentType));
+
+            // Write MDN to response without header names.
+            // Force 7bit encoding in MIME Response
+            MultipartSigned mSigned = mdn.Body as MultipartSigned;
+            Debug.Assert(mSigned != null, nameof(mSigned) + " != null");
+            MultipartReport mReport = mSigned[0] as MultipartReport;
+            Debug.Assert(mReport != null, nameof(mReport) + " != null");
+            TextPart textReport = mReport[0] as TextPart;
+            Debug.Assert(textReport != null, nameof(textReport) + " != null");
+            textReport.ContentTransferEncoding = ContentEncoding.SevenBit;
+            var notReport = mReport[1] as MessageDispositionNotification;
+            Debug.Assert(notReport != null, nameof(notReport) + " != null");
+            notReport.ContentTransferEncoding = ContentEncoding.SevenBit;
+            mdn.Headers.Add(HeaderId.Date, As2DateUtil.RFC822.getFormat(DateTime.Now));
+            mdn.WriteTo(response.Body);
+        }
+
+        private string NormalizeHeaderValue(string value)
+        {
+            var result = Regex.Replace(value, @"[\t\r\n]", string.Empty);
+            return result;
+        }
+    }
 }

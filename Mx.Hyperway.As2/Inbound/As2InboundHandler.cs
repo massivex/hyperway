@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Mx.Hyperway.As2.Inbound
 {
+    using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
 
     using log4net;
@@ -12,6 +14,7 @@ namespace Mx.Hyperway.As2.Inbound
     using Microsoft.AspNetCore.Http;
 
     using MimeKit;
+    using MimeKit.Cryptography;
 
     using Mx.Hyperway.Api.Model;
     using Mx.Hyperway.Api.Persist;
@@ -27,6 +30,7 @@ namespace Mx.Hyperway.As2.Inbound
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Sbdh;
     using Mx.Peppol.Security.Api;
+    using Mx.Tools;
 
     using Header = MimeKit.Header;
 
@@ -50,13 +54,16 @@ namespace Mx.Hyperway.As2.Inbound
 
         private readonly SMimeMessageFactory sMimeMessageFactory;
 
+        private readonly Func<HyperwaySecureMimeContext> secureContextFactory;
+
         public As2InboundHandler(
             StatisticsService statisticsService,
             TimestampProvider timestampProvider,
             CertificateValidator certificateValidator,
             PersisterHandler persisterHandler,
             TransmissionVerifier transmissionVerifier,
-            SMimeMessageFactory sMimeMessageFactory)
+            SMimeMessageFactory sMimeMessageFactory,
+            Func<HyperwaySecureMimeContext> secureContextFactory)
         {
             this.statisticsService = statisticsService;
             this.timestampProvider = timestampProvider;
@@ -66,6 +73,7 @@ namespace Mx.Hyperway.As2.Inbound
             this.transmissionVerifier = transmissionVerifier;
 
             this.sMimeMessageFactory = sMimeMessageFactory;
+            this.secureContextFactory = secureContextFactory;
         }
 
         /**
@@ -92,11 +100,11 @@ namespace Mx.Hyperway.As2.Inbound
             // Initiate MDN
             MdnBuilder mdnBuilder = MdnBuilder.newInstance(mimeMessage);
             mdnBuilder.addHeader(MdnHeader.DATE, t2.getDate());
-            
+
 
             // Extract Message-ID
             TransmissionIdentifier transmissionIdentifier =
-                    TransmissionIdentifier.fromHeader(httpHeaders[As2Header.MESSAGE_ID]);
+                TransmissionIdentifier.fromHeader(httpHeaders[As2Header.MESSAGE_ID]);
             mdnBuilder.addHeader(MdnHeader.ORIGINAL_MESSAGE_ID, httpHeaders[As2Header.MESSAGE_ID]);
 
 
@@ -106,23 +114,20 @@ namespace Mx.Hyperway.As2.Inbound
 
             // Extract content headers
             byte[] headerBytes = sMimeReader.getBodyHeader();
+            Stream bodyStream = sMimeReader.getBodyInputStream();
+            byte[] bodyBytes = bodyStream.ToBuffer();
+
             mdnBuilder.addHeader(MdnHeader.ORIGINAL_CONTENT_HEADER, headerBytes);
 
-            // TODO: calculate hash including headers
-            // Prepare calculation of digest
-            // MessageDigest messageDigest = BcHelper.getMessageDigest(digestMethod.getIdentifier());
-            // InputStream digestInputStream = new DigestInputStream(sMimeReader.getBodyInputStream(), messageDigest);
-
-            // Add header to calculation of digest
-            // messageDigest.update(headerBytes);
-
-            var bodyStream = sMimeReader.getBodyInputStream();
-
-            // Prepare content for reading of SBDH
-            // PeekingInputStream peekingInputStream = new PeekingInputStream(digestInputStream);
+            using (var fs = File.Create("C:\\temp\\hyperway-input-mic-content.eml"))
+            {
+                fs.Write(headerBytes, 0, headerBytes.Length);
+                fs.Write(bodyBytes, 0, bodyBytes.Length);
+            }
 
             // Extract SBDH
             Mx.Peppol.Common.Model.Header header;
+            bodyStream.Seek(0, SeekOrigin.Begin);
             using (var sbdReader = SbdReader.newInstance(bodyStream))
             {
                 header = sbdReader.getHeader();
@@ -143,73 +148,69 @@ namespace Mx.Hyperway.As2.Inbound
                     // Exhaust InputStream
                     // ByteStreams.exhaust(payloadInputStream);
                 }
-                //            }
 
                 // Fetch calculated digest
-                var s = SHA512.Create();
-                using (Stream payloadInputStream = sMimeReader.getBodyInputStream())
-                {
-                    s.ComputeHash(payloadInputStream);
-                    var hash = s.ComputeHash(headerBytes);
-                    var hashText = BitConverter.ToString(hash).Replace("-", "");
+                var s = SHA1.Create();
+                var hash = s.ComputeHash(headerBytes.Concat(bodyBytes).ToArray());
+                var hashText = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
 
-                    Digest calculatedDigest = Digest.of(DigestMethod.SHA512, hash);
-                    mdnBuilder.addHeader(MdnHeader.RECEIVED_CONTENT_MIC, new Mic(calculatedDigest));
+                Digest calculatedDigest = Digest.of(DigestMethod.SHA1, hash);
+                mdnBuilder.addHeader(MdnHeader.RECEIVED_CONTENT_MIC, new Mic(calculatedDigest));
+
+                DigitalSignatureCollection signatures;
+                var check = this.VerifySignature(mimeMessage.Body as MultipartSigned, out signatures);
+                if (!check || signatures.Count != 1)
+                {
+                    throw new NotSupportedException("Firma non valida");
                 }
 
+                var signature = signatures[0];
+                var certificate = signature.SignerCertificate as SecureMimeDigitalCertificate;
+                Debug.Assert(certificate != null, nameof(certificate) + " != null");
+                this.certificateValidator.validate(Service.AP, certificate.Certificate);
 
-                //Digest calculatedDigest = Digest.of(digestMethod.getDigestMethod(), messageDigest.digest());
+                // Create receipt (MDN)
+                mdnBuilder.addHeader(MdnHeader.DISPOSITION, Disposition.PROCESSED);
+                MimeMessage mdn = sMimeMessageFactory.createSignedMimeMessage(mdnBuilder.build(), digestMethod);
+                mdn.Headers.Add(As2Header.AS2_VERSION, As2Header.VERSION);
+                mdn.Headers.Add(As2Header.AS2_FROM, httpHeaders[As2Header.AS2_TO]);
+                mdn.Headers.Add(As2Header.AS2_TO, httpHeaders[As2Header.AS2_FROM]);
+
+                // Prepare MDN
+                // mdn.WriteTo();
+                //ByteArrayOutputStream mdnOutputStream = new ByteArrayOutputStream();
+                //mdn.writeTo(mdnOutputStream);
+
+                //// Persist metadata
+                //As2InboundMetadata inboundMetadata = new As2InboundMetadata(transmissionIdentifier, header, t2,
+                //    digestMethod.getTransportProfile(), calculatedDigest, signer, mdnOutputStream.toByteArray());
+                //persisterHandler.persist(inboundMetadata, payloadPath);
+
+                //// Persist statistics
+                //statisticsService.persist(inboundMetadata);
+                return mdn;
+            }
+        }
 
 
-                //// Validate signature using calculated digest
-                //X509Certificate signer = SMimeBC.verifySignature(
-                //        ImmutableMap.of(digestMethod.getOid(), calculatedDigest.getValue()),
-                //        sMimeReader.getSignature()
-                //);
-
+        public bool VerifySignature(MultipartSigned multipartSigned, out DigitalSignatureCollection signatures)
+        {
+            var signed = multipartSigned;
+            if (signed != null)
+            {
+                using (var ctx = this.secureContextFactory())
+                {
+                    signatures = signed.Verify(ctx);
+                    foreach (var signature in signatures)
+                    {
+                        bool valid = signature.Verify();
+                        return true;
+                    }
+                }
             }
 
-            return null;
-
-
-            //// Validate certificate
-            //certificateValidator.validate(Service.AP, signer);
-
-            //            // Create receipt (MDN)
-            //            mdnBuilder.addHeader(MdnHeader.DISPOSITION, Disposition.PROCESSED);
-            //            MimeMessage mdn = sMimeMessageFactory.createSignedMimeMessage(mdnBuilder.build(), digestMethod);
-            //// MimeMessage mdn = sMimeMessageFactory.createSignedMimeMessageNew(mdnBuilder.build(), calculatedDigest, digestMethod);
-            //mdn.setHeader(As2Header.AS2_VERSION, As2Header.VERSION);
-            //            mdn.setHeader(As2Header.AS2_FROM, httpHeaders.getHeader(As2Header.AS2_TO)[0]);
-            //            mdn.setHeader(As2Header.AS2_TO, httpHeaders.getHeader(As2Header.AS2_FROM)[0]);
-
-            //            // Prepare MDN
-            //            ByteArrayOutputStream mdnOutputStream = new ByteArrayOutputStream();
-            //mdn.writeTo(mdnOutputStream);
-
-            //            // Persist metadata
-            //            As2InboundMetadata inboundMetadata = new As2InboundMetadata(transmissionIdentifier, header, t2,
-            //                    digestMethod.getTransportProfile(), calculatedDigest, signer, mdnOutputStream.toByteArray());
-            //persisterHandler.persist(inboundMetadata, payloadPath);
-
-            //            // Persist statistics
-            //            statisticsService.persist(inboundMetadata);
-
-            //            return mdn;
-            //        } catch (SbdhException e) {
-            //            throw new OxalisAs2InboundException(Disposition.UNSUPPORTED_FORMAT, e.getMessage(), e);
-            //        } catch (NoSuchAlgorithmException e) {
-            //            throw new OxalisAs2InboundException(Disposition.UNSUPPORTED_MIC_ALGORITHMS, e.getMessage(), e);
-            //        } catch (VerifierException e) {
-            //            throw new OxalisAs2InboundException(Disposition.fromVerifierException(e), e.getMessage(), e);
-            //        } catch (PeppolSecurityException e) {
-            //            throw new OxalisAs2InboundException(Disposition.AUTHENTICATION_FAILED, e.getMessage(), e);
-            //        } catch (OxalisSecurityException e) {
-            //            throw new OxalisAs2InboundException(Disposition.INTEGRITY_CHECK_FAILED, e.getMessage(), e);
-            //        } catch (IOException | TimestampException | MessagingException | OxalisTransmissionException e) {
-            //            throw new OxalisAs2InboundException(Disposition.UNEXPECTED_PROCESSING_ERROR, e.getMessage(), e);
-            //        }
-
+            signatures = null;
+            return false;
         }
     }
 }

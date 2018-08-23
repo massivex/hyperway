@@ -128,15 +128,6 @@
             {
                 TransportProfile transportProfile = transmissionRequest.getEndpoint().getTransportProfile();
                 MessageSender messageSender = this.messageSenderFactory.getMessageSender(transportProfile);
-
-                // Testing
-                //transmissionRequest = new DefaultTransmissionRequest(
-                //    transmissionRequest.getHeader(),
-                //    File.ReadAllBytes("c:\\temp\\java.xml").ToStream(),
-                //    transmissionRequest.getEndpoint()
-                //    );                
-                //
-
                 transmissionResponse = messageSender.send(transmissionRequest, span);
             }
             catch (HyperwayTransmissionException e)

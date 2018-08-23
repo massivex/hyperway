@@ -44,9 +44,8 @@ namespace Mx.Peppol.Security.Util
         {
             try
             {
-                this.validator.validate(
-                    this.mode.GetValue(String.Format("security.validator.{0}", service.ToString())),
-                    certificate);
+                var key = $"security.validator.{service.ToString()}";
+                this.validator.validate(this.mode.GetValue(key), certificate);
             }
             catch (CertificateValidationException e)
             {

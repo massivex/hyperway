@@ -102,6 +102,7 @@
             }
             
             var mimeMessage = new MimeMessage();
+            mimeMessage.Headers.Clear();
             foreach (var header in headers)
             {
                 mimeMessage.Headers.Add(header.Key, header.Value);
@@ -213,6 +214,8 @@
                 {
                     bodyPart.WriteTo(m);
                     m.Seek(0, SeekOrigin.Begin);
+                    var content = m.ToArray();
+                    System.IO.File.WriteAllBytes("C:\\temp\\hyperway-outbound-mic-content.eml", content);
                     digest = BcHelper.Hash(m.ToArray(), digestMethod.getAlgorithm());
                     var test = BitConverter.ToString(digest).Replace("-", "");
                 }

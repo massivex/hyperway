@@ -33,13 +33,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Tools", "Mx.Tools\Mx.Too
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "third-party", "third-party", "{128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zipkin4net", "zipkin4net", "{B2272C1E-EF9A-4128-ACAD-6F8171ACA59D}"
-	ProjectSection(SolutionItems) = preProject
-		third-party\zipkin4net\zipkin4net.deps.json = third-party\zipkin4net\zipkin4net.deps.json
-		third-party\zipkin4net\zipkin4net.dll = third-party\zipkin4net\zipkin4net.dll
-		third-party\zipkin4net\zipkin4net.pdb = third-party\zipkin4net\zipkin4net.pdb
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "arsoft-tools", "arsoft-tools", "{1B048BBE-6536-4565-8386-7521A2AD1D9B}"
 	ProjectSection(SolutionItems) = preProject
 		third-party\arsoft-tools\ARSoft.Tools.Net.deps.json = third-party\arsoft-tools\ARSoft.Tools.Net.deps.json
@@ -151,7 +144,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B2272C1E-EF9A-4128-ACAD-6F8171ACA59D} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
 		{1B048BBE-6536-4565-8386-7521A2AD1D9B} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
 		{D114C553-8D1F-40BC-B47D-1319F3C55DB8} = {128B69F4-82BF-4E8C-AE09-8EFDD0BA7F3C}
 	EndGlobalSection

@@ -30,7 +30,7 @@
             this.code = code;
         }
 
-        public String ToString()
+        public override string ToString()
         {
             return this.code;
         }

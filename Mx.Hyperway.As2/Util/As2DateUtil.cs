@@ -46,7 +46,7 @@
      */
     public class As2DateUtil
     {
-        public static readonly As2DateUtil RFC822 = new As2DateUtil("EEE, dd MMM yyyy HH:mm:ss Z");
+        public static readonly As2DateUtil RFC822 = new As2DateUtil("ddd, dd MMM yyyy HH:mm:ss zzz");
 
         public static readonly As2DateUtil ISO8601 = new As2DateUtil("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
@@ -72,7 +72,13 @@
 
         public String getFormat(DateTime d)
         {
-            return d.ToString(this.format, CultureInfo.InvariantCulture);
+            var dateTxt = d.ToString(this.format, CultureInfo.InvariantCulture);
+            if (dateTxt.Length == 32)
+            {
+                dateTxt = dateTxt.Substring(0, 29) + dateTxt.Substring(30);
+            }
+
+            return dateTxt;
         }
     }
 }

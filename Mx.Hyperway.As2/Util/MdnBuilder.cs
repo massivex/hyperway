@@ -8,6 +8,7 @@ namespace Mx.Hyperway.As2.Util
     using System.Linq;
 
     using MimeKit;
+    using MimeKit.Text;
 
     using Mx.Hyperway.As2.Code;
     using Mx.Hyperway.Commons.Util;
@@ -19,11 +20,6 @@ namespace Mx.Hyperway.As2.Util
 
         private static readonly String ISSUER = String.Format("Hyperway {0}", HyperwayVersion.getVersion());
 
-        // private InternetHeaders headers = new InternetHeaders();
-
-        //  private ByteArrayOutputStream textOutputStream = new ByteArrayOutputStream();
-
-        // private LineOutputStream textLineOutputStream = new LineOutputStream(textOutputStream);
         private HeaderList headers = new HeaderList();
 
         private IBaseEncoding base64 = new Base64Encoding();
@@ -89,49 +85,29 @@ namespace Mx.Hyperway.As2.Util
             this.headers.Add(name, disposition.ToString());
         }
 
-        public Multipart build()
+        public MultipartReport build()
         {
             // Initiate multipart
-            MimeMessage mimeMultipart = new MimeMessage();
-            var multipart = new Multipart("report; Report-Type=disposition-notification");
-
-            // var textPart = new MimePart("report; Report-Type=disposition-notification");
-            // mimeMultipart.setSubType("report; Report-Type=disposition-notification");
-
+            
+            var multipart = new MultipartReport("disposition-notification");
+            
             // Insert text part
-            //MimeBodyPart textPart = new MimeBodyPart();
-            //textLineOutputStream.close();
-            var textPart = new MimePart();
-            var textContent = Encoding.UTF8.GetBytes(this.sw.ToString());
-            textPart.Content = new MimeContent(textContent.ToStream());
-            textPart.Headers[HeaderId.ContentType] = "text/plain";
+            var textPart = new TextPart();
+            textPart.ContentTransferEncoding = ContentEncoding.SevenBit;
+            textPart.SetText(Encoding.ASCII, this.sw.ToString());
+            textPart.ContentTransferEncoding = ContentEncoding.SevenBit;
             multipart.Add(textPart);
 
-            // Extract headers
-            this.sw = new StringBuilder();
+            // Insert header part
+            var headerPart = new MessageDispositionNotification();
+            headerPart.ContentTransferEncoding = ContentEncoding.Default;
             foreach (var header in this.headers)
             {
-                this.sw.AppendLine(header.ToString());
+                headerPart.Fields.Add(header);
             }
-            // ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            //LineOutputStream lineOutputStream = new LineOutputStream(outputStream);
-
-            // for (String header : Collections.list((Enumeration<String>) headers.getAllHeaderLines()))
-            //     lineOutputStream.writeln(header);
-            // lineOutputStream.close();
-
-            // Insert header part
-            var headerPart = new MimePart();
-            headerPart.Headers[HeaderId.ContentType] = "message/disposition-notification";
-            var headerContent = Encoding.UTF8.GetBytes(this.sw.ToString());
-            headerPart.Content = new MimeContent(headerContent.ToStream());
+            headerPart.ContentTransferEncoding = ContentEncoding.SevenBit;
             multipart.Add(headerPart);
-
             return multipart;
-            //    MimePart mimeBodyPart = new MimePart();
-
-            //mimeBodyPart.setContent(mimeMultipart, mimeMultipart.getContentType());
-            //    return mimeBodyPart;
         }
     }
 
