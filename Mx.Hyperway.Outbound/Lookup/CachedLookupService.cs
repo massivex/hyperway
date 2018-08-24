@@ -45,12 +45,12 @@
             return this.lookup(header);
         }
 
-        public Endpoint load(HeaderStub header) // throws Exception
+        public Endpoint Load(HeaderStub header) // throws Exception
         {
             return this.lookupClient.getEndpoint(
-                header.getReceiver(),
-                header.getDocumentType(),
-                header.getProcess(),
+                header.GetReceiver(),
+                header.GetDocumentType(),
+                header.GetProcess(),
                 this.transportProfiles);
         }
 
@@ -70,17 +70,17 @@
                 this.process = header.getProcess();
             }
 
-            public ParticipantIdentifier getReceiver()
+            public ParticipantIdentifier GetReceiver()
             {
                 return this.receiver;
             }
 
-            public DocumentTypeIdentifier getDocumentType()
+            public DocumentTypeIdentifier GetDocumentType()
             {
                 return this.documentType;
             }
 
-            public ProcessIdentifier getProcess()
+            public ProcessIdentifier GetProcess()
             {
                 return this.process;
             }

@@ -31,7 +31,7 @@
         }
 
         public void persist(
-            TransmissionRequest transmissionRequest,
+            ITransmissionRequest transmissionRequest,
             TransmissionResponse transmissionResponse,
             Trace root)
         {
@@ -50,15 +50,15 @@
 
                 // If we know the CN name of the destination AP, supply that
                 // as the channel id otherwise use the protocol name
-                if (transmissionRequest.getEndpoint().getCertificate() != null)
+                if (transmissionRequest.GetEndpoint().getCertificate() != null)
                 {
                     String accessPointIdentifierValue =
-                        CertificateUtils.extractCommonName(transmissionRequest.getEndpoint().getCertificate());
+                        CertificateUtils.extractCommonName(transmissionRequest.GetEndpoint().getCertificate());
                     builder.Channel(new ChannelId(accessPointIdentifierValue));
                 }
                 else
                 {
-                    String protocolName = transmissionRequest.getEndpoint().getTransportProfile().getIdentifier();
+                    String protocolName = transmissionRequest.GetEndpoint().getTransportProfile().getIdentifier();
                     builder.Channel(new ChannelId(protocolName));
                 }
 

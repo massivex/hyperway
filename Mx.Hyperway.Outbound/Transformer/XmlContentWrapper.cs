@@ -18,16 +18,12 @@
             var m = new MemoryStream();
             try
             {
-                // ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 var xml = new XmlTextWriter(m, Encoding.UTF8);
                 xml.Formatting = Formatting.None;
-                using (var sbdWriter = SbdWriter.newInstance(m, header))
+                using (SbdWriter.newInstance(m, header))
                 {
                     XmlTools.AddXmlFragment(inputStream, xml);
-                    // XMLStreamUtils.copy(inputStream, sbdWriter.xmlWriter());
                 }
-
-
             }
             catch (Exception e)
             {

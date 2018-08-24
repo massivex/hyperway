@@ -10,27 +10,16 @@
 
     using zipkin4net;
 
-    /**
-     * Executes transmission requests by sending the payload to the requested destination.
-     * Updates statistics for the transmission using the configured RawStatisticsRepository.
-     * <p>
-     * Will log an error if the recording of statistics fails for some reason.
-     *
-     * @author steinar
-     * @author thore
-     * @author erlend
-     */
-    public class DefaultTransmitter : Transmitter
+    /// <summary>
+    /// Executes transmission requests by sending the payload to the requested destination.
+    /// Updates statistics for the transmission using the configured RawStatisticsRepository.
+    /// </summary>
+    public class DefaultTransmitter : ITransmitter
     {
-
-        /**
-         * Factory used to fetch implementation of required transport profile implementation.
-         */
+        /// <summary>Factory used to fetch implementation of required transport profile implementation.</summary>
         private readonly MessageSenderFactory messageSenderFactory;
 
-        /**
-         * Service to report statistics when transmission is successfully transmitted.
-         */
+        /// <summary>Service to report statistics when transmission is successfully transmitted.</summary>
         private readonly StatisticsService statisticsService;
 
         private readonly TransmissionVerifier transmissionVerifier;
@@ -49,14 +38,15 @@
             this.lookupService = lookupService;
         }
 
-        public TransmissionResponse transmit(TransmissionMessage transmissionMessage, Trace root)
+        /// <inheritdoc />
+        public TransmissionResponse Transmit(ITransmissionMessage transmissionMessage, Trace root)
         {
             Trace span = root.Child();
             span.Record(Annotations.ServiceName("transmit"));
             span.Record(Annotations.ClientSend());
             try
             {
-                return this.perform(transmissionMessage, span);
+                return this.Perform(transmissionMessage, span);
             }
             finally
             {
@@ -64,44 +54,41 @@
             }
         }
 
-        public TransmissionResponse transmit(TransmissionMessage transmissionMessage)
+        /// <inheritdoc />
+        public TransmissionResponse Transmit(ITransmissionMessage transmissionMessage)
         {
             Trace root = Trace.Create();
             root.Record(Annotations.ServiceName("transmit"));
             root.Record(Annotations.ClientSend());
             try
             {
-                return this.perform(transmissionMessage, root);
+                return this.Perform(transmissionMessage, root);
             }
             finally
             {
                 root.Record(Annotations.ClientRecv());
-                // root.finish();
             }
         }
 
-        private TransmissionResponse perform(TransmissionMessage transmissionMessage, Trace root)
+        private TransmissionResponse Perform(ITransmissionMessage transmissionMessage, Trace root)
         {
 
-            this.transmissionVerifier.verify(transmissionMessage.getHeader(), Direction.OUT);
+            this.transmissionVerifier.verify(transmissionMessage.GetHeader(), Direction.OUT);
 
-            TransmissionRequest transmissionRequest;
-            if (transmissionMessage is TransmissionRequest)
+            ITransmissionRequest transmissionRequest;
+            if (transmissionMessage is ITransmissionRequest)
             {
-                transmissionRequest = (TransmissionRequest)transmissionMessage;
+                transmissionRequest = (ITransmissionRequest)transmissionMessage;
             }
             else
             {
                 // Perform lookup using header.
-
-                // Span span = tracer.newChild(root.context()).name("Fetch endpoint information").start();
                 Trace lookupSpan = root.Child();
                 lookupSpan.Record(Annotations.ServiceName("Fetch endpoint information"));
                 lookupSpan.Record(Annotations.ClientSend());
-                Endpoint endpoint;
                 try
                 {
-                    endpoint = this.lookupService.lookup(transmissionMessage.getHeader(), lookupSpan);
+                    var endpoint = this.lookupService.lookup(transmissionMessage.GetHeader(), lookupSpan);
                     lookupSpan.Record(
                         Annotations.Tag("transport profile", endpoint.getTransportProfile().getIdentifier()));
                     transmissionRequest = new DefaultTransmissionRequest(transmissionMessage, endpoint);
@@ -109,12 +96,11 @@
                 catch (HyperwayTransmissionException e)
                 {
                     lookupSpan.Record(Annotations.Tag("exception", e.Message));
-                    throw e;
+                    throw;
                 }
                 finally
                 {
                     lookupSpan.Record(Annotations.ClientRecv());
-                    // span.finish();
                 }
             }
 
@@ -126,20 +112,18 @@
             TransmissionResponse transmissionResponse;
             try
             {
-                TransportProfile transportProfile = transmissionRequest.getEndpoint().getTransportProfile();
-                MessageSender messageSender = this.messageSenderFactory.getMessageSender(transportProfile);
+                TransportProfile transportProfile = transmissionRequest.GetEndpoint().getTransportProfile();
+                MessageSender messageSender = this.messageSenderFactory.GetMessageSender(transportProfile);
                 transmissionResponse = messageSender.send(transmissionRequest, span);
             }
             catch (HyperwayTransmissionException e)
             {
                 span.Record(Annotations.Tag("exception", e.Message));
-                // span.tag("exception", e.getMessage());
-                throw e;
+                throw;
             }
             finally
             {
                 span.Record(Annotations.ClientRecv());
-                // span.finish();
             }
 
             this.statisticsService.persist(transmissionRequest, transmissionResponse, root);

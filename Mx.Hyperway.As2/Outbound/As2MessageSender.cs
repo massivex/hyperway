@@ -46,7 +46,7 @@
          */
         private readonly String fromIdentifier;
 
-        private TransmissionRequest transmissionRequest;
+        private ITransmissionRequest transmissionRequest;
 
         private TransmissionIdentifier transmissionIdentifier;
 
@@ -71,12 +71,12 @@
             this.fromIdentifier = CertificateUtils.extractCommonName(certificate);
         }
 
-        public TransmissionResponse send(TransmissionRequest transmissionRequest)
+        public TransmissionResponse send(ITransmissionRequest transmissionRequest)
         {
             return this.send(transmissionRequest, this.root);
         }
 
-        public TransmissionResponse send(TransmissionRequest transmissionRequest, Trace root)
+        public TransmissionResponse send(ITransmissionRequest transmissionRequest, Trace root)
         {
             this.transmissionRequest = transmissionRequest;
 
@@ -109,19 +109,19 @@
 
                 // Create the body part of the MIME message containing our content to be transmitted.
                 MimeEntity mimeBodyPart = MimeMessageHelper.createMimeBodyPart(
-                    this.transmissionRequest.getPayload(),
+                    this.transmissionRequest.GetPayload(),
                     "application/xml");
 
                 // Digest method to use.
                 SMimeDigestMethod digestMethod =
                     SMimeDigestMethod.findByTransportProfile(
-                        this.transmissionRequest.getEndpoint().getTransportProfile());
-                var dataTemp = this.transmissionRequest.getPayload().ToBuffer();
+                        this.transmissionRequest.GetEndpoint().getTransportProfile());
+                var dataTemp = this.transmissionRequest.GetPayload().ToBuffer();
                 
                 this.outboundMic = MimeMessageHelper.calculateMic(mimeBodyPart, digestMethod);
                 span.Record(Annotations.Tag("mic", this.outboundMic.ToString()));
                 span.Record(
-                    Annotations.Tag("endpoint url", this.transmissionRequest.getEndpoint().getAddress().ToString()));
+                    Annotations.Tag("endpoint url", this.transmissionRequest.GetEndpoint().getAddress().ToString()));
 
                 // Create a complete S/MIME message using the body part containing our content as the
                 // signed part of the S/MIME message.
@@ -129,7 +129,7 @@
                 
 
                 // Initiate POST request
-                httpPost = new HttpPost(this.transmissionRequest.getEndpoint().getAddress());
+                httpPost = new HttpPost(this.transmissionRequest.GetEndpoint().getAddress());
 
                 List<String> headerNames = signedMimeMessage.Headers
                     // Tag for tracing.
@@ -158,7 +158,7 @@
                 httpPost.Headers.Add(As2Header.AS2_FROM, this.fromIdentifier);
                 httpPost.Headers.Add(
                     As2Header.AS2_TO,
-                    CertificateUtils.extractCommonName(this.transmissionRequest.getEndpoint().getCertificate()));
+                    CertificateUtils.extractCommonName(this.transmissionRequest.GetEndpoint().getCertificate()));
                 httpPost.Headers.Add(As2Header.DISPOSITION_NOTIFICATION_TO, "not.in.use@difi.no");
                 httpPost.Headers.Add(
                     As2Header.DISPOSITION_NOTIFICATION_OPTIONS,
@@ -196,7 +196,7 @@
             catch (Exception e)
             {
                 span.Record(Annotations.Tag("exception", e.Message));
-                throw new HyperwayTransmissionException(this.transmissionRequest.getEndpoint().getAddress(), e);
+                throw new HyperwayTransmissionException(this.transmissionRequest.GetEndpoint().getAddress(), e);
             }
             finally
             {
@@ -223,7 +223,7 @@
                     LOGGER.ErrorFormat(
                         "AS2 HTTP POST expected HTTP OK, but got : {0} from {1}",
                         response.StatusCode,
-                        this.transmissionRequest.getEndpoint().getAddress());
+                        this.transmissionRequest.GetEndpoint().getAddress());
 
                     // Throws exception
                     this.handleFailedRequest(response);
@@ -232,7 +232,7 @@
                 // handle normal HTTP OK response
                 LOGGER.DebugFormat(
                     "AS2 transmission to {0} returned HTTP OK, verify MDN response",
-                    this.transmissionRequest.getEndpoint().getAddress());
+                    this.transmissionRequest.GetEndpoint().getAddress());
 
                 string contentTypeHeader = response.Headers["Content-Type"];
                 if (string.IsNullOrWhiteSpace(contentTypeHeader))
@@ -294,13 +294,13 @@
 
                 // Verify if the certificate used by the receiving Access Point in
                 // the response message does not match its certificate published by the SMP
-                if (!this.transmissionRequest.getEndpoint().getCertificate().Equals(certificate))
+                if (!this.transmissionRequest.GetEndpoint().getCertificate().Equals(certificate))
                 {
                     throw new HyperwayTransmissionException(
                         String.Format(
                             "Certificate in MDN ('{0}') does not match certificate from SMP ('{1}').",
                             certificate.SubjectDN.ToString(), // .getSubjectX500Principal().getName(),
-                            this.transmissionRequest.getEndpoint().getCertificate()
+                            this.transmissionRequest.GetEndpoint().getCertificate()
                                 .SubjectDN)); // .getSubjectX500Principal().getName()));
                 }
 

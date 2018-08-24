@@ -2,9 +2,9 @@
 {
     using Mx.Peppol.Common.Model;
 
-    public interface TransmissionRequest : TransmissionMessage
+    public interface ITransmissionRequest : ITransmissionMessage
     {
-        Endpoint getEndpoint();
+        Endpoint GetEndpoint();
     }
 
 }

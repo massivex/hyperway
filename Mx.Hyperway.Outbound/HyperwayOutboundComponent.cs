@@ -16,44 +16,41 @@
             this.context = context;
         }
 
-        /**
-         * Retrieves instances of TransmissionRequestBuilder, while not exposing Google Guice to the outside
-         */
-        public TransmissionRequestBuilder getTransmissionRequestBuilder()
+        /// <summary>
+        /// Retrieves instances of TransmissionRequestBuilder, while not exposing Google Guice to the outside
+        /// </summary>
+        public TransmissionRequestBuilder GetTransmissionRequestBuilder()
         {
             return this.context.Resolve<TransmissionRequestBuilder>();
         }
 
-        public TransmissionRequestFactory getTransmissionRequestFactory()
+        public TransmissionRequestFactory GetTransmissionRequestFactory()
         {
             return this.context.Resolve<TransmissionRequestFactory>();
         }
 
-        /**
-         * Retrieves instance of LookupService, without revealing intern object dependency injection.
-         */
-        public LookupService getLookupService()
+        /// <summary>
+        /// Retrieves instance of LookupService, without revealing intern object dependency injection.
+        /// </summary>
+        public LookupService GetLookupService()
         {
-            // return injector.getInstance(LookupService.class);
             return this.context.Resolve<LookupService>();
         }
 
-        /**
-         * Retrieves instance of DefaultTransmitter, without revealing intern object dependency injection.
-         */
-        public Transmitter getTransmitter()
+        /// <summary>
+        /// Retrieves instance of DefaultTransmitter, without revealing intern object dependency injection.
+        /// </summary>
+        public ITransmitter GetTransmitter()
         {
-            return this.context.Resolve<Transmitter>();
-            // return context.getInstance(Transmitter.class);
+            return this.context.Resolve<ITransmitter>();
         }
 
-        public EvidenceFactory getEvidenceFactory()
+        public EvidenceFactory GetEvidenceFactory()
         {
             return this.context.Resolve<EvidenceFactory>();
-            // return injector.getInstance(EvidenceFactory.class);
         }
 
-        public TransmissionService getTransmissionService()
+        public TransmissionService GetTransmissionService()
         {
             return this.context.Resolve<TransmissionService>();
         }

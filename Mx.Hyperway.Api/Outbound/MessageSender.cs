@@ -8,11 +8,11 @@
         /**
          * Protocol specific transmission of transmission requested. (Without tracing.)
          */
-        TransmissionResponse send(TransmissionRequest transmissionRequest);
+        TransmissionResponse send(ITransmissionRequest transmissionRequest);
 
         /**
         * Protocol specific transmission of transmission requested. (With tracing.)
         */
-        TransmissionResponse send(TransmissionRequest transmissionRequest, Trace root);
+        TransmissionResponse send(ITransmissionRequest transmissionRequest, Trace root);
     }
 }

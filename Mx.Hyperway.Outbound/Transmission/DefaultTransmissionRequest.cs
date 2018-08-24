@@ -5,25 +5,21 @@
     using Mx.Hyperway.Api.Outbound;
     using Mx.Peppol.Common.Model;
 
-    /**
-     * Describes a request to transmit a payload (PEPPOL Document) to a designated end-point.
-     * Instances of this class are to be deemed as value objects, as they are immutable.
-     *
-     */
-    public class DefaultTransmissionRequest : TransmissionRequest
+    /// <summary>
+    /// Describes a request to transmit a payload (PEPPOL Document) to a designated end-point.
+    /// Instances of this class are to be deemed as value objects, as they are immutable.
+    /// </summary>
+    public class DefaultTransmissionRequest : ITransmissionRequest
     {
-
-        private static readonly long serialVersionUID = -4542158917465140099L;
-
         private readonly Endpoint endpoint;
 
         private readonly Header header;
 
         private readonly Stream payload;
-
-        /**
-         * Module private constructor grabbing the constructor data from the supplied builder.
-         */
+        
+        /// <summary>
+        /// Module private constructor grabbing the constructor data from the supplied builder.
+        /// </summary>
         public DefaultTransmissionRequest(Header header, Stream inputStream, Endpoint endpoint)
         {
             this.endpoint = endpoint;
@@ -31,27 +27,27 @@
             this.payload = inputStream;
         }
 
-        public DefaultTransmissionRequest(TransmissionMessage transmissionMessage, Endpoint endpoint)
+        public DefaultTransmissionRequest(ITransmissionMessage transmissionMessage, Endpoint endpoint)
         {
             this.endpoint = endpoint;
-            this.header = transmissionMessage.getHeader();
-            this.payload = transmissionMessage.getPayload();
+            this.header = transmissionMessage.GetHeader();
+            this.payload = transmissionMessage.GetPayload();
         }
 
 
-        public Endpoint getEndpoint()
+        public Endpoint GetEndpoint()
         {
             return this.endpoint;
         }
 
 
-        public Header getHeader()
+        public Header GetHeader()
         {
             return this.header;
         }
 
 
-        public Stream getPayload()
+        public Stream GetPayload()
         {
             return this.payload;
         }

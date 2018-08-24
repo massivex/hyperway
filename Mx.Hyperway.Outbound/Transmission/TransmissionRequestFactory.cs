@@ -28,32 +28,29 @@
             this.contentWrapper = contentWrapper;
         }
 
-        public TransmissionMessage newInstance(Stream inputStream)
+        public ITransmissionMessage NewInstance(Stream inputStream)
         {
             Trace trace = Trace.Create();
             trace.Record(Annotations.ServiceName(this.GetType().Name));
             trace.Record(Annotations.ClientSend());
-            // Span root = tracer.newTrace().name(getClass().getSimpleName()).start();
             try
             {
-                return this.perform(inputStream, trace);
+                return this.Perform(inputStream, trace);
             }
             finally
             {
                 trace.Record(Annotations.ClientRecv());
-                //root.finish();
             }
         }
 
-        public TransmissionMessage newInstance(Stream inputStream, Trace root) 
+        public ITransmissionMessage NewInstance(Stream inputStream, Trace root) 
         {
             var trace = root.Child();
             trace.Record(Annotations.ServiceName(this.GetType().Name));
             trace.Record(Annotations.ClientSend());
-            // Span span = tracer.newChild(root.context()).name(getClass().getSimpleName()).start();
             try
             {
-                return this.perform(inputStream, root);
+                return this.Perform(inputStream, root);
             }
             finally
             {
@@ -61,7 +58,7 @@
             }
         }
 
-        private TransmissionMessage perform(Stream inputStream, Trace root)
+        private ITransmissionMessage Perform(Stream inputStream, Trace root)
         {
             PeekingInputStream peekingInputStream = new PeekingInputStream(inputStream);
 
@@ -81,7 +78,7 @@
                     }
                 } catch (SbdhException e) {
                     span.Record(Annotations.Tag("exception", e.Message));
-                    throw e;
+                    throw;
                 } finally {
                     span.Record(Annotations.ClientRecv());
                 }
@@ -89,7 +86,7 @@
                 // Create transmission request.
                 return new DefaultTransmissionMessage(header, peekingInputStream.newInputStream());
             }
-            catch (SbdhException e)
+            catch (SbdhException)
             {
                 byte[] payload = peekingInputStream.getContent();
 

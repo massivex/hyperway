@@ -13,11 +13,11 @@
 
         private readonly TransmissionRequestFactory transmissionRequestFactory;
 
-        private readonly Transmitter transmitter;
+        private readonly ITransmitter transmitter;
 
         public DefaultTransmissionService(
             TransmissionRequestFactory transmissionRequestFactory,
-            Transmitter transmitter,
+            ITransmitter transmitter,
             Trace tracer)
             : base(tracer)
         {
@@ -42,7 +42,7 @@
 
         public TransmissionResponse send(Stream inputStream, Trace trace)
         {
-            return this.transmitter.transmit(this.transmissionRequestFactory.newInstance(inputStream, trace), trace);
+            return this.transmitter.Transmit(this.transmissionRequestFactory.NewInstance(inputStream, trace), trace);
         }
     }
 

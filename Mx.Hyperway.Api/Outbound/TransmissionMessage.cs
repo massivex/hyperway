@@ -4,11 +4,11 @@
 
     using Mx.Peppol.Common.Model;
 
-    public interface TransmissionMessage
+    public interface ITransmissionMessage
     {
 
-        Header getHeader();
+        Header GetHeader();
 
-        Stream getPayload();
+        Stream GetPayload();
     }
 }

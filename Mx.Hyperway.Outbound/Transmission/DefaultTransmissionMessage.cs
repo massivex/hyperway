@@ -5,31 +5,29 @@
     using Mx.Hyperway.Api.Outbound;
     using Mx.Peppol.Common.Model;
 
-    public class DefaultTransmissionMessage : TransmissionMessage {
-
-    private static readonly long serialVersionUID = -2292244133544793106L;
-
-    private readonly Header header;
-
-    private readonly Stream payload;
-
-    public DefaultTransmissionMessage(Header header, Stream payload)
+    public class DefaultTransmissionMessage : ITransmissionMessage
     {
-        this.header = header;
-        this.payload = payload;
-    }
 
-    
-    public Header getHeader()
-    {
-        return this.header;
-    }
+        private readonly Header header;
+
+        private readonly Stream payload;
+
+        public DefaultTransmissionMessage(Header header, Stream payload)
+        {
+            this.header = header;
+            this.payload = payload;
+        }
 
 
-    public Stream getPayload()
-    {
-        return this.payload;
-    }
-    }
+        public Header GetHeader()
+        {
+            return this.header;
+        }
 
+
+        public Stream GetPayload()
+        {
+            return this.payload;
+        }
+    }
 }

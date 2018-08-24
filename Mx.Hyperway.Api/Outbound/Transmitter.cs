@@ -2,17 +2,16 @@
 {
     using zipkin4net;
 
-    public interface Transmitter
+    public interface ITransmitter
     {
+        /// <summary>
+        /// Transmit content of transmission request. (No tracing.)
+        /// </summary>
+        TransmissionResponse Transmit(ITransmissionMessage transmissionMessage);
 
-        /**
-         * Transmit content of transmission request. (No tracing.)
-         */
-        TransmissionResponse transmit(TransmissionMessage transmissionMessage);
-
-        /**
-        * Transmit content of transmission request. (With tracing.)
-        */
-        TransmissionResponse transmit(TransmissionMessage transmissionMessage, Trace root);
+        /// <summary>
+        /// Transmit content of transmission request. (With tracing.)
+        /// </summary>
+        TransmissionResponse Transmit(ITransmissionMessage transmissionMessage, Trace root);
     }
 }

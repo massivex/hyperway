@@ -19,9 +19,7 @@
 
     public class TransmissionRequestBuilder
     {
-
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(TransmissionRequestBuilder));
-        // private static final Logger log = LoggerFactory.getLogger(TransmissionRequestBuilder.class);
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(TransmissionRequestBuilder));
 
         private readonly ContentDetector contentDetector;
 
@@ -29,25 +27,25 @@
 
         private bool allowOverride;
 
-        /**
-         * Will contain the payload PEPPOL document
-         */
+        /// <summary>
+        /// Will contain the payload PEPPOL document
+        /// </summary>
         private byte[] payload;
 
-        /**
-         * The address of the endpoint either supplied by the caller or looked up in the SMP
-         */
+        /// <summary>
+        /// The address of the endpoint either supplied by the caller or looked up in the SMP
+        /// </summary>
         private Endpoint endpoint;
 
-        /**
-         * The header fields supplied by the caller as opposed to the header fields parsed from the payload
-         */
+        /// <summary>
+        /// The header fields supplied by the caller as opposed to the header fields parsed from the payload
+        /// </summary>
         private PeppolStandardBusinessHeader suppliedHeaderFields = new PeppolStandardBusinessHeader();
 
-        /**
-         * The header fields in effect, i.e. merge the parsed header fields with the supplied ones,
-         * giving precedence to the supplied ones.
-         */
+        /// <summary>
+        /// The header fields in effect, i.e. merge the parsed header fields with the supplied ones,
+        /// giving precedence to the supplied ones.
+        /// </summary>
         private PeppolStandardBusinessHeader effectiveStandardBusinessHeader;
 
         public TransmissionRequestBuilder(ContentDetector contentDetector, LookupService lookupService)
@@ -56,70 +54,70 @@
             this.lookupService = lookupService;
         }
 
-        public void reset()
+        public void Reset()
         {
             this.suppliedHeaderFields = new PeppolStandardBusinessHeader();
             this.effectiveStandardBusinessHeader = null;
         }
 
-        /**
-         * Supplies the  builder with the contents of the message to be sent.
-         */
-        public TransmissionRequestBuilder payLoad(Stream inputStream)
+        /// <summary>
+        /// Supplies the  builder with the contents of the message to be sent.
+        /// </summary>
+        public TransmissionRequestBuilder PayLoad(Stream inputStream)
         {
-            this.savePayLoad(inputStream);
+            this.SavePayLoad(inputStream);
             return this;
         }
 
-        /**
-         * Overrides the endpoint URL and the AS2 System identifier for the AS2 protocol.
-         * You had better know what you are doing :-)
-         */
-        public TransmissionRequestBuilder overrideAs2Endpoint(Endpoint endpoint)
+        /// <summary>
+        /// Overrides the endpoint URL and the AS2 System identifier for the AS2 protocol.
+        /// You had better know what you are doing :-)
+        /// </summary>
+
+        public TransmissionRequestBuilder OverrideAs2Endpoint(Endpoint newEndpoint)
         {
-            this.endpoint = endpoint;
+            this.endpoint = newEndpoint;
             return this;
         }
 
-        public TransmissionRequestBuilder receiver(ParticipantIdentifier receiverId)
+        public TransmissionRequestBuilder Receiver(ParticipantIdentifier receiverId)
         {
             this.suppliedHeaderFields.setRecipientId(receiverId);
             return this;
         }
 
-        public TransmissionRequestBuilder sender(ParticipantIdentifier senderId)
+        public TransmissionRequestBuilder Sender(ParticipantIdentifier senderId)
         {
             this.suppliedHeaderFields.setSenderId(senderId);
             return this;
         }
 
-        public TransmissionRequestBuilder documentType(DocumentTypeIdentifier documentTypeIdentifier)
+        public TransmissionRequestBuilder DocumentType(DocumentTypeIdentifier documentTypeIdentifier)
         {
             this.suppliedHeaderFields.setDocumentTypeIdentifier(documentTypeIdentifier);
             return this;
         }
 
-        public TransmissionRequestBuilder processType(ProcessIdentifier processTypeId)
+        public TransmissionRequestBuilder ProcessType(ProcessIdentifier processTypeId)
         {
             this.suppliedHeaderFields.setProfileTypeIdentifier(processTypeId);
             return this;
         }
 
-        public TransmissionRequestBuilder instanceId(InstanceId instanceId)
+        public TransmissionRequestBuilder InstanceId(InstanceId instanceId)
         {
             this.suppliedHeaderFields.setInstanceId(instanceId);
             return this;
         }
 
-        public TransmissionRequest build(Trace root)
+        public ITransmissionRequest Build(Trace root)
         {
             Trace span = root.Child();
             span.Record(Annotations.ServiceName("build"));
             span.Record(Annotations.ClientSend());
-            //Span span = tracer.newChild(root.context()).name("build").start();
             try
             {
-                return this.build();
+                return this.Build();
             }
             finally
             {
@@ -127,21 +125,18 @@
             }
         }
 
-        /**
-         * Builds the actual {@link TransmissionRequest}.
-         * <p>
-         * The  {@link PeppolStandardBusinessHeader} is built as following:
-         *
-         * <ol>
-         * <li>If the payload contains an SBHD, allow override if global "overrideAllowed" flag is set,
-         * otherwise use the one parsed</li>
-         * <li>If the payload does not contain an SBDH, parse payload to determine some of the SBDH attributes
-         * and allow override if global "overrideAllowed" flag is set.</li>
-         * </ol>
-         *
-         * @return Prepared transmission request.
-         */
-        public TransmissionRequest build()
+        /// <summary>
+        /// Builds the actual <see cref="ITransmissionRequest"/>.
+        ///
+        /// The <see cref="PeppolStandardBusinessHeader"/> is build as following
+        ///
+        /// <ol>
+        /// <li>If the payload contains an SBHD, allow override if global "overrideAllowed" flag is set, otherwise use the one parsed</li>
+        /// <li>If the payload does not contain an SBDH, parse payload to determine some of the SBDH attributes and allow override if global "overrideAllowed" flag is set.</li>
+        /// </ol>
+        /// </summary>
+        /// <returns>Prepared transmission request</returns>
+        public ITransmissionRequest Build()
         {
             if (this.payload.Length < 2)
                 throw new HyperwayTransmissionException("You have forgotten to provide payload");
@@ -151,62 +146,61 @@
             {
                 optionalParsedSbdh = new PeppolStandardBusinessHeader(SbdhParser.parse(this.payload.ToStream()));
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 // No action.
             }
 
             // Calculates the effectiveStandardBusinessHeader to be used
-            this.effectiveStandardBusinessHeader = this.makeEffectiveSbdh(optionalParsedSbdh, this.suppliedHeaderFields);
+            this.effectiveStandardBusinessHeader = this.MakeEffectiveSbdh(optionalParsedSbdh, this.suppliedHeaderFields);
 
             // If the endpoint has not been overridden by the caller, look up the endpoint address in
             // the SMP using the data supplied in the payload
-            if (this.isEndpointSuppliedByCaller() && this.isOverrideAllowed())
+            if (this.IsEndpointSuppliedByCaller() && this.IsOverrideAllowed())
             {
-                log.Warn("Endpoint was set by caller not retrieved from SMP, make sure this is intended behaviour.");
+                Log.Warn("Endpoint was set by caller not retrieved from SMP, make sure this is intended behaviour.");
             }
             else
             {
-                Endpoint endpoint = this.lookupService.lookup(this.effectiveStandardBusinessHeader.toVefa(), null);
+                Endpoint endpointLookedup = this.lookupService.lookup(this.effectiveStandardBusinessHeader.toVefa(), null);
 
-                if (this.isEndpointSuppliedByCaller() && !this.endpoint.Equals(endpoint))
+                if (this.IsEndpointSuppliedByCaller() && !this.endpoint.Equals(endpointLookedup))
                 {
                     throw new InvalidOperationException("You are not allowed to override the EndpointAddress from SMP.");
                 }
 
-                this.endpoint = endpoint;
+                this.endpoint = endpointLookedup;
             }
 
             // make sure payload is encapsulated in SBDH
             if (optionalParsedSbdh == null)
             {
                 // Wraps the payload with an SBDH, as this is required for AS2
-                this.payload = this.wrapPayLoadWithSBDH(this.payload.ToStream(), this.effectiveStandardBusinessHeader);
+                this.payload = this.WrapPayLoadWithSbdh(this.payload.ToStream(), this.effectiveStandardBusinessHeader);
             }
 
             // Transfers all the properties of this object into the newly created TransmissionRequest
             return new DefaultTransmissionRequest(
-                this.getEffectiveStandardBusinessHeader().toVefa(),
-                this.getPayload(),
-                this.getEndpoint());
+                this.GetEffectiveStandardBusinessHeader().toVefa(),
+                this.GetPayload(),
+                this.GetEndpoint());
         }
 
-        /**
-         * Merges the SBDH parsed from the payload with the SBDH data supplied by the caller, i.e. the caller wishes to
-         * override the contents of the SBDH parsed. That is, if the payload contains an SBDH
-         *
-         * @param optionalParsedSbdh         the SBDH as parsed (extracted) from the payload.
-         * @param peppolSbdhSuppliedByCaller the SBDH data supplied by the caller in order to override data from the payload
-         * @return the merged, effective SBDH created by combining the two data sets
-         */
-        PeppolStandardBusinessHeader makeEffectiveSbdh(
+        /// <summary>
+        /// Merges the SBDH parsed from the payload with the SBDH data supplied by the caller, i.e. the caller wishes to
+        /// override the contents of the SBDH parsed. That is, if the payload contains an SBDH
+        /// </summary>
+        /// <param name="optionalParsedSbdh">the SBDH as parsed (extracted) from the payload.</param>
+        /// <param name="peppolSbdhSuppliedByCaller">the SBDH data supplied by the caller in order to override data from the payload</param>
+        /// <returns>the merged, effective SBDH created by combining the two data sets</returns>
+        private PeppolStandardBusinessHeader MakeEffectiveSbdh(
             PeppolStandardBusinessHeader optionalParsedSbdh,
             PeppolStandardBusinessHeader peppolSbdhSuppliedByCaller)
 
         {
             PeppolStandardBusinessHeader effectiveSbdh;
 
-            if (this.isOverrideAllowed())
+            if (this.IsOverrideAllowed())
             {
                 if (peppolSbdhSuppliedByCaller.isComplete())
                 {
@@ -216,20 +210,20 @@
                 else
                 {
                     // missing meta data, parse payload, which does not contain SBHD, in order to deduce missing fields
-                    PeppolStandardBusinessHeader parsedPeppolStandardBusinessHeader = this.parsePayLoadAndDeduceSbdh(optionalParsedSbdh);
-                    effectiveSbdh = this.createEffectiveHeader(parsedPeppolStandardBusinessHeader, peppolSbdhSuppliedByCaller);
+                    PeppolStandardBusinessHeader parsedPeppolStandardBusinessHeader = this.ParsePayLoadAndDeduceSbdh(optionalParsedSbdh);
+                    effectiveSbdh = this.CreateEffectiveHeader(parsedPeppolStandardBusinessHeader, peppolSbdhSuppliedByCaller);
                 }
             }
             else
             {
                 // override is not allowed, make sure we do not override any restricted headers
-                PeppolStandardBusinessHeader parsedPeppolStandardBusinessHeader = this.parsePayLoadAndDeduceSbdh(optionalParsedSbdh);
-                List<String> overriddenHeaders = this.findRestricedHeadersThatWillBeOverridden(
+                PeppolStandardBusinessHeader parsedPeppolStandardBusinessHeader = this.ParsePayLoadAndDeduceSbdh(optionalParsedSbdh);
+                List<String> overriddenHeaders = this.FindRestricedHeadersThatWillBeOverridden(
                     parsedPeppolStandardBusinessHeader,
                     peppolSbdhSuppliedByCaller);
                 if (overriddenHeaders.Count == 0)
                 {
-                    effectiveSbdh = this.createEffectiveHeader(
+                    effectiveSbdh = this.CreateEffectiveHeader(
                         parsedPeppolStandardBusinessHeader,
                         peppolSbdhSuppliedByCaller);
                 }
@@ -252,7 +246,7 @@
         }
 
 
-        private PeppolStandardBusinessHeader parsePayLoadAndDeduceSbdh(
+        private PeppolStandardBusinessHeader ParsePayLoadAndDeduceSbdh(
             PeppolStandardBusinessHeader optionallyParsedSbdh)
         {
             if (optionallyParsedSbdh != null)
@@ -263,15 +257,14 @@
             return new PeppolStandardBusinessHeader(this.contentDetector.parse(this.payload.ToStream()));
         }
 
-        /**
-         * Merges the supplied header fields with the SBDH parsed or derived from the payload thus allowing the caller
-         * to explicitly override whatever has been supplied in the payload.
-         *
-         * @param parsed   the PeppolStandardBusinessHeader parsed from the payload
-         * @param supplied the header fields supplied by the caller
-         * @return the merged and effective headers
-         */
-        protected PeppolStandardBusinessHeader createEffectiveHeader(PeppolStandardBusinessHeader parsed, PeppolStandardBusinessHeader supplied)
+        /// <summary>
+        /// Merges the supplied header fields with the SBDH parsed or derived from the payload thus allowing the caller
+        /// to explicitly override whatever has been supplied in the payload.
+        /// </summary>
+        /// <param name="parsed">the PeppolStandardBusinessHeader parsed from the payload</param>
+        /// <param name="supplied">the header fields supplied by the caller</param>
+        /// <returns>the merged and effective headers</returns>
+        protected PeppolStandardBusinessHeader CreateEffectiveHeader(PeppolStandardBusinessHeader parsed, PeppolStandardBusinessHeader supplied)
         {
 
             // Creates a copy of the original business headers
@@ -316,13 +309,13 @@
 
         }
 
-        /**
-         * Returns a list of "restricted" header names that will be overridden when calling #createEffectiveHeader
-         * The restricted header names are SenderId, RecipientId, DocumentTypeIdentifier and ProfileTypeIdentifier
-         * Compares values that exist both as parsed and supplied headers.
-         * Ignores values that only exists in one of them (that allows for sending new and unknown document types)
-         */
-        protected List<String> findRestricedHeadersThatWillBeOverridden(
+        /// <summary>
+        /// Returns a list of "restricted" header names that will be overridden when calling #createEffectiveHeader
+        /// The restricted header names are SenderId, RecipientId, DocumentTypeIdentifier and ProfileTypeIdentifier
+        /// Compares values that exist both as parsed and supplied headers.
+        /// Ignores values that only exists in one of them (that allows for sending new and unknown document types)
+        /// </summary>
+        protected List<String> FindRestricedHeadersThatWillBeOverridden(
             PeppolStandardBusinessHeader parsed,
             PeppolStandardBusinessHeader supplied)
         {
@@ -357,12 +350,12 @@
             return headers;
         }
 
-        protected PeppolStandardBusinessHeader getEffectiveStandardBusinessHeader()
+        protected PeppolStandardBusinessHeader GetEffectiveStandardBusinessHeader()
         {
             return this.effectiveStandardBusinessHeader;
         }
 
-        protected void savePayLoad(Stream inputStream)
+        protected void SavePayLoad(Stream inputStream)
         {
             try
             {
@@ -374,38 +367,38 @@
             }
         }
 
-        protected Stream getPayload()
+        protected Stream GetPayload()
         {
             return this.payload.ToStream();
         }
 
-        public Endpoint getEndpoint()
+        public Endpoint GetEndpoint()
         {
             return this.endpoint;
         }
 
-        public bool isOverrideAllowed()
+        public bool IsOverrideAllowed()
         {
             return this.allowOverride;
         }
 
-        private bool isEndpointSuppliedByCaller()
+        private bool IsEndpointSuppliedByCaller()
         {
             return this.endpoint != null;
         }
 
-        private byte[] wrapPayLoadWithSBDH(
+        private byte[] WrapPayLoadWithSbdh(
             Stream byteArrayInputStream,
-            PeppolStandardBusinessHeader effectiveStandardBusinessHeader)
+            PeppolStandardBusinessHeader effectivesbh)
         {
             SbdhWrapper sbdhWrapper = new SbdhWrapper();
-            return sbdhWrapper.wrap(byteArrayInputStream, effectiveStandardBusinessHeader.toVefa());
+            return sbdhWrapper.wrap(byteArrayInputStream, effectivesbh.toVefa());
         }
 
-        /**
-         * For testing purposes only
-         */
-        public void setTransmissionBuilderOverride(bool transmissionBuilderOverride)
+        /// <summary>
+        /// For testing purposes only
+        /// </summary>
+        public void SetTransmissionBuilderOverride(bool transmissionBuilderOverride)
         {
             this.allowOverride = transmissionBuilderOverride;
         }

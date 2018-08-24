@@ -22,7 +22,7 @@
         /**
          * Original transmission request is kept to allow easy access to immutable objects part of the request.
          */
-        private readonly TransmissionRequest transmissionRequest;
+        private readonly ITransmissionRequest transmissionRequest;
 
         private readonly TransmissionIdentifier transmissionIdentifier;
 
@@ -36,7 +36,7 @@
 
         public As2TransmissionResponse(
             TransmissionIdentifier transmissionIdentifier,
-            TransmissionRequest transmissionRequest,
+            ITransmissionRequest transmissionRequest,
             Digest digest,
             byte[] nativeEvidenceBytes,
             Timestamp timestamp,
@@ -61,7 +61,7 @@
 
         public Header getHeader()
         {
-            return this.transmissionRequest.getHeader();
+            return this.transmissionRequest.GetHeader();
         }
 
         public TransmissionIdentifier getTransmissionIdentifier()
@@ -87,7 +87,7 @@
 
         public Endpoint getEndpoint()
         {
-            return this.transmissionRequest.getEndpoint();
+            return this.transmissionRequest.GetEndpoint();
         }
 
 

@@ -9,7 +9,7 @@
     public class NoopStatisticsService : StatisticsService
     {
 
-    public void persist(TransmissionRequest transmissionRequest,
+    public void persist(ITransmissionRequest transmissionRequest,
                         TransmissionResponse transmissionResponse, Trace root)
     {
         // No action.

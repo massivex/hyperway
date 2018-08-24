@@ -8,7 +8,7 @@
     public interface StatisticsService
     {
 
-        void persist(TransmissionRequest transmissionRequest, TransmissionResponse transmissionResponse, Trace root);
+        void persist(ITransmissionRequest transmissionRequest, TransmissionResponse transmissionResponse, Trace root);
 
         void persist(InboundMetadata inboundMetadata);
     }
