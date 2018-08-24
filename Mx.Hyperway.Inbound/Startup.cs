@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     using Mx.Hyperway.Api.Persist;
     using Mx.Hyperway.Api.Statistics;
@@ -21,6 +22,11 @@
     using Mx.Peppol.Mode;
     using Mx.Peppol.Security.Api;
     using Mx.Peppol.Security.Util;
+
+    using zipkin4net;
+    using zipkin4net.Middleware;
+    using zipkin4net.Tracers.Zipkin;
+    using zipkin4net.Transport.Http;
 
     public class Startup
     {
@@ -53,7 +59,7 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +67,24 @@
             }
 
             app.UseMvc();
+            var appName = this.Configuration["applicationName"];
+            var zipkinUrl = this.Configuration["zipkinUrl"];
+            if (!string.IsNullOrWhiteSpace(zipkinUrl))
+            {
+                var lifetime = app.ApplicationServices.GetService<IApplicationLifetime>();
+                lifetime.ApplicationStarted.Register(
+                    () =>
+                        {
+                            TraceManager.SamplingRate = 1.0f;
+                            var logger = new TracingLogger(loggerFactory, "zipkin4net");
+                            var httpSender = new HttpZipkinSender("http://localhost:9411", "application/json");
+                            var tracer = new ZipkinTracer(httpSender, new JSONSpanSerializer());
+                            TraceManager.RegisterTracer(tracer);
+                            TraceManager.Start(logger);
+                        });
+                lifetime.ApplicationStopped.Register(() => TraceManager.Stop());
+                app.UseTracing(appName);
+            }
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Linq;
     using System.Net;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -28,7 +27,7 @@
     [Route("api/as2")]
     public class As2Controller
     {
-        public static readonly ILog LOGGER = LogManager.GetLogger(typeof(As2Controller));
+        public static readonly ILog Logger = LogManager.GetLogger(typeof(As2Controller));
 
         private readonly Func<As2InboundHandler> inboundHandlerProvider;
 
@@ -78,7 +77,7 @@
             root.Record(Annotations.ServerRecv());
             root.Record(Annotations.Tag("message-id", messageId));
 
-            LOGGER.Debug("Receiving HTTP POST request");
+            Logger.Debug("Receiving HTTP POST request");
             try
             {
                 // Read MIME message
@@ -99,14 +98,14 @@
                     span.Record(Annotations.ServiceName("mdn"));
                     span.Record(Annotations.ServerRecv());
 
-                    this.writeMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.OK);
+                    this.WriteMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.OK);
                     span.Record(Annotations.ServerSend());
 
                 }
                 catch (HyperwayAs2InboundException e)
                 {
                     String identifier = Guid.NewGuid().ToString();
-                    LOGGER.ErrorFormat("Error [{0}] {1}", identifier, e);
+                    Logger.ErrorFormat("Error [{0}] {1}", identifier, e);
 
                     // Open message for reading
                     SMimeReader sMimeReader = new SMimeReader(mimeMessage);
@@ -126,7 +125,7 @@
                     mdn.Headers.Add(As2Header.AS2_VERSION, As2Header.VERSION);
                     mdn.Headers.Add(As2Header.AS2_FROM, headers[As2Header.AS2_TO]);
                     mdn.Headers.Add(As2Header.AS2_TO, headers[As2Header.AS2_FROM]);
-                    this.writeMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.BadRequest);
+                    this.WriteMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception e)
@@ -134,11 +133,11 @@
                 root.Record(Annotations.Tag("exception", e.Message));
 
                 // Unexpected internal error, cannot proceed, return HTTP 500 and partly MDN to indicating the problem
-                LOGGER.ErrorFormat("Internal error occured: {0}", e.Message);
-                LOGGER.Error("Attempting to return MDN with explanatory message and HTTP 500 status");
+                Logger.ErrorFormat("Internal error occured: {0}", e.Message);
+                Logger.Error("Attempting to return MDN with explanatory message and HTTP 500 status");
 
                 // TODO: manage failure
-                writeFailureWithExplanation(this.httpContext.Request, this.httpContext.Response, e);
+                this.writeFailureWithExplanation(this.httpContext.Request, this.httpContext.Response, e);
             }
 
             // MDC.clear();
@@ -153,23 +152,22 @@
         {
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            LOGGER.Error("Internal error: " + e.Message, e);
+            Logger.Error("Internal error: " + e.Message, e);
 
-            LOGGER.Debug("Request headers");
+            Logger.Debug("Request headers");
             foreach (var header in request.Headers)
             {
-                LOGGER.DebugFormat("=> {0}: {1}", header.Key, header.Value);
+                Logger.DebugFormat("=> {0}: {1}", header.Key, header.Value);
             }
 
             var message = Encoding.ASCII.GetBytes("INTERNAL ERROR!!");
             response.Body.Write(message, 0, message.Length);
 
             // Being helpful to those who must read the error logs
-            LOGGER.Error("\n---------- REQUEST FAILURE INFORMATION ENDS HERE --------------");
+            Logger.Error("\n---------- REQUEST FAILURE INFORMATION ENDS HERE --------------");
         }
 
-        protected void
-            writeMdn(HttpResponse response, MimeMessage mdn, int status) //throws MessagingException, IOException
+        protected void WriteMdn(HttpResponse response, MimeMessage mdn, int status)
         {
             response.StatusCode = status;
 
