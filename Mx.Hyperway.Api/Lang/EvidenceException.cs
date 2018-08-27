@@ -5,7 +5,7 @@
     public class EvidenceException : HyperwayException
     {
 
-        public EvidenceException(String message, Exception cause)
+        public EvidenceException(string message, Exception cause)
             : base(message, cause)
         {
         }

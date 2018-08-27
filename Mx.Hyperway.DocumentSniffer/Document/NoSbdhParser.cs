@@ -13,14 +13,14 @@
      * Parses UBL based documents, which are not wrapped within an SBDH, extracting data and
      * creating a PeppolStandardBusinessHeader.
      */
-    public class NoSbdhParser : ContentDetector
+    public class NoSbdhParser : IContentDetector
     {
 
         /**
          * Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
          * should not be wrapped in an SBDH.
          */
-        public Header parse(Stream inputStream)
+        public Header Parse(Stream inputStream)
         {
             return this.originalParse(inputStream).toVefa();
         }

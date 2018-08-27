@@ -5,13 +5,13 @@
     public class TimestampException : HyperwayException
     {
 
-        public TimestampException(String message)
+        public TimestampException(string message)
             : base(message)
         {
 
         }
 
-        public TimestampException(String message, Exception cause)
+        public TimestampException(string message, Exception cause)
             : base(message, cause)
         {
 

@@ -8,7 +8,7 @@
     using zipkin4net;
 
     // TODO: Register as singleton
-    public class DefaultTransmissionService : Traceable, TransmissionService
+    public class DefaultTransmissionService : Traceable, ITransmissionService
     {
 
         private readonly TransmissionRequestFactory transmissionRequestFactory;
@@ -25,14 +25,14 @@
             this.transmitter = transmitter;
         }
 
-        public TransmissionResponse send(Stream inputStream)
+        public ITransmissionResponse Send(Stream inputStream)
         {
             var trace = Trace.Create();
             trace.Record(Annotations.ServiceName("TransmissionService"));
             trace.Record(Annotations.ClientSend());
             try
             {
-                return this.send(inputStream, trace);
+                return this.Send(inputStream, trace);
             }
             finally
             {
@@ -40,7 +40,7 @@
             }
         }
 
-        public TransmissionResponse send(Stream inputStream, Trace trace)
+        public ITransmissionResponse Send(Stream inputStream, Trace trace)
         {
             return this.transmitter.Transmit(this.transmissionRequestFactory.NewInstance(inputStream, trace), trace);
         }

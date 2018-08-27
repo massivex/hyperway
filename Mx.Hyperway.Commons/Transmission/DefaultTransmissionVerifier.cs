@@ -4,10 +4,10 @@
     using Mx.Hyperway.Api.Transmission;
     using Mx.Peppol.Common.Model;
 
-    public class DefaultTransmissionVerifier : TransmissionVerifier
+    public class DefaultTransmissionVerifier : ITransmissionVerifier
     {
 
-        public void verify(Header header, Direction direction)
+        public void Verify(Header header, Direction direction)
         {
             // No action.
         }

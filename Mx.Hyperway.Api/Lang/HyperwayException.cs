@@ -5,14 +5,12 @@
     public abstract class HyperwayException : Exception
     {
 
-        public HyperwayException(String message)
-            : base(message)
+        public HyperwayException(string message) : base(message)
         {
 
         }
 
-        public HyperwayException(String message, Exception cause)
-            : base(message, cause)
+        public HyperwayException(string message, Exception cause) : base(message, cause)
         {
 
         }

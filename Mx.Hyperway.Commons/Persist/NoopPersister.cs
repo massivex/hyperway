@@ -11,16 +11,16 @@ namespace Mx.Hyperway.Commons.Persist
     using Mx.Hyperway.Api.Persist;
     using Mx.Peppol.Common.Model;
 
-    public class NoopPersister : PersisterHandler
+    public class NoopPersister : IPersisterHandler
     {
-        public FileInfo persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
+        public FileInfo Persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
         {
             // Iterate all stream
             inputStream.Seek(inputStream.Length, SeekOrigin.Begin);
             return null;
         }
 
-        public void persist(InboundMetadata inboundMetadata, FileInfo payloadPath)
+        public void Persist(IInboundMetadata inboundMetadata, FileInfo payloadPath)
         {
             // No operation (intended)
         }

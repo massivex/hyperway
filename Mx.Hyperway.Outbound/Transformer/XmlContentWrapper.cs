@@ -11,9 +11,9 @@
     using Mx.Peppol.Sbdh;
     using Mx.Tools;
 
-    public class XmlContentWrapper : ContentWrapper
+    public class XmlContentWrapper : IContentWrapper
     {
-        public Stream wrap(Stream inputStream, Header header)
+        public Stream Wrap(Stream inputStream, Header header)
         {
             var m = new MemoryStream();
             try

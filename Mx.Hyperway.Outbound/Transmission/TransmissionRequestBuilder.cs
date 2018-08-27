@@ -21,9 +21,9 @@
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(TransmissionRequestBuilder));
 
-        private readonly ContentDetector contentDetector;
+        private readonly IContentDetector contentDetector;
 
-        private readonly LookupService lookupService;
+        private readonly ILookupService lookupService;
 
         private bool allowOverride;
 
@@ -48,7 +48,7 @@
         /// </summary>
         private PeppolStandardBusinessHeader effectiveStandardBusinessHeader;
 
-        public TransmissionRequestBuilder(ContentDetector contentDetector, LookupService lookupService)
+        public TransmissionRequestBuilder(IContentDetector contentDetector, ILookupService lookupService)
         {
             this.contentDetector = contentDetector;
             this.lookupService = lookupService;
@@ -162,7 +162,7 @@
             }
             else
             {
-                Endpoint endpointLookedup = this.lookupService.lookup(this.effectiveStandardBusinessHeader.toVefa(), null);
+                Endpoint endpointLookedup = this.lookupService.Lookup(this.effectiveStandardBusinessHeader.toVefa(), null);
 
                 if (this.IsEndpointSuppliedByCaller() && !this.endpoint.Equals(endpointLookedup))
                 {
@@ -254,7 +254,7 @@
                 return optionallyParsedSbdh;
             }
 
-            return new PeppolStandardBusinessHeader(this.contentDetector.parse(this.payload.ToStream()));
+            return new PeppolStandardBusinessHeader(this.contentDetector.Parse(this.payload.ToStream()));
         }
 
         /// <summary>

@@ -2,27 +2,20 @@
 {
     using System;
 
-    /**
-     * Unique identifier for a PEPPOL Access Point.
-     * <p>
-     * This identifier is typically represented by the Common Name (CN) attribute of the distinguished name of the
-     * certificate of the Subject.
-     * <p>
-     * However; the usage of the common name is only a recommendation, not a mandatory rule.
-     *
-     * @author steinar
-     *         Date: 10.02.13
-     *         Time: 21:00
-     */
+    /// <summary>
+    /// Unique identifier for a PEPPOL Access Point.
+    /// <p>
+    /// This identifier is typically represented by the Common Name (CN) attribute of the distinguished name of the certificate of the Subject.
+    /// </p>
+    /// </summary>
     public class AccessPointIdentifier
     {
         private readonly string accessPointIdentifierValue;
 
-        /**
-         * Creates an instance using whatever text value is supplied.
-         *
-         * @param accessPointIdentifierValue the textual representation of the identifier
-         */
+        /// <summary>
+        /// Creates an instance using whatever text value is supplied. 
+        /// </summary>
+        /// <param name="accessPointIdentifierValue">the textual representation of the identifier</param>
         public AccessPointIdentifier(string accessPointIdentifierValue)
         {
             this.accessPointIdentifierValue = accessPointIdentifierValue;

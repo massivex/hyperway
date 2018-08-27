@@ -111,7 +111,7 @@
 
         public static Disposition fromVerifierException(VerifierException e)
         {
-            return verifierMap[e.getReason()];
+            return verifierMap[e.GetReason()];
         }
 
         private Disposition(DispositionType type, DispositionModifier modifier, DispositionModifierExtension extension)

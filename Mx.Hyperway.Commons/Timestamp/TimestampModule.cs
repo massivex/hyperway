@@ -9,8 +9,8 @@
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<SystemTimestampProvider>()
-                .Keyed<TimestampProvider>("system")
-                .As<TimestampProvider>()
+                .Keyed<ITimestampProvider>("system")
+                .As<ITimestampProvider>()
                 .InstancePerLifetimeScope();
         }
     }

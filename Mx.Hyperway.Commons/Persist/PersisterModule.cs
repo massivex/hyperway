@@ -14,33 +14,33 @@ namespace Mx.Hyperway.Commons.Persist
         {
             // default
             builder.RegisterType<DefaultPersister>()
-                .Keyed<PayloadPersister>("default")
-                .As<PayloadPersister>()
+                .Keyed<IPayloadPersister>("default")
+                .As<IPayloadPersister>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<DefaultPersister>()
-                .Keyed<ReceiptPersister>("default")
-                .As<ReceiptPersister>()
+                .Keyed<IReceiptPersister>("default")
+                .As<IReceiptPersister>()
                 .InstancePerLifetimeScope(); 
 
             builder.RegisterType<DefaultPersisterHandler>()
-                .Keyed<PersisterHandler>("default")
-                .As<PersisterHandler>()
+                .Keyed<IPersisterHandler>("default")
+                .As<IPersisterHandler>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<NoopPersister>()
-                .Keyed<PayloadPersister>("noop")
-                .As<PayloadPersister>()
+                .Keyed<IPayloadPersister>("noop")
+                .As<IPayloadPersister>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<NoopPersister>()
-                .Keyed<ReceiptPersister>("noop")
-                .As<ReceiptPersister>()
+                .Keyed<IReceiptPersister>("noop")
+                .As<IReceiptPersister>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<NoopPersister>()
-                .Keyed<PersisterHandler>("noop")
-                .As<PersisterHandler>()
+                .Keyed<IPersisterHandler>("noop")
+                .As<IPersisterHandler>()
                 .InstancePerLifetimeScope();
         }
     }

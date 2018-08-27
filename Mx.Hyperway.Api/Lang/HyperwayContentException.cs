@@ -5,12 +5,12 @@
     public class HyperwayContentException : HyperwayException
     {
 
-        public HyperwayContentException(String message) 
+        public HyperwayContentException(string message) 
             : base(message)
         {
         }
 
-        public HyperwayContentException(String message, Exception cause)
+        public HyperwayContentException(string message, Exception cause)
             : base(message, cause)
         {
 

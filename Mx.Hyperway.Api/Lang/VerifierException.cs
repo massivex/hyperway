@@ -7,7 +7,7 @@
 
         private readonly Reason reason;
 
-        public static VerifierException becauseOf(Reason reason, String message)
+        public static VerifierException BecauseOf(Reason reason, String message)
         {
             return new VerifierException(reason, message);
         }
@@ -17,18 +17,20 @@
             this.reason = reason;
         }
 
-        public Reason getReason()
+        public Reason GetReason()
         {
             return this.reason;
         }
 
         public enum Reason
         {
+            // ReSharper disable InconsistentNaming
             PARTICIPANT,
 
             DOCUMENT_TYPE,
 
             PROCESS
+            // ReSharper restore InconsistentNaming
         }
     }
 

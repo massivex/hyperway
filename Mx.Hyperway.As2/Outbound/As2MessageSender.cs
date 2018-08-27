@@ -33,7 +33,7 @@
 
     using Trace = zipkin4net.Trace;
 
-    public class As2MessageSender : MessageSender
+    public class As2MessageSender : IMessageSender
     {
 
         private static readonly ILog LOGGER = LogManager.GetLogger(typeof(As2MessageSender));
@@ -44,7 +44,7 @@
         /**
          * Timestamp provider used to create timestamp "t3" (time of reception of transport specific receipt, MDN).
          */
-        private readonly TimestampProvider timestampProvider;
+        private readonly ITimestampProvider timestampProvider;
 
         private readonly Func<HyperwaySecureMimeContext> secureMimeContext;
 
@@ -69,7 +69,7 @@
         public As2MessageSender(
             X509Certificate certificate,
             SMimeMessageFactory sMimeMessageFactory,
-            TimestampProvider timestampProvider,
+            ITimestampProvider timestampProvider,
             Func<HyperwaySecureMimeContext> secureMimeContext)
         {
             this.sMimeMessageFactory = sMimeMessageFactory;
@@ -80,12 +80,12 @@
             this.fromIdentifier = CertificateUtils.extractCommonName(certificate);
         }
 
-        public TransmissionResponse send(ITransmissionRequest transmissionRequest)
+        public ITransmissionResponse Send(ITransmissionRequest transmissionRequest)
         {
-            return this.send(transmissionRequest, this.root);
+            return this.Send(transmissionRequest, this.root);
         }
 
-        public TransmissionResponse send(ITransmissionRequest transmissionRequest, Trace root)
+        public ITransmissionResponse Send(ITransmissionRequest transmissionRequest, Trace root)
         {
             this.transmissionRequest = transmissionRequest;
 
@@ -152,7 +152,7 @@
 
                 signedMimeMessage.Headers.Clear();
 
-                this.transmissionIdentifier = TransmissionIdentifier.fromHeader(httpPost.Headers[As2Header.MESSAGE_ID]);
+                this.transmissionIdentifier = TransmissionIdentifier.FromHeader(httpPost.Headers[As2Header.MESSAGE_ID]);
 
                 // Write content to OutputStream without headers.
                 using (var m = new MemoryStream())
@@ -197,7 +197,7 @@
             return result;
         }
 
-        protected TransmissionResponse sendHttpRequest(HttpPost httpPost)
+        protected ITransmissionResponse sendHttpRequest(HttpPost httpPost)
         {
             Trace span = this.root.Child();
             span.Record(Annotations.ServiceName("execute"));
@@ -223,7 +223,7 @@
             }
         }
 
-        protected TransmissionResponse handleResponse(HttpResponse httpResponse)
+        protected ITransmissionResponse handleResponse(HttpResponse httpResponse)
         {
             Trace span = this.root.Child();
             // tracer.newChild(root.context()).name("response").start();
@@ -288,7 +288,7 @@
                 
                 SMimeReader sMimeReader = new SMimeReader(mimeMessage);
                 // Timestamp of reception of MDN
-                Timestamp t3 = this.timestampProvider.generate(sMimeReader.getSignature(), Direction.OUT);
+                Timestamp t3 = this.timestampProvider.Generate(sMimeReader.getSignature(), Direction.OUT);
 
                 MultipartSigned signedMessage = mimeMessage.Body as MultipartSigned;
                 using (var ctx = this.secureMimeContext())
@@ -333,7 +333,7 @@
                 // InternetHeaders internetHeaders = new InternetHeaders((InputStream)mimeBodyPart.getContent());
 
                 // Fetch timestamp if set
-                DateTime date = t3.getDate();
+                DateTime date = t3.GetDate();
                 if (internetHeaders.Any(x => x.Field == MdnHeader.DATE))
                 {
                     var dateText = internetHeaders.First(x => x.Field == MdnHeader.DATE).Value;

@@ -40,7 +40,7 @@
             var builder = new ContainerBuilder();
             builder.RegisterType<HyperwayOutboundComponent>().AsSelf();
             builder.RegisterType<TransmissionRequestBuilder>().AsSelf();
-            builder.RegisterType<NoSbdhParser>().As<ContentDetector>();
+            builder.RegisterType<NoSbdhParser>().As<IContentDetector>();
 
             // Lookup module registration
             builder.RegisterModule(new ModeModule());               // Configuration
@@ -66,8 +66,8 @@
             
 
             builder.RegisterType<MessageSenderFactory>().AsSelf();
-            builder.RegisterType<NoopStatisticsService>().As<StatisticsService>();
-            builder.RegisterType<DefaultTransmissionVerifier>().As<TransmissionVerifier>();
+            builder.RegisterType<NoopStatisticsService>().As<IStatisticsService>();
+            builder.RegisterType<DefaultTransmissionVerifier>().As<ITransmissionVerifier>();
             builder.RegisterType<TransmissionRequestBuilder>().AsSelf();
 
             builder.RegisterType<Mx.Peppol.Lookup.Provider.DefaultProvider>().As<MetadataProvider>();

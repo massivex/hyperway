@@ -18,22 +18,22 @@ namespace Mx.Hyperway.Commons.Persist
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
 
-    public class DefaultPersister : PayloadPersister, ReceiptPersister
+    public class DefaultPersister : IPayloadPersister, IReceiptPersister
     {
 
         public static readonly ILog LOGGER = LogManager.GetLogger(typeof(DefaultPersister));
 
-        private readonly EvidenceFactory evidenceFactory;
+        private readonly IEvidenceFactory evidenceFactory;
 
         private readonly DirectoryInfo inboundFolder;
 
-        public DefaultPersister([KeyFilter("inbound")] DirectoryInfo inboundFolder, EvidenceFactory evidenceFactory)
+        public DefaultPersister([KeyFilter("inbound")] DirectoryInfo inboundFolder, IEvidenceFactory evidenceFactory)
         {
             this.inboundFolder = inboundFolder;
             this.evidenceFactory = evidenceFactory;
         }
 
-        public FileInfo persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
+        public FileInfo Persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
         {
             var identifier = FileUtils.filterString(transmissionIdentifier.getIdentifier());
             var targetFolder = PersisterUtils.createArtifactFolders(inboundFolder, header).FullName;
@@ -49,15 +49,15 @@ namespace Mx.Hyperway.Commons.Persist
         }
 
 
-        public void persist(InboundMetadata inboundMetadata, FileInfo payloadPath)
+        public void Persist(IInboundMetadata inboundMetadata, FileInfo payloadPath)
         {
-            var targetFolder = PersisterUtils.createArtifactFolders(inboundFolder, inboundMetadata.getHeader()).FullName;
-            var identifier = FileUtils.filterString(inboundMetadata.getTransmissionIdentifier().getIdentifier());
+            var targetFolder = PersisterUtils.createArtifactFolders(inboundFolder, inboundMetadata.GetHeader()).FullName;
+            var identifier = FileUtils.filterString(inboundMetadata.GetTransmissionIdentifier().getIdentifier());
             string targetFile = Path.Combine(targetFolder, $"{identifier}.receipt.dat");
 
             using (var fs = File.Create(targetFile))
             {
-                this.evidenceFactory.write(fs, inboundMetadata);
+                this.evidenceFactory.Write(fs, inboundMetadata);
             }
 
             LOGGER.DebugFormat("Receipt persisted to: {0}", targetFile);

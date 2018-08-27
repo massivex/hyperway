@@ -3,9 +3,9 @@
     using Mx.Hyperway.Api.Model;
     using Mx.Peppol.Common.Model;
 
-    public interface TransmissionVerifier
+    public interface ITransmissionVerifier
     {
 
-        void verify(Header header, Direction direction); // throws VerifierException;
+        void Verify(Header header, Direction direction);
     }
 }

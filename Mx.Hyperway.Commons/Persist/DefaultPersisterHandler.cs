@@ -11,27 +11,27 @@ namespace Mx.Hyperway.Commons.Persist
     using Mx.Hyperway.Api.Persist;
     using Mx.Peppol.Common.Model;
 
-    public class DefaultPersisterHandler : PersisterHandler
+    public class DefaultPersisterHandler : IPersisterHandler
     {
 
-        private PayloadPersister payloadPersister;
+        private IPayloadPersister payloadPersister;
 
-        private ReceiptPersister receiptPersister;
+        private IReceiptPersister receiptPersister;
 
-        public DefaultPersisterHandler(PayloadPersister payloadPersister, ReceiptPersister receiptPersister)
+        public DefaultPersisterHandler(IPayloadPersister payloadPersister, IReceiptPersister receiptPersister)
         {
             this.payloadPersister = payloadPersister;
             this.receiptPersister = receiptPersister;
         }
 
-        public void persist(InboundMetadata inboundMetadata, FileInfo payloadPath)
+        public void Persist(IInboundMetadata inboundMetadata, FileInfo payloadPath)
         {
-            receiptPersister.persist(inboundMetadata, payloadPath);
+            receiptPersister.Persist(inboundMetadata, payloadPath);
         }
 
-        public FileInfo persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
+        public FileInfo Persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
         {
-            return payloadPersister.persist(transmissionIdentifier, header, inputStream);
+            return payloadPersister.Persist(transmissionIdentifier, header, inputStream);
         }
     }
 }

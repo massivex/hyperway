@@ -45,13 +45,13 @@ namespace Mx.Hyperway.As2.Inbound
 
         public static readonly ILog LOGGER = LogManager.GetLogger(typeof(As2InboundHandler));
 
-        private readonly StatisticsService statisticsService;
+        private readonly IStatisticsService statisticsService;
 
-        private readonly TimestampProvider timestampProvider;
+        private readonly ITimestampProvider timestampProvider;
 
-        private readonly PersisterHandler persisterHandler;
+        private readonly IPersisterHandler persisterHandler;
 
-        private readonly TransmissionVerifier transmissionVerifier;
+        private readonly ITransmissionVerifier transmissionVerifier;
 
         private readonly CertificateValidator certificateValidator;
 
@@ -60,11 +60,11 @@ namespace Mx.Hyperway.As2.Inbound
         private readonly Func<HyperwaySecureMimeContext> secureContextFactory;
 
         public As2InboundHandler(
-            StatisticsService statisticsService,
-            TimestampProvider timestampProvider,
+            IStatisticsService statisticsService,
+            ITimestampProvider timestampProvider,
             CertificateValidator certificateValidator,
-            PersisterHandler persisterHandler,
-            TransmissionVerifier transmissionVerifier,
+            IPersisterHandler persisterHandler,
+            ITransmissionVerifier transmissionVerifier,
             SMimeMessageFactory sMimeMessageFactory,
             Func<HyperwaySecureMimeContext> secureContextFactory)
         {
@@ -98,16 +98,16 @@ namespace Mx.Hyperway.As2.Inbound
             SMimeReader sMimeReader = new SMimeReader(mimeMessage);
 
             // Get timestamp using signature as input
-            Timestamp t2 = timestampProvider.generate(sMimeReader.getSignature(), Direction.IN);
+            Timestamp t2 = timestampProvider.Generate(sMimeReader.getSignature(), Direction.IN);
 
             // Initiate MDN
             MdnBuilder mdnBuilder = MdnBuilder.newInstance(mimeMessage);
-            mdnBuilder.addHeader(MdnHeader.DATE, t2.getDate());
+            mdnBuilder.addHeader(MdnHeader.DATE, t2.GetDate());
 
 
             // Extract Message-ID
             TransmissionIdentifier transmissionIdentifier =
-                TransmissionIdentifier.fromHeader(httpHeaders[As2Header.MESSAGE_ID]);
+                TransmissionIdentifier.FromHeader(httpHeaders[As2Header.MESSAGE_ID]);
             mdnBuilder.addHeader(MdnHeader.ORIGINAL_MESSAGE_ID, httpHeaders[As2Header.MESSAGE_ID]);
 
 
@@ -131,14 +131,14 @@ namespace Mx.Hyperway.As2.Inbound
                 header = sbdReader.getHeader();
 
                 // Perform validation of SBDH
-                transmissionVerifier.verify(header, Direction.IN);
+                transmissionVerifier.Verify(header, Direction.IN);
 
                 // Extract "fresh" InputStream
                 FileInfo payloadPath;
                 using (Stream payloadInputStream = sMimeReader.getBodyInputStream())
                 {
                     // Persist content
-                    payloadPath = this.persisterHandler.persist(
+                    payloadPath = this.persisterHandler.Persist(
                         transmissionIdentifier,
                         header,
                         new UnclosableInputStream(payloadInputStream));

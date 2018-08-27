@@ -5,14 +5,14 @@
     public class HyperwayLoadingException : HyperwayRuntimeException
     {
 
-        public HyperwayLoadingException(String message)
+        public HyperwayLoadingException(string message)
             : base(message)
         {
 
         }
 
-        public HyperwayLoadingException(String message, Exception cause)
-            : base(message)
+        public HyperwayLoadingException(string message, Exception cause)
+            : base(message, cause)
         {
 
         }

@@ -13,7 +13,7 @@
 
     using zipkin4net;
 
-    public class CachedLookupService : CacheLoader<CachedLookupService.HeaderStub, Endpoint>, LookupService
+    public class CachedLookupService : CacheLoader<CachedLookupService.HeaderStub, Endpoint>, ILookupService
     {
 
         private readonly LookupClient lookupClient;
@@ -28,7 +28,7 @@
             this.transportProfiles = transportProfiles.ToArray();
         }
 
-        public Endpoint lookup(Header header)
+        public Endpoint Lookup(Header header)
         {
             try
             {
@@ -40,9 +40,9 @@
             }
         }
 
-        public Endpoint lookup(Header header, Trace root)
+        public Endpoint Lookup(Header header, Trace root)
         {
-            return this.lookup(header);
+            return this.Lookup(header);
         }
 
         public Endpoint Load(HeaderStub header) // throws Exception

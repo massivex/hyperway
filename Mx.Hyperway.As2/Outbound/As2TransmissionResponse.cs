@@ -16,7 +16,7 @@
      * @author thore
      * @author erlend
      */
-    public class As2TransmissionResponse : TransmissionResponse
+    public class As2TransmissionResponse : ITransmissionResponse
     {
 
         /**
@@ -50,66 +50,66 @@
 
             List<Receipt> receipts = new List<Receipt>();
             receipts.Add(this.receipt);
-            if (timestamp.getReceipt() != null)
+            if (timestamp.GetReceipt() != null)
             {
-                receipts.Add(timestamp.getReceipt());
+                receipts.Add(timestamp.GetReceipt());
             }
 
 
             this.receipts = new ImmutableList<Receipt>(receipts);
         }
 
-        public Header getHeader()
+        public Header GetHeader()
         {
             return this.transmissionRequest.GetHeader();
         }
 
-        public TransmissionIdentifier getTransmissionIdentifier()
+        public TransmissionIdentifier GetTransmissionIdentifier()
         {
             return this.transmissionIdentifier;
         }
 
-        public byte[] getNativeEvidenceBytes()
+        public byte[] GetNativeEvidenceBytes()
         {
-            return this.primaryReceipt().getValue();
+            return this.PrimaryReceipt().getValue();
         }
 
-        public TransportProfile getProtocol()
+        public TransportProfile GetProtocol()
         {
-            return this.getEndpoint().getTransportProfile();
+            return this.GetEndpoint().getTransportProfile();
         }
 
-        public IList<Receipt> getReceipts()
+        public IList<Receipt> GetReceipts()
         {
             return this.receipts;
         }
 
 
-        public Endpoint getEndpoint()
+        public Endpoint GetEndpoint()
         {
             return this.transmissionRequest.GetEndpoint();
         }
 
 
-        public Receipt primaryReceipt()
+        public Receipt PrimaryReceipt()
         {
             return this.receipt;
         }
 
 
-        public Digest getDigest()
+        public Digest GetDigest()
         {
             return this.digest;
         }
 
 
-        public TransportProtocol getTransportProtocol()
+        public TransportProtocol GetTransportProtocol()
         {
             return TransportProtocol.AS2;
         }
 
 
-        public DateTime getTimestamp()
+        public DateTime GetTimestamp()
         {
             return this.timestamp;
         }

@@ -20,17 +20,17 @@
         private readonly MessageSenderFactory messageSenderFactory;
 
         /// <summary>Service to report statistics when transmission is successfully transmitted.</summary>
-        private readonly StatisticsService statisticsService;
+        private readonly IStatisticsService statisticsService;
 
-        private readonly TransmissionVerifier transmissionVerifier;
+        private readonly ITransmissionVerifier transmissionVerifier;
 
-        private readonly LookupService lookupService;
+        private readonly ILookupService lookupService;
 
         public DefaultTransmitter(
             MessageSenderFactory messageSenderFactory,
-            StatisticsService statisticsService,
-            TransmissionVerifier transmissionVerifier,
-            LookupService lookupService)
+            IStatisticsService statisticsService,
+            ITransmissionVerifier transmissionVerifier,
+            ILookupService lookupService)
         {
             this.messageSenderFactory = messageSenderFactory;
             this.statisticsService = statisticsService;
@@ -39,7 +39,7 @@
         }
 
         /// <inheritdoc />
-        public TransmissionResponse Transmit(ITransmissionMessage transmissionMessage, Trace root)
+        public ITransmissionResponse Transmit(ITransmissionMessage transmissionMessage, Trace root)
         {
             Trace span = root.Child();
             span.Record(Annotations.ServiceName("transmit"));
@@ -55,7 +55,7 @@
         }
 
         /// <inheritdoc />
-        public TransmissionResponse Transmit(ITransmissionMessage transmissionMessage)
+        public ITransmissionResponse Transmit(ITransmissionMessage transmissionMessage)
         {
             Trace root = Trace.Create();
             root.Record(Annotations.ServiceName("transmit"));
@@ -70,10 +70,10 @@
             }
         }
 
-        private TransmissionResponse Perform(ITransmissionMessage transmissionMessage, Trace root)
+        private ITransmissionResponse Perform(ITransmissionMessage transmissionMessage, Trace root)
         {
 
-            this.transmissionVerifier.verify(transmissionMessage.GetHeader(), Direction.OUT);
+            this.transmissionVerifier.Verify(transmissionMessage.GetHeader(), Direction.OUT);
 
             ITransmissionRequest transmissionRequest;
             if (transmissionMessage is ITransmissionRequest)
@@ -88,7 +88,7 @@
                 lookupSpan.Record(Annotations.ClientSend());
                 try
                 {
-                    var endpoint = this.lookupService.lookup(transmissionMessage.GetHeader(), lookupSpan);
+                    var endpoint = this.lookupService.Lookup(transmissionMessage.GetHeader(), lookupSpan);
                     lookupSpan.Record(
                         Annotations.Tag("transport profile", endpoint.getTransportProfile().getIdentifier()));
                     transmissionRequest = new DefaultTransmissionRequest(transmissionMessage, endpoint);
@@ -109,12 +109,12 @@
             span.Record(Annotations.ClientSend());
 
             // Span span = tracer.newChild(root.context()).name("send message").start();
-            TransmissionResponse transmissionResponse;
+            ITransmissionResponse transmissionResponse;
             try
             {
                 TransportProfile transportProfile = transmissionRequest.GetEndpoint().getTransportProfile();
-                MessageSender messageSender = this.messageSenderFactory.GetMessageSender(transportProfile);
-                transmissionResponse = messageSender.send(transmissionRequest, span);
+                IMessageSender messageSender = this.messageSenderFactory.GetMessageSender(transportProfile);
+                transmissionResponse = messageSender.Send(transmissionRequest, span);
             }
             catch (HyperwayTransmissionException e)
             {
@@ -126,7 +126,7 @@
                 span.Record(Annotations.ClientRecv());
             }
 
-            this.statisticsService.persist(transmissionRequest, transmissionResponse, root);
+            this.statisticsService.Persist(transmissionRequest, transmissionResponse, root);
 
             return transmissionResponse;
         }

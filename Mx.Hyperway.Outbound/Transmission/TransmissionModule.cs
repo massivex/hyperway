@@ -12,8 +12,8 @@
         {
             builder.RegisterType<DefaultTransmitter>().As<ITransmitter>().InstancePerLifetimeScope();
             builder.RegisterType<TransmissionRequestFactory>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<DefaultTransmissionService>().As<TransmissionService>();
-            builder.RegisterType<XmlContentWrapper>().Keyed<ContentWrapper>("xml").As<ContentWrapper>();
+            builder.RegisterType<DefaultTransmissionService>().As<ITransmissionService>();
+            builder.RegisterType<XmlContentWrapper>().Keyed<IContentWrapper>("xml").As<IContentWrapper>();
 
         }
     }

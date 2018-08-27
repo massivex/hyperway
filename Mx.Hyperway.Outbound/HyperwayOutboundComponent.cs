@@ -32,9 +32,9 @@
         /// <summary>
         /// Retrieves instance of LookupService, without revealing intern object dependency injection.
         /// </summary>
-        public LookupService GetLookupService()
+        public ILookupService GetLookupService()
         {
-            return this.context.Resolve<LookupService>();
+            return this.context.Resolve<ILookupService>();
         }
 
         /// <summary>
@@ -45,14 +45,14 @@
             return this.context.Resolve<ITransmitter>();
         }
 
-        public EvidenceFactory GetEvidenceFactory()
+        public IEvidenceFactory GetEvidenceFactory()
         {
-            return this.context.Resolve<EvidenceFactory>();
+            return this.context.Resolve<IEvidenceFactory>();
         }
 
-        public TransmissionService GetTransmissionService()
+        public ITransmissionService GetTransmissionService()
         {
-            return this.context.Resolve<TransmissionService>();
+            return this.context.Resolve<ITransmissionService>();
         }
     }
 

@@ -8,27 +8,27 @@
     public class TransmissionIdentifier : AbstractSimpleIdentifier
     {
 
-        private static readonly Regex RFC2822 = new Regex("^<(.+?)>$", RegexOptions.Compiled);
+        private static readonly Regex Rfc2822 = new Regex("^<(.+?)>$", RegexOptions.Compiled);
 
-        public static TransmissionIdentifier generateUUID()
+        public static TransmissionIdentifier GenerateUuid()
         {
-            return of(Guid.NewGuid().ToString());
+            return Of(Guid.NewGuid().ToString());
         }
 
-        public static TransmissionIdentifier of(String value)
+        public static TransmissionIdentifier Of(String value)
         {
             return new TransmissionIdentifier(value);
         }
 
-        public static TransmissionIdentifier fromHeader(String value)
+        public static TransmissionIdentifier FromHeader(String value)
         {
-            var matches = RFC2822.Matches(value);
+            var matches = Rfc2822.Matches(value);
             if (matches.Count > 0)
             {
-                return of(matches[0].Groups[1].Value);
+                return Of(matches[0].Groups[1].Value);
             }
 
-            return of(value);
+            return Of(value);
         }
 
         private TransmissionIdentifier(String value)

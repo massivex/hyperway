@@ -7,17 +7,17 @@
 
     using zipkin4net;
 
-    public class SystemTimestampProvider : TimestampProvider
+    public class SystemTimestampProvider : ITimestampProvider
     {
         // @Override
-        public Timestamp generate(byte[] content, Direction direction)
+        public Timestamp Generate(byte[] content, Direction direction)
         {
             return new Timestamp(DateTime.Now, null);
         }
 
-        public Timestamp generate(byte[] content, Direction direction, Trace span)
+        public Timestamp Generate(byte[] content, Direction direction, Trace span)
         {
-            return this.generate(content, direction);
+            return this.Generate(content, direction);
         }
     }
 }

@@ -11,13 +11,13 @@
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CachedLookupService>()
-                .Keyed<LookupService>("cached")
-                .As<LookupService>()
+                .Keyed<ILookupService>("cached")
+                .As<ILookupService>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<DefaultLookupService>()
-                .Keyed<LookupService>("default")
-                .As<LookupService>()
+                .Keyed<ILookupService>("default")
+                .As<ILookupService>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<HyperwayHttpFetcher>().As<MetadataFetcher>();

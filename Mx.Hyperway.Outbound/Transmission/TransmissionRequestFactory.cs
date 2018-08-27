@@ -17,11 +17,11 @@
     public class TransmissionRequestFactory : Traceable
     {
 
-        private readonly ContentDetector contentDetector;
+        private readonly IContentDetector contentDetector;
 
-        private readonly ContentWrapper contentWrapper;
+        private readonly IContentWrapper contentWrapper;
 
-        public TransmissionRequestFactory(ContentDetector contentDetector, ContentWrapper contentWrapper, Trace tracer)
+        public TransmissionRequestFactory(IContentDetector contentDetector, IContentWrapper contentWrapper, Trace tracer)
             : base(tracer)
         {
             this.contentDetector = contentDetector;
@@ -96,7 +96,7 @@
                 span.Record(Annotations.ClientSend());
                 try
                 {
-                    header = this.contentDetector.parse(payload.ToStream());
+                    header = this.contentDetector.Parse(payload.ToStream());
                     span.Record(Annotations.Tag("identifier", header.getIdentifier().getIdentifier()));
                 }
                 catch (HyperwayContentException ex)
@@ -116,7 +116,7 @@
                 Stream wrappedContent;
                 try
                 {
-                    wrappedContent = this.contentWrapper.wrap(payload.ToStream(), header);
+                    wrappedContent = this.contentWrapper.Wrap(payload.ToStream(), header);
                 }
                 catch (HyperwayContentException ex)
                 {

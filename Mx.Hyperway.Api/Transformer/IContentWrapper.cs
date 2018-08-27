@@ -4,8 +4,10 @@
 
     using Mx.Peppol.Common.Model;
 
-    public interface ContentDetector
+    public interface IContentWrapper
     {
-        Header parse(Stream inputStream);
+
+        Stream Wrap(Stream inputStream, Header header);
+
     }
 }

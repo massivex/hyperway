@@ -50,12 +50,12 @@
             builder.RegisterModule(new As2OutboundModule());
             builder.RegisterModule(new TimestampModule());
             builder.RegisterModule(new PersisterModule());
-            builder.RegisterType<DefaultTransmissionVerifier>().As<TransmissionVerifier>();
-            builder.RegisterType<DefaultPersisterHandler>().As<PersisterHandler>();
+            builder.RegisterType<DefaultTransmissionVerifier>().As<ITransmissionVerifier>();
+            builder.RegisterType<DefaultPersisterHandler>().As<IPersisterHandler>();
             builder.RegisterType<DifiCertificateValidator>().As<CertificateValidator>();
             builder.RegisterType<SMimeMessageFactory>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<As2InboundHandler>().AsSelf();
-            builder.RegisterType<NoopStatisticsService>().As<StatisticsService>();
+            builder.RegisterType<NoopStatisticsService>().As<IStatisticsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

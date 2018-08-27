@@ -39,7 +39,7 @@
 
             try
             {
-                TransmissionResponse transmissionResponse;
+                ITransmissionResponse transmissionResponse;
                 long duration = 0;
 
                 if (this.parameters.UseFactory)
@@ -47,7 +47,7 @@
                     using (Stream inputStream = File.Open(this.xmlPayloadFile.FullName, FileMode.Open, FileAccess.Read))
                     {
                         transmissionResponse = this.parameters.HyperwayOutboundComponent.GetTransmissionService()
-                            .send(inputStream, span);
+                            .Send(inputStream, span);
                     }
                 }
                 else
@@ -75,10 +75,10 @@
                         this.parameters.EvidencePath, transmitter, transmissionRequest, span);
                     watch.Stop();
                     
-                    return new TransmissionResult(watch.ElapsedMilliseconds, transmissionResponse.getTransmissionIdentifier());
+                    return new TransmissionResult(watch.ElapsedMilliseconds, transmissionResponse.GetTransmissionIdentifier());
                 }
 
-                return new TransmissionResult(duration, transmissionResponse.getTransmissionIdentifier());
+                return new TransmissionResult(duration, transmissionResponse.GetTransmissionIdentifier());
             }
             finally
             {
@@ -150,7 +150,7 @@
             }
         }
 
-        protected TransmissionResponse PerformTransmission(
+        protected ITransmissionResponse PerformTransmission(
             DirectoryInfo evidencePath,
             ITransmitter transmitter,
             ITransmissionRequest transmissionRequest,
@@ -165,7 +165,7 @@
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
                 // long start = System.DateTime.Now;
-                TransmissionResponse transmissionResponse = transmitter.Transmit(transmissionRequest, span);
+                ITransmissionResponse transmissionResponse = transmitter.Transmit(transmissionRequest, span);
                 watch.Stop();
 
                 long durationInMs = watch.ElapsedMilliseconds; // System.DateTime.Now - start;
@@ -173,10 +173,10 @@
                 Log.Debug(
                     String.Format(
                         "Message using messageId {0} sent to {1} using {2} was assigned transmissionId {3} took {4}ms\n",
-                        transmissionResponse.getHeader().getIdentifier().getIdentifier(),
-                        transmissionResponse.getEndpoint().getAddress(),
-                        transmissionResponse.getProtocol().getIdentifier(),
-                        transmissionResponse.getTransmissionIdentifier(),
+                        transmissionResponse.GetHeader().getIdentifier().getIdentifier(),
+                        transmissionResponse.GetEndpoint().getAddress(),
+                        transmissionResponse.GetProtocol().getIdentifier(),
+                        transmissionResponse.GetTransmissionIdentifier(),
                         durationInMs));
 
                 this.SaveEvidence(transmissionResponse, evidencePath, span);
@@ -190,7 +190,7 @@
         }
 
         protected void SaveEvidence(
-            TransmissionResponse transmissionResponse,
+            ITransmissionResponse transmissionResponse,
             DirectoryInfo evidencePath,
             Trace root)
         {
@@ -203,7 +203,7 @@
                     transmissionResponse,
                     "-as2-mdn.txt",
 #pragma warning disable 612
-                    transmissionResponse.getNativeEvidenceBytes(),
+                    transmissionResponse.GetNativeEvidenceBytes(),
 #pragma warning restore 612
                     evidencePath);
             }
@@ -214,12 +214,12 @@
         }
 
         void SaveEvidence(
-            TransmissionResponse transmissionResponse,
+            ITransmissionResponse transmissionResponse,
             String suffix,
             byte[] supplier,
             DirectoryInfo evidencePath)
         {
-            String fileName = FileUtils.filterString(transmissionResponse.getTransmissionIdentifier().ToString())
+            String fileName = FileUtils.filterString(transmissionResponse.GetTransmissionIdentifier().ToString())
                               + suffix;
             FileInfo evidenceFile = new FileInfo(Path.Combine(evidencePath.FullName, fileName));
             File.WriteAllBytes(evidenceFile.FullName, supplier);

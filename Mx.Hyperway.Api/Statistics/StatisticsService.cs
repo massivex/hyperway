@@ -5,12 +5,12 @@
 
     using zipkin4net;
 
-    public interface StatisticsService
+    public interface IStatisticsService
     {
 
-        void persist(ITransmissionRequest transmissionRequest, TransmissionResponse transmissionResponse, Trace root);
+        void Persist(ITransmissionRequest transmissionRequest, ITransmissionResponse transmissionResponse, Trace root);
 
-        void persist(InboundMetadata inboundMetadata);
+        void Persist(IInboundMetadata inboundMetadata);
     }
 
 }

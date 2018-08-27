@@ -58,9 +58,9 @@
         /// <summary>
         /// Fetch MessageSender implementing from provided transport profile.
         /// </summary>
-        public MessageSender GetMessageSender(TransportProfile transportProfile)
+        public IMessageSender GetMessageSender(TransportProfile transportProfile)
         {
-            return this.injector.ResolveKeyed<MessageSender>(this.GetSender(transportProfile));
+            return this.injector.ResolveKeyed<IMessageSender>(this.GetSender(transportProfile));
         }
     }
 

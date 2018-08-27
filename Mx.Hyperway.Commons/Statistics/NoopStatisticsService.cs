@@ -6,16 +6,16 @@
 
     using zipkin4net;
 
-    public class NoopStatisticsService : StatisticsService
+    public class NoopStatisticsService : IStatisticsService
     {
 
-    public void persist(ITransmissionRequest transmissionRequest,
-                        TransmissionResponse transmissionResponse, Trace root)
+    public void Persist(ITransmissionRequest transmissionRequest,
+                        ITransmissionResponse transmissionResponse, Trace root)
     {
         // No action.
     }
 
-    public void persist(InboundMetadata inboundMetadata)
+    public void Persist(IInboundMetadata inboundMetadata)
     {
         // No action.
     }

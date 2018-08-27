@@ -5,13 +5,13 @@
     public abstract class HyperwayRuntimeException : Exception
     {
 
-        public HyperwayRuntimeException(String message)
+        public HyperwayRuntimeException(string message)
             : base(message)
         {
 
         }
 
-        public HyperwayRuntimeException(String message, Exception cause)
+        public HyperwayRuntimeException(string message, Exception cause)
             : base(message, cause)
         {
         }

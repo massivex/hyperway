@@ -10,7 +10,7 @@ namespace Mx.Hyperway.As2.Inbound
     using Mx.Peppol.Common.Model;
     using Org.BouncyCastle.X509;
 
-    public class As2InboundMetadata : InboundMetadata
+    public class As2InboundMetadata : IInboundMetadata
     {
         private readonly TransmissionIdentifier transmissionIdentifier;
 
@@ -45,54 +45,54 @@ namespace Mx.Hyperway.As2.Inbound
             this.receipt = Receipt.of("message/disposition-notification", primaryReceipt);
             this.receipts = new List<Receipt>();
             this.receipts.Add(this.receipt);
-            if (timestamp.getReceipt() != null)
+            if (timestamp.GetReceipt() != null)
             {
-                this.receipts.Add(timestamp.getReceipt());
+                this.receipts.Add(timestamp.GetReceipt());
             }
             this.certificate = certificate;
         }
 
-        public TransmissionIdentifier getTransmissionIdentifier()
+        public TransmissionIdentifier GetTransmissionIdentifier()
         {
             return this.transmissionIdentifier;
         }
 
-        public Header getHeader()
+        public Header GetHeader()
         {
             return this.header;
         }
 
-        public DateTime getTimestamp()
+        public DateTime GetTimestamp()
         {
             return this.timestamp;
         }
 
-        public Digest getDigest()
+        public Digest GetDigest()
         {
             return this.digest;
         }
 
-        public TransportProtocol getTransportProtocol()
+        public TransportProtocol GetTransportProtocol()
         {
             return TransportProtocol.AS2;
         }
 
-        public TransportProfile getProtocol()
+        public TransportProfile GetProtocol()
         {
             return this.transportProfile;
         }
 
-        public IList<Receipt> getReceipts()
+        public IList<Receipt> GetReceipts()
         {
             return this.receipts;
         }
 
-        public Receipt primaryReceipt()
+        public Receipt PrimaryReceipt()
         {
             return this.receipt;
         }
 
-        public X509Certificate getCertificate()
+        public X509Certificate GetCertificate()
         {
             return this.certificate;
         }

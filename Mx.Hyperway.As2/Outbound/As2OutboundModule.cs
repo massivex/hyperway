@@ -9,7 +9,7 @@
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<HyperwaySecureMimeContext>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<As2MessageSender>().Keyed<MessageSender>("hyperway-as2").As<MessageSender>();
+            builder.RegisterType<As2MessageSender>().Keyed<IMessageSender>("hyperway-as2").As<IMessageSender>();
         }
     }
 }

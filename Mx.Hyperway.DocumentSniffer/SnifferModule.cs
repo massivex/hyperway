@@ -10,7 +10,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<NoSbdhParser>().Named<ContentDetector>("legacy").InstancePerLifetimeScope();
+            builder.RegisterType<NoSbdhParser>().Named<IContentDetector>("legacy").InstancePerLifetimeScope();
         }
     }
 }
