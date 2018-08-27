@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Hyperway.Commons.Persist
+﻿namespace Mx.Hyperway.Commons.Persist
 {
     using System.IO;
 
@@ -21,7 +17,7 @@ namespace Mx.Hyperway.Commons.Persist
     public class DefaultPersister : IPayloadPersister, IReceiptPersister
     {
 
-        public static readonly ILog LOGGER = LogManager.GetLogger(typeof(DefaultPersister));
+        public static readonly ILog Logger = LogManager.GetLogger(typeof(DefaultPersister));
 
         private readonly IEvidenceFactory evidenceFactory;
 
@@ -35,15 +31,15 @@ namespace Mx.Hyperway.Commons.Persist
 
         public FileInfo Persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
         {
-            var identifier = FileUtils.filterString(transmissionIdentifier.getIdentifier());
-            var targetFolder = PersisterUtils.createArtifactFolders(inboundFolder, header).FullName;
+            var identifier = FileUtils.FilterString(transmissionIdentifier.getIdentifier());
+            var targetFolder = PersisterUtils.CreateArtifactFolders(this.inboundFolder, header).FullName;
             string targetFile = Path.Combine(targetFolder, $"{identifier}.doc.xml");
 
             var xmlData = inputStream.ToBuffer();
             File.WriteAllBytes(targetFile, xmlData);
 
 
-            LOGGER.DebugFormat("Payload persisted to: {0}", targetFile);
+            Logger.DebugFormat("Payload persisted to: {0}", targetFile);
 
             return new FileInfo(targetFile);
         }
@@ -51,8 +47,8 @@ namespace Mx.Hyperway.Commons.Persist
 
         public void Persist(IInboundMetadata inboundMetadata, FileInfo payloadPath)
         {
-            var targetFolder = PersisterUtils.createArtifactFolders(inboundFolder, inboundMetadata.GetHeader()).FullName;
-            var identifier = FileUtils.filterString(inboundMetadata.GetTransmissionIdentifier().getIdentifier());
+            var targetFolder = PersisterUtils.CreateArtifactFolders(this.inboundFolder, inboundMetadata.GetHeader()).FullName;
+            var identifier = FileUtils.FilterString(inboundMetadata.GetTransmissionIdentifier().getIdentifier());
             string targetFile = Path.Combine(targetFolder, $"{identifier}.receipt.dat");
 
             using (var fs = File.Create(targetFile))
@@ -60,7 +56,7 @@ namespace Mx.Hyperway.Commons.Persist
                 this.evidenceFactory.Write(fs, inboundMetadata);
             }
 
-            LOGGER.DebugFormat("Receipt persisted to: {0}", targetFile);
+            Logger.DebugFormat("Receipt persisted to: {0}", targetFile);
         }
     }
 }

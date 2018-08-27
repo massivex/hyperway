@@ -6,7 +6,7 @@ namespace Mx.Hyperway.Commons.Util
     {
         private static Version version;
 
-        private static Version GetVersion()
+        private static Version Current()
         {
             if (version == null)
             {
@@ -16,44 +16,49 @@ namespace Mx.Hyperway.Commons.Util
             return version;
         }
 
-        /**
-         * The Oxalis version, taken from the POM
-         */
-        public static String getVersion()
+        /// <summary>
+        /// the Hyperway version 
+        /// </summary>
+        /// <returns></returns>
+        public static string GetVersion()
         {
-            return GetVersion().ToString();
+            return Current().ToString();
         }
 
-        /**
-         * The OS user (from environment) running the build
-         */
-        public static String getUser()
+        /// <summary>
+        /// The OS user (from environment) running the build
+        /// </summary>
+        /// <returns></returns>
+        public static string GetUser()
         {
-            return System.Environment.UserName;
+            return Environment.UserName;
         }
 
-        /**
-         * Describes the build SCM version
-         */
-        public static String getBuildDescription()
+        /// <summary>
+        /// Describes the build SCM version 
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBuildDescription()
         {
-            return GetVersion().Build.ToString();
+            return Current().Build.ToString();
         }
 
-        /**
-         * Git SCM version, full format
-         */
-        public static String getBuildId()
+        /// <summary>
+        /// Git SCM version, full format
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBuildId()
         {
-            return GetVersion().Build.ToString();
+            return Current().Build.ToString();
         }
 
-        /**
-         * The build commit time stamp
-         */
-        public static String getBuildTimeStamp()
+        /// <summary>
+        /// The build commit time stamp 
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBuildTimeStamp()
         {
-            return GetVersion().Build.ToString();
+            return Current().Build.ToString();
         }
 
     }

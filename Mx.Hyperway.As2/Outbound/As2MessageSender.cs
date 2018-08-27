@@ -74,7 +74,7 @@
             this.secureMimeContext = secureMimeContext;
 
             // Establishes our AS2 System Identifier based upon the contents of the CN= field of the certificate
-            this.fromIdentifier = CertificateUtils.extractCommonName(certificate);
+            this.fromIdentifier = CertificateUtils.ExtractCommonName(certificate);
         }
 
         public ITransmissionResponse Send(ITransmissionRequest request)
@@ -164,7 +164,7 @@
                 httpPost.Headers.Add(As2Header.As2From, this.fromIdentifier);
                 httpPost.Headers.Add(
                     As2Header.As2To,
-                    CertificateUtils.extractCommonName(this.transmissionRequest.GetEndpoint().getCertificate()));
+                    CertificateUtils.ExtractCommonName(this.transmissionRequest.GetEndpoint().getCertificate()));
                 httpPost.Headers.Add(As2Header.DispositionNotificationTo, "not.in.use@difi.no");
                 httpPost.Headers.Add(
                     As2Header.DispositionNotificationOptions,

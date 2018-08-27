@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Hyperway.Commons.Persist
+﻿namespace Mx.Hyperway.Commons.Persist
 {
     using System.IO;
 
@@ -25,5 +21,4 @@ namespace Mx.Hyperway.Commons.Persist
             // No operation (intended)
         }
     }
-
 }

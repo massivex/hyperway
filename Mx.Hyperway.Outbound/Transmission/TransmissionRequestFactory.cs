@@ -84,11 +84,11 @@
                 }
 
                 // Create transmission request.
-                return new DefaultTransmissionMessage(header, peekingInputStream.newInputStream());
+                return new DefaultTransmissionMessage(header, peekingInputStream.NewInputStream());
             }
             catch (SbdhException)
             {
-                byte[] payload = peekingInputStream.getContent();
+                byte[] payload = peekingInputStream.GetContent();
 
                 // Detect header from content.
                 Trace span = root.Child();

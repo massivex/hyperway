@@ -57,7 +57,6 @@
             var settings = c.Resolve<Setting<KeyStoreConf>>();
 
             var keyAlias = settings.Get(KeyStoreConf.KeyAlias);
-            var keyPassword = settings.Get(KeyStoreConf.KeyPassword);
 
             if (!keyStore.ContainsAlias(keyAlias))
             {

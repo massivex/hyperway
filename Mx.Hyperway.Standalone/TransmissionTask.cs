@@ -219,7 +219,7 @@
             byte[] supplier,
             DirectoryInfo evidencePath)
         {
-            String fileName = FileUtils.filterString(transmissionResponse.GetTransmissionIdentifier().ToString())
+            String fileName = FileUtils.FilterString(transmissionResponse.GetTransmissionIdentifier().ToString())
                               + suffix;
             FileInfo evidenceFile = new FileInfo(Path.Combine(evidencePath.FullName, fileName));
             File.WriteAllBytes(evidenceFile.FullName, supplier);

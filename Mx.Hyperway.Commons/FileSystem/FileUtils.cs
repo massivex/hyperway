@@ -5,28 +5,14 @@
 
     public class FileUtils
     {
-
-        /**
-         * Filter string to make it better fit use as filename.
-         *
-         * @param s Unfiltered string.
-         * @return Filtered string.
-         */
-        public static String filterString(String s)
+        /// <summary>
+        /// Filter string to make it better fit use as filename. 
+        /// </summary>
+        /// <param name="s">Unfiltered string.</param>
+        /// <returns>Filtered string.</returns>
+        public static String FilterString(String s)
         {
             return Regex.Replace(s, "[^a-zA-Z0-9.\\-]", "_");
         }
-
-        //public static Uri toUrl(Path path)
-        //{
-        //    try
-        //    {
-        //        return path.toUri().toURL();
-        //    }
-        //    catch (MalformedURLException e)
-        //    {
-        //        throw new IllegalStateException(e.getMessage(), e);
-        //    }
-        //}
     }
 }

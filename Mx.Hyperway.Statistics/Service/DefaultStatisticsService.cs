@@ -27,7 +27,7 @@
         public DefaultStatisticsService(RawStatisticsRepository rawStatisticsRepository, X509Certificate certificate)
         {
             this.rawStatisticsRepository = rawStatisticsRepository;
-            this.ourAccessPointIdentifier = new AccessPointIdentifier(CertificateUtils.extractCommonName(certificate));
+            this.ourAccessPointIdentifier = new AccessPointIdentifier(CertificateUtils.ExtractCommonName(certificate));
         }
 
         public void Persist(
@@ -53,7 +53,7 @@
                 if (transmissionRequest.GetEndpoint().getCertificate() != null)
                 {
                     String accessPointIdentifierValue =
-                        CertificateUtils.extractCommonName(transmissionRequest.GetEndpoint().getCertificate());
+                        CertificateUtils.ExtractCommonName(transmissionRequest.GetEndpoint().getCertificate());
                     builder.Channel(new ChannelId(accessPointIdentifierValue));
                 }
                 else

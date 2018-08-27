@@ -4,10 +4,10 @@
 
     using Mx.Tools;
 
-    /**
-     * Caching InputStream to be used when reading the beginning of a stream is needed before the stream is "reset" when
-     * the exact amount of data is unknown and support for marking of is irrelevant.
-     */
+    /// <summary>
+    /// Caching InputStream to be used when reading the beginning of a stream is needed before the stream is "reset" when
+    /// the exact amount of data is unknown and support for marking of is irrelevant.
+    /// </summary>
     public class PeekingInputStream : MemoryStream
     {
 
@@ -15,7 +15,7 @@
 
         private readonly Stream internlaInputStream;
 
-        public PeekingInputStream(Stream sourceInputStream) // throws IOException
+        public PeekingInputStream(Stream sourceInputStream)
         {
             this.content = sourceInputStream.ToBuffer();
             this.internlaInputStream = new MemoryStream(this.content);
@@ -27,12 +27,12 @@
             return this.internlaInputStream.Read(buffer, offset, count);
         }
 
-        public byte[] getContent()
+        public byte[] GetContent()
         {
             return this.content;
         }
 
-        public Stream newInputStream() // throws IOException {
+        public Stream NewInputStream() // throws IOException {
         {
             return new MemoryStream(this.content);
         }

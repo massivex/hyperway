@@ -2,9 +2,10 @@
 {
     using System.IO;
 
-    /**
-     * Simple wrapper of an InputStream making sure the close method on the encapsulated InputStream is never called.
-     */
+    /// <inheritdoc />
+    /// <summary>
+    /// Simple wrapper of an InputStream making sure the close method on the encapsulated InputStream is never called. 
+    /// </summary>
     public class UnclosableInputStream : MemoryStream
     {
 
@@ -15,7 +16,12 @@
             this.inputStream = (MemoryStream) inputStream;
         }
 
-        public override void Close() // throws IOException
+        public MemoryStream GetStream()
+        {
+            return this.inputStream;
+        }
+
+        public override void Close()
         {
             // No action.
         }

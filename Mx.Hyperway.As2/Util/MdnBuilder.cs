@@ -12,7 +12,7 @@ namespace Mx.Hyperway.As2.Util
     public class MdnBuilder
     {
 
-        private static readonly string Issuer = string.Format("Hyperway {0}", HyperwayVersion.getVersion());
+        private static readonly string Issuer = string.Format("Hyperway {0}", HyperwayVersion.GetVersion());
 
         private HeaderList headers = new HeaderList();
 

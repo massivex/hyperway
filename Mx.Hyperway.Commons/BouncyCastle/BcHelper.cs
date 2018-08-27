@@ -13,17 +13,5 @@
             hasher.DoFinal(result, 0);
             return result;
         }
-
-        //public static MessageDigest getMessageDigest(string algorithm) //throws NoSuchAlgorithmException
-        //{
-        //    try
-        //    {
-        //        return MessageDigest.getInstance(algorithm, BouncyCastleProvider.PROVIDER_NAME);
-        //    }
-        //    catch (NoSuchProviderException e)
-        //    {
-        //        throw new NoSuchAlgorithmException(e.getMessage(), e);
-        //    }
-        //}
     }
 }

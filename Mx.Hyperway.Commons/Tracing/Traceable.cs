@@ -4,20 +4,18 @@
 
     public abstract class Traceable
     {
+        /// <summary>
+        /// Zipkin tracer implementation. 
+        /// </summary>
+        protected readonly Trace Tracer;
 
-        /**
-         * Zipkin tracer implementation.
-         */
-        protected readonly Trace tracer;
-
-        /**
-         * Default constructor accepting a tracer.
-         *
-         * @param tracer Tracer from application context.
-         */
+        /// <summary>
+        /// Default constructor accepting a tracer. 
+        /// </summary>
+        /// <param name="tracer">Tracer from application context.</param>
         protected Traceable(Trace tracer)
         {
-            this.tracer = tracer;
+            this.Tracer = tracer;
         }
     }
 

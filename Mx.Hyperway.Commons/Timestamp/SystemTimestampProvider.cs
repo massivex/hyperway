@@ -9,7 +9,6 @@
 
     public class SystemTimestampProvider : ITimestampProvider
     {
-        // @Override
         public Timestamp Generate(byte[] content, Direction direction)
         {
             return new Timestamp(DateTime.Now, null);

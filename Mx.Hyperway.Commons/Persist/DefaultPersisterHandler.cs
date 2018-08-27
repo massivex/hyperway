@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Hyperway.Commons.Persist
+﻿namespace Mx.Hyperway.Commons.Persist
 {
     using System.IO;
 
@@ -14,9 +10,9 @@ namespace Mx.Hyperway.Commons.Persist
     public class DefaultPersisterHandler : IPersisterHandler
     {
 
-        private IPayloadPersister payloadPersister;
+        private readonly IPayloadPersister payloadPersister;
 
-        private IReceiptPersister receiptPersister;
+        private readonly IReceiptPersister receiptPersister;
 
         public DefaultPersisterHandler(IPayloadPersister payloadPersister, IReceiptPersister receiptPersister)
         {
@@ -26,12 +22,12 @@ namespace Mx.Hyperway.Commons.Persist
 
         public void Persist(IInboundMetadata inboundMetadata, FileInfo payloadPath)
         {
-            receiptPersister.Persist(inboundMetadata, payloadPath);
+            this.receiptPersister.Persist(inboundMetadata, payloadPath);
         }
 
         public FileInfo Persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
         {
-            return payloadPersister.Persist(transmissionIdentifier, header, inputStream);
+            return this.payloadPersister.Persist(transmissionIdentifier, header, inputStream);
         }
     }
 }

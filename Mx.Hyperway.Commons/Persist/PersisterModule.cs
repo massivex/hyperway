@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Hyperway.Commons.Persist
+﻿namespace Mx.Hyperway.Commons.Persist
 {
     using Autofac;
 
     using Mx.Hyperway.Api.Persist;
 
-    public class PersisterModule : Autofac.Module
+    public class PersisterModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

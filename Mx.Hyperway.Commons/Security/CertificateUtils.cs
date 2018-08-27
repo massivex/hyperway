@@ -9,13 +9,12 @@
     public class CertificateUtils
     {
 
-        private static readonly Regex PATTERN_CN = new Regex("CN=([^,]+)");
+        private static readonly Regex PatternCn = new Regex("CN=([^,]+)");
 
-        public static String extractCommonName(X509Certificate certificate)
+        public static String ExtractCommonName(X509Certificate certificate)
         {
-            X509Name principal = certificate.SubjectDN; // .getSubjectX500Principal();
-            // TODO: check if ToString return common name
-            Match m = PATTERN_CN.Match(principal.ToString());
+            X509Name principal = certificate.SubjectDN;
+            Match m = PatternCn.Match(principal.ToString());
 
             if (m.Success)
             {
@@ -23,7 +22,7 @@
             }
             else
             {
-                throw new InvalidOperationException("Unable to extract the CN attribute from " + principal.ToString());
+                throw new InvalidOperationException("Unable to extract the CN attribute from " + principal);
             }
         }
     }

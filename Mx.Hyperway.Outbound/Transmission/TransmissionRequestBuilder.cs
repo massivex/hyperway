@@ -144,7 +144,7 @@
             PeppolStandardBusinessHeader optionalParsedSbdh = null;
             try
             {
-                optionalParsedSbdh = new PeppolStandardBusinessHeader(SbdhParser.parse(this.payload.ToStream()));
+                optionalParsedSbdh = new PeppolStandardBusinessHeader(SbdhParser.Parse(this.payload.ToStream()));
             }
             catch (InvalidOperationException)
             {
