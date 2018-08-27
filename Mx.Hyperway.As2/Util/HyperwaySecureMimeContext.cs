@@ -168,7 +168,7 @@
 
         public void Update(X509CertificateRecord record, X509CertificateRecordFields fields)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public IEnumerable<X509CrlRecord> Find(X509Name issuer, X509CrlRecordFields fields)

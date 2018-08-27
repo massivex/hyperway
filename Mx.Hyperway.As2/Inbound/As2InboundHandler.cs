@@ -32,6 +32,9 @@ namespace Mx.Hyperway.As2.Inbound
     using Mx.Peppol.Security.Api;
     using Mx.Tools;
 
+    using Org.BouncyCastle.Asn1;
+    using Org.BouncyCastle.Asn1.Cms;
+
     using Header = MimeKit.Header;
 
     /**
@@ -119,11 +122,6 @@ namespace Mx.Hyperway.As2.Inbound
 
             mdnBuilder.addHeader(MdnHeader.ORIGINAL_CONTENT_HEADER, headerBytes);
 
-            using (var fs = File.Create("C:\\temp\\hyperway-input-mic-content.eml"))
-            {
-                fs.Write(headerBytes, 0, headerBytes.Length);
-                fs.Write(bodyBytes, 0, bodyBytes.Length);
-            }
 
             // Extract SBDH
             Mx.Peppol.Common.Model.Header header;
@@ -176,18 +174,6 @@ namespace Mx.Hyperway.As2.Inbound
                 mdn.Headers.Add(As2Header.AS2_FROM, httpHeaders[As2Header.AS2_TO]);
                 mdn.Headers.Add(As2Header.AS2_TO, httpHeaders[As2Header.AS2_FROM]);
 
-                // Prepare MDN
-                // mdn.WriteTo();
-                //ByteArrayOutputStream mdnOutputStream = new ByteArrayOutputStream();
-                //mdn.writeTo(mdnOutputStream);
-
-                //// Persist metadata
-                //As2InboundMetadata inboundMetadata = new As2InboundMetadata(transmissionIdentifier, header, t2,
-                //    digestMethod.getTransportProfile(), calculatedDigest, signer, mdnOutputStream.toByteArray());
-                //persisterHandler.persist(inboundMetadata, payloadPath);
-
-                //// Persist statistics
-                //statisticsService.persist(inboundMetadata);
                 return mdn;
             }
         }
@@ -203,6 +189,8 @@ namespace Mx.Hyperway.As2.Inbound
                     signatures = signed.Verify(ctx);
                     foreach (var signature in signatures)
                     {
+                        var signerInfo = ((MimeKit.Cryptography.SecureMimeDigitalSignature)signature).SignerInfo;
+                        var test = signerInfo.SignedAttributes[CmsAttributes.MessageDigest];
                         bool valid = signature.Verify();
                         return true;
                     }

@@ -34,6 +34,10 @@ namespace Mx.Tools.Http
                 result.StatusCode = response.StatusCode;
                 result.Headers = response.Headers;
                 string charset = response.CharacterSet;
+                if (string.IsNullOrWhiteSpace(charset))
+                {
+                    charset = "utf-8";
+                }
                 Encoding encoding = Encoding.GetEncoding(charset);
                 using (var stream = response.GetResponseStream())
                 {

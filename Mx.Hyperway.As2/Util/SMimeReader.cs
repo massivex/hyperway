@@ -37,7 +37,8 @@
             // signature = this.mimeMultipart[1].WriteTo(). GetBuffer(); //  ByteStreams.toByteArray(((InputStream)mimeMultipart.getBodyPart(1).getContent()));
 
             // Extracting DNO
-            String[] dno = mimeMessage.Headers[As2Header.DISPOSITION_NOTIFICATION_OPTIONS].Split(new[] { "\\r\\n" }, StringSplitOptions.None);
+            String[] dno = (mimeMessage.Headers[As2Header.DISPOSITION_NOTIFICATION_OPTIONS] ?? string.Empty)
+                .Split(new[] { "\\r\\n" }, StringSplitOptions.None);
 
             // if (dno == null)
             // throw new IllegalStateException("Unable to extract dno.");

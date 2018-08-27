@@ -1,12 +1,14 @@
 ﻿namespace Mx.Hyperway.As2.Util
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
 
     using MimeKit;
     using MimeKit.Cryptography;
+    using MimeKit.IO;
 
     using Mx.Tools;
 
@@ -55,6 +57,19 @@
 
         public MimeMessage createSignedMimeMessage(MimeEntity mimeBodyPart, SMimeDigestMethod digestMethod)
         {
+            if (mimeBodyPart is MimePart)
+            {
+                // ((MimePart)mimeBodyPart).Content.Encoding = ContentEncoding.Default;
+                ((MimePart) mimeBodyPart).ContentTransferEncoding = ContentEncoding.Binary;
+            }
+            //static MultipartSigned Create(CryptographyContext ctx, DigestAlgorithm digestAlgo, MimeEntity entity, MimeEntity signature)
+            //{
+
+
+            //    return signed;
+            //}
+
+
             MultipartSigned multipart;
             using (var ctx = this.secContentFactory())
             {
@@ -73,43 +88,43 @@
                     throw new NotSupportedException($"Algorithm {digestMethod.getAlgorithm()} not supported");
                 }
 
-                // Signer identification
-                var cmsSigner = new CmsSigner(this.ourCertificate, this.privateKey)
-                                    {
-                                        DigestAlgorithm = algorithm
-                                    };
+                var micalg = ctx.GetDigestAlgorithmName(algorithm);
+                var signed = new MultipartSigned();
 
-                // Create and sign message
-                multipart = MultipartSigned.Create(ctx, cmsSigner, mimeBodyPart);
-                
-                // Force signed content to be transferred in binary format
-                            
-                //MimeEntity xml = multipart.First();
-  //              xml.ContentTransferEncoding = ContentEncoding.Binary;
-            }
+                // set the protocol and micalg Content-Type parameters
+                signed.ContentType.Parameters["protocol"] = ctx.SignatureProtocol;
+                signed.ContentType.Parameters["micalg"] = micalg;
 
-            // Remove unused headers
-            foreach (var header in multipart.Headers.Select(x => x.Id).ToList())
-            {
-                if (header != HeaderId.MessageId && header != HeaderId.MimeVersion && header != HeaderId.ContentType)
+
+                // add the modified/parsed entity as our first part
+                signed.Add(mimeBodyPart);
+
+                var cmsSigner = new CmsSigner(this.ourCertificate, this.privateKey) { DigestAlgorithm = algorithm };
+                ApplicationPkcs7Signature signature;
+                using (var memory = new MemoryBlockStream())
                 {
-                    multipart.Headers.Remove(header);
+                    // var prepared = Prepare(entity, memory);
+                    mimeBodyPart.WriteTo(memory);
+                    memory.Position = 0;
+
+                    // sign the cleartext content
+                    signature = ctx.Sign(cmsSigner, memory);
                 }
 
+                // add the detached signature as the second part
+                signed.Add(signature);
+
+
+                // Signer identification
+
+
+                // Create and sign message
+                multipart = signed;
             }
 
             var message = new MimeMessage();
             message.Body = multipart;
-            // Remove unused headers
-            foreach (var header in message.Headers.Select(x => x.Id).ToList())
-            {
-                if (header != HeaderId.MessageId && header != HeaderId.MimeVersion && header != HeaderId.ContentType)
-                {
-                    message.Headers.Remove(header);
-                }
 
-            }
-            
             return message;
         }
         /**

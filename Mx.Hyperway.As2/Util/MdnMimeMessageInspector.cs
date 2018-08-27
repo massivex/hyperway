@@ -24,6 +24,8 @@ using Mx.Tools.Encoding;
  */
 namespace Mx.Hyperway.As2.Util
 {
+    using MimeKit.Cryptography;
+
     using Mx.Hyperway.As2.Model;
 
     public class MdnMimeMessageInspector
@@ -38,12 +40,11 @@ namespace Mx.Hyperway.As2.Util
             this.mdnMimeMessage = mdnMimeMessage;
         }
 
-        public List<MimeEntity> getSignedMultiPart()
+        public MultipartSigned getSignedMultiPart()
         {
             try
             {
-                // return (MimeMultipart)mdnMimeMessage.getContent();
-                return this.mdnMimeMessage.BodyParts.ToList();
+                return (MultipartSigned) this.mdnMimeMessage.Body;
             }
             catch (Exception e)
             {
@@ -55,17 +56,16 @@ namespace Mx.Hyperway.As2.Util
      * The multipart/report should contain both a text/plain part with textual information and
      * a message/disposition-notification part that should be examined for error/failure/warning.
      */
-        public List<MimeEntity> getMultipartReport()
+        public MultipartReport getMultipartReport()
         {
             try
             {
-                MimeEntity bodyPart = this.getSignedMultiPart()[0];
-                List<MimeEntity> multipartReport = (bodyPart as Multipart).ToList();
-                if (!containsIgnoreCase(bodyPart.Headers[HeaderId.ContentType], "multipart/report"))
+                MultipartReport bodyPart = this.getSignedMultiPart()[0] as MultipartReport;
+                if (bodyPart == null)
                 {
                     throw new InvalidOperationException("The first body part of the first part of the signed message is not a multipart/report");
                 }
-                return multipartReport;
+                return bodyPart;
             }
             catch (Exception e)
             {
@@ -76,19 +76,19 @@ namespace Mx.Hyperway.As2.Util
         /**
      * We assume that the first text/plain part is the one containing any textual information.
      */
-        public MimeEntity getPlainTextBodyPart()
+        public TextPart getPlainTextBodyPart()
         {
-            return this.getPartFromMultipartReport("text/plain");
+            return (TextPart) this.getPartFromMultipartReport("text/plain");
         }
 
         /**
      * We search for the first message/disposition-notification part.
      * If we don't find one of that type we assume that part 2 is the right one.
      */
-        public MimeEntity getMessageDispositionNotificationPart()
+        public MessageDispositionNotification getMessageDispositionNotificationPart()
         {
-            MimeEntity bp = this.getPartFromMultipartReport("message/disposition-notification");
-            if (bp == null) bp = this.getBodyPartAt(1); // the second part should be machine readable
+            var bp = (MessageDispositionNotification) this.getPartFromMultipartReport("message/disposition-notification");
+            // if (bp == null) bp = this.getBodyPartAt(1); // the second part should be machine readable
             return bp;
         }
 
@@ -101,11 +101,11 @@ namespace Mx.Hyperway.As2.Util
         {
             try
             {
-                List<MimeEntity> multipartReport = this.getMultipartReport();
+                MultipartReport multipartReport = this.getMultipartReport();
                 for (int t = 0; t < multipartReport.Count; t++)
                 {
-                    MimeEntity bp = multipartReport[t]; //.getBodyPart(t);
-                    if (containsIgnoreCase(bp.Headers[HeaderId.ContentType], contentType))
+                    MimeEntity bp = multipartReport[t];
+                    if (containsIgnoreCase(bp.ContentType.MimeType, contentType))
                     {
                         return bp;
                     }
@@ -131,98 +131,99 @@ namespace Mx.Hyperway.As2.Util
         public String getPlainTextPartAsText()
         {
 
-            return this.getPlainTextBodyPart().ToString();
+            return this.getPlainTextBodyPart().Text;
         }
 
-        public Dictionary<String, String> getMdnFields()
+        public HeaderList getMdnFields()
         {
-            Dictionary<string, string> ret = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            try
-            {
+            // Dictionary<string, string> ret = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            //try
+            //{
 
-                MimeEntity bp = this.getMessageDispositionNotificationPart();
-                bool contentIsBase64Encoded = false;
+                MessageDispositionNotification bp = this.getMessageDispositionNotificationPart();
+                //bool contentIsBase64Encoded = false;
 
-                //
-                // look for base64 transfer encoded MDN's (when Content-Transfer-Encoding is present)
-                //
-                // Content-Type: message/disposition-notification
-                // Content-Transfer-Encoding: base64
-                //
-                // "Content-Transfer-Encoding not used in HTTP transport Because HTTP, unlike SMTP,
-                // does not have an early history involving 7-bit restriction.
-                // There is no need to use the Content Transfer Encodings of MIME."
-                //
-                String[] contentTransferEncodings = bp
-                    .Headers[HeaderId.ContentTransferEncoding]
-                    .Split(new[] { "\r\n" }, StringSplitOptions.None);
-                // GetAllFieldValue("Content-Transfer-Encoding");
-                if (contentTransferEncodings != null && contentTransferEncodings.Length > 0)
-                {
-                    if (contentTransferEncodings.Length > 1)
-                    {
-                        log.Warn("MDN has multiple Content-Transfer-Encoding, we only try the first one");
-                    }
+                return bp.Fields;
+            //    //
+            //    // look for base64 transfer encoded MDN's (when Content-Transfer-Encoding is present)
+            //    //
+            //    // Content-Type: message/disposition-notification
+            //    // Content-Transfer-Encoding: base64
+            //    //
+            //    // "Content-Transfer-Encoding not used in HTTP transport Because HTTP, unlike SMTP,
+            //    // does not have an early history involving 7-bit restriction.
+            //    // There is no need to use the Content Transfer Encodings of MIME."
+            //    //
+            //    String[] contentTransferEncodings = bp
+            //        .Headers[HeaderId.ContentTransferEncoding]
+            //        .Split(new[] { "\r\n" }, StringSplitOptions.None);
+            //    // GetAllFieldValue("Content-Transfer-Encoding");
+            //    if (contentTransferEncodings != null && contentTransferEncodings.Length > 0)
+            //    {
+            //        if (contentTransferEncodings.Length > 1)
+            //        {
+            //            log.Warn("MDN has multiple Content-Transfer-Encoding, we only try the first one");
+            //        }
 
-                    String encoding = contentTransferEncodings[0];
-                    if (encoding == null)
-                    {
-                        encoding = "";
-                    }
+            //        String encoding = contentTransferEncodings[0];
+            //        if (encoding == null)
+            //        {
+            //            encoding = "";
+            //        }
 
-                    encoding = encoding.Trim();
-                    log.Debug("MDN specifies Content-Transfer-Encoding : '" + encoding + "'");
-                    if ("base64".EqualsIgnoreCase(encoding))
-                    {
-                        contentIsBase64Encoded = true;
-                    }
-                }
+            //        encoding = encoding.Trim();
+            //        log.Debug("MDN specifies Content-Transfer-Encoding : '" + encoding + "'");
+            //        if ("base64".EqualsIgnoreCase(encoding))
+            //        {
+            //            contentIsBase64Encoded = true;
+            //        }
+            //    }
 
-                byte[] content;
-                using (var m = new MemoryStream())
-                {
-                    bp.WriteTo(m, true);
-                    content = m.ToArray();
-                }
-                if (content != null)
-                {
-                    // InputStream contentInputStream = (InputStream)content;
+            //    byte[] content;
+            //    using (var m = new MemoryStream())
+            //    {
+            //        bp.WriteTo(m, true);
+            //        content = m.ToArray();
+            //    }
+            //    if (content != null)
+            //    {
+            //        // InputStream contentInputStream = (InputStream)content;
 
-                    if (contentIsBase64Encoded)
-                    {
-                        log.Debug("MDN seems to be base64 encoded, wrapping content stream in Base64 decoding stream");
-                        var base64 = new Base64Encoding();
-                        content = base64.FromBytes(content);
-                        // contentInputStream = (new Base64Encoding)  new Base64InputStream(contentInputStream); // wrap in base64 decoding stream
-                    }
+            //        if (contentIsBase64Encoded)
+            //        {
+            //            log.Debug("MDN seems to be base64 encoded, wrapping content stream in Base64 decoding stream");
+            //            var base64 = new Base64Encoding();
+            //            content = base64.FromBytes(content);
+            //            // contentInputStream = (new Base64Encoding)  new Base64InputStream(contentInputStream); // wrap in base64 decoding stream
+            //        }
 
-                    // BufferedReader r = new BufferedReader(new InputStreamReader(contentInputStream));
-                    using (var r = new StreamReader(content.ToStream()))
+            //        // BufferedReader r = new BufferedReader(new InputStreamReader(contentInputStream));
+            //        using (var r = new StreamReader(content.ToStream()))
 
-                        while (!r.EndOfStream)
-                        {
-                            String line = r.ReadLine();
-                            int firstColon = line.IndexOf(":"); // "Disposition: ......"
-                            if (firstColon > 0)
-                            {
-                                String key = line.Substring(0, firstColon).Trim(); // up to :
-                                String value = line.Substring(firstColon + 1).Trim(); // skip :
-                                ret.Add(key, value);
-                            }
-                        }
+            //            while (!r.EndOfStream)
+            //            {
+            //                String line = r.ReadLine();
+            //                int firstColon = line.IndexOf(":"); // "Disposition: ......"
+            //                if (firstColon > 0)
+            //                {
+            //                    String key = line.Substring(0, firstColon).Trim(); // up to :
+            //                    String value = line.Substring(firstColon + 1).Trim(); // skip :
+            //                    ret.Add(key, value);
+            //                }
+            //            }
 
-                }
-                else
-                {
-                    throw new Exception("Unsupported MDN content, expected InputStream found @ " + content.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException("Unable to retrieve the values from the MDN : " + e.Message, e);
-            }
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("Unsupported MDN content, expected InputStream found @ " + content.ToString());
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new InvalidOperationException("Unable to retrieve the values from the MDN : " + e.Message, e);
+            //}
 
-            return ret;
+            //return ret;
         }
 
         /**
@@ -233,7 +234,7 @@ namespace Mx.Hyperway.As2.Util
         public bool isOkOrWarning(Mic outboundMic)
         {
 
-            Dictionary<String, String> mdnFields = this.getMdnFields();
+            HeaderList mdnFields = this.getMdnFields();
 
             /*
         --------_=_NextPart_001_B096DD27.9007A6CE

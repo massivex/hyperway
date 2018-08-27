@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -19,7 +18,7 @@
 
     class Program
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(Program));
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Program));
 
         static void Main(string[] args)
         {
@@ -27,7 +26,7 @@
                 .WithNotParsed(HandleParseError);
         }
 
-        private static void printErrorMessage(string message)
+        private static void PrintErrorMessage(string message)
         {
             Console.WriteLine(message);
         }
@@ -55,8 +54,7 @@
         }
 
         private static void RunInScope(ILifetimeScope scope, Options options)
-        {
-            var elenco = scope.ResolveKeyed<List<TransportProfile>>("prioritized");
+        {   
             // bootstraps the outbound module
             HyperwayOutboundComponent hyperwayOutboundComponent = scope.Resolve<HyperwayOutboundComponent>();
             TransmissionParameters parameters = new TransmissionParameters(hyperwayOutboundComponent);
@@ -70,7 +68,7 @@
 
             if (!evidencePath.Exists)
             {
-                printErrorMessage(evidencePath + " does not exist or is not a directory");
+                PrintErrorMessage(evidencePath + " does not exist or is not a directory");
             }
 
             parameters.EvidencePath = evidencePath;
@@ -145,7 +143,7 @@
                 Console.WriteLine("");
 
                 int maxThreads = options.ThreadCount;
-                log.Info("Using " + maxThreads + " threads");
+                Log.Info("Using " + maxThreads + " threads");
 
                 int repeats = options.RepeatCount;
                 int maximumTransmissions = options.MaxTransmissions;
@@ -154,7 +152,6 @@
                 // ExecutorCompletionService<TransmissionResult> ecs = new ExecutorCompletionService<>(exec);
 
                 // long start = DateTime.Now;
-                var watch = new Stopwatch();
                 int submittedTaskCount = 0;
                 foreach (FileInfo file in files)
                 {

@@ -160,11 +160,9 @@
             try
             {
                 bodyPart = new MimePart(mimeType);
-                bodyPart.Content = new MimeContent(inputStream, ContentEncoding.Binary);
-                bodyPart.ContentTransferEncoding = ContentEncoding.Binary;
+                bodyPart.Content = new MimeContent(inputStream);
                 
                 //var parseOption = new ParserOptions();
-
                 //parseOption.CharsetEncoding = Encoding.UTF8;
                 //inputStream.Seek(0, SeekOrigin.Begin);
                 //bodyPart = MimeEntity.Load(parseOption, ContentType.Parse(mimeType), inputStream);                
@@ -215,16 +213,10 @@
                     bodyPart.WriteTo(m);
                     m.Seek(0, SeekOrigin.Begin);
                     var content = m.ToArray();
-                    System.IO.File.WriteAllBytes("C:\\temp\\hyperway-outbound-mic-content.eml", content);
                     digest = BcHelper.Hash(m.ToArray(), digestMethod.getAlgorithm());
-                    var test = BitConverter.ToString(digest).Replace("-", "");
                 }
 
                 return Digest.of(digestMethod.getDigestMethod(), digest);
-                // MessageDigest md = BCHelper.getMessageDigest(digestMethod.getIdentifier());
-
-                // bodyPart.writeTo(new DigestOutputStream(ByteStreams.nullOutputStream(), md));
-
             }
             catch (IOException e)
             {

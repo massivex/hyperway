@@ -44,7 +44,7 @@
             this.mimeMessage = mimeMessage;
             this.verifyContentType();
 
-            this.parseSignedMessage();
+            // Wthis.parseSignedMessage();
         }
 
 

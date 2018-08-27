@@ -2,9 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     using log4net;
 
@@ -28,6 +31,8 @@
 
     using zipkin4net;
 
+    using Trace = zipkin4net.Trace;
+
     public class As2MessageSender : MessageSender
     {
 
@@ -40,6 +45,8 @@
          * Timestamp provider used to create timestamp "t3" (time of reception of transport specific receipt, MDN).
          */
         private readonly TimestampProvider timestampProvider;
+
+        private readonly Func<HyperwaySecureMimeContext> secureMimeContext;
 
         /**
          * Identifier from sender's certificate used during transmission in "AS2-From" header.
@@ -62,10 +69,12 @@
         public As2MessageSender(
             X509Certificate certificate,
             SMimeMessageFactory sMimeMessageFactory,
-            TimestampProvider timestampProvider)
+            TimestampProvider timestampProvider,
+            Func<HyperwaySecureMimeContext> secureMimeContext)
         {
             this.sMimeMessageFactory = sMimeMessageFactory;
             this.timestampProvider = timestampProvider;
+            this.secureMimeContext = secureMimeContext;
 
             // Establishes our AS2 System Identifier based upon the contents of the CN= field of the certificate
             this.fromIdentifier = CertificateUtils.extractCommonName(certificate);
@@ -116,45 +125,47 @@
                 SMimeDigestMethod digestMethod =
                     SMimeDigestMethod.findByTransportProfile(
                         this.transmissionRequest.GetEndpoint().getTransportProfile());
-                var dataTemp = this.transmissionRequest.GetPayload().ToBuffer();
-                
-                this.outboundMic = MimeMessageHelper.calculateMic(mimeBodyPart, digestMethod);
-                span.Record(Annotations.Tag("mic", this.outboundMic.ToString()));
-                span.Record(
-                    Annotations.Tag("endpoint url", this.transmissionRequest.GetEndpoint().getAddress().ToString()));
+
+
+
 
                 // Create a complete S/MIME message using the body part containing our content as the
                 // signed part of the S/MIME message.
-                MimeMessage signedMimeMessage = this.sMimeMessageFactory.createSignedMimeMessage(mimeBodyPart, digestMethod);
-                
+                MimeMessage signedMimeMessage =
+                    this.sMimeMessageFactory.createSignedMimeMessage(mimeBodyPart, digestMethod);
+
+                var signedMultipart = (signedMimeMessage.Body as MultipartSigned);
+                Debug.Assert(signedMultipart != null, nameof(signedMultipart) + " != null");
+                this.outboundMic = MimeMessageHelper.calculateMic(signedMultipart[0], digestMethod);
+                span.Record(Annotations.Tag("mic", this.outboundMic.ToString()));
+                span.Record(Annotations.Tag("endpoint url", this.transmissionRequest.GetEndpoint().getAddress().ToString()));
 
                 // Initiate POST request
                 httpPost = new HttpPost(this.transmissionRequest.GetEndpoint().getAddress());
 
                 List<String> headerNames = signedMimeMessage.Headers
                     // Tag for tracing.
-                    .Peek(
-                        x => span.Record(
-                            Annotations.Tag(x.Field, x.Value))) // span.tag(h.getName(), h.getValue()))
+                    .Peek(x => span.Record(Annotations.Tag(x.Field, x.Value))) // span.tag(h.getName(), h.getValue()))
                     // Add headers to httpPost object (remove new lines according to HTTP 1.1).
-                    .Peek(x => httpPost.AddHeader(x.Field, x.Value.Replace("\r\n\t", string.Empty)))
-                    .Map(x => x.Field)
+                    .Peek(x => httpPost.AddHeader(x.Field, x.Value.Replace("\r\n\t", string.Empty))).Map(x => x.Field)
                     .ToList();
 
                 signedMimeMessage.Headers.Clear();
-                
-                this.transmissionIdentifier = TransmissionIdentifier.fromHeader(httpPost.Headers[As2Header.MESSAGE_ID]);
 
+                this.transmissionIdentifier = TransmissionIdentifier.fromHeader(httpPost.Headers[As2Header.MESSAGE_ID]);
 
                 // Write content to OutputStream without headers.
                 using (var m = new MemoryStream())
                 {
-                    signedMimeMessage.WriteTo(m);
+                    signedMultipart.WriteTo(m);
                     httpPost.Entity = m.ToBuffer();
                 }
 
+                var contentType = signedMultipart.Headers[HeaderId.ContentType];
+
                 // Set all headers specific to AS2 (not MIME).
                 httpPost.Host = "skynet.sediva.it";
+                httpPost.Headers.Add("Content-Type", this.NormalizeHeaderValue(contentType));
                 httpPost.Headers.Add(As2Header.AS2_FROM, this.fromIdentifier);
                 httpPost.Headers.Add(
                     As2Header.AS2_TO,
@@ -170,12 +181,20 @@
             }
             catch (Exception e)
             {
-                throw new HyperwayTransmissionException("Unable to stream S/MIME message into byte array output stream");
+                throw new HyperwayTransmissionException(
+                    "Unable to stream S/MIME message into byte array output stream");
             }
             finally
             {
                 span.Record(Annotations.ClientRecv());
             }
+        }
+
+
+        private string NormalizeHeaderValue(string value)
+        {
+            var result = Regex.Replace(value, @"[\t\r\n]", string.Empty);
+            return result;
         }
 
         protected TransmissionResponse sendHttpRequest(HttpPost httpPost)
@@ -242,69 +261,61 @@
                 }
 
                 // Read MIME Message
-                Multipart multipart = MimeMessageHelper.parseMultipart(
-                    response.Entity.Content.ToStream(),
-                    contentTypeHeader) as Multipart;
-                MimeMessage mimeMessage = null;
-                throw new NotImplementedException();
-
-                // Add headers to MIME Message
-                foreach (var headerName in response.Headers.AllKeys)
+                MimeMessage mimeMessage;
+                SignedMimeMessage signedMimeMessage;
+                using (var m = new MemoryStream())
                 {
-                    mimeMessage.Headers.Add(headerName, response.Headers[headerName]);
+                    // Add headers to MIME Message
+                    foreach (var headerName in response.Headers.AllKeys)
+                    {
+                        var headerText = $"{headerName}: {response.Headers[headerName]}";
+                        var headerData = Encoding.ASCII.GetBytes(headerText);
+                        m.Write(headerData, 0, headerData.Length);
+                        m.Write(new byte[] { 13, 10 }, 0, 2);
+                    }
+                    m.Write(new byte[] { 13, 10 }, 0, 2);
+
+                    var messageData = response.Entity.Content;
+                    m.Write(messageData, 0, messageData.Length);
+
+
+                    m.Seek(0, SeekOrigin.Begin);
+                    mimeMessage = MimeMessage.Load(m);
+                    mimeMessage.Headers[HeaderId.ContentType] = response.Headers["Content-Type"];
+                    signedMimeMessage = new SignedMimeMessage(mimeMessage);
                 }
 
                 
                 SMimeReader sMimeReader = new SMimeReader(mimeMessage);
-
                 // Timestamp of reception of MDN
                 Timestamp t3 = this.timestampProvider.generate(sMimeReader.getSignature(), Direction.OUT);
 
-                // Extract signed digest and digest algorithm
-                SMimeDigestMethod digestMethod = sMimeReader.getDigestMethod();
-
-                // Preparing calculation of digest
-                byte[] digest = BcHelper.Hash(sMimeReader.getBody(), digestMethod.getAlgorithm());
-                //MessageDigest messageDigest = BcHelper.getMessageDigest(digestMethod.getIdentifier());
-                //InputStream digestInputStream = new DigestInputStream(sMimeReader.getBodyInputStream(), messageDigest);
-
-                // Reading report
-                Multipart mimeMultipart = new Multipart();
-                mimeMultipart.Add(MimeEntity.Load(digest.ToStream()));
-                // mimeMultipart.SetContentType(mimeMessage.GetContentType());
-                // mimeMultipart.LoadBody(digest, Encoding.ASCII);
-
-
-                // new ByteArrayDataSource(digestInputStream, mimeMessage.getContentType()));
-
-                // Create digest object
-                // Digest digest = Digest.of(digestMethod.getDigestMethod(), messageDigest.digest());
-
-                // Verify signature
-                /*
-                X509Certificate certificate = SMimeBC.verifySignature(
-                        ImmutableMap.of(digestMethod.getOid(), digest.getValue()),
-                        sMimeReader.getSignature()
-                );
-                */
-
-                // verify the signature of the MDN, we warn about dodgy signatures
-                SignedMimeMessage signedMimeMessage = new SignedMimeMessage(mimeMessage);
-                X509Certificate certificate = signedMimeMessage.getSignersX509Certificate();
-
-                // Verify if the certificate used by the receiving Access Point in
-                // the response message does not match its certificate published by the SMP
-                if (!this.transmissionRequest.GetEndpoint().getCertificate().Equals(certificate))
+                MultipartSigned signedMessage = mimeMessage.Body as MultipartSigned;
+                using (var ctx = this.secureMimeContext())
                 {
-                    throw new HyperwayTransmissionException(
-                        String.Format(
-                            "Certificate in MDN ('{0}') does not match certificate from SMP ('{1}').",
-                            certificate.SubjectDN.ToString(), // .getSubjectX500Principal().getName(),
-                            this.transmissionRequest.GetEndpoint().getCertificate()
-                                .SubjectDN)); // .getSubjectX500Principal().getName()));
+                    Debug.Assert(signedMessage != null, nameof(signedMessage) + " != null");
+
+                    var signatures = signedMessage.Verify();
+                    var signature = signatures.First();
+                    var mimeCertificate = signature.SignerCertificate as SecureMimeDigitalCertificate;
+
+
+                    // Verify if the certificate used by the receiving Access Point in
+                    // the response message does not match its certificate published by the SMP
+                    X509Certificate certificate = mimeCertificate.Certificate;
+                    if (!this.transmissionRequest.GetEndpoint().getCertificate().Equals(certificate))
+                    {
+                        throw new HyperwayTransmissionException(
+                            String.Format(
+                                "Certificate in MDN ('{0}') does not match certificate from SMP ('{1}').",
+                                certificate.SubjectDN.ToString(), // .getSubjectX500Principal().getName(),
+                                this.transmissionRequest.GetEndpoint().getCertificate()
+                                    .SubjectDN)); // .getSubjectX500Principal().getName()));
+                    }
+
+                    LOGGER.Debug("MDN signature was verified for : " + certificate.SubjectDN);
                 }
 
-                LOGGER.Debug("MDN signature was verified for : " + certificate.SubjectDN);
 
                 // Verifies the actual MDN
                 MdnMimeMessageInspector mdnMimeMessageInspector = new MdnMimeMessageInspector(mimeMessage);

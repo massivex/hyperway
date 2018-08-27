@@ -144,7 +144,7 @@
             SendingMode sendingMode = SendingMode.createFromTextValue(sendingModeString);
 
             String dispositionTypeString = matcher.Groups[3].Value;
-            DispositionType dispositionType = DispositionType.valueOf(dispositionTypeString.ToUpperInvariant());
+            DispositionType dispositionType = DispositionType.valueOf(dispositionTypeString.ToLowerInvariant());
 
             As2Disposition result;
             if (matcher.Groups[4].Success)

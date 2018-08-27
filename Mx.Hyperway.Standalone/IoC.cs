@@ -5,11 +5,14 @@
 
     using Autofac;
 
+    using MimeKit.Cryptography;
+
     using Mx.Hyperway.Api.Statistics;
     using Mx.Hyperway.Api.Transformer;
     using Mx.Hyperway.Api.Transmission;
     using Mx.Hyperway.As2.Outbound;
     using Mx.Hyperway.As2.Util;
+    using Mx.Hyperway.Commons.Persist;
     using Mx.Hyperway.Commons.Security;
     using Mx.Hyperway.Commons.Statistics;
     using Mx.Hyperway.Commons.Timestamp;
@@ -46,7 +49,8 @@
             builder.RegisterModule(new TransmissionModule());
             builder.RegisterModule(new As2OutboundModule());
             builder.RegisterModule(new TimestampModule());
-            
+            builder.RegisterModule(new PersisterModule());
+
 
 
             // Manual registration
@@ -84,6 +88,8 @@
 
 
             Container = builder.Build();
+
+            CryptographyContext.Register(() => Container.Resolve<HyperwaySecureMimeContext>());
         }
     }
 }
