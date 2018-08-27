@@ -51,12 +51,11 @@
             return new ContentResult() { StatusCode = StatusCodes.Status200OK, Content = "Hello AS2 world\n" };
         }
 
-        /**
-         * Receives the POST'ed AS2 message.
-         * <p>
-         * Important to note that the HTTP headers contains the MIME headers for the payload.
-         * Since the the request can only be read once, using getReader()/getInputStream()
-         */
+        /// <summary>
+        /// Receives the POST'ed AS2 message.
+        /// Important to note that the HTTP headers contains the MIME headers for the payload.
+        /// Since the the request can only be read once, using getReader()/getInputStream()
+        /// </summary>
         [HttpPost]
         public void DoPost()
         {
@@ -137,18 +136,20 @@
                 Logger.Error("Attempting to return MDN with explanatory message and HTTP 500 status");
 
                 // TODO: manage failure
-                this.writeFailureWithExplanation(this.httpContext.Request, this.httpContext.Response, e);
+                this.WriteFailureWithExplanation(this.httpContext.Request, this.httpContext.Response, e);
             }
 
             // MDC.clear();
             root.Record(Annotations.ServerSend());
         }
 
-        /**
-         * If the AS2 message processing failed with an exception, we have an internal error and act accordingly
-         */
-        private void
-            writeFailureWithExplanation(HttpRequest request, HttpResponse response, Exception e) // throws IOException
+        /// <summary>
+        /// If the AS2 message processing failed with an exception, we have an internal error and act accordingly 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <param name="e"></param>
+        private void WriteFailureWithExplanation(HttpRequest request, HttpResponse response, Exception e)
         {
             response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
