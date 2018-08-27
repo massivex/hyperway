@@ -6,9 +6,9 @@
     using Mx.Peppol.Common.Model;
     using Mx.Tools.Encoding;
 
-    /**
-     * Value object holding the Message Integrity Control (MIC) of an AS2 message.
-     */
+    /// <summary>
+    /// Value object holding the Message Integrity Control (MIC) of an AS2 message. 
+    /// </summary>
     public class Mic
     {
 
@@ -17,7 +17,7 @@
         private readonly SMimeDigestMethod algorithm;
 
         public Mic(Digest digest) : this(new Base64Encoding().ToString(digest.getValue()),
-            SMimeDigestMethod.findByDigestMethod(digest.getMethod()))
+            SMimeDigestMethod.FindByDigestMethod(digest.getMethod()))
         {
             
         }
@@ -28,19 +28,19 @@
             this.algorithm = algorithm;
         }
 
-        public static Mic valueOf(String receivedContentMic)
+        public static Mic ValueOf(String receivedContentMic)
         {
             String[] s = receivedContentMic.Split(',');
             if (s.Length != 2)
             {
                 throw new ArgumentException("Invalid mic: '" + receivedContentMic + "'. Required syntax: encoded-message-digest \",\" (sha1|md5)");
             }
-            return new Mic(s[0].Trim(), SMimeDigestMethod.findByIdentifier(s[1].Trim()));
+            return new Mic(s[0].Trim(), SMimeDigestMethod.FindByIdentifier(s[1].Trim()));
         }
 
         public override string ToString()
         {
-            return String.Format("{0}, {1}", this.digestAsString, this.algorithm.getIdentifier());
+            return $"{this.digestAsString}, {this.algorithm.GetIdentifier()}";
         }
 
         

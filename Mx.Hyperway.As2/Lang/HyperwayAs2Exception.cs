@@ -7,12 +7,12 @@
     public class HyperwayAs2Exception : HyperwayException
     {
 
-        public HyperwayAs2Exception(String message)
+        public HyperwayAs2Exception(string message)
             : base(message)
         {
         }
 
-        public HyperwayAs2Exception(String message, Exception cause)
+        public HyperwayAs2Exception(string message, Exception cause)
             : base(message, cause)
         {
 

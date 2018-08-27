@@ -10,141 +10,134 @@
     public class Disposition
     {
 
-        private static readonly Regex PATTERN = new Regex("^(.*?); ([a-z]+)/([a-z]+): (.*)|(.*?); ([a-z]+)$", RegexOptions.Compiled);
+        private static readonly Regex Pattern = new Regex(
+            "^(.*?); ([a-z]+)/([a-z]+): (.*)|(.*?); ([a-z]+)$",
+            RegexOptions.Compiled);
 
-    private static readonly string SENT_AUTOMATICALLY = "automatic-action/MDN-sent-automatically";
+        private static readonly string SentAutomatically = "automatic-action/MDN-sent-automatically";
 
-    public static readonly Disposition PROCESSED = new Disposition(DispositionType.PROCESSED, null, null);
+        public static readonly Disposition Processed = new Disposition(DispositionType.Processed, null, null);
 
-        public static readonly Disposition UNSUPPORTED_FORMAT = new Disposition(
-                DispositionType.FAILED, DispositionModifier.FAILURE,
-                DispositionModifierExtension.UNEXPECTED_PROCESSING_ERROR);
+        public static readonly Disposition UnsupportedFormat = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Failure,
+            DispositionModifierExtension.UnexpectedProcessingError);
 
-        public static readonly Disposition UNSUPPORTED_MIC_ALGORITHMS = new Disposition(
-                DispositionType.FAILED, DispositionModifier.FAILURE,
-                DispositionModifierExtension.UNSUPPORTED_MIC_ALGORITHMS);
+        public static readonly Disposition UnsupportedMicAlgorithms = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Failure,
+            DispositionModifierExtension.UnsupportedMicAlgorithms);
 
-        public static readonly Disposition SENDER_EQUALS_RECEIVER = new Disposition(
-                DispositionType.FAILED, DispositionModifier.FAILURE,
-                DispositionModifierExtension.SENDER_EQUALS_RECEIVER);
+        public static readonly Disposition SenderEqualsReceiver = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Failure,
+            DispositionModifierExtension.SenderEqualsReceiver);
 
-        public static readonly Disposition DECRYPTION_FAILED = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.DECRYPTION_FAILED);
+        public static readonly Disposition DecryptionFailed = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.DecryptionFailed);
 
-        public static readonly Disposition AUTHENTICATION_FAILED = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.AUTHENTICATION_FAILED);
+        public static readonly Disposition AuthenticationFailed = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.AuthenticationFailed);
 
-        public static readonly Disposition INTEGRITY_CHECK_FAILED = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.INTEGRITY_CHECK_FAILED);
+        public static readonly Disposition IntegrityCheckFailed = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.IntegrityCheckFailed);
 
-        public static readonly Disposition PARTICIPANT_NOT_ACCEPTED = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.PARTICIPANT_NOT_ACCEPTED);
+        public static readonly Disposition ParticipantNotAccepted = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.ParticipantNotAccepted);
 
-        public static readonly Disposition DOCUMENT_TYPE_ID_NOT_ACCEPTED = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.DOCUMENT_TYPE_ID_NOT_ACCEPTED);
+        public static readonly Disposition DocumentTypeIdNotAccepted = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.DocumentTypeIdNotAccepted);
 
-        public static readonly Disposition PROCESS_ID_NOT_ACCEPTED = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.PROCESS_ID_NOT_ACCEPTED);
+        public static readonly Disposition ProcessIdNotAccepted = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.ProcessIdNotAccepted);
 
-        public static readonly Disposition UNEXPECTED_PROCESSING_ERROR = new Disposition(
-                DispositionType.FAILED, DispositionModifier.ERROR,
-                DispositionModifierExtension.UNEXPECTED_PROCESSING_ERROR);
+        public static readonly Disposition UnexpectedProcessingError = new Disposition(
+            DispositionType.Failed,
+            DispositionModifier.Error,
+            DispositionModifierExtension.UnexpectedProcessingError);
 
-        public static readonly Disposition DUPLICATE_DOCUMENT = new Disposition(
-                DispositionType.PROCESSED, DispositionModifier.WARNING,
-                DispositionModifierExtension.DUPLICATE_DOCUMENT);
+        public static readonly Disposition DuplicateDocument = new Disposition(
+            DispositionType.Processed,
+            DispositionModifier.Warning,
+            DispositionModifierExtension.DuplicateDocument);
 
-        private static Dictionary<VerifierException.Reason, Disposition> verifierMap =
+        private static readonly Dictionary<VerifierException.Reason, Disposition> VerifierMap =
             new Dictionary<VerifierException.Reason, Disposition>()
                 {
                     {
                         VerifierException.Reason.DOCUMENT_TYPE,
-                        DOCUMENT_TYPE_ID_NOT_ACCEPTED
+                        DocumentTypeIdNotAccepted
                     },
                     {
                         VerifierException.Reason.PROCESS,
-                        PROCESS_ID_NOT_ACCEPTED
+                        ProcessIdNotAccepted
                     },
                     {
                         VerifierException.Reason.PARTICIPANT,
-                        PARTICIPANT_NOT_ACCEPTED
+                        ParticipantNotAccepted
                     }
                 };
 
-        private DispositionType type;
-
-        private DispositionModifier modifier;
-
-        private DispositionModifierExtension extension;
-
-        public static Disposition parse(String str)
+        public static Disposition Parse(String str)
         {
             // TODO: Verify correct parsing!!!!!
             // Matcher matcher = PATTERN.matcher(str);
             String cleaned = str.ReplaceAll("[ \r\n\t]+", " ");
 
-            var matches = PATTERN.Matches(cleaned);
+            var matches = Pattern.Matches(cleaned);
 
             if (matches.Count > 0)
             {
                 if (string.IsNullOrWhiteSpace(matches[1].Value))
-                    return new Disposition(
-                            DispositionType.of(matches[6].Value),
-                            null, null
-                    );
+                    return new Disposition(DispositionType.Of(matches[6].Value), null, null);
                 else
                     return new Disposition(
-                            DispositionType.of(matches[2].Value),
-                            DispositionModifier.of(matches[3].Value),
-                            DispositionModifierExtension.of(matches[4].Value)
-                    );
+                        DispositionType.Of(matches[2].Value),
+                        DispositionModifier.Of(matches[3].Value),
+                        DispositionModifierExtension.Of(matches[4].Value));
             }
 
-            throw new ArgumentException(String.Format("Unable to parse disposition '{0}'.", str));
+            throw new ArgumentException($"Unable to parse disposition '{str}'.");
         }
 
-        public static Disposition fromVerifierException(VerifierException e)
+        public static Disposition FromVerifierException(VerifierException e)
         {
-            return verifierMap[e.GetReason()];
+            return VerifierMap[e.GetReason()];
         }
 
         private Disposition(DispositionType type, DispositionModifier modifier, DispositionModifierExtension extension)
         {
-            this.type = type;
-            this.modifier = modifier;
-            this.extension = extension;
+            this.Type = type;
+            this.Modifier = modifier;
+            this.Extension = extension;
         }
 
-        public DispositionType getType()
-        {
-            return this.type;
-        }
+        public DispositionType Type { get; }
 
-        public DispositionModifier getModifier()
-        {
-            return this.modifier;
-        }
+        public DispositionModifier Modifier { get; }
 
-        public DispositionModifierExtension getExtension()
-        {
-            return this.extension;
-        }
+        public DispositionModifierExtension Extension { get; }
 
         public override string ToString()
         {
-            if (this.modifier == null)
+            if (this.Modifier == null)
             {
-                return String.Format("{0}; {1}", SENT_AUTOMATICALLY, this.type);
+                return $"{SentAutomatically}; {this.Type}";
             }
 
-            return String.Format("{0}; {1}/{2}: {3}", SENT_AUTOMATICALLY, this.type, this.modifier, this.extension);
+            return $"{SentAutomatically}; {this.Type}/{this.Modifier}: {this.Extension}";
         }
     }
-
 }

@@ -84,14 +84,14 @@
                 var bodyStream = this.httpContext.Request.Body;
                 var bodyData = bodyStream.ToBuffer();
                 MimeMessage mimeMessage =
-                    MimeMessageHelper.createMimeMessageAssistedByHeaders(bodyData.ToStream(), headers);
+                    MimeMessageHelper.CreateMimeMessageAssistedByHeaders(bodyData.ToStream(), headers);
 
                 try
                 {
                     Trace span = root.Child();
                     span.Record(Annotations.ServiceName("as2message"));
                     span.Record(Annotations.ServerRecv());
-                    MimeMessage mdn = this.inboundHandlerProvider().receive(headers, mimeMessage);
+                    MimeMessage mdn = this.inboundHandlerProvider().Receive(headers, mimeMessage);
                     span.Record(Annotations.ServerSend());
 
                     span = root.Child();
@@ -111,20 +111,20 @@
                     SMimeReader sMimeReader = new SMimeReader(mimeMessage);
 
                     // Begin builder
-                    MdnBuilder mdnBuilder = MdnBuilder.newInstance(mimeMessage);
+                    MdnBuilder mdnBuilder = MdnBuilder.NewInstance(mimeMessage);
                     // Original Message-Id
-                    mdnBuilder.addHeader(MdnHeader.ORIGINAL_MESSAGE_ID, headers[As2Header.MESSAGE_ID]);
+                    mdnBuilder.AddHeader(MdnHeader.OriginalMessageId, headers[As2Header.MessageId]);
                     // Disposition from exception
-                    mdnBuilder.addHeader(MdnHeader.DISPOSITION, e.getDisposition());
-                    mdnBuilder.addText(String.Format("Error [{0}]", identifier), e.Message);
+                    mdnBuilder.AddHeader(MdnHeader.Disposition, e.Disposition);
+                    mdnBuilder.AddText(String.Format("Error [{0}]", identifier), e.Message);
 
                     // Build and add headers
-                    MimeMessage mdn = this.sMimeMessageFactory.createSignedMimeMessage(
-                        mdnBuilder.build(),
-                        sMimeReader.getDigestMethod());
-                    mdn.Headers.Add(As2Header.AS2_VERSION, As2Header.VERSION);
-                    mdn.Headers.Add(As2Header.AS2_FROM, headers[As2Header.AS2_TO]);
-                    mdn.Headers.Add(As2Header.AS2_TO, headers[As2Header.AS2_FROM]);
+                    MimeMessage mdn = this.sMimeMessageFactory.CreateSignedMimeMessage(
+                        mdnBuilder.Build(),
+                        sMimeReader.GetDigestMethod());
+                    mdn.Headers.Add(As2Header.As2Version, As2Header.Version);
+                    mdn.Headers.Add(As2Header.As2From, headers[As2Header.As2To]);
+                    mdn.Headers.Add(As2Header.As2To, headers[As2Header.As2From]);
                     this.WriteMdn(this.httpContext.Response, mdn, (int)HttpStatusCode.BadRequest);
                 }
             }
@@ -191,7 +191,7 @@
             var notReport = mReport[1] as MessageDispositionNotification;
             Debug.Assert(notReport != null, nameof(notReport) + " != null");
             notReport.ContentTransferEncoding = ContentEncoding.SevenBit;
-            mdn.Headers.Add(HeaderId.Date, As2DateUtil.RFC822.getFormat(DateTime.Now));
+            mdn.Headers.Add(HeaderId.Date, As2DateUtil.Rfc822.GetFormat(DateTime.Now));
             mdn.WriteTo(response.Body);
         }
 

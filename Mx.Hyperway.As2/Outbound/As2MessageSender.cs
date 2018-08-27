@@ -1,7 +1,6 @@
 ﻿namespace Mx.Hyperway.As2.Outbound
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -21,7 +20,6 @@
     using Mx.Hyperway.As2.Code;
     using Mx.Hyperway.As2.Model;
     using Mx.Hyperway.As2.Util;
-    using Mx.Hyperway.Commons.BouncyCastle;
     using Mx.Hyperway.Commons.Security;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
@@ -36,21 +34,21 @@
     public class As2MessageSender : IMessageSender
     {
 
-        private static readonly ILog LOGGER = LogManager.GetLogger(typeof(As2MessageSender));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(As2MessageSender));
 
 
         private readonly SMimeMessageFactory sMimeMessageFactory;
 
-        /**
-         * Timestamp provider used to create timestamp "t3" (time of reception of transport specific receipt, MDN).
-         */
+        /// <summary>
+        /// Timestamp provider used to create timestamp "t3" (time of reception of transport specific receipt, MDN). 
+        /// </summary>
         private readonly ITimestampProvider timestampProvider;
 
         private readonly Func<HyperwaySecureMimeContext> secureMimeContext;
 
-        /**
-         * Identifier from sender's certificate used during transmission in "AS2-From" header.
-         */
+        /// <summary>
+        /// Identifier from sender's certificate used during transmission in "AS2-From" header. 
+        /// </summary>
         private readonly String fromIdentifier;
 
         private ITransmissionRequest transmissionRequest;
@@ -61,11 +59,10 @@
 
         private Digest outboundMic;
 
-        /**
-         * Constructor expecting resources needed to perform transmission using AS2. All task required to be done once for
-         * all requests using this instance is done here.
-         */
-        // @Inject
+        /// <summary>
+        /// Constructor expecting resources needed to perform transmission using AS2. All task required to be done once for
+        /// all requests using this instance is done here.
+        /// </summary>
         public As2MessageSender(
             X509Certificate certificate,
             SMimeMessageFactory sMimeMessageFactory,
@@ -80,26 +77,26 @@
             this.fromIdentifier = CertificateUtils.extractCommonName(certificate);
         }
 
-        public ITransmissionResponse Send(ITransmissionRequest transmissionRequest)
+        public ITransmissionResponse Send(ITransmissionRequest request)
         {
-            return this.Send(transmissionRequest, this.root);
+            return this.Send(request, this.root);
         }
 
-        public ITransmissionResponse Send(ITransmissionRequest transmissionRequest, Trace root)
+        public ITransmissionResponse Send(ITransmissionRequest request, Trace traceParent)
         {
-            this.transmissionRequest = transmissionRequest;
+            this.transmissionRequest = request;
 
-            this.root = root.Child();
+            this.root = traceParent.Child();
             this.root.Record(Annotations.ServiceName("Send AS2 message"));
             this.root.Record(Annotations.ClientSend());
             try
             {
-                return this.sendHttpRequest(this.prepareHttpRequest());
+                return this.SendHttpRequest(this.PrepareHttpRequest());
             }
             catch (HyperwayTransmissionException e)
             {
                 this.root.Record(Annotations.Tag("exception", e.Message));
-                throw e;
+                throw;
             }
             finally
             {
@@ -107,7 +104,7 @@
             }
         }
 
-        protected HttpPost prepareHttpRequest()
+        protected HttpPost PrepareHttpRequest()
         {
             Trace span = this.root.Child();
             span.Record(Annotations.ServiceName("request"));
@@ -117,13 +114,13 @@
                 HttpPost httpPost;
 
                 // Create the body part of the MIME message containing our content to be transmitted.
-                MimeEntity mimeBodyPart = MimeMessageHelper.createMimeBodyPart(
+                MimeEntity mimeBodyPart = MimeMessageHelper.CreateMimeBodyPart(
                     this.transmissionRequest.GetPayload(),
                     "application/xml");
 
                 // Digest method to use.
                 SMimeDigestMethod digestMethod =
-                    SMimeDigestMethod.findByTransportProfile(
+                    SMimeDigestMethod.FindByTransportProfile(
                         this.transmissionRequest.GetEndpoint().getTransportProfile());
 
 
@@ -132,27 +129,25 @@
                 // Create a complete S/MIME message using the body part containing our content as the
                 // signed part of the S/MIME message.
                 MimeMessage signedMimeMessage =
-                    this.sMimeMessageFactory.createSignedMimeMessage(mimeBodyPart, digestMethod);
+                    this.sMimeMessageFactory.CreateSignedMimeMessage(mimeBodyPart, digestMethod);
 
                 var signedMultipart = (signedMimeMessage.Body as MultipartSigned);
                 Debug.Assert(signedMultipart != null, nameof(signedMultipart) + " != null");
-                this.outboundMic = MimeMessageHelper.calculateMic(signedMultipart[0], digestMethod);
+                this.outboundMic = MimeMessageHelper.CalculateMic(signedMultipart[0], digestMethod);
                 span.Record(Annotations.Tag("mic", this.outboundMic.ToString()));
                 span.Record(Annotations.Tag("endpoint url", this.transmissionRequest.GetEndpoint().getAddress().ToString()));
 
                 // Initiate POST request
                 httpPost = new HttpPost(this.transmissionRequest.GetEndpoint().getAddress());
 
-                List<String> headerNames = signedMimeMessage.Headers
-                    // Tag for tracing.
-                    .Peek(x => span.Record(Annotations.Tag(x.Field, x.Value))) // span.tag(h.getName(), h.getValue()))
-                    // Add headers to httpPost object (remove new lines according to HTTP 1.1).
-                    .Peek(x => httpPost.AddHeader(x.Field, x.Value.Replace("\r\n\t", string.Empty))).Map(x => x.Field)
-                    .ToList();
-
+                foreach (var header in signedMimeMessage.Headers)
+                {
+                    span.Record(Annotations.Tag(header.Field, header.Value));
+                    httpPost.AddHeader(header.Field, header.Value.Replace("\r\n\t", string.Empty));
+                }
                 signedMimeMessage.Headers.Clear();
 
-                this.transmissionIdentifier = TransmissionIdentifier.FromHeader(httpPost.Headers[As2Header.MESSAGE_ID]);
+                this.transmissionIdentifier = TransmissionIdentifier.FromHeader(httpPost.Headers[As2Header.MessageId]);
 
                 // Write content to OutputStream without headers.
                 using (var m = new MemoryStream())
@@ -166,20 +161,20 @@
                 // Set all headers specific to AS2 (not MIME).
                 httpPost.Host = "skynet.sediva.it";
                 httpPost.Headers.Add("Content-Type", this.NormalizeHeaderValue(contentType));
-                httpPost.Headers.Add(As2Header.AS2_FROM, this.fromIdentifier);
+                httpPost.Headers.Add(As2Header.As2From, this.fromIdentifier);
                 httpPost.Headers.Add(
-                    As2Header.AS2_TO,
+                    As2Header.As2To,
                     CertificateUtils.extractCommonName(this.transmissionRequest.GetEndpoint().getCertificate()));
-                httpPost.Headers.Add(As2Header.DISPOSITION_NOTIFICATION_TO, "not.in.use@difi.no");
+                httpPost.Headers.Add(As2Header.DispositionNotificationTo, "not.in.use@difi.no");
                 httpPost.Headers.Add(
-                    As2Header.DISPOSITION_NOTIFICATION_OPTIONS,
-                    As2DispositionNotificationOptions.getDefault(digestMethod).toString());
-                httpPost.Headers.Add(As2Header.AS2_VERSION, As2Header.VERSION);
-                httpPost.Headers.Add(As2Header.SUBJECT, "AS2 message from HYPERWAY");
-                httpPost.Headers.Add(As2Header.DATE, As2DateUtil.RFC822.getFormat(DateTime.Now));
+                    As2Header.DispositionNotificationOptions,
+                    As2DispositionNotificationOptions.GetDefault(digestMethod).ToString());
+                httpPost.Headers.Add(As2Header.As2Version, As2Header.Version);
+                httpPost.Headers.Add(As2Header.Subject, "AS2 message from HYPERWAY");
+                httpPost.Headers.Add(As2Header.Date, As2DateUtil.Rfc822.GetFormat(DateTime.Now));
                 return httpPost;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new HyperwayTransmissionException(
                     "Unable to stream S/MIME message into byte array output stream");
@@ -197,7 +192,7 @@
             return result;
         }
 
-        protected ITransmissionResponse sendHttpRequest(HttpPost httpPost)
+        protected ITransmissionResponse SendHttpRequest(HttpPost httpPost)
         {
             Trace span = this.root.Child();
             span.Record(Annotations.ServiceName("execute"));
@@ -208,7 +203,7 @@
                 var response = httpClient.Execute(httpPost);
 
 
-                var result = this.handleResponse(response);
+                var result = this.HandleResponse(response);
                 span.Record(Annotations.ClientRecv());
                 return result;
             }
@@ -223,7 +218,7 @@
             }
         }
 
-        protected ITransmissionResponse handleResponse(HttpResponse httpResponse)
+        protected ITransmissionResponse HandleResponse(HttpResponse httpResponse)
         {
             Trace span = this.root.Child();
             // tracer.newChild(root.context()).name("response").start();
@@ -239,17 +234,17 @@
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    LOGGER.ErrorFormat(
+                    Logger.ErrorFormat(
                         "AS2 HTTP POST expected HTTP OK, but got : {0} from {1}",
                         response.StatusCode,
                         this.transmissionRequest.GetEndpoint().getAddress());
 
                     // Throws exception
-                    this.handleFailedRequest(response);
+                    this.HandleFailedRequest(response);
                 }
 
                 // handle normal HTTP OK response
-                LOGGER.DebugFormat(
+                Logger.DebugFormat(
                     "AS2 transmission to {0} returned HTTP OK, verify MDN response",
                     this.transmissionRequest.GetEndpoint().getAddress());
 
@@ -262,7 +257,6 @@
 
                 // Read MIME Message
                 MimeMessage mimeMessage;
-                SignedMimeMessage signedMimeMessage;
                 using (var m = new MemoryStream())
                 {
                     // Add headers to MIME Message
@@ -282,16 +276,15 @@
                     m.Seek(0, SeekOrigin.Begin);
                     mimeMessage = MimeMessage.Load(m);
                     mimeMessage.Headers[HeaderId.ContentType] = response.Headers["Content-Type"];
-                    signedMimeMessage = new SignedMimeMessage(mimeMessage);
                 }
-
                 
                 SMimeReader sMimeReader = new SMimeReader(mimeMessage);
+
                 // Timestamp of reception of MDN
-                Timestamp t3 = this.timestampProvider.Generate(sMimeReader.getSignature(), Direction.OUT);
+                Timestamp t3 = this.timestampProvider.Generate(sMimeReader.GetSignature(), Direction.OUT);
 
                 MultipartSigned signedMessage = mimeMessage.Body as MultipartSigned;
-                using (var ctx = this.secureMimeContext())
+                using (this.secureMimeContext())
                 {
                     Debug.Assert(signedMessage != null, nameof(signedMessage) + " != null");
 
@@ -302,42 +295,43 @@
 
                     // Verify if the certificate used by the receiving Access Point in
                     // the response message does not match its certificate published by the SMP
+                    Debug.Assert(mimeCertificate != null, nameof(mimeCertificate) + " != null");
                     X509Certificate certificate = mimeCertificate.Certificate;
                     if (!this.transmissionRequest.GetEndpoint().getCertificate().Equals(certificate))
                     {
                         throw new HyperwayTransmissionException(
                             String.Format(
                                 "Certificate in MDN ('{0}') does not match certificate from SMP ('{1}').",
-                                certificate.SubjectDN.ToString(), // .getSubjectX500Principal().getName(),
+                                certificate.SubjectDN, // .getSubjectX500Principal().getName(),
                                 this.transmissionRequest.GetEndpoint().getCertificate()
                                     .SubjectDN)); // .getSubjectX500Principal().getName()));
                     }
 
-                    LOGGER.Debug("MDN signature was verified for : " + certificate.SubjectDN);
+                    Logger.Debug("MDN signature was verified for : " + certificate.SubjectDN);
                 }
 
 
                 // Verifies the actual MDN
                 MdnMimeMessageInspector mdnMimeMessageInspector = new MdnMimeMessageInspector(mimeMessage);
-                String msg = mdnMimeMessageInspector.getPlainTextPartAsText();
+                String msg = mdnMimeMessageInspector.GetPlainTextPartAsText();
 
-                if (!mdnMimeMessageInspector.isOkOrWarning(new Mic(this.outboundMic)))
+                if (!mdnMimeMessageInspector.IsOkOrWarning(new Mic(this.outboundMic)))
                 {
-                    LOGGER.ErrorFormat("AS2 transmission failed with some error message '{0}'.", msg);
+                    Logger.ErrorFormat("AS2 transmission failed with some error message '{0}'.", msg);
                     throw new HyperwayTransmissionException(String.Format("AS2 transmission failed : {0}", msg));
                 }
 
                 // Read structured content
-                MimeEntity mimeBodyPart = mdnMimeMessageInspector.getMessageDispositionNotificationPart();
+                MimeEntity mimeBodyPart = mdnMimeMessageInspector.GetMessageDispositionNotificationPart();
                 var internetHeaders = mimeBodyPart.Headers;
                 // InternetHeaders internetHeaders = new InternetHeaders((InputStream)mimeBodyPart.getContent());
 
                 // Fetch timestamp if set
                 DateTime date = t3.GetDate();
-                if (internetHeaders.Any(x => x.Field == MdnHeader.DATE))
+                if (internetHeaders.Any(x => x.Field == MdnHeader.Date))
                 {
-                    var dateText = internetHeaders.First(x => x.Field == MdnHeader.DATE).Value;
-                    date = As2DateUtil.RFC822.parse(dateText);
+                    var dateText = internetHeaders.First(x => x.Field == MdnHeader.Date).Value;
+                    date = As2DateUtil.Rfc822.Parse(dateText);
                 }
 
 
@@ -346,7 +340,7 @@
                     this.transmissionIdentifier,
                     this.transmissionRequest,
                     this.outboundMic,
-                    MimeMessageHelper.toBytes(mimeMessage),
+                    MimeMessageHelper.ToBytes(mimeMessage),
                     t3,
                     date);
             }
@@ -365,7 +359,7 @@
             }
         }
 
-        protected void handleFailedRequest(HttpResponse response)
+        protected void HandleFailedRequest(HttpResponse response)
         {
             byte[] entity = response.Entity.Content; // Any results?
             try

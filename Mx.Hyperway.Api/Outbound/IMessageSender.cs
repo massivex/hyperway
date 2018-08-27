@@ -7,16 +7,16 @@
         /// <summary>
         /// Protocol specific transmission of transmission requested. (Without tracing.) 
         /// </summary>
-        /// <param name="transmissionRequest">request</param>
+        /// <param name="request">request</param>
         /// <returns></returns>
-        ITransmissionResponse Send(ITransmissionRequest transmissionRequest);
+        ITransmissionResponse Send(ITransmissionRequest request);
 
         /// <summary>
         /// Protocol specific transmission of transmission requested. (With tracing.)
         /// </summary>
-        /// <param name="transmissionRequest">request</param>
+        /// <param name="request">request</param>
         /// <param name="root">trace span</param>
         /// <returns></returns>
-        ITransmissionResponse Send(ITransmissionRequest transmissionRequest, Trace root);
+        ITransmissionResponse Send(ITransmissionRequest request, Trace root);
     }
 }

@@ -6,17 +6,17 @@
     public class DispositionModifier
     {
 
-        public static readonly DispositionModifier FAILURE = new DispositionModifier("failure");
+        public static readonly DispositionModifier Failure = new DispositionModifier("failure");
 
-        public static readonly DispositionModifier ERROR = new DispositionModifier("error");
+        public static readonly DispositionModifier Error = new DispositionModifier("error");
 
-        public static readonly DispositionModifier WARNING = new DispositionModifier("warning");
+        public static readonly DispositionModifier Warning = new DispositionModifier("warning");
 
         private String code;
 
-        public static DispositionModifier of(String str)
+        public static DispositionModifier Of(String str)
         {
-            foreach (DispositionModifier modifier in values())
+            foreach (DispositionModifier modifier in Values())
             {
                 if (modifier.code.Equals(str))
                 {
@@ -24,20 +24,20 @@
                 }
             }
 
-            throw new ArgumentException(String.Format("Unknown disposition modifier: {0}", str));
+            throw new ArgumentException($"Unknown disposition modifier: {str}");
         }
 
-        DispositionModifier(String code)
+        private DispositionModifier(String code)
         {
             this.code = code;
         }
 
-        public static IEnumerable<DispositionModifier> values()
+        public static IEnumerable<DispositionModifier> Values()
         {
-            return new[] { FAILURE, ERROR, WARNING };
+            return new[] { Failure, Error, Warning };
         }
 
-        public String ToString()
+        public override string ToString()
         {
             return this.code;
         }

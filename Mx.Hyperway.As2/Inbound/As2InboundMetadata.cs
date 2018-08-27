@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Hyperway.As2.Inbound
 {
@@ -26,7 +25,7 @@ namespace Mx.Hyperway.As2.Inbound
 
         private readonly List<Receipt> receipts;
 
-        private readonly Org.BouncyCastle.X509.X509Certificate certificate;
+        private readonly X509Certificate certificate;
 
         public As2InboundMetadata(
             TransmissionIdentifier transmissionIdentifier,

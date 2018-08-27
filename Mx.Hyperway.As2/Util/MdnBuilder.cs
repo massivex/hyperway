@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Hyperway.As2.Util
 {
-    using System.IO;
-    using System.Linq;
-
     using MimeKit;
-    using MimeKit.Text;
 
     using Mx.Hyperway.As2.Code;
     using Mx.Hyperway.Commons.Util;
-    using Mx.Tools;
     using Mx.Tools.Encoding;
 
     public class MdnBuilder
     {
 
-        private static readonly String ISSUER = String.Format("Hyperway {0}", HyperwayVersion.getVersion());
+        private static readonly string Issuer = string.Format("Hyperway {0}", HyperwayVersion.getVersion());
 
         private HeaderList headers = new HeaderList();
 
@@ -26,15 +20,14 @@ namespace Mx.Hyperway.As2.Util
 
         private StringBuilder sw = new StringBuilder();
 
-        public static MdnBuilder newInstance(MimeMessage mimeMessage)
+        public static MdnBuilder NewInstance(MimeMessage mimeMessage)
         {
             MdnBuilder mdnBuilder = new MdnBuilder();
-            mdnBuilder.addHeader(MdnHeader.REPORTING_UA, ISSUER);
+            mdnBuilder.AddHeader(MdnHeader.ReportingUa, Issuer);
 
-            // TODO: separate headers
-            String recipient = String.Format("rfc822; {0}", mimeMessage.Headers[As2Header.AS2_TO]);
-            mdnBuilder.addHeader(MdnHeader.ORIGINAL_RECIPIENT, recipient);
-            mdnBuilder.addHeader(MdnHeader.FINAL_RECIPIENT, recipient);
+            string recipient = string.Format("rfc822; {0}", mimeMessage.Headers[As2Header.As2To]);
+            mdnBuilder.AddHeader(MdnHeader.OriginalRecipient, recipient);
+            mdnBuilder.AddHeader(MdnHeader.FinalRecipient, recipient);
 
             mdnBuilder.sw.AppendLine("= Received headers");
             mdnBuilder.sw.AppendLine();
@@ -52,7 +45,7 @@ namespace Mx.Hyperway.As2.Util
             // No action.
         }
 
-        public void addText(String title, String text)
+        public void AddText(string title, string text)
         {
             this.sw.AppendLine($"= {title}");
             this.sw.AppendLine();
@@ -60,32 +53,32 @@ namespace Mx.Hyperway.As2.Util
             this.sw.AppendLine();
         }
 
-        public void addHeader(String name, String value)
+        public void AddHeader(string name, string value)
         {
             this.headers.Add(name, value);
         }
 
-        public void addHeader(String name, DateTime value)
+        public void AddHeader(string name, DateTime value)
         {
-            this.headers.Add(name, As2DateUtil.RFC822.getFormat(value));
+            this.headers.Add(name, As2DateUtil.Rfc822.GetFormat(value));
         }
 
-        public void addHeader(String name, byte[] value)
+        public void AddHeader(string name, byte[] value)
         {
             this.headers.Add(name, this.base64.ToString(value));
         }
 
-        public void addHeader(String name, Object value)
+        public void AddHeader(string name, object value)
         {
             this.headers.Add(name, value.ToString());
         }
 
-        public void addHeader(String name, Disposition disposition)
+        public void AddHeader(string name, Disposition disposition)
         {
             this.headers.Add(name, disposition.ToString());
         }
 
-        public MultipartReport build()
+        public MultipartReport Build()
         {
             // Initiate multipart
             

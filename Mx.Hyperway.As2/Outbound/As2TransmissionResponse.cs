@@ -9,19 +9,14 @@
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
 
-    /**
-     * Implementation of {@link TransmissionResponse} for use in AS2.
-     *
-     * @author steinar
-     * @author thore
-     * @author erlend
-     */
+    /// <summary>
+    /// Implementation of {@link TransmissionResponse} for use in AS2. 
+    /// </summary>
     public class As2TransmissionResponse : ITransmissionResponse
     {
-
-        /**
-         * Original transmission request is kept to allow easy access to immutable objects part of the request.
-         */
+        /// <summary>
+        /// Original transmission request is kept to allow easy access to immutable objects part of the request. 
+        /// </summary>
         private readonly ITransmissionRequest transmissionRequest;
 
         private readonly TransmissionIdentifier transmissionIdentifier;
@@ -48,15 +43,15 @@
             this.receipt = Receipt.of("message/disposition-notification", nativeEvidenceBytes);
             this.timestamp = date;
 
-            List<Receipt> receipts = new List<Receipt>();
-            receipts.Add(this.receipt);
+            List<Receipt> allReceipts = new List<Receipt>();
+            allReceipts.Add(this.receipt);
             if (timestamp.GetReceipt() != null)
             {
-                receipts.Add(timestamp.GetReceipt());
+                allReceipts.Add(timestamp.GetReceipt());
             }
 
 
-            this.receipts = new ImmutableList<Receipt>(receipts);
+            this.receipts = new ImmutableList<Receipt>(allReceipts);
         }
 
         public Header GetHeader()

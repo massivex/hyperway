@@ -5,15 +5,15 @@
 
     public class DispositionType
     {
-        public static readonly DispositionType PROCESSED = new DispositionType("processed");
+        public static readonly DispositionType Processed = new DispositionType("processed");
 
-        public static readonly DispositionType FAILED = new DispositionType("failed");
+        public static readonly DispositionType Failed = new DispositionType("failed");
 
-        private String code;
+        private string code;
 
-        public static DispositionType of(String str)
+        public static DispositionType Of(String str)
         {
-            foreach (DispositionType modifier in values())
+            foreach (DispositionType modifier in Values())
             {
                 if (modifier.code.Equals(str))
                 {
@@ -25,7 +25,7 @@
             throw new ArgumentException(String.Format("Unknown disposition type: {0}", str));
         }
 
-        DispositionType(String code)
+        private DispositionType(String code)
         {
             this.code = code;
         }
@@ -35,9 +35,9 @@
             return this.code;
         }
 
-        public static IEnumerable<DispositionType> values()
+        public static IEnumerable<DispositionType> Values()
         {
-            return new[] { PROCESSED, FAILED };
+            return new[] { Processed, Failed };
         }
     }
 }

@@ -12,9 +12,7 @@
 
     public class SMimeDigestMethod
     {
-        // md5("md5", "MD5"),
-        // rsa_md5("rsa-md5", "MD5"),
-        public static readonly SMimeDigestMethod sha1 = new SMimeDigestMethod(
+        public static readonly SMimeDigestMethod Sha1 = new SMimeDigestMethod(
             new[] { "sha1", "sha-1", "rsa-sha1" },
             "SHA1withRSA",
             "SHA-1",
@@ -22,21 +20,19 @@
             DigestMethod.SHA1,
             TransportProfile.AS2_1_0);
 
-        // sha256("sha256", "SHA256withRSA", "SHA-256", NISTObjectIdentifiers.id_sha256, DigestMethod.SHA256, null),
-        // sha384("sha384", "SHA-384"),
-        public static readonly SMimeDigestMethod sha512 = new SMimeDigestMethod(
-            new String[] { "sha512", "sha-512" },
+        public static readonly SMimeDigestMethod Sha512 = new SMimeDigestMethod(
+            new[] { "sha512", "sha-512" },
             "SHA512withRSA",
             "SHA-512",
             NistObjectIdentifiers.IdSha512,
             DigestMethod.SHA512,
             TransportProfile.of("busdox-transport-as2-ver1p0r1"));
 
-        private readonly String[] identifier;
+        private readonly string[] identifier;
 
-        private readonly String method;
+        private readonly string method;
 
-        private readonly String algorithm;
+        private readonly string algorithm;
 
         private readonly Asn1Object oid;
 
@@ -45,9 +41,9 @@
         private readonly TransportProfile transportProfile;
 
         SMimeDigestMethod(
-            String[] identifier,
-            String method,
-            String algorithm,
+            string[] identifier,
+            string method,
+            string algorithm,
             Asn1Object oid,
             DigestMethod digestMethod,
             TransportProfile transportProfile)
@@ -61,47 +57,47 @@
             this.transportProfile = transportProfile;
         }
 
-        public String getIdentifier()
+        public string GetIdentifier()
         {
             return this.identifier[0];
         }
 
-        public String getMethod()
+        public string GetMethod()
         {
             return this.method;
         }
 
-        public String getAlgorithm()
+        public string GetAlgorithm()
         {
             return this.algorithm;
         }
 
-        public Asn1Object getOid()
+        public Asn1Object GetOid()
         {
             return this.oid;
         }
 
-        public DigestMethod getDigestMethod()
+        public DigestMethod GetDigestMethod()
         {
             return this.digestMethod;
         }
 
-        public TransportProfile getTransportProfile()
+        public TransportProfile GetTransportProfile()
         {
             return this.transportProfile;
         }
 
-        public static IEnumerable<SMimeDigestMethod> values()
+        public static IEnumerable<SMimeDigestMethod> Values()
         {
-            return new[] { sha1, sha512 };
+            return new[] { Sha1, Sha512 };
         }
-        public static SMimeDigestMethod findByIdentifier(String identifier)
+        public static SMimeDigestMethod FindByIdentifier(string identifier)
         {
-            String provided = identifier.ToLowerInvariant();
+            string provided = identifier.ToLowerInvariant();
 
-            foreach (SMimeDigestMethod digestMethod in values())
+            foreach (SMimeDigestMethod digestMethod in Values())
             {
-                foreach (System.String ident in digestMethod.identifier)
+                foreach (string ident in digestMethod.identifier)
                 {
                     if (ident.Equals(provided))
                     {
@@ -110,12 +106,12 @@
                 }
             }
 
-            throw new ArgumentException(System.String.Format("Digest method '{0}' not known.", identifier));
+            throw new ArgumentException($"Digest method '{identifier}' not known.");
         }
 
-        public static SMimeDigestMethod findByTransportProfile(TransportProfile transportProfile)
+        public static SMimeDigestMethod FindByTransportProfile(TransportProfile transportProfile)
         {
-            foreach (SMimeDigestMethod digestMethod in values())
+            foreach (SMimeDigestMethod digestMethod in Values())
             {
                 if (digestMethod.transportProfile.Equals(transportProfile))
                 {
@@ -123,13 +119,12 @@
                 }
             }
 
-            throw new ArgumentException(
-                System.String.Format("Digest method for transport profile '{0}' not known.", transportProfile));
+            throw new ArgumentException($"Digest method for transport profile '{transportProfile}' not known.");
         }
 
-        public static SMimeDigestMethod findByDigestMethod(DigestMethod digestMethod)
+        public static SMimeDigestMethod FindByDigestMethod(DigestMethod digestMethod)
         {
-            foreach (SMimeDigestMethod method in values())
+            foreach (SMimeDigestMethod method in Values())
             {
                 if (method.digestMethod.Equals(digestMethod))
                 {
@@ -137,7 +132,7 @@
                 }
             }
 
-            throw new ArgumentException(System.String.Format("Digest method '{0}' not known.", digestMethod));
+            throw new ArgumentException(string.Format("Digest method '{0}' not known.", digestMethod));
         }
     }
 }

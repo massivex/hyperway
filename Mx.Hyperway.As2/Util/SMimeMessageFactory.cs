@@ -1,7 +1,6 @@
 ﻿namespace Mx.Hyperway.As2.Util
 {
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -31,61 +30,61 @@
             this.secContentFactory = secContentFactory;
         }
 
-        /**
-         * Creates an S/MIME message from the supplied String, having the supplied MimeType as the "content-type".
-         */
-        public MimeMessage createSignedMimeMessage(
+        /// <summary>
+        /// Creates an S/MIME message from the supplied String, having the supplied MimeType as the "content-type". 
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="mimeType"></param>
+        /// <param name="digestMethod"></param>
+        /// <returns></returns>
+        public MimeMessage CreateSignedMimeMessage(
                 string msg,
                 string mimeType,
                 SMimeDigestMethod digestMethod)
         {
             var msgData = Encoding.Default.GetBytes(msg);
-            return this.createSignedMimeMessage(msgData.ToStream(), mimeType, digestMethod);
+            return this.CreateSignedMimeMessage(msgData.ToStream(), mimeType, digestMethod);
         }
 
-        /**
-         * Creates a new S/MIME message having the supplied MimeType as the "content-type"
-         */
-        public MimeMessage createSignedMimeMessage(
+        /// <summary>
+        /// Creates a new S/MIME message having the supplied MimeType as the "content-type"
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <param name="mimeType"></param>
+        /// <param name="digestMethod"></param>
+        /// <returns></returns>
+        public MimeMessage CreateSignedMimeMessage(
             Stream inputStream,
             string mimeType,
             SMimeDigestMethod digestMethod)
         {
-            MimeEntity mimeBodyPart = MimeMessageHelper.createMimeBodyPart(inputStream, mimeType);
-            return this.createSignedMimeMessage(mimeBodyPart, digestMethod);
+            MimeEntity mimeBodyPart = MimeMessageHelper.CreateMimeBodyPart(inputStream, mimeType);
+            return this.CreateSignedMimeMessage(mimeBodyPart, digestMethod);
         }
 
-        public MimeMessage createSignedMimeMessage(MimeEntity mimeBodyPart, SMimeDigestMethod digestMethod)
+        public MimeMessage CreateSignedMimeMessage(MimeEntity mimeBodyPart, SMimeDigestMethod digestMethod)
         {
             if (mimeBodyPart is MimePart)
             {
-                // ((MimePart)mimeBodyPart).Content.Encoding = ContentEncoding.Default;
                 ((MimePart) mimeBodyPart).ContentTransferEncoding = ContentEncoding.Binary;
             }
-            //static MultipartSigned Create(CryptographyContext ctx, DigestAlgorithm digestAlgo, MimeEntity entity, MimeEntity signature)
-            //{
-
-
-            //    return signed;
-            //}
-
 
             MultipartSigned multipart;
             using (var ctx = this.secContentFactory())
             {
                 // Algorithm lookup
                 DigestAlgorithm algorithm;
-                if (digestMethod.Equals(SMimeDigestMethod.sha1))
+                if (digestMethod.Equals(SMimeDigestMethod.Sha1))
                 {
                     algorithm = DigestAlgorithm.Sha1;
                 }
-                else if (digestMethod.Equals(SMimeDigestMethod.sha512))
+                else if (digestMethod.Equals(SMimeDigestMethod.Sha512))
                 {
                     algorithm = DigestAlgorithm.Sha512;
                 }
                 else
                 {
-                    throw new NotSupportedException($"Algorithm {digestMethod.getAlgorithm()} not supported");
+                    throw new NotSupportedException($"Algorithm {digestMethod.GetAlgorithm()} not supported");
                 }
 
                 var micalg = ctx.GetDigestAlgorithmName(algorithm);
@@ -114,10 +113,6 @@
                 // add the detached signature as the second part
                 signed.Add(signature);
 
-
-                // Signer identification
-
-
                 // Create and sign message
                 multipart = signed;
             }
@@ -127,28 +122,32 @@
 
             return message;
         }
-        /**
-         * Creates an S/MIME message using the supplied MimeBodyPart. The signature is generated using the private key
-         * as supplied in the constructor. Our certificate, which is required to verify the signature is enclosed.
-         */
-        public MimeMessage createSignedMimeMessage(MimeMessage mimeBodyPart, SMimeDigestMethod digestMethod)
+
+        /// <summary>
+        /// Creates an S/MIME message using the supplied MimeBodyPart. The signature is generated using the private key
+        /// as supplied in the constructor. Our certificate, which is required to verify the signature is enclosed.
+        /// </summary>
+        /// <param name="mimeBodyPart"></param>
+        /// <param name="digestMethod"></param>
+        /// <returns></returns>
+        public MimeMessage CreateSignedMimeMessage(MimeMessage mimeBodyPart, SMimeDigestMethod digestMethod)
         {
             MimeMessage message = new MimeMessage();
             using (var ctx = this.secContentFactory())
             {
                 // Algorithm lookup
                 DigestAlgorithm algorithm;
-                if (digestMethod.Equals(SMimeDigestMethod.sha1))
+                if (digestMethod.Equals(SMimeDigestMethod.Sha1))
                 {
                     algorithm = DigestAlgorithm.Sha1;
                 }
-                else if (digestMethod.Equals(SMimeDigestMethod.sha512))
+                else if (digestMethod.Equals(SMimeDigestMethod.Sha512))
                 {
                     algorithm = DigestAlgorithm.Sha512;
                 }
                 else
                 {
-                    throw new NotSupportedException($"Algorithm {digestMethod.getAlgorithm()} not supported");
+                    throw new NotSupportedException($"Algorithm {digestMethod.GetAlgorithm()} not supported");
                 }
 
                 // Signer identification

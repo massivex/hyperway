@@ -13,28 +13,23 @@
     using Mx.Hyperway.Commons.BouncyCastle;
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
-    using Mx.Tools.Encoding;
 
     public class MimeMessageHelper
     {
+        public static readonly ILog Log = LogManager.GetLogger(typeof(MimeMessageHelper));
 
-        private static Base64Encoding encoder = new Base64Encoding();
-
-        public static readonly ILog log = LogManager.GetLogger(typeof(MimeMessageHelper));
-
-        /**
-         * Creates a MIME message from the supplied stream, which <em>must</em> contain headers,
-         * especially the header "Content-Type:"
-         */
-        public static MimeMessage createMimeMessage(Stream inputStream)
+        /// <summary>
+        /// Creates a MIME message from the supplied stream, which <em>must</em> contain headers,
+        /// especially the header "Content-Type:"
+        /// </summary>
+        /// <param name="inputStream">mime stream</param>
+        /// <returns></returns>
+        public static MimeMessage CreateMimeMessage(Stream inputStream)
         {
             try
             {
-                //Properties properties = System.getProperties();
-                //Session session = Session.getDefaultInstance(properties, null);
                 var msg = MimeMessage.Load(inputStream);
                 return msg;
-                // return new MimeMessage(session, inputStream);
             }
             catch (Exception e)
             {
@@ -42,18 +37,19 @@
             }
         }
 
-        /**
-         * Creates a MimeMultipart MIME message from an input stream, which does not contain the header "Content-Type:".
-         * Thus the mime type must be supplied as an argument.
-         */
-        public static Multipart parseMultipart(Stream contents, String mimeType)
+        /// <summary>
+        /// Creates a MimeMultipart MIME message from an input stream, which does not contain the header "Content-Type:".
+        /// Thus the mime type must be supplied as an argument.
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
+        public static Multipart ParseMultipart(Stream contents, string mimeType)
         {
             try
             {
                 var ct = ContentType.Parse(mimeType);
-                // TODO: mimeType check not implmemented
                 var message = MimeEntity.Load(ct, contents);
-                // var message = MimeMessage.Load(contents);
                 return message as Multipart;
             }
             catch (IOException e)
@@ -66,16 +62,19 @@
             }
         }
 
-        /**
-         * Creates a MIME message from the supplied InputStream, using values from the HTTP headers to
-         * do a successful MIME decoding.  If MimeType can not be extracted from the HTTP headers we
-         * still try to do a successful decoding using the payload directly.
-         */
-        public static MimeMessage createMimeMessageAssistedByHeaders(Stream inputStream, IHeaderDictionary headers)
+        /// <summary>
+        /// Creates a MIME message from the supplied InputStream, using values from the HTTP headers to
+        /// do a successful MIME decoding.  If MimeType can not be extracted from the HTTP headers we
+        /// still try to do a successful decoding using the payload directly.
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <param name="headers"></param>
+        /// <returns></returns>
+        public static MimeMessage CreateMimeMessageAssistedByHeaders(Stream inputStream, IHeaderDictionary headers)
             // throws MessagingException
         {
-            String mimeType = null;
-            String contentType = headers
+            string mimeType = null;
+            string contentType = headers
                 .Where(x => x.Key == HeaderId.ContentType.ToHeaderName())
                 .Select(x => x.Value)
                 .FirstOrDefault();
@@ -93,12 +92,12 @@
             Multipart multipart;
             if (mimeType == null)
             {
-                log.Warn("Headers did not contain MIME content type, trying to decode content type from body.");
-                multipart = MimeMessageHelper.parseMultipart(inputStream);
+                Log.Warn("Headers did not contain MIME content type, trying to decode content type from body.");
+                multipart = ParseMultipart(inputStream);
             }
             else
             {
-                multipart = MimeMessageHelper.parseMultipart(inputStream, mimeType);
+                multipart = ParseMultipart(inputStream, mimeType);
             }
             
             var mimeMessage = new MimeMessage();
@@ -114,96 +113,50 @@
         }
 
 
-        public static Multipart parseMultipart(Stream inputStream)
+        public static Multipart ParseMultipart(Stream inputStream)
         {
-            try
-            {
-                // TODO: default mime properties missing
-                throw new NotSupportedException("default mime properties missing");
-                // return new MimeMessage(Session.getDefaultInstance(System.getProperties()), inputStream);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            // TODO: default mime properties missing
+            throw new NotSupportedException("default mime properties missing");
         }
 
-        public static Multipart parseMultipart(String contents)
+        public static Multipart ParseMultipart(string contents)
         {
             var stream = contents.ToUtf8().ToStream();
-            // ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(contents.getBytes());
-            return parseMultipart(stream);
+            return ParseMultipart(stream);
         }
 
-        public static MimeMessage multipartMimeMessage(byte[] dataSource) // throws MessagingException
+        public static MimeMessage MultipartMimeMessage(byte[] dataSource) // throws MessagingException
         {
 
-            // MimeBody mimeMultipart = new MimeBody();
-            // mimeMultipart.LoadBody(dataSource, Encoding.UTF8);
-            // MimeMessage mimeMessage = new MimeMessage(Session.getDefaultInstance(System.getProperties()));
-            // mimeMultipart
-            //mimeMessage.setContent(mimeMultipart);
-            Multipart mimeMultipart = Multipart.Load(ParserOptions.Default, dataSource.ToStream(), false) as Multipart;
-            // mimeMultipart.Prepare();
+            Multipart mimeMultipart = MimeEntity.Load(ParserOptions.Default, dataSource.ToStream(), false) as Multipart;
             MimeMessage m = new MimeMessage();
-            // m.LoadBody(dataSource, Encoding.UTF8);
             m.Body = mimeMultipart;
             return m;
         }
 
-        public static MimePart createMimeBodyPart(Stream inputStream, String mimeType)
+        public static MimePart CreateMimeBodyPart(Stream inputStream, string mimeType)
         {
-            // var mimeMessage = new MimeMessage();
-
-            // ByteArrayDataSource byteArrayDataSource;
             MimePart bodyPart;
             try
             {
                 bodyPart = new MimePart(mimeType);
                 bodyPart.Content = new MimeContent(inputStream);
-                
-                //var parseOption = new ParserOptions();
-                //parseOption.CharsetEncoding = Encoding.UTF8;
-                //inputStream.Seek(0, SeekOrigin.Begin);
-                //bodyPart = MimeEntity.Load(parseOption, ContentType.Parse(mimeType), inputStream);                
-                // mimeBodyPart.LoadBody(inputStream.ToBuffer().ToUtf8String());
-                // byteArrayDataSource = new ByteArrayDataSource(inputStream, mimeType);
             }
             catch (IOException e)
             {
                 throw new ArgumentException("Unable to create ByteArrayDataSource from inputStream." + e.Message, e);
             }
 
-            // TODO: Check what's DataHandler for mimeBodyPart
-            //mimeBodyPart.
-            //try
-            //{
-            //    DataHandler dh = new DataHandler(byteArrayDataSource);
-            //    mimeBodyPart.setDataHandler(dh);
-            //}
-            //catch (MessagingException e)
-            //{
-            //    throw new IllegalStateException("Unable to set data handler on mime body part." + e.getMessage(), e);
-            //}
-
-            //try
-            //{
-            //    bodyPart.SetFieldValue(MimeConst.ContentType, mimeType, null); // .setHeader("Content-Type", mimeType);
-            //    bodyPart.SetFieldValue(MimeConst.TransferEncoding, "binary", null); // .setHeader("Content-Transfer-Encoding", "binary");
-            //                                                                      //  No content-transfer-encoding needed for http
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new InvalidOperationException("Unable to set headers." + e.Message, e);
-            //}
-
             return bodyPart;
         }
 
-        /**
-         * Calculates sha1 mic based on the MIME body part.
-         */
-        public static Digest calculateMic(MimeEntity bodyPart, SMimeDigestMethod digestMethod)
+        /// <summary>
+        /// Calculates sha1 mic based on the MIME body part. 
+        /// </summary>
+        /// <param name="bodyPart"></param>
+        /// <param name="digestMethod"></param>
+        /// <returns></returns>
+        public static Digest CalculateMic(MimeEntity bodyPart, SMimeDigestMethod digestMethod)
         {
             try
             {
@@ -212,11 +165,10 @@
                 {
                     bodyPart.WriteTo(m);
                     m.Seek(0, SeekOrigin.Begin);
-                    var content = m.ToArray();
-                    digest = BcHelper.Hash(m.ToArray(), digestMethod.getAlgorithm());
+                    digest = BcHelper.Hash(m.ToArray(), digestMethod.GetAlgorithm());
                 }
 
-                return Digest.of(digestMethod.getDigestMethod(), digest);
+                return Digest.of(digestMethod.GetDigestMethod(), digest);
             }
             catch (IOException e)
             {
@@ -228,13 +180,13 @@
             }
         }
 
-        public static String toString(MimeMessage mimeMessage)
+        public static string ToString(MimeMessage mimeMessage)
         {
-            byte[] bytes = toBytes(mimeMessage);
+            byte[] bytes = ToBytes(mimeMessage);
             return bytes.ToUtf8String();
         }
 
-        public static byte[] toBytes(MimeMessage mimeMessage)
+        public static byte[] ToBytes(MimeMessage mimeMessage)
         {
             byte[] result;
             using (var buffer = new MemoryStream())

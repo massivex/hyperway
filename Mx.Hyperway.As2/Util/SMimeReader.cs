@@ -7,7 +7,6 @@
     using MimeKit;
     using MimeKit.Cryptography;
 
-    using Mx.Hyperway.As2.Code;
     using Mx.Tools;
 
     using ContentType = System.Net.Mime.ContentType;
@@ -21,11 +20,15 @@
 
         private SMimeDigestMethod sMimeDigestMethod;
 
-        public SMimeReader(MimeMessage mimeMessage) // throws MessagingException, IOException
+        public SMimeReader(MimeMessage mimeMessage)
         {
             this.mimeMultipart = mimeMessage.Body as MultipartSigned;
-
+            if (this.mimeMultipart == null)
+            {
+                throw new InvalidOperationException("Mime multipart is not a MultipartSigned");
+            }
             MimeEntity mime = this.mimeMultipart[1];
+            
             // Extracting signature
             using (var m = new MemoryStream())
             {
@@ -34,14 +37,7 @@
                 this.signature = m.ToBuffer();
 
             }
-            // signature = this.mimeMultipart[1].WriteTo(). GetBuffer(); //  ByteStreams.toByteArray(((InputStream)mimeMultipart.getBodyPart(1).getContent()));
 
-            // Extracting DNO
-            String[] dno = (mimeMessage.Headers[As2Header.DISPOSITION_NOTIFICATION_OPTIONS] ?? string.Empty)
-                .Split(new[] { "\\r\\n" }, StringSplitOptions.None);
-
-            // if (dno == null)
-            // throw new IllegalStateException("Unable to extract dno.");
             var contentType = new ContentType(mimeMessage.Headers[HeaderId.ContentType]);
             String algorithm = contentType.Parameters?["micalg"];
             if (algorithm == null)
@@ -50,13 +46,14 @@
                     "micalg parameter not found in Content-Type header: " + contentType);
             }
 
-            this.sMimeDigestMethod = SMimeDigestMethod.findByIdentifier(algorithm);
+            this.sMimeDigestMethod = SMimeDigestMethod.FindByIdentifier(algorithm);
         }
 
-        /**
-         * Extracts headers of body MIME part. Creates headers as done by Bouncycastle.
-         */
-        public byte[] getBodyHeader() // throws MessagingException, IOException
+        /// <summary>
+        /// Extracts headers of body MIME part. Creates headers as done by Bouncycastle. 
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetBodyHeader() // throws MessagingException, IOException
         {
             MimeEntity body = this.mimeMultipart[0];
             var sb = new StringBuilder();
@@ -67,32 +64,18 @@
 
             sb.AppendLine();
             return Encoding.Default.GetBytes(sb.ToString());
-            //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            //LineOutputStream los = new LineOutputStream(outputStream);
-
-            //Enumeration hdrLines =
-            //    ((MimeBodyPart)mimeMultipart.getBodyPart(0)).getNonMatchingHeaderLines(new String[] { });
-            //while (hdrLines.hasMoreElements())
-            //    los.writeln((String)hdrLines.nextElement());
-
-            //// The CRLF separator between header and content
-            //los.writeln();
-            //los.close();
-
-            //return outputStream.toByteArray();
         }
 
-        /**
-         * Extracts content in body MIME part.
-         *
-         * @return Content
-         */
-        public Stream getBodyInputStream() // throws MessagingException, IOException
+        /// <summary>
+        /// Extracts content in body MIME part. 
+        /// </summary>
+        /// <returns>Content</returns>
+        public Stream GetBodyInputStream()
         {
-            return this.getBody().ToStream();
+            return this.GetBody().ToStream();
         }
 
-        public byte[] getBody() // throws MessagingException, IOException
+        public byte[] GetBody()
         {
             byte[] result;
             using (var m = new MemoryStream())
@@ -106,22 +89,21 @@
         }
 
 
-        public SMimeDigestMethod getDigestMethod()
+        public SMimeDigestMethod GetDigestMethod()
         {
             return this.sMimeDigestMethod;
         }
 
-        /**
-         * Extracts signature in signature MIME part.
-         *
-         * @return Signature
-         */
-        public byte[] getSignature() // throws MessagingException, IOException
+        /// <summary>
+        /// Extracts signature in signature MIME part. 
+        /// </summary>
+        /// <returns>Signature</returns>
+        public byte[] GetSignature()
         {
             return this.signature;
         }
 
-        public void Dispose() // throws IOException
+        public void Dispose()
         {
             this.mimeMultipart = null;
             this.signature = null;
