@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Rules
 {
@@ -8,20 +6,21 @@ namespace Mx.Certificates.Validator.Rules
 
     using Org.BouncyCastle.X509;
 
-    /**
-     * Validation making sure certificate doesn't expire in n milliseconds.
-     */
-    public class ExpirationSoonRule : ValidatorRule
+    /// <inheritdoc />
+    /// <summary>
+    /// Validation making sure certificate doesn't expire in n milliseconds. 
+    /// </summary>
+    public class ExpirationSoonRule : IValidatorRule
     {
 
-        private long millis;
+        private readonly long millis;
 
         public ExpirationSoonRule(long millis)
         {
             this.millis = millis;
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
             var timeout = DateTime.Now.AddMilliseconds(this.millis);
             if (certificate.NotAfter < timeout)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Security.Util
+﻿namespace Mx.Peppol.Security.Util
 {
     using System.IO;
 
@@ -31,7 +27,7 @@ namespace Mx.Peppol.Security.Util
             try
             {
                 var file = new FileInfo(mode.GetValue("security.pki"));
-                this.validator = ValidatorLoader.newInstance().build(file);
+                this.validator = ValidatorLoader.NewInstance().Build(file);
             }
             catch (ValidatorParsingException e)
             {
@@ -40,12 +36,12 @@ namespace Mx.Peppol.Security.Util
         }
 
 
-        public void validate(Service service, X509Certificate certificate) // throws PeppolSecurityException
+        public void validate(Service service, X509Certificate certificate)
         {
             try
             {
                 var key = $"security.validator.{service.ToString()}";
-                this.validator.validate(this.mode.GetValue(key), certificate);
+                this.validator.Validate(this.mode.GetValue(key), certificate);
             }
             catch (CertificateValidationException e)
             {

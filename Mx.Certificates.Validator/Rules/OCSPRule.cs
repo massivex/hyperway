@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Mx.Certificates.Validator.Rules
 {
-    using System.Collections;
     using System.IO;
     using System.Net;
-    using System.Resources;
 
     using Mx.Certificates.Validator.Api;
     using Mx.Tools;
@@ -19,22 +17,20 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.Ocsp;
     using Org.BouncyCastle.X509;
 
-    using CertStatus = Org.BouncyCastle.Asn1.Ocsp.CertStatus;
-
-    /**
-     * Validation of certificate using OCSP. Requires intermediate certificates.
-     */
-    public class OCSPRule : ValidatorRule
+    ///<summary>
+    /// Validation of certificate using OCSP. Requires intermediate certificates.
+    /// </summary>
+    public class OcspRule : IValidatorRule
     {
 
-        private CertificateBucket intermediateCertificates;
+        private readonly ICertificateBucket intermediateCertificates;
 
-        public OCSPRule(CertificateBucket intermediateCertificates)
+        public OcspRule(ICertificateBucket intermediateCertificates)
         {
             this.intermediateCertificates = intermediateCertificates;
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate) // throws CertificateValidationException
         {
             try
             {
@@ -44,20 +40,16 @@ namespace Mx.Certificates.Validator.Rules
                     return;
                 }
 
-                X509Certificate issuer = this.intermediateCertificates.findBySubject(certificate.IssuerDN);
+                X509Certificate issuer = this.intermediateCertificates.FindBySubject(certificate.IssuerDN);
                 if (issuer == null)
                 {
-                    throw new FailedValidationException(
-                        String.Format(
-                            "Unable to find issuer certificate '{0}'",
-                            certificate.IssuerDN));
+                    throw new FailedValidationException($"Unable to find issuer certificate '{certificate.IssuerDN}'");
                 }
 
-                OcspCheckStatus ocspStatus = this.getRevocationStatus(certificate, issuer);
+                OcspCheckStatus ocspStatus = this.GetRevocationStatus(certificate, issuer);
                 if (!ocspStatus.Equals(OcspCheckStatus.Good))
                 {
-                    throw new FailedValidationException(
-                        String.Format("Certificate status is reported as {0} by OCSP.", ocspStatus));
+                    throw new FailedValidationException($"Certificate status is reported as {ocspStatus} by OCSP.");
                 }
             }
             catch (Exception e) when (e is IOException || e is NullReferenceException)
@@ -66,17 +58,17 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        public OcspCheckStatus getRevocationStatus(
+        public OcspCheckStatus GetRevocationStatus(
                 X509Certificate cert,
                 X509Certificate issuer) // throws IOException, CertPathValidatorException
         {
-            var uri = this.getOcspUrlFromCertificate(issuer);
-            var request = getOcspPackage(cert.SerialNumber, issuer);
-            var response = this.getOcspResponse(uri, request);
-            return this.parseOcspResponse(response);
+            var uri = this.GetOcspUrlFromCertificate(issuer);
+            var request = GetOcspPackage(cert.SerialNumber, issuer);
+            var response = this.GetOcspResponse(uri, request);
+            return this.ParseOcspResponse(response);
         }
 
-        private string getOcspUrlFromCertificate(X509Certificate cert)
+        private string GetOcspUrlFromCertificate(X509Certificate cert)
         {
             var derId = new DerObjectIdentifier(X509Extensions.AuthorityInfoAccess.Id);
             byte[] extensionValue = cert.GetExtensionValue(derId).GetOctets();
@@ -109,16 +101,15 @@ namespace Mx.Certificates.Validator.Rules
             return result;
         }
 
-        private static byte[] getOcspPackage(BigInteger serialNr, X509Certificate cacert)
+        private static byte[] GetOcspPackage(BigInteger serialNr, X509Certificate cacert)
         {
             OcspReqGenerator gen = new OcspReqGenerator();
             try
             {
                 CertificateID certId = new CertificateID(CertificateID.HashSha1, cacert, serialNr);
                 gen.AddRequest(certId);
-                gen.SetRequestExtensions(getExtentions());
-                OcspReq req;
-                req = gen.Generate();
+                gen.SetRequestExtensions(GetExtentions());
+                var req = gen.Generate();
                 return req.GetEncoded();
             }
             catch (OcspException e)
@@ -127,7 +118,7 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        private static X509Extensions getExtentions()
+        private static X509Extensions GetExtentions()
         {
             var millis = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             BigInteger nonce = BigInteger.ValueOf(millis);
@@ -140,7 +131,7 @@ namespace Mx.Certificates.Validator.Rules
             return new X509Extensions(oids, values);
         }
 
-        private byte[] getOcspResponse(string url, byte[] ocspRequest)
+        private byte[] GetOcspResponse(string url, byte[] ocspRequest)
         {
             HttpWebRequest req = WebRequest.CreateHttp(url);
             req.Method = "POST";
@@ -157,9 +148,8 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        private OcspCheckStatus parseOcspResponse(byte[] raw)
+        private OcspCheckStatus ParseOcspResponse(byte[] raw)
         {
-            BasicOcspResp brep;
             OcspResp response = new OcspResp(raw);
             if (response.Status == OcspRespStatus.Unauthorized)
             {
@@ -170,7 +160,7 @@ namespace Mx.Certificates.Validator.Rules
                 return OcspCheckStatus.Error;
             }
 
-            brep = (BasicOcspResp)response.GetResponseObject();
+            var brep = (BasicOcspResp)response.GetResponseObject();
             SingleResp[] singleResps = brep.Responses;
             SingleResp singleResp = singleResps[0];
             Object status = singleResp.GetCertStatus();

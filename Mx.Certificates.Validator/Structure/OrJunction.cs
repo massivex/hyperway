@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Certificates.Validator.Structure
@@ -8,27 +7,27 @@ namespace Mx.Certificates.Validator.Structure
 
     using Org.BouncyCastle.X509;
 
-    /**
-     * Allows combining instances of validators using a limited set of logic.
-     */
+    /// <summary>
+    /// Allows combining instances of validators using a limited set of logic. 
+    /// </summary>
     public class OrJunction : AbstractJunction
     {
 
-        public OrJunction(params ValidatorRule[] validatorRules)
+        public OrJunction(params IValidatorRule[] validatorRules)
             : base(validatorRules)
         {
 
         }
 
-        public override void validate(X509Certificate certificate) // throws CertificateValidationException
+        public override void Validate(X509Certificate certificate)
         {
             List<CertificateValidationException> exceptions = new List<CertificateValidationException>();
 
-            foreach (ValidatorRule validatorRule in this.validatorRules)
+            foreach (IValidatorRule validatorRule in this.ValidatorRules)
             {
                 try
                 {
-                    validatorRule.validate(certificate);
+                    validatorRule.Validate(certificate);
                     return;
                 }
                 catch (CertificateValidationException e)
@@ -39,7 +38,7 @@ namespace Mx.Certificates.Validator.Structure
 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("Or-junction failed with results:");
-            foreach (Exception e in exceptions)
+            foreach (CertificateValidationException e in exceptions)
             {
                 stringBuilder.Append("\n* ").Append(e.Message);
             }

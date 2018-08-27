@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Mx.Certificates.Validator
 {
@@ -12,94 +11,94 @@ namespace Mx.Certificates.Validator
     public class ValidatorGroup : Validator
     {
 
-    private Dictionary<String, ValidatorRule> rulesMap;
+    private readonly Dictionary<string, IValidatorRule> rulesMap;
 
-    private String name;
+    private readonly string name;
 
-    private String version;
+    private readonly string version;
 
-    public ValidatorGroup(Dictionary<String, ValidatorRule> rulesMap) : base(null)
+    public ValidatorGroup(Dictionary<string, IValidatorRule> rulesMap) : base(null)
     {
         this.rulesMap = rulesMap;
     }
 
-    public ValidatorGroup(Dictionary<String, ValidatorRule> rulesMap, String name, String version): this(rulesMap)
+    public ValidatorGroup(Dictionary<string, IValidatorRule> rulesMap, string name, string version): this(rulesMap)
     {
         this.name = name;
         this.version = version;
     }
 
-    public String getName()
+    public string GetName()
     {
-        return name;
+        return this.name;
     }
 
-    public String getVersion()
+    public string GetVersion()
     {
-        return version;
+        return this.version;
     }
 
-    public void validate(X509Certificate certificate) // throws CertificateValidationException
+    public override void Validate(X509Certificate certificate)
     {
-        validate("default", certificate);
+        this.Validate("default", certificate);
     }
 
-    public void validate(String name, X509Certificate certificate) // throws CertificateValidationException
+    public void Validate(string ruleName, X509Certificate certificate)
     {
-        if (!this.rulesMap.ContainsKey(name))
+        if (!this.rulesMap.ContainsKey(ruleName))
         {
-            throw new CertificateValidationException($"Unknown validator '{name}'.");
+            throw new CertificateValidationException($"Unknown validator '{ruleName}'.");
         }
 
-        this.rulesMap[name].validate(certificate);
+        this.rulesMap[ruleName].Validate(certificate);
     }
 
-    public X509Certificate validate(String name, Stream inputStream) // throws CertificateValidationException
+    public X509Certificate Validate(string ruleName, Stream inputStream)
     {
-        X509Certificate certificate = getCertificate(inputStream);
-        validate(name, certificate);
+        X509Certificate certificate = GetCertificate(inputStream);
+        this.Validate(ruleName, certificate);
         return certificate;
     }
 
-    public X509Certificate validate(String name, byte[] bytes) // throws CertificateValidationException
+    public X509Certificate Validate(string ruleName, byte[] bytes)
     {
-        X509Certificate certificate = getCertificate(bytes);
-        validate(name, certificate);
+        X509Certificate certificate = GetCertificate(bytes);
+        this.Validate(ruleName, certificate);
         return certificate;
     }
 
-    public bool isValid(String name, X509Certificate certificate)
+    public bool IsValid(string ruleName, X509Certificate certificate)
     {
         try
         {
-            validate(name, certificate);
+            this.Validate(ruleName, certificate);
             return true;
         }
-        catch (CertificateValidationException e)
+        catch (CertificateValidationException)
         {
             return false;
         }
     }
 
-    public bool isValid(String name, Stream inputStream)
+    public bool IsValid(string nameToValidate, Stream inputStream)
     {
         try
         {
-            return isValid(name, getCertificate(inputStream));
+            return this.IsValid(nameToValidate, GetCertificate(inputStream));
         }
-        catch (CertificateValidationException e)
+        catch (CertificateValidationException)
         {
             return false;
         }
     }
 
-    public bool isValid(String name, byte[] bytes)
+    public bool IsValid(string nameToValidate, byte[] bytes)
     {
         try
         {
-            return isValid(name, getCertificate(bytes));
+            return this.IsValid(nameToValidate, GetCertificate(bytes));
         }
-        catch (CertificateValidationException e)
+        catch (CertificateValidationException)
         {
             return false;
         }

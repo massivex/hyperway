@@ -1,47 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Certificates.Validator.Rules
+﻿namespace Mx.Certificates.Validator.Rules
 {
     using Mx.Certificates.Validator.Api;
 
     using Org.BouncyCastle.X509;
 
-    /**
-     * Throws an exception on validation if message is set.
-     */
-    public class DummyRule : ValidatorRule
+    /// <inheritdoc />
+    /// <summary>
+    /// Throws an exception on validation if message is set.
+    /// </summary>
+    public class DummyRule : IValidatorRule
     {
 
-        public static DummyRule alwaysSuccess()
+        public static DummyRule AlwaysSuccess()
         {
             return new DummyRule();
         }
 
-        public static DummyRule alwaysFail(String message)
+        public static DummyRule AlwaysFail(string message)
         {
             return new DummyRule(message);
         }
 
-        private String message;
+        private readonly string message;
 
-        /**
-         * Defines an instance always having successful validations.
-         */
+        /// <summary>
+        /// Defines an instance always having successful validations.</summary>
         public DummyRule(): this(null)
         { }
 
-        /**
-         * Defines as instance always having failing validations, given message is not null.
-         * @param message Message used when failing validation.
-         */
-        public DummyRule(String message)
+        /// <summary>
+        /// Defines as instance always having failing validations, given message is not null.
+        /// </summary>
+        /// <param name="message">Message used when failing validation.</param>
+        public DummyRule(string message)
         {
             this.message = message;
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
             if (this.message != null)
             {

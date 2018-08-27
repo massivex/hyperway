@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Util
 {
@@ -10,49 +8,36 @@ namespace Mx.Certificates.Validator.Util
 
     using Org.BouncyCastle.X509;
 
-    public class CachedValidatorRule : ValidatorRule
+    public class CachedValidatorRule : IValidatorRule
     {
 
-        private ValidatorRule validatorRule;
-
-        private readonly long timeout;
+        private readonly IValidatorRule validatorRule;
 
         private readonly IMemoryCache memoryCache;
 
-        // private LoadingCache<X509Certificate, Result> cache;
-        // private IMemoryCache cache;
 
-
-
-        public CachedValidatorRule(ValidatorRule validatorRule, long timeout)
+        public CachedValidatorRule(IValidatorRule validatorRule)
         {
             this.validatorRule = validatorRule;
-            this.timeout = timeout;
             this.memoryCache = new MemoryCache(
                 new MemoryCacheOptions() { ExpirationScanFrequency = TimeSpan.FromSeconds(5) }
             );
-
-            //cache = CacheBuilder.newBuilder()
-            //    .expireAfterWrite(timeout, TimeUnit.SECONDS)
-            //    .build(this);
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
             Result value;
             if (this.memoryCache.TryGetValue(certificate, out value))
             {
-                value.trigger();
+                value.Trigger();
             }
-            // cache.getUnchecked(certificate).trigger();
         }
 
-        // @Override
-        internal Result load(X509Certificate certificate) // throws Exception
+        internal Result Load(X509Certificate certificate)
         {
             try
             {
-                validatorRule.validate(certificate);
+                this.validatorRule.Validate(certificate);
                 return new Result();
             }
             catch (CertificateValidationException e)
@@ -77,16 +62,13 @@ namespace Mx.Certificates.Validator.Util
                 this.exception = e;
             }
 
-            public void trigger() // throws CertificateValidationException
+            public void Trigger() // throws CertificateValidationException
             {
-                if (exception != null)
+                if (this.exception != null)
                 {
-                    throw exception;
+                    throw this.exception;
                 }
             }
         }
     }
-
-
-
 }

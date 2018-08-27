@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Certificates.Validator.Api
+﻿namespace Mx.Certificates.Validator.Api
 {
 
-    /**
-     * Used by PrincipalNameValidator to implement validation logic.
-     */
-    public interface PrincipalNameProvider<T>
+    /// <summary>
+    /// Used by PrincipalNameValidator to implement validation logic.
+    /// </summary>
+    /// <typeparam name="T">Principal type</typeparam>
+    public interface IPrincipalNameProvider<T>
     {
-        bool validate(T value);
+        bool Validate(T value);
     }
 
 }

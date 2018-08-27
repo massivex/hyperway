@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Certificates.Validator.Api
+﻿namespace Mx.Certificates.Validator.Api
 {
     using Org.BouncyCastle.X509;
 
-    /**
-     * Defines a validator rule. Made as simple as possible by purpose.
-     */
-    public interface ValidatorRule
+    /// <summary>
+    /// Defines a validator rule. Made as simple as possible by purpose.
+    /// </summary>
+    public interface IValidatorRule
     {
-
-        /**
-         * Validate certificate.
-         * @param certificate Certificate subject to validation.
-         * @throws CertificateValidationException
-         */
-        void validate(X509Certificate certificate); // throws CertificateValidationException;
+        /// <summary>
+        /// Validate certificate
+        /// </summary>
+        /// <param name="certificate">Certificate subject to validation</param>
+        void Validate(X509Certificate certificate);
     }
-
 }

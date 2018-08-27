@@ -1,6 +1,5 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator
 {
@@ -9,9 +8,9 @@ namespace Mx.Certificates.Validator
     public class ValidatorLoader
     {
 
-        private Dictionary<String, Object> objectStorage = new Dictionary<string, object>();
+        private readonly Dictionary<String, Object> objectStorage = new Dictionary<string, object>();
 
-        public static ValidatorLoader newInstance()
+        public static ValidatorLoader NewInstance()
         {
             return new ValidatorLoader();
         }
@@ -21,26 +20,26 @@ namespace Mx.Certificates.Validator
 
         }
 
-        public ValidatorLoader put(String key, Object value)
+        public ValidatorLoader Put(String key, Object value)
         {
             this.objectStorage.Add(key, value);
 
             return this;
         }
 
-        public ValidatorGroup build(FileInfo path) // throws IOException, ValidatorParsingException
+        public ValidatorGroup Build(FileInfo path)
         {
             ValidatorGroup validatorGroup;
             using (Stream inputStream = File.OpenRead(path.FullName))
             {
-                validatorGroup = this.build(inputStream);
+                validatorGroup = this.Build(inputStream);
             }
             return validatorGroup;
         }
 
-        public ValidatorGroup build(Stream inputStream) // throws ValidatorParsingException
+        public ValidatorGroup Build(Stream inputStream)
         {
-            return ValidatorLoaderParser.parse(inputStream, new Dictionary<string, object>(this.objectStorage));
+            return ValidatorLoaderParser.Parse(inputStream, new Dictionary<string, object>(this.objectStorage));
         }
     }
 }

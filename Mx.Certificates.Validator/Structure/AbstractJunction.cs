@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Certificates.Validator.Structure
 {
@@ -8,22 +6,22 @@ namespace Mx.Certificates.Validator.Structure
 
     using Org.BouncyCastle.X509;
 
-    public abstract class AbstractJunction : ValidatorRule
+    public abstract class AbstractJunction : IValidatorRule
     {
 
-        protected List<ValidatorRule> validatorRules = new List<ValidatorRule>();
+        protected List<IValidatorRule> ValidatorRules = new List<IValidatorRule>();
 
-        public AbstractJunction(ValidatorRule[] validatorRules)
+        public AbstractJunction(IValidatorRule[] validatorRules)
         {
-            addRule(validatorRules);
+            this.AddRule(validatorRules);
         }
 
-        public AbstractJunction addRule(ValidatorRule[] validatorRules)
+        public AbstractJunction AddRule(IValidatorRule[] validatorRules)
         {
-            this.validatorRules.AddRange(validatorRules);
+            this.ValidatorRules.AddRange(validatorRules);
             return this;
         }
 
-        public abstract void validate(X509Certificate certificate);
+        public abstract void Validate(X509Certificate certificate);
     }
 }

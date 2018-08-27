@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Rules
 {
@@ -9,13 +7,14 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509;
 
-    /**
-     * Validate validity of certificate.
-     */
-    public class ExpirationRule : ValidatorRule
+    /// <inheritdoc />
+    /// <summary>
+    /// Validate validity of certificate.
+    /// </summary>
+    public class ExpirationRule : IValidatorRule
     {
 
-        public void validate(X509Certificate certificate) // throws FailedValidationException
+        public void Validate(X509Certificate certificate)
         {
             try
             {

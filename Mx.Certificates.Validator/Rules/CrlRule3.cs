@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Rules
 {
@@ -14,32 +13,32 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Extension;
 
-    public class CRLRule : ValidatorRule
+    public class CrlRule : IValidatorRule
     {
 
-        private const string CRL_EXTENSION = "2.5.29.31";
+        private const string CrlExtension = "2.5.29.31";
 
-        private CrlFetcher crlFetcher;
+        private readonly ICrlFetcher crlFetcher;
 
-        public CRLRule(CrlFetcher crlFetcher)
+        public CrlRule(ICrlFetcher crlFetcher)
         {
             this.crlFetcher = crlFetcher;
         }
 
-        public CRLRule(CrlCache crlCache)
+        public CrlRule(ICrlCache crlCache)
             : this(new SimpleCachingCrlFetcher(crlCache))
         {}
 
-        public CRLRule()
+        public CrlRule()
         {
             this.crlFetcher = new SimpleCachingCrlFetcher(new SimpleCrlCache());
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
-            List<String> urls = getCrlDistributionPoints(certificate);
-            foreach (String url in urls) {
-                X509Crl crl = this.crlFetcher.get(url);
+            List<string> urls = GetCrlDistributionPoints(certificate);
+            foreach (string url in urls) {
+                X509Crl crl = this.crlFetcher.Get(url);
                 if (crl != null)
                 {
                     if (crl.IsRevoked(certificate))
@@ -50,18 +49,18 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        public static List<String> getCrlDistributionPoints(X509Certificate certificate) // throws CertificateValidationException
+        public static List<string> GetCrlDistributionPoints(X509Certificate certificate)
         {
             try
             {
-                List<String> urls = new List<String>();
+                List<string> urls = new List<string>();
 
-                if (!certificate.GetNonCriticalExtensionOids().Contains(CRL_EXTENSION))
+                if (!certificate.GetNonCriticalExtensionOids().Contains(CrlExtension))
                 {
                     return urls;
                 }
 
-                var oid = new DerObjectIdentifier(CRL_EXTENSION);
+                var oid = new DerObjectIdentifier(CrlExtension);
                 CrlDistPoint distPoint = CrlDistPoint.GetInstance(X509ExtensionUtilities.FromExtensionValue(certificate.GetExtensionValue(oid)));
                 foreach (DistributionPoint dp in distPoint.GetDistributionPoints())
                 {
@@ -82,5 +81,4 @@ namespace Mx.Certificates.Validator.Rules
             }
             }
     }
-
 }

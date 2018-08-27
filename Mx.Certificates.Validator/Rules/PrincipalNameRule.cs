@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Mx.Certificates.Validator.Rules
@@ -11,72 +9,71 @@ namespace Mx.Certificates.Validator.Rules
     using Mx.Xml.tns;
 
     using Org.BouncyCastle.Asn1;
-    using Org.BouncyCastle.Asn1.Crmf;
     using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.Security.Certificates;
-    using Org.BouncyCastle.Utilities;
     using Org.BouncyCastle.X509;
 
-    /**
-     * Validator using defined logic to validate content in principal name of subject or issuer.
-     */
-    public class PrincipalNameRule : ValidatorRule
+    /// <inheritdoc />
+    /// <summary>
+    /// Validator using defined logic to validate content in principal name of subject or issuer.
+    /// </summary>
+    public class PrincipalNameRule : IValidatorRule
     {
 
-        protected String field;
+        protected string Field;
 
-        protected PrincipalNameProvider<String> provider;
+        protected IPrincipalNameProvider<string> Provider;
 
-        protected Enumerations.PrincipalEnum principal;
+        protected Enumerations.PrincipalEnum Principal;
 
-        public PrincipalNameRule(PrincipalNameProvider<String> provider)
+        public PrincipalNameRule(IPrincipalNameProvider<string> provider)
             : this(null, provider, Enumerations.PrincipalEnum.SUBJECT)
         {
 
         }
 
-        public PrincipalNameRule(PrincipalNameProvider<String> provider, Enumerations.PrincipalEnum principal)
+        public PrincipalNameRule(IPrincipalNameProvider<string> provider, Enumerations.PrincipalEnum principal)
             : this(null, provider, principal)
         {
 
         }
 
-        public PrincipalNameRule(String field, PrincipalNameProvider<String> provider)
+        public PrincipalNameRule(string field, IPrincipalNameProvider<string> provider)
             : this(field, provider, Enumerations.PrincipalEnum.SUBJECT)
         {
 
         }
 
-        public PrincipalNameRule(String field, PrincipalNameProvider<String> provider, Enumerations.PrincipalEnum principal)
+        public PrincipalNameRule(string field, IPrincipalNameProvider<string> provider, Enumerations.PrincipalEnum principal)
         {
-            this.field = field;
-            this.provider = provider;
-            this.principal = principal;
+            this.Field = field;
+            this.Provider = provider;
+            this.Principal = principal;
         }
 
-        public void validate(X509Certificate certificate) // CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
             try
             {
                 X509Name current;
-                if (principal.Equals(Enumerations.PrincipalEnum.SUBJECT))
+                if (this.Principal.Equals(Enumerations.PrincipalEnum.SUBJECT))
                 {
-                    current = getSubject(certificate);
+                    current = GetSubject(certificate);
                 }
                 else
                 {
-                    current = getIssuer(certificate);
+                    current = GetIssuer(certificate);
                 }
 
-                foreach (string value in extract(current, field))
+                foreach (string value in Extract(current, this.Field))
                 {
-                    if (provider.validate(value))
+                    if (this.Provider.Validate(value))
                     {
                         return;
                     }
                 }
 
-                throw new FailedValidationException($"Validation of subject principal({this.field}) failed.");
+                throw new FailedValidationException($"Validation of subject principal({this.Field}) failed.");
             }
             catch (CertificateEncodingException e)
             {
@@ -84,20 +81,20 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        protected static X509Name getIssuer(X509Certificate certificate) // throws CertificateEncodingException
+        protected static X509Name GetIssuer(X509Certificate certificate) // throws CertificateEncodingException
         {
             return certificate.IssuerDN;
             // return new JcaX509CertificateHolder(certificate).getIssuer();
         }
 
-        protected static X509Name getSubject(X509Certificate certificate) // throws CertificateEncodingException
+        protected static X509Name GetSubject(X509Certificate certificate) // throws CertificateEncodingException
         {
             return certificate.SubjectDN;
             // return new JcaX509CertificateHolder(certificate).getSubject();
         }
 
 
-        protected static IList<String> extract(X509Name principal, String field)
+        protected static IList<string> Extract(X509Name principal, string field)
         {
             if (field == null)
             {
@@ -106,7 +103,7 @@ namespace Mx.Certificates.Validator.Rules
             }
 
             var values = new List<string>();
-            var normalizedField = (field ?? string.Empty).Trim().ToLowerInvariant();
+            var normalizedField = field.Trim().ToLowerInvariant();
             if (!X509Name.DefaultLookup.Contains(normalizedField))
             {
                 return values;
@@ -116,13 +113,5 @@ namespace Mx.Certificates.Validator.Rules
             values = principal.GetValueList(oidField).OfType<string>().ToList();
             return values;
         }
-
-        //public enum Principal
-        //{
-        //    SUBJECT,
-
-        //    ISSUER
-        //}
     }
-
 }

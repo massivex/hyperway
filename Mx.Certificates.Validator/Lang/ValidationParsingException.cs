@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Lang
 {
@@ -8,7 +6,7 @@ namespace Mx.Certificates.Validator.Lang
 
     public class ValidatorParsingException : CertificateValidationException
     {
-        public ValidatorParsingException(String reason, Exception cause)
+        public ValidatorParsingException(string reason, Exception cause)
             : base(reason, cause)
         {
 

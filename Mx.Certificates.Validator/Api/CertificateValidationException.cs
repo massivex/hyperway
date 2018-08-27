@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Api
 {
-    /**
-     * Generic exception for project.
-     */
+    /// <summary>
+    /// Generic exception for project.
+    /// </summary>
     public class CertificateValidationException : Exception
     {
-        public CertificateValidationException(String reason, Exception cause)
+        public CertificateValidationException(string reason, Exception cause)
             : base(reason, cause)
         {
 
         }
 
-        public CertificateValidationException(String message)
+        public CertificateValidationException(string message)
             : base(message)
         {
 

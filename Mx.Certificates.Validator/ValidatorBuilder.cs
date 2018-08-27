@@ -1,60 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Certificates.Validator
 {
     using Mx.Certificates.Validator.Api;
     using Mx.Certificates.Validator.Structure;
 
-    /**
-     * Builder for creation of validators.
-     */
+    /// <summary>
+    /// Builder for creation of validators.
+    /// </summary>
     public class ValidatorBuilder
     {
-
-        /**
-         * Point of entry.
-         *
-         * @return Builder instance.
-         */
-        public static ValidatorBuilder newInstance()
+        /// <summary>
+        /// Entry point
+        /// </summary>
+        public static ValidatorBuilder NewInstance()
         {
             return new ValidatorBuilder();
         }
 
-        private List<ValidatorRule> validatorRules = new List<ValidatorRule>();
+        private readonly List<IValidatorRule> validatorRules = new List<IValidatorRule>();
 
         private ValidatorBuilder()
         {
             // No action
         }
 
-        /**
-         * Append validator instance to validator.
-         *
-         * @param validatorRule Configured validator.
-         * @return Builder instance.
-         */
-        public ValidatorBuilder addRule(ValidatorRule validatorRule)
+        /// <summary>
+        /// Append validator instance to validator. 
+        /// </summary>
+        /// <param name="validatorRule">Configured validator.</param>
+        /// <returns>Builder instance.</returns>
+        public ValidatorBuilder AddRule(IValidatorRule validatorRule)
         {
-            validatorRules.Add(validatorRule);
+            this.validatorRules.Add(validatorRule);
             return this;
         }
 
-        /**
-         * Generates a ValidatorHelper instance containing defined validator(s).
-         *
-         * @return Validator ready for use.
-         */
-        public Validator build()
+        /// <summary>
+        /// Generates a ValidatorHelper instance containing defined validator(s). 
+        /// </summary>
+        /// <returns>Validator ready for use.</returns>
+        public Validator Build()
         {
-            if (validatorRules.Count == 1)
+            if (this.validatorRules.Count == 1)
             {
-                return new Validator(validatorRules[0]);
+                return new Validator(this.validatorRules[0]);
             }
 
-            return new Validator(Junction.and(validatorRules.ToArray()));
+            return new Validator(Junction.And(this.validatorRules.ToArray()));
         }
     }
 

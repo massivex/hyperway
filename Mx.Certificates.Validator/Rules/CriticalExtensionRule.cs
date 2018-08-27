@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Certificates.Validator.Rules
+﻿namespace Mx.Certificates.Validator.Rules
 {
     public class CriticalExtensionRule
     {
+        private CriticalExtensionRule()
+        {
+            // No action.
+        }
 
-        public static CriticalExtensionRecognizedRule recognizes(String[] recognizedExtensions)
+        public static CriticalExtensionRecognizedRule Recognizes(string[] recognizedExtensions)
         {
             return new CriticalExtensionRecognizedRule(recognizedExtensions);
         }
 
-        public static CriticalExtensionRequiredRule requires(String[] requiredExtensions)
+        public static CriticalExtensionRequiredRule Requires(string[] requiredExtensions)
         {
             return new CriticalExtensionRequiredRule(requiredExtensions);
-        }
-
-        CriticalExtensionRule()
-        {
-            // No action.
         }
     }
 }

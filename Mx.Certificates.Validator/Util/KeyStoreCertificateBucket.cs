@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Util
 {
     using System.Collections;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
 
@@ -14,34 +14,36 @@ namespace Mx.Certificates.Validator.Util
     using Org.BouncyCastle.Pkcs;
     using Org.BouncyCastle.X509;
 
-    /**
-     * Reads a keystore from input stream and keeps it in memory.
-     */
-    public class KeyStoreCertificateBucket : CertificateBucket
+    /// <summary>
+    /// Reads a keystore from input stream and keeps it in memory. 
+    /// </summary>
+    public class KeyStoreCertificateBucket : ICertificateBucket
     {
 
-        protected Pkcs12Store keyStore;
+        protected Pkcs12Store KeyStore;
 
         public KeyStoreCertificateBucket(Pkcs12Store keyStore)
         {
-            this.keyStore = keyStore;
+            this.KeyStore = keyStore;
         }
 
-        public KeyStoreCertificateBucket(Stream inputStream, String password) : this("PCKS12", inputStream, password)
+        public KeyStoreCertificateBucket(Stream inputStream, string password) : this("PCKS12", inputStream, password)
         {
             
         }
 
         public KeyStoreCertificateBucket(
-            String type,
+            string type,
             Stream inputStream,
-            String password) // throws CertificateBucketException
+            string password)
         {
             try
             {
-                // keyStore = KeyStore.getInstance(type);
-                // keyStore.load(inputStream, password.toCharArray());
-                this.keyStore = new Pkcs12Store(inputStream, password.ToCharArray());
+                if (type != "PCKS12")
+                {
+                    throw new NotSupportedException($"Store type {type} not supported");
+                }
+                this.KeyStore = new Pkcs12Store(inputStream, password.ToCharArray());
                 inputStream.Close();
                 inputStream.Dispose();
             }
@@ -51,7 +53,7 @@ namespace Mx.Certificates.Validator.Util
             }
         }
 
-        public X509Certificate findBySubject(X509Name principal) // throws CertificateBucketException
+        public X509Certificate FindBySubject(X509Name principal)
         {
             foreach (X509Certificate certificate in this)
             {
@@ -64,69 +66,26 @@ namespace Mx.Certificates.Validator.Util
             return null;
         }
 
-        //public Iterator<X509Certificate> iterator()
-        //{
-        //    try
-        //    {
-        //        final KeyStore keyStore = getKeyStore();
-        //        final Enumeration<String>
-        //        aliases = keyStore.aliases();
 
-        //        return new Iterator<X509Certificate>()
-        //                   {
-        //                       @Override
-        //                       public boolean hasNext() { return aliases.hasMoreElements();
-        //                   }
-
-        //        @Override
-
-        //        public X509Certificate next()
-        //        {
-        //            try
-        //            {
-        //                return (X509Certificate)keyStore.getCertificate(aliases.nextElement());
-        //            }
-        //            catch (KeyStoreException |
-
-        //            NoSuchElementException e) {
-        //                throw new IllegalStateException(e.getMessage(), e);
-        //            }
-        //        }
-
-        //        @Override
-
-        //        public void remove()
-        //        {
-        //            // No action.
-        //        }
-
-        //        };
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new IllegalStateException(e.getMessage(), e);
-        //    }
-        //}
-
-        /**
-         * Adding certificates identified by aliases from key store to a SimpleCertificateBucket.
-         */
-        public void toSimple(
-            SimpleCertificateBucket certificates,
-            params String[] aliases) // throws CertificateBucketException
+        /// <summary>
+        /// Adding certificates identified by aliases from key store to a SimpleCertificateBucket. 
+        /// </summary>
+        /// <param name="certificates"></param>
+        /// <param name="aliases"></param>
+        public void ToSimple(SimpleCertificateBucket certificates, params string[] aliases)
         {
             try
             {
-                List<String> aliasesList = aliases.ToList();
+                List<string> aliasesList = aliases.ToList();
 
-                Pkcs12Store keyStore = getKeyStore();
+                Pkcs12Store keyStore = this.GetKeyStore();
                 IEnumerator aliasesEnumeration = keyStore.Aliases.GetEnumerator();
                 while (aliasesEnumeration.MoveNext())
                 {
-                    String alias = (string) aliasesEnumeration.Current;
+                    string alias = (string) aliasesEnumeration.Current;
                     if (aliasesList.Contains(alias))
                     {
-                        certificates.add(keyStore.GetCertificate(alias).Certificate);
+                        certificates.Add(keyStore.GetCertificate(alias).Certificate);
                     }
                 }
             }
@@ -136,35 +95,34 @@ namespace Mx.Certificates.Validator.Util
             }
         }
 
-        /**
-         * Create a new SimpleCertificateBucket and adding certificates based on aliases.
-         */
-        public SimpleCertificateBucket toSimple(params String[] aliases) // throws CertificateBucketException
+        /// <summary>
+        /// Create a new SimpleCertificateBucket and adding certificates based on aliases.
+        /// </summary>
+        public SimpleCertificateBucket ToSimple(params string[] aliases)
         {
             SimpleCertificateBucket certificates = new SimpleCertificateBucket();
-            toSimple(certificates, aliases);
+            this.ToSimple(certificates, aliases);
             return certificates;
         }
 
-        /**
-         * Adding certificates identified by prefix(es) from key store to a SimpleCertificateBucket.
-         */
-        public void startsWith(
-            SimpleCertificateBucket certificates,
-            String[] prefix) // throws CertificateBucketException
+        /// <summary>
+        /// Adding certificates identified by prefix(es) from key store to a SimpleCertificateBucket.
+        /// </summary>
+        public void StartsWith(SimpleCertificateBucket certificates, string[] prefix)
         {
             try
             {
-                Pkcs12Store keyStore = getKeyStore();
+                Pkcs12Store keyStore = this.GetKeyStore();
                 IEnumerator aliasesEnumeration = keyStore.Aliases.GetEnumerator();
                 while (aliasesEnumeration.MoveNext())
                 {
-                    String alias = (string) aliasesEnumeration.Current;
-                    foreach (String p in prefix)
+                    string alias = (string) aliasesEnumeration.Current;
+                    foreach (string p in prefix)
                     {
+                        Debug.Assert(alias != null, nameof(alias) + " != null");
                         if (alias.StartsWith(p))
                         {
-                            certificates.add(keyStore.GetCertificate(alias).Certificate);
+                            certificates.Add(keyStore.GetCertificate(alias).Certificate);
                         }
                     }
                 }
@@ -175,22 +133,22 @@ namespace Mx.Certificates.Validator.Util
             }
         }
 
-        /**
-         * Create a new SimpleCertificateBucket and adding certificates based on prefix(es).
-         */
-        public SimpleCertificateBucket startsWith(params String[] prefix) // throws CertificateBucketException
+        /// <summary>
+        /// Create a new SimpleCertificateBucket and adding certificates based on prefix(es).
+        /// </summary>
+        public SimpleCertificateBucket StartsWith(params string[] prefix)
         {
             SimpleCertificateBucket certificates = new SimpleCertificateBucket();
-            startsWith(certificates, prefix);
+            this.StartsWith(certificates, prefix);
             return certificates;
         }
 
-        /**
-         * Allows for overriding method of fetching key store when used.
-         */
-        protected Pkcs12Store getKeyStore() // throws CertificateBucketException
+        /// <summary>
+        /// Allows for overriding method of fetching key store when used.
+        /// </summary>
+        protected Pkcs12Store GetKeyStore()
         {
-            return keyStore;
+            return this.KeyStore;
         }
 
         public IEnumerator<X509Certificate> GetEnumerator()

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Certificates.Validator.Structure
@@ -7,28 +6,27 @@ namespace Mx.Certificates.Validator.Structure
     using Mx.Certificates.Validator.Api;
 
     using Org.BouncyCastle.X509;
-
-    /**
-     * Allows combining instances of validators using a limited set of logic.
-     */
+    /// <summary>
+    /// Allows combining instances of validators using a limited set of logic.
+    /// </summary>
     public class XorJunction : AbstractJunction
     {
 
-        public XorJunction(params ValidatorRule[] validatorRules)
+        public XorJunction(params IValidatorRule[] validatorRules)
             : base(validatorRules)
         {
 
         }
 
-        public override void validate(X509Certificate certificate) // throws CertificateValidationException
+        public override void Validate(X509Certificate certificate)
         {
             List<CertificateValidationException> exceptions = new List<CertificateValidationException>();
 
-            foreach (ValidatorRule validatorRule in validatorRules)
+            foreach (IValidatorRule validatorRule in this.ValidatorRules)
             {
                 try
                 {
-                    validatorRule.validate(certificate);
+                    validatorRule.Validate(certificate);
                 }
                 catch (CertificateValidationException e)
                 {
@@ -36,15 +34,13 @@ namespace Mx.Certificates.Validator.Structure
                 }
             }
 
-            if (exceptions.Count != validatorRules.Count - 1)
+            if (exceptions.Count != this.ValidatorRules.Count - 1)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append(
-                    String.Format(
-                        "Xor-junction failed with results ({0} of {1}):",
-                        exceptions.Count,
-                        validatorRules.Count));
-                foreach (Exception e in exceptions)
+                int totExceptions = exceptions.Count;
+                int totRules = this.ValidatorRules.Count;
+                stringBuilder.Append($"Xor-junction failed with results ({totExceptions} of {totRules}):");
+                foreach (var e in exceptions)
                 {
                     stringBuilder.Append("\n* ").Append(e.Message);
                 }

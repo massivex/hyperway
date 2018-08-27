@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Certificates.Validator.Util
 {
@@ -9,43 +7,39 @@ namespace Mx.Certificates.Validator.Util
     using Mx.Certificates.Validator.Api;
 
     using Org.BouncyCastle.Asn1.X509;
-    using Org.BouncyCastle.Utilities;
     using Org.BouncyCastle.X509;
 
-    /**
-     * Lightweight implementation using ArrayList to keep certificates in memory.
-     */
-    public class SimpleCertificateBucket : CertificateBucket
+    /// <summary>
+    /// Lightweight implementation using ArrayList to keep certificates in memory.
+    /// </summary>
+    public class SimpleCertificateBucket : ICertificateBucket
     {
 
-        private List<X509Certificate> certificates = new List<X509Certificate>();
+        private readonly List<X509Certificate> certificates = new List<X509Certificate>();
 
         public SimpleCertificateBucket(params X509Certificate[] certificates)
         {
-            add(certificates);
+            this.Add(certificates);
         }
 
-        /**
-         * Append certificate(s) to bucket.
-         *
-         * @param certificates Certificate(s) to be added.
-         */
-        public void add(params X509Certificate[] certificates)
+        /// <summary>
+        /// Append certificate(s) to bucket. 
+        /// </summary>
+        /// <param name="certificatesToAdd">Certificate(s) to be added.</param>
+        public void Add(params X509Certificate[] certificatesToAdd)
         {
-            this.certificates.AddRange(certificates);
+            this.certificates.AddRange(certificatesToAdd);
         }
 
-        public X509Certificate findBySubject(X509Name principal)
+        public X509Certificate FindBySubject(X509Name principal)
         {
-            foreach (X509Certificate certificate in certificates)
+            foreach (X509Certificate certificate in this.certificates)
             {
                 if (certificate.SubjectDN.Equals(principal))
                 {
                     return certificate;
 
                 }
-
-
             }
 
             return null;
@@ -53,7 +47,7 @@ namespace Mx.Certificates.Validator.Util
 
         public IEnumerator<X509Certificate> GetEnumerator()
         {
-            return certificates.GetEnumerator();
+            return this.certificates.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -11,12 +11,12 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.X509;
 
-    public class KeyUsageRule : ValidatorRule
+    public class KeyUsageRule : IValidatorRule
     {
 
-        private KeyUsage[] expectedKeyUsages;
+        private readonly KeyUsage[] expectedKeyUsages;
 
-        private bool[] expected = new bool[9];
+        private readonly bool[] expected = new bool[9];
 
         public KeyUsageRule(KeyUsage[] keyUsages)
         {
@@ -29,12 +29,12 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
             bool[] found = certificate.GetKeyUsage();
 
             var keyUsageText = this.expectedKeyUsages.ToStringValues();
-            var keyValueText = prettyprint(found).ToStringValues();
+            var keyValueText = this.prettyprint(found).ToStringValues();
             var msg = $"Expected {keyUsageText}, found {keyValueText}.";
                 
             if (!this.expected.SequenceEqual(found))

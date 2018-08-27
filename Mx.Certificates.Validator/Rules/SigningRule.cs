@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Rules
 {
@@ -10,23 +8,23 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.Security;
     using Org.BouncyCastle.X509;
 
-    public class SigningRule : ValidatorRule
+    public class SigningRule : IValidatorRule
     {
 
         public static SigningRule PublicSignedOnly()
         {
-            return new SigningRule(Kind.PUBLIC_SIGNED_ONLY);
+            return new SigningRule(Kind.PublicSignedOnly);
         }
 
         public static SigningRule SelfSignedOnly()
         {
-            return new SigningRule(Kind.SELF_SIGNED_ONLY);
+            return new SigningRule(Kind.SelfSignedOnly);
         }
 
         private Kind kind;
 
         public SigningRule()
-            : this(Kind.PUBLIC_SIGNED_ONLY)
+            : this(Kind.PublicSignedOnly)
         {
 
         }
@@ -36,14 +34,14 @@ namespace Mx.Certificates.Validator.Rules
             this.kind = kind;
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate) // throws CertificateValidationException
         {
             try
             {
-                if (isSelfSigned(certificate))
+                if (IsSelfSigned(certificate))
                 {
                     // Self signed
-                    if (kind.Equals(Kind.PUBLIC_SIGNED_ONLY))
+                    if (this.kind.Equals(Kind.PublicSignedOnly))
                     {
                         throw new FailedValidationException("Certificate should be publicly signed.");
                     }
@@ -51,15 +49,15 @@ namespace Mx.Certificates.Validator.Rules
                 else
                 {
                     // Publicly signed
-                    if (kind.Equals(Kind.SELF_SIGNED_ONLY))
+                    if (this.kind.Equals(Kind.SelfSignedOnly))
                     {
                         throw new FailedValidationException("Certificate should be self-signed.");
                     }
                 }
             }
-            catch (FailedValidationException e)
+            catch (FailedValidationException)
             {
-                throw e;
+                throw;
             }
             catch (Exception e)
             {
@@ -67,12 +65,7 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        /**
-         * Source: http://www.nakov.com/blog/2009/12/01/x509-certificate-validation-in-java-build-and-verify-chain-and-verify-clr-with-bouncy-castle/
-         */
-        public static bool
-            isSelfSigned(
-                X509Certificate cert) // throws CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
+        public static bool IsSelfSigned(X509Certificate cert)
         {
             try
             {
@@ -91,9 +84,9 @@ namespace Mx.Certificates.Validator.Rules
 
         public enum Kind
         {
-            PUBLIC_SIGNED_ONLY,
+            PublicSignedOnly,
 
-            SELF_SIGNED_ONLY
+            SelfSignedOnly
         }
     }
 }

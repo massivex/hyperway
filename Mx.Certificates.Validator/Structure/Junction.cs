@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Certificates.Validator.Structure
+﻿namespace Mx.Certificates.Validator.Structure
 {
     using Mx.Certificates.Validator.Api;
 
-    /**
-     * Allows combining instances of validators using a limited set of logic.
-     */
+    /// <summary>
+    /// Allows combining instances of validators using a limited set of logic. 
+    /// </summary>
     public class Junction
     {
 
-        public static ValidatorRule and(params ValidatorRule[] validatorRules)
+        public static IValidatorRule And(params IValidatorRule[] validatorRules)
         {
             if (validatorRules.Length == 1)
             {
@@ -22,7 +18,7 @@ namespace Mx.Certificates.Validator.Structure
             return new AndJunction(validatorRules);
         }
 
-        public static ValidatorRule or(params ValidatorRule[] validatorRules)
+        public static IValidatorRule Or(params IValidatorRule[] validatorRules)
         {
             if (validatorRules.Length == 1)
             {
@@ -32,7 +28,7 @@ namespace Mx.Certificates.Validator.Structure
             return new OrJunction(validatorRules);
         }
 
-        public static ValidatorRule xor(params ValidatorRule[] validatorRules)
+        public static IValidatorRule Xor(params IValidatorRule[] validatorRules)
         {
             if (validatorRules.Length == 1)
             {
@@ -42,7 +38,7 @@ namespace Mx.Certificates.Validator.Structure
             return new XorJunction(validatorRules);
         }
 
-        Junction()
+        private Junction()
         {
             // No action
         }

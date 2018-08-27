@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Certificates.Validator.Structure
+﻿namespace Mx.Certificates.Validator.Structure
 {
     using Mx.Certificates.Validator.Api;
     using Org.BouncyCastle.X509;
 
-    /**
-     * Allows combining instances of validators using a limited set of logic.
-     */
+    /// <summary>
+    /// Allows combining instances of validators using a limited set of logic.
+    /// </summary>
     public class AndJunction : AbstractJunction
     {
 
-        public AndJunction(params ValidatorRule[] validatorRules) : base(validatorRules)
+        public AndJunction(params IValidatorRule[] validatorRules) : base(validatorRules)
         {
 
         }
 
-        public override void validate(X509Certificate certificate) // throws CertificateValidationException
+        public override void Validate(X509Certificate certificate)
         {
-            foreach (ValidatorRule validatorRule in validatorRules)
+            foreach (IValidatorRule validatorRule in this.ValidatorRules)
             {
-                validatorRule.validate(certificate);
+                validatorRule.Validate(certificate);
             }
         }
     }

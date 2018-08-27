@@ -125,7 +125,7 @@
 
                     X509Certificate certificate;
                     using (Stream inputStream = File.Open(options.DestinationCertificate, FileMode.Open, FileAccess.Read)) {
-                        certificate = Validator.getCertificate(inputStream);
+                        certificate = Validator.GetCertificate(inputStream);
                     }
 
                     parameters.Endpoint = Endpoint.of(

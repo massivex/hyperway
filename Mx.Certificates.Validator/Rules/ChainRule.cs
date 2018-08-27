@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mx.Certificates.Validator.Rules
+﻿namespace Mx.Certificates.Validator.Rules
 {
     using Mx.Certificates.Validator.Api;
 
@@ -10,37 +8,39 @@ namespace Mx.Certificates.Validator.Rules
     using Org.BouncyCastle.X509;
     using Org.BouncyCastle.X509.Store;
 
-    /**
-  * Validator checking validity of chain using root certificates and intermediate certificates.
-  */
-    public class ChainRule : ValidatorRule
+    /// <summary>
+    /// Validator checking validity of chain using root certificates and intermediate certificates.
+    /// </summary>
+    public class ChainRule : IValidatorRule
     {
 
-        private CertificateBucket rootCertificates;
+        private readonly ICertificateBucket rootCertificates;
 
-        private CertificateBucket intermediateCertificates;
+        private readonly ICertificateBucket intermediateCertificates;
 
-        private HashSet policies = new HashSet();
+        private readonly HashSet policies = new HashSet();
 
-        /**
-         * @param rootCertificates         Trusted root certificates.
-         * @param intermediateCertificates Trusted intermediate certificates.
-         */
+        /// <summary>
+        /// Create a new <see cref="ChainRule"/> instance"/>
+        /// </summary>
+        /// <param name="rootCertificates">Trusted root certificates</param>
+        /// <param name="intermediateCertificates">Trusted intermediate certificates</param>
+        /// <param name="policies"></param>
         public ChainRule(
-            CertificateBucket rootCertificates,
-            CertificateBucket intermediateCertificates,
-            String[] policies)
+            ICertificateBucket rootCertificates,
+            ICertificateBucket intermediateCertificates,
+            string[] policies)
         {
             this.rootCertificates = rootCertificates;
             this.intermediateCertificates = intermediateCertificates;
             this.policies.AddAll(policies);
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate)
         {
             try
             {
-                this.verifyCertificate(certificate);
+                this.VerifyCertificate(certificate);
             }
             catch (GeneralSecurityException e)
             {
@@ -48,7 +48,7 @@ namespace Mx.Certificates.Validator.Rules
             }
         }
 
-        private PkixCertPathBuilderResult verifyCertificate(X509Certificate cert) // throws GeneralSecurityException
+        private void VerifyCertificate(X509Certificate cert)
         {
             // Create the selector that specifies the starting certificate
             X509CertStoreSelector selector = new X509CertStoreSelector();
@@ -88,8 +88,7 @@ namespace Mx.Certificates.Validator.Rules
 
             // Build and verify the certification chain
             PkixCertPathBuilder builder = new PkixCertPathBuilder();
-            // CertPathBuilder builder = CertPathBuilder.getInstance("PKIX");
-            return builder.Build(pkixParams);
+            builder.Build(pkixParams);
         }
     }
 }

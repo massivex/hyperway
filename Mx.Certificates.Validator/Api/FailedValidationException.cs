@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Api
 {
 
-    /**
-     * Exception thrown when validation failes.
-     */
+    /// <summary>
+    /// Exception thrown when validation failes.
+    /// </summary>
     public class FailedValidationException : CertificateValidationException
     {
-        public FailedValidationException(String reason, Exception cause)
+        public FailedValidationException(string reason, Exception cause)
             : base(reason, cause)
         {
 
         }
 
-        public FailedValidationException(String message)
+        public FailedValidationException(string message)
             : base(message)
         {
         }

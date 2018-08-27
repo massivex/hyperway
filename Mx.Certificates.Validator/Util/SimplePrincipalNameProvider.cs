@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Certificates.Validator.Util
 {
@@ -8,30 +6,28 @@ namespace Mx.Certificates.Validator.Util
 
     using Mx.Certificates.Validator.Api;
 
-    using Org.BouncyCastle.Utilities;
-
-    /**
-     * Validate principal name using a static list of values.
-     */
-    public class SimplePrincipalNameProvider : PrincipalNameProvider<String>
+    /// <summary>
+    /// Validate principal name using a static list of values. 
+    /// </summary>
+    public class SimplePrincipalNameProvider : IPrincipalNameProvider<string>
     {
 
-        private List<String> expected;
+        private readonly List<string> expected;
 
-        public SimplePrincipalNameProvider(params String[] expected)
+        public SimplePrincipalNameProvider(params string[] expected)
             : this(expected.AsEnumerable())
         {
 
         }
 
-        public SimplePrincipalNameProvider(IEnumerable<String> expected)
+        public SimplePrincipalNameProvider(IEnumerable<string> expected)
         {
             this.expected = expected.ToList();
         }
 
-        public bool validate(String value)
+        public bool Validate(string value)
         {
-            return expected.Contains(value);
+            return this.expected.Contains(value);
         }
     }
 

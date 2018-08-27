@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Certificates.Validator.Util
 {
@@ -11,35 +9,35 @@ namespace Mx.Certificates.Validator.Util
 
     using Org.BouncyCastle.X509;
 
-    /**
-     * Simple implementation of CRL fetcher, which caches downloaded CRLs. If a CRL is not cached, or the Next update-
-     * field of a cached CRL indicates there is an updated CRL available, an updated CRL will immediately be downloaded.
-     */
-    public class SimpleCachingCrlFetcher : CrlFetcher
+    /// <summary>
+    /// Simple implementation of CRL fetcher, which caches downloaded CRLs. If a CRL is not cached, or the Next update-
+    /// field of a cached CRL indicates there is an updated CRL available, an updated CRL will immediately be downloaded.
+    /// </summary>
+    public class SimpleCachingCrlFetcher : ICrlFetcher
     {
 
         private static X509CrlParser certificateFactory;
 
-        private CrlCache crlCache;
+        private readonly ICrlCache crlCache;
 
-        public SimpleCachingCrlFetcher(CrlCache crlCache)
+        public SimpleCachingCrlFetcher(ICrlCache crlCache)
         {
             this.crlCache = crlCache;
         }
 
 
-        public X509Crl get(String url) // throws CertificateValidationException
+        public X509Crl Get(string url)
         {
-            X509Crl crl = crlCache.get(url);
+            X509Crl crl = this.crlCache.Get(url);
             if (crl == null)
             {
                 // Not in cache
-                crl = download(url);
+                crl = this.Download(url);
             }
-            else if (crl.NextUpdate != null && crl.NextUpdate.Value < System.DateTime.Now)
+            else if (crl.NextUpdate != null && crl.NextUpdate.Value < DateTime.Now)
             {
                 // Outdated
-                crl = download(url);
+                crl = this.Download(url);
             }
             else if (crl.NextUpdate == null)
             {
@@ -49,7 +47,7 @@ namespace Mx.Certificates.Validator.Util
             return crl;
         }
 
-        protected X509Crl download(String url) // throws CertificateValidationException
+        protected X509Crl Download(string url)
         {
             try
             {
@@ -63,8 +61,8 @@ namespace Mx.Certificates.Validator.Util
                     WebClient wc = new WebClient();
                     var data = wc.DownloadData(url);
 
-                    X509Crl crl = (X509Crl)certificateFactory.ReadCrl(data);
-                    crlCache.set(url, crl);
+                    X509Crl crl = certificateFactory.ReadCrl(data);
+                    this.crlCache.Set(url, crl);
                     return crl;
                 }
                 else if (url.StartsWith("ldap://"))
@@ -75,9 +73,7 @@ namespace Mx.Certificates.Validator.Util
             }
             catch (Exception e)
             {
-                throw new CertificateValidationException(
-                    String.Format("Failed to download CRL '{0}' ({1})", url, e.Message),
-                    e);
+                throw new CertificateValidationException($"Failed to download CRL '{url}' ({e.Message})", e);
             }
 
             return null;

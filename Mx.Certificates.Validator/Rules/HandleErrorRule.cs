@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Certificates.Validator.Rules
 {
@@ -8,43 +6,42 @@ namespace Mx.Certificates.Validator.Rules
 
     using Mx.Certificates.Validator.Api;
 
-    using Org.BouncyCastle.Utilities;
     using Org.BouncyCastle.X509;
 
-    /**
-     * Allows encapsulation of other validations rule, allowing errors to occur but not failed validation. May be useful
-     * for encapsulation of CRLRule and other rules where use of external resources may cause validation to fail due to
-     * unavailability of services.
-     */
-    public class HandleErrorRule : ValidatorRule
+    /// <summary>
+    /// Allows encapsulation of other validations rule, allowing errors to occur but not failed validation. May be useful
+    /// for encapsulation of CRLRule and other rules where use of external resources may cause validation to fail due to
+    /// unavailability of services.
+    /// </summary>
+    public class HandleErrorRule : IValidatorRule
     {
 
-        private readonly List<ValidatorRule> validatorRules;
+        private readonly List<IValidatorRule> validatorRules;
 
-        public HandleErrorRule(ValidatorRule[] validatorRules)
+        public HandleErrorRule(IValidatorRule[] validatorRules)
             : this(validatorRules.ToList())
         {
 
         }
 
-        public HandleErrorRule(List<ValidatorRule> validatorRules)
+        public HandleErrorRule(List<IValidatorRule> validatorRules)
         {
             this.validatorRules = validatorRules;
         }
 
-        public void validate(X509Certificate certificate) // throws CertificateValidationException
+        public void Validate(X509Certificate certificate) // throws CertificateValidationException
         {
-            foreach (ValidatorRule validatorRule in validatorRules)
+            foreach (IValidatorRule validatorRule in this.validatorRules)
             {
                 try
                 {
-                    validatorRule.validate(certificate);
+                    validatorRule.Validate(certificate);
                 }
-                catch (FailedValidationException e)
+                catch (FailedValidationException)
                 {
-                    throw e;
+                    throw;
                 }
-                catch (CertificateValidationException e)
+                catch (CertificateValidationException)
                 {
                     // No action.
                 }
