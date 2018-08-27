@@ -4,57 +4,59 @@
 
     using Mx.Peppol.Common.Model;
 
-    /**
-     * Parser to retrieves information from PEPPOL Invoice scenarios.
-     * Should be able to decode Invoices in plain UBL and Norwegian EHF variants.
-     *
-     * @author thore
-     */
+    /// <summary>
+    /// Parser to retrieves information from PEPPOL Invoice scenarios.
+    /// Should be able to decode Invoices in plain UBL and Norwegian EHF variants.
+    /// </summary>
     public class InvoiceDocumentParser : AbstractDocumentParser
     {
 
-        public InvoiceDocumentParser(PlainUBLParser parser)
+        public InvoiceDocumentParser(PlainUblParser parser)
             : base(parser)
         {
 
         }
 
 
-        public override ParticipantIdentifier getSender()
+        public override ParticipantIdentifier Sender
         {
-            String endpointFirst = "//cac:AccountingSupplierParty/cac:Party/cbc:EndpointID";
-            String companySecond = "//cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:CompanyID";
-            ParticipantIdentifier s;
-            try
+            get
             {
-                s = this.participantId(endpointFirst);
-            }
-            catch (Exception)
-            {
-                s = this.participantId(companySecond);
-            }
+                string endpointFirst = "//cac:AccountingSupplierParty/cac:Party/cbc:EndpointID";
+                string companySecond = "//cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:CompanyID";
+                ParticipantIdentifier s;
+                try
+                {
+                    s = this.ParticipantId(endpointFirst);
+                }
+                catch (Exception)
+                {
+                    s = this.ParticipantId(companySecond);
+                }
 
-            return s;
+                return s;
+            }
         }
 
-
-        public override ParticipantIdentifier getReceiver()
+        public override ParticipantIdentifier Receiver
         {
-            String endpointFirst = "//cac:AccountingCustomerParty/cac:Party/cbc:EndpointID";
-            String companySecond = "//cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:CompanyID";
-            ParticipantIdentifier s;
-            try
+            get
             {
-                s = this.participantId(endpointFirst);
-            }
-            catch (Exception)
-            {
-                s = this.participantId(companySecond);
-            }
+                string endpointFirst = "//cac:AccountingCustomerParty/cac:Party/cbc:EndpointID";
+                string companySecond = "//cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:CompanyID";
+                ParticipantIdentifier s;
+                try
+                {
+                    s = this.ParticipantId(endpointFirst);
+                }
+                catch (Exception)
+                {
+                    s = this.ParticipantId(companySecond);
+                }
 
-            return s;
+                return s;
+            }
         }
-
     }
 
 }

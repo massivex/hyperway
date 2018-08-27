@@ -7,47 +7,37 @@
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Icd.Api;
 
-    /**
-     * @author Steinar Overbeck Cook
-     * @author Thore Johnsen
-     * <p>
-     * TODO: introduce the iso6235 ICD as a separate property of the constructor
-     * @see SchemeId
-     */
     public class ParticipantId
     {
 
-        static readonly Regex ISO6523_PATTERN = new Regex("^(\\d{4}):([^\\s]+)$", RegexOptions.Compiled);
+        static readonly Regex Iso6523Pattern = new Regex("^(\\d{4}):([^\\s]+)$", RegexOptions.Compiled);
 
         // max length for international organisation number
-        static readonly int INTERNATION_ORG_ID_MAX_LENGTH = 50;
+        static readonly int InternationOrgIdMaxLength = 50;
 
         // Holds the textual representation of this PEPPOL participant id
-        private readonly String peppolParticipantIdValue;
+        private readonly string peppolParticipantIdValue;
 
-        /**
-         * Constructs a new instance based upon a match of the following patterns :
-         * <ol>
-         * <li>{@code xxxx:yyyyyy} - i.e. a 4 digit ICD followed by a ':' followed by the organisationID</li>
-         * <li>AB999999999 - i.e. a prefix of at least two characters followed by something</li>
-         * </ol>
-         *
-         * @param participantId participant Id represented as a string
-         * @throws InvalidPeppolParticipantException if we are unable to recognize the input as a PEPPOL participant ID
-         */
-        public ParticipantId(String participantId)
+        /// <summary>
+        /// Constructs a new instance based upon a match of the following patterns :
+        /// <ol>
+        /// <li>{@code xxxx:yyyyyy} - i.e.a 4 digit ICD followed by a ':' followed by the organisationID</li>
+        /// <li>AB999999999 - i.e.a prefix of at least two characters followed by something</li>
+        /// </ol>
+        /// </summary>
+        /// <param name="participantId">participant Id represented as a string</param>
+        public ParticipantId(string participantId)
         {
-            this.peppolParticipantIdValue = parse(participantId);
+            this.peppolParticipantIdValue = Parse(participantId);
         }
 
-        /**
-         * Uses combination of SchemeId and Organisation identifier to create new instance.
-         * The Organisation identifier is validated in accordance with the rules of the scheme.
-         *
-         * @param schemeId
-         * @param organisationId
-         */
-        public ParticipantId(Icd schemeId, String organisationId)
+        /// <summary>
+        /// Uses combination of SchemeId and Organisation identifier to create new instance.
+        /// The Organisation identifier is validated in accordance with the rules of the scheme.
+        /// </summary>
+        /// <param name="schemeId"></param>
+        /// <param name="organisationId"></param>
+        public ParticipantId(Icd schemeId, string organisationId)
         {
 
             if (schemeId == null)
@@ -60,55 +50,54 @@
                 throw new ArgumentException("The organisation id must be specified.");
             }
 
-            if (organisationId.Length > INTERNATION_ORG_ID_MAX_LENGTH)
+            if (organisationId.Length > InternationOrgIdMaxLength)
             {
                 throw new ArgumentException(
-                    String.Format(
+                    string.Format(
                         "Invalid organisation id. '{0}' is longer than {1} characters",
                         organisationId,
-                        INTERNATION_ORG_ID_MAX_LENGTH));
+                        InternationOrgIdMaxLength));
             }
 
             // Formats the organisation identifier in accordance with what PEPPOL expects.
-            this.peppolParticipantIdValue = String.Format("{0}:{1}", schemeId.getCode(), organisationId);
+            this.peppolParticipantIdValue = string.Format("{0}:{1}", schemeId.getCode(), organisationId);
         }
 
-        /**
-         * Parses the input string assuming it represents an organisation number or PEPPOL participant identifier in one
-         * of these forms:
-         * <ol>
-         * <li>icd +':' + organisation identifier</li>
-         * <li>National organisation number with at least two character prefix.</li>
-         * </ol>
-         * <p>
-         * After parsing, the organisation identifier is validated in accordance with the rules of the scheme a
-         * validator is found.
-         * </p>
-         *
-         * @param participantId the string representing the participant identifier or organisation identifier
-         * @return a string on the form [ISO6523 ICD]:[participantId];
-         */
-        static String parse(String participantId) // throws InvalidPeppolParticipantException
+        /// <summary>
+        /// Parses the input string assuming it represents an organisation number or PEPPOL participant identifier in one
+        /// of these forms:
+        /// <ol>
+        /// <li>icd +':' + organisation identifier</li>
+        /// <li>National organisation number with at least two character prefix.</li>
+        /// </ol>
+        /// <p>
+        /// After parsing, the organisation identifier is validated in accordance with the rules of the scheme a
+        /// validator is found.
+        /// </p>
+        /// </summary>
+        /// <param name="participantId">the string representing the participant identifier or organisation identifier</param>
+        /// <returns>a string on the form [ISO6523 ICD]:[participantId];</returns>
+        static string Parse(string participantId) // throws InvalidPeppolParticipantException
         {
-            String organisationId = participantId.Trim().Replace("\\s", ""); // Squeezes out any white spaces
+            string organisationId = participantId.Trim().Replace("\\s", ""); // Squeezes out any white spaces
             Icd schemeId = null;
 
-            MatchCollection matches = ISO6523_PATTERN.Matches(organisationId);
+            MatchCollection matches = Iso6523Pattern.Matches(organisationId);
 
             if (matches.Count == 0)
             {
-                throw new InvalidPeppolParticipantException(String.Format("ICD not found in '{0}'.", participantId));
+                throw new InvalidPeppolParticipantException(string.Format("ICD not found in '{0}'.", participantId));
             }
 
             // If the representation is in the form xxxx:yyyyyyyyy, we are good
-            String icd = matches[0].Groups[1].Value;
+            string icd = matches[0].Groups[1].Value;
             organisationId = matches[0].Groups[2].Value;
 
             try
             {
-                schemeId = SchemeId.fromISO6523(icd); // Locates the associated scheme
+                schemeId = SchemeId.FromIso6523(icd); // Locates the associated scheme
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // No action.
             }
@@ -117,40 +106,40 @@
                 throw new InvalidPeppolParticipantException("ICD " + icd + " is unknown");
 
             // Constructs the textual representation of the PEPPOL participant identifier
-            return String.Format("{0}:{1}", schemeId.getCode(), organisationId);
+            return $"{schemeId.getCode()}:{organisationId}";
         }
 
-
-        /**
-         * Parses the provided participant identifier into a validated instance
-         * of {@link ParticipantId}
-         *
-         * @param participantId The organisation number as xxxx:yyyy or just an organisation number
-         * @return validated instance of Participant Id
-         */
-        public static ParticipantId valueOf(String participantId)
+        /// <summary>
+        /// Parses the provided participant identifier into a validated instance
+        /// of {@link ParticipantId}
+        /// </summary>
+        /// <param name="participantId">The organisation number as xxxx:yyyy or just an organisation number</param>
+        /// <returns>validated instance of Participant Id</returns>
+        public static ParticipantId ValueOf(string participantId)
         {
-            return new ParticipantId(parse(participantId.Trim()));
+            return new ParticipantId(Parse(participantId.Trim()));
 
         }
 
-        /**
-         * Simple syntax verifier, verifies icd prefix + code
-         */
-        public static bool isValidParticipantIdentifierPattern(String value)
+        /// <summary>
+        /// Simple syntax verifier, verifies icd prefix + code 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsValidParticipantIdentifierPattern(string value)
         {
             if (value == null) return false;
 
-            Match matcher = ISO6523_PATTERN.Match(value);
+            Match matcher = Iso6523Pattern.Match(value);
             return matcher.Success;
         }
 
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is ParticipantId)) return false;
-            
+
             ParticipantId that = (ParticipantId)o;
             if (this.peppolParticipantIdValue != null
                     ? !this.peppolParticipantIdValue.Equals(that.peppolParticipantIdValue)
@@ -168,21 +157,20 @@
             return this.peppolParticipantIdValue != null ? this.peppolParticipantIdValue.GetHashCode() : 0;
         }
 
-        public String stringValue()
+        public string StringValue()
         {
             return this.peppolParticipantIdValue;
         }
 
 
-        public override String ToString()
+        public override string ToString()
         {
             return this.peppolParticipantIdValue;
         }
 
-        public ParticipantIdentifier toVefa()
+        public ParticipantIdentifier ToVefa()
         {
             return ParticipantIdentifier.of(this.peppolParticipantIdValue, ParticipantIdentifier.DEFAULT_SCHEME);
         }
     }
-
 }

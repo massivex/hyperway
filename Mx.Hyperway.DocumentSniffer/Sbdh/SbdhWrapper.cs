@@ -7,27 +7,20 @@
     using Mx.Peppol.Sbdh;
     using Mx.Tools;
 
-    /**
-     * Takes a document and wraps it together with headers into a StandardBusinessDocument.
-     * <p>
-     * The SBDH part of the document is constructed from the headers.
-     * The document will be the payload (xs:any) following the SBDH.
-     *
-     * @author thore
-     * @author steinar
-     * @author erlend
-     */
+    /// <summary>
+    /// Takes a document and wraps it together with headers into a StandardBusinessDocument.
+    /// The SBDH part of the document is constructed from the headers.
+    /// The document will be the payload (xs:any) following the SBDH.
+    /// </summary>
     public class SbdhWrapper
     {
-
-        /**
-         * Wraps payload + headers into a StandardBusinessDocument
-         *
-         * @param inputStream the input stream to be wrapped
-         * @param headers     the headers to use for sbdh
-         * @return byte buffer with the resulting output in utf-8
-         */
-        public byte[] wrap(Stream inputStream, Header headers)
+        /// <summary>
+        /// Wraps payload + headers into a StandardBusinessDocument 
+        /// </summary>
+        /// <param name="inputStream">the input stream to be wrapped</param>
+        /// <param name="headers">the headers to use for sbdh</param>
+        /// <returns>byte buffer with the resulting output in utf-8</returns>
+        public byte[] Wrap(Stream inputStream, Header headers)
         {
             MemoryStream m = new MemoryStream();
 

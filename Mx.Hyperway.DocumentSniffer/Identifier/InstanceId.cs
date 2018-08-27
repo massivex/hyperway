@@ -4,43 +4,47 @@
 
     using Mx.Peppol.Common.Model;
 
-    /**
-     * Represents the Instance Identifier used in the SBDH.
-     */
+    /// <summary>
+    /// Represents the Instance Identifier used in the SBDH. 
+    /// </summary>
     public class InstanceId
     {
 
 
-    private readonly String value;
+        private readonly string value;
 
-    /** Creates new InstanceId with random UUID */
-    public InstanceId()
-    {
-        this.value = Guid.NewGuid().ToString();
+        /// <summary>
+        /// Creates new InstanceId with random UUID 
+        /// </summary>
+        public InstanceId()
+        {
+            this.value = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
+        /// Creates new InstanceId with supplied value 
+        /// </summary>
+        /// <param name="value"></param>
+        public InstanceId(string value)
+        {
+            this.value = value;
+        }
+
+
+
+        public override string ToString()
+        {
+            return this.value;
+        }
+
+        public InstanceId ValueOf(string newValue)
+        {
+            return new InstanceId(newValue);
+        }
+
+        public InstanceIdentifier ToVefa()
+        {
+            return InstanceIdentifier.of(this.value);
+        }
     }
-
-    /** Creates new InstanceId with supplied value */
-    public InstanceId(String value)
-    {
-        this.value = value;
-    }
-
-
-    
-    public override String ToString()
-    {
-        return this.value;
-    }
-
-    public InstanceId valueOf(String value)
-    {
-        return new InstanceId(value);
-    }
-
-    public InstanceIdentifier toVefa()
-    {
-        return InstanceIdentifier.of(this.value);
-    }
-    }
-
 }

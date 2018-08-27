@@ -7,45 +7,43 @@
     using System.Xml.Linq;
     using System.Xml.XPath;
 
-    /**
-     * Simple parser that is UBL aware and handles xpath with namespaces.
-     *
-     * @author thore
-     */
-    public class PlainUBLParser
+    /// <summary>
+    /// Simple parser that is UBL aware and handles xpath with namespaces. 
+    /// </summary>
+    public class PlainUblParser
     {
 
         private readonly XDocument document;
 
         private readonly IXmlNamespaceResolver nsResolver;
 
-        public PlainUBLParser(XDocument document, IXmlNamespaceResolver nsResolver)
+        public PlainUblParser(XDocument document, IXmlNamespaceResolver nsResolver)
         {
             this.document = document;
             this.nsResolver = nsResolver;
         }
 
-        public String localName()
+        public String LocalName()
         {
-            return this.document.Document.Root.Name.LocalName;
+            return this.document.Document?.Root?.Name.LocalName;
         }
 
-        public String rootNameSpace()
+        public String RootNameSpace()
         {
-            return this.document.Document.Root.Name.NamespaceName;
+            return this.document.Document?.Root?.Name.NamespaceName;
         }
 
-        public String ublVersion()
+        public String UblVersion()
         {
-            return this.retriveValueForXpath("//cbc:UBLVersionID");
+            return this.RetriveValueForXpath("//cbc:UBLVersionID");
         }
 
-        public bool canParse()
+        public bool CanParse()
         {
-            return ("" + this.rootNameSpace()).StartsWith("urn:oasis:names:specification:ubl:schema:xsd:");
+            return ("" + this.RootNameSpace()).StartsWith("urn:oasis:names:specification:ubl:schema:xsd:");
         }
 
-        public XElement retrieveElementForXpath(String s)
+        public XElement RetrieveElementForXpath(String s)
         {
             try
             {
@@ -63,18 +61,12 @@
             }
         }
 
-        public String retriveValueForXpath(String s)
+        public String RetriveValueForXpath(String s)
         {
             try
             {
                 // TODO: Verificare il tipo di path che viene restituito
                 var value = ((IEnumerable<object>)this.document.XPathEvaluate(s, this.nsResolver)).OfType<XElement>().Single().Value;
-                // XElement element = this.document.x
-                // String value = xPath.evaluate(s, document);
-                if (value == null)
-                {
-                    throw new InvalidOperationException("Unable to find value for Xpath expr " + s);
-                }
                 return value.Trim();
             }
             catch (Exception e)
@@ -82,7 +74,5 @@
                 throw new InvalidOperationException("Unable to evaluate " + s + "; " + e.Message, e);
             }
         }
-
     }
-
 }

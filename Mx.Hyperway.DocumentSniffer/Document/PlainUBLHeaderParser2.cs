@@ -9,46 +9,42 @@
     using Mx.Peppol.Common.Model;
     using Mx.Tools;
 
-    /**
-     * Parses the common PEPPOL header information, enough to decide document type and profile
-     *
-     * @author steinar
-     * @author thore
-     * @author arun
-     */
-    public class PlainUBLHeaderParser : PlainUBLParser
+    /// <summary>
+    /// Parses the common PEPPOL header information, enough to decide document type and profile 
+    /// </summary>
+    public class PlainUblHeaderParser : PlainUblParser
     {
 
-        public static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(PlainUBLHeaderParser));
+        public static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(PlainUblHeaderParser));
 
-    public PlainUBLHeaderParser(XDocument document, IXmlNamespaceResolver nsResolver): base(document, nsResolver)
+    public PlainUblHeaderParser(XDocument document, IXmlNamespaceResolver nsResolver): base(document, nsResolver)
     {
         
     }
 
-    public CustomizationIdentifier fetchCustomizationId()
+    public CustomizationIdentifier FetchCustomizationId()
     {
-        String value = this.retriveValueForXpath("//cbc:CustomizationID");
-        return CustomizationIdentifier.valueOf(value);
+        String value = this.RetriveValueForXpath("//cbc:CustomizationID");
+        return CustomizationIdentifier.ValueOf(value);
     }
 
-    public ProcessIdentifier fetchProcessTypeId()
+    public ProcessIdentifier FetchProcessTypeId()
     {
-        String value = this.retriveValueForXpath("//cbc:ProfileID");
+        String value = this.RetriveValueForXpath("//cbc:ProfileID");
         return ProcessIdentifier.of(value);
     }
 
-    public PeppolDocumentTypeId fetchDocumentTypeId()
+    public PeppolDocumentTypeId FetchDocumentTypeId()
     {
-        CustomizationIdentifier customizationIdentifier = this.fetchCustomizationId();
-        return new PeppolDocumentTypeId(this.rootNameSpace(), this.localName(), customizationIdentifier, this.ublVersion());
+        CustomizationIdentifier customizationIdentifier = this.FetchCustomizationId();
+        return new PeppolDocumentTypeId(this.RootNameSpace(), this.LocalName(), customizationIdentifier, this.UblVersion());
     }
 
-    public PEPPOLDocumentParser createDocumentParser()
+    public IPeppolDocumentParser CreateDocumentParser()
     {
-        String type = this.localName();
+        String type = this.LocalName();
 
-        log.Debug("Creating DocumentParser for type : " + this.localName());
+        Log.Debug("Creating DocumentParser for type : " + this.LocalName());
         
         // despatch advice scenario
         if ("DespatchAdvice".EqualsIgnoreCase(type))

@@ -5,18 +5,14 @@
     using System.Linq;
     using System.Xml;
 
-    /**
-     * Namespace resolver hard coded for UBL based documents only.
-     *
-     * @author steinar
-     * @author thore
-     * @author erlend
-     */
+    /// <summary>
+    /// Namespace resolver hard coded for UBL based documents only. 
+    /// </summary>
     public class HardCodedNamespaceResolver : IXmlNamespaceResolver
     {
 
-        private static readonly Dictionary<String, String> NAMESPACE_MAP =
-            new Dictionary<String, String>
+        private static readonly Dictionary<string, string> NamespaceMap =
+            new Dictionary<string, string>
                 {
                     { "xsi", "http://www.w3.org/2001/XMLSchema-instance" },
                     {
@@ -35,7 +31,7 @@
 
         public IDictionary<string, string> GetNamespacesInScope(XmlNamespaceScope scope)
         {
-            return NAMESPACE_MAP;
+            return NamespaceMap;
         }
 
         public string LookupNamespace(string prefix)
@@ -45,12 +41,12 @@
                 throw new ArgumentException("No prefix provided!");
             }
 
-            if (!NAMESPACE_MAP.ContainsKey(prefix))
+            if (!NamespaceMap.ContainsKey(prefix))
             {
                 return null;
             }
 
-            String uri = NAMESPACE_MAP[prefix];
+            string uri = NamespaceMap[prefix];
             return uri;
         }
 
@@ -61,12 +57,12 @@
                 throw new ArgumentException("No namespace provided!");
             }
 
-            if (!NAMESPACE_MAP.ContainsValue(namespaceName))
+            if (!NamespaceMap.ContainsValue(namespaceName))
             {
                 return null;
             }
 
-            String prefix = NAMESPACE_MAP.Where(x => x.Value == namespaceName).Select(x => x.Key).First();
+            string prefix = NamespaceMap.Where(x => x.Value == namespaceName).Select(x => x.Key).First();
             return prefix;
         }
     }

@@ -2,31 +2,27 @@
 {
     using System;
 
-    /**
-     * Represents a PEPPOL Customization Identifier contained within a PEPPOL Document Identifier.
-     *
-     * @author Steinar Overbeck Cook steinar@sendregning.no
-     * @author Thore Johnsen thore@sendregning.no
-     *
-     * @see "PEPPOL Policy for use of identifiers v3.0 of 2014-02-03"
-     */
+    /// <summary>
+    /// Represents a PEPPOL Customization Identifier contained within a PEPPOL Document Identifier. 
+    /// </summary>
+    /// <see>PEPPOL Policy for use of identifiers v3.0 of 2014-02-03</see>
     public class CustomizationIdentifier
     {
 
-        private String value;
+        private readonly string value;
 
-        public CustomizationIdentifier(String customizationIdentifier)
+        public CustomizationIdentifier(string customizationIdentifier)
         {
-            if (customizationIdentifier != null) customizationIdentifier = customizationIdentifier.Trim();
+            customizationIdentifier = customizationIdentifier?.Trim();
             this.value = customizationIdentifier;
         }
 
-        public static CustomizationIdentifier valueOf(String s)
+        public static CustomizationIdentifier ValueOf(string s)
         {
             return new CustomizationIdentifier(s);
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is CustomizationIdentifier)) return false;
@@ -41,7 +37,7 @@
         }
 
 
-        public override String ToString()
+        public override string ToString()
         {
             return this.value;
         }

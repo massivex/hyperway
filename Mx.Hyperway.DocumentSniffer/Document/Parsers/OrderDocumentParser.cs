@@ -4,45 +4,48 @@
 
     using Mx.Peppol.Common.Model;
 
-    /**
-     * Parser to retrieves information from PEPPOL Order scenarios.
-     * Should be able to decode Order and OrderResponse documents.
-     *
-     * @author thore
-     */
+    /// <summary>
+    /// Parser to retrieves information from PEPPOL Order scenarios.
+    /// Should be able to decode Order and OrderResponse documents.
+    /// </summary>
     public class OrderDocumentParser : AbstractDocumentParser
     {
 
-        public OrderDocumentParser(PlainUBLParser parser)
+        public OrderDocumentParser(PlainUblParser parser)
             : base(parser)
         {
 
         }
 
 
-        public override ParticipantIdentifier getSender()
+        public override ParticipantIdentifier Sender
         {
-            String xpath = "//cac:BuyerCustomerParty/cac:Party/cbc:EndpointID";
-            if (this.parser.localName().StartsWith("OrderResponse"))
+            get
             {
-                // Matches both OrderResponse and OrderResponseSimple
-                xpath = "//cac:SellerSupplierParty/cac:Party/cbc:EndpointID";
-            }
+                String xpath = "//cac:BuyerCustomerParty/cac:Party/cbc:EndpointID";
+                if (this.Parser.LocalName().StartsWith("OrderResponse"))
+                {
+                    // Matches both OrderResponse and OrderResponseSimple
+                    xpath = "//cac:SellerSupplierParty/cac:Party/cbc:EndpointID";
+                }
 
-            return this.participantId(xpath);
+                return this.ParticipantId(xpath);
+            }
         }
 
-
-        public override ParticipantIdentifier getReceiver()
+        public override ParticipantIdentifier Receiver
         {
-            String xpath = "//cac:SellerSupplierParty/cac:Party/cbc:EndpointID";
-            if (this.parser.localName().StartsWith("OrderResponse"))
+            get
             {
-                // Matches both OrderResponse and OrderResponseSimple
-                xpath = "//cac:BuyerCustomerParty/cac:Party/cbc:EndpointID";
-            }
+                String xpath = "//cac:SellerSupplierParty/cac:Party/cbc:EndpointID";
+                if (this.Parser.LocalName().StartsWith("OrderResponse"))
+                {
+                    // Matches both OrderResponse and OrderResponseSimple
+                    xpath = "//cac:BuyerCustomerParty/cac:Party/cbc:EndpointID";
+                }
 
-            return this.participantId(xpath);
+                return this.ParticipantId(xpath);
+            }
         }
     }
 }

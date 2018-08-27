@@ -82,31 +82,31 @@
 
         public TransmissionRequestBuilder Receiver(ParticipantIdentifier receiverId)
         {
-            this.suppliedHeaderFields.setRecipientId(receiverId);
+            this.suppliedHeaderFields.RecipientId = receiverId;
             return this;
         }
 
         public TransmissionRequestBuilder Sender(ParticipantIdentifier senderId)
         {
-            this.suppliedHeaderFields.setSenderId(senderId);
+            this.suppliedHeaderFields.SenderId = senderId;
             return this;
         }
 
         public TransmissionRequestBuilder DocumentType(DocumentTypeIdentifier documentTypeIdentifier)
         {
-            this.suppliedHeaderFields.setDocumentTypeIdentifier(documentTypeIdentifier);
+            this.suppliedHeaderFields.DocumentTypeIdentifier = documentTypeIdentifier;
             return this;
         }
 
         public TransmissionRequestBuilder ProcessType(ProcessIdentifier processTypeId)
         {
-            this.suppliedHeaderFields.setProfileTypeIdentifier(processTypeId);
+            this.suppliedHeaderFields.ProfileTypeIdentifier = processTypeId;
             return this;
         }
 
         public TransmissionRequestBuilder InstanceId(InstanceId instanceId)
         {
-            this.suppliedHeaderFields.setInstanceId(instanceId);
+            this.suppliedHeaderFields.InstanceId = instanceId;
             return this;
         }
 
@@ -162,7 +162,7 @@
             }
             else
             {
-                Endpoint endpointLookedup = this.lookupService.Lookup(this.effectiveStandardBusinessHeader.toVefa(), null);
+                Endpoint endpointLookedup = this.lookupService.Lookup(this.effectiveStandardBusinessHeader.ToVefa(), null);
 
                 if (this.IsEndpointSuppliedByCaller() && !this.endpoint.Equals(endpointLookedup))
                 {
@@ -181,7 +181,7 @@
 
             // Transfers all the properties of this object into the newly created TransmissionRequest
             return new DefaultTransmissionRequest(
-                this.GetEffectiveStandardBusinessHeader().toVefa(),
+                this.GetEffectiveStandardBusinessHeader().ToVefa(),
                 this.GetPayload(),
                 this.GetEndpoint());
         }
@@ -202,7 +202,7 @@
 
             if (this.IsOverrideAllowed())
             {
-                if (peppolSbdhSuppliedByCaller.isComplete())
+                if (peppolSbdhSuppliedByCaller.IsComplete())
                 {
                     // we have sufficient meta data (set explicitly by the caller using API functions)
                     effectiveSbdh = peppolSbdhSuppliedByCaller;
@@ -235,9 +235,9 @@
                 }
             }
 
-            if (!effectiveSbdh.isComplete())
+            if (!effectiveSbdh.IsComplete())
             {
-                var txtValues = effectiveSbdh.listMissingProperties().ToArray().ToStringValues();
+                var txtValues = effectiveSbdh.ListMissingProperties().ToArray().ToStringValues();
                 throw new InvalidOperationException(
                     $"TransmissionRequest can not be built, missing {txtValues} metadata.");
             }
@@ -270,39 +270,39 @@
             // Creates a copy of the original business headers
             PeppolStandardBusinessHeader mergedHeaders = new PeppolStandardBusinessHeader(parsed);
 
-            if (supplied.getSenderId() != null)
+            if (supplied.SenderId!= null)
             {
-                mergedHeaders.setSenderId(supplied.getSenderId());
+                mergedHeaders.SenderId = supplied.SenderId;
             }
 
-            if (supplied.getRecipientId() != null)
+            if (supplied.RecipientId!= null)
             {
-                mergedHeaders.setRecipientId(supplied.getRecipientId());
+                mergedHeaders.RecipientId = supplied.RecipientId;
             }
 
-            if (supplied.getDocumentTypeIdentifier() != null)
+            if (supplied.DocumentTypeIdentifier != null)
             {
-                mergedHeaders.setDocumentTypeIdentifier(supplied.getDocumentTypeIdentifier());
+                mergedHeaders.DocumentTypeIdentifier = supplied.DocumentTypeIdentifier;
             }
 
-            if (supplied.getProfileTypeIdentifier() != null)
+            if (supplied.ProfileTypeIdentifier != null)
             {
-                mergedHeaders.setProfileTypeIdentifier(supplied.getProfileTypeIdentifier());
+                mergedHeaders.ProfileTypeIdentifier = supplied.ProfileTypeIdentifier;
             }
 
             // If instanceId was supplied by caller, use it otherwise, create new
-            if (supplied.getInstanceId() != null)
+            if (supplied.InstanceId!= null)
             {
-                mergedHeaders.setInstanceId(supplied.getInstanceId());
+                mergedHeaders.InstanceId = supplied.InstanceId;
             }
             else
             {
-                mergedHeaders.setInstanceId(new InstanceId());
+                mergedHeaders.InstanceId = new InstanceId();
             }
 
-            if (supplied.getCreationDateAndTime() != null)
+            if (supplied.CreationDateAndTime != null)
             {
-                mergedHeaders.setCreationDateAndTime(supplied.getCreationDateAndTime());
+                mergedHeaders.CreationDateAndTime = supplied.CreationDateAndTime;
             }
 
             return mergedHeaders;
@@ -320,29 +320,29 @@
             PeppolStandardBusinessHeader supplied)
         {
             List<String> headers = new List<String>();
-            if ((parsed.getSenderId() != null) && (supplied.getSenderId() != null)
-                                               && (!supplied.getSenderId().Equals(parsed.getSenderId())))
+            if ((parsed.SenderId!= null) && (supplied.SenderId!= null)
+                                               && (!supplied.SenderId.Equals(parsed.SenderId)))
             {
                 headers.Add("SenderId");
             }
 
-            if ((parsed.getRecipientId() != null) && (supplied.getRecipientId() != null)
-                                                  && (!supplied.getRecipientId().Equals(parsed.getRecipientId())))
+            if ((parsed.RecipientId!= null) && (supplied.RecipientId!= null)
+                                                  && (!supplied.RecipientId.Equals(parsed.RecipientId)))
             {
                 headers.Add("RecipientId");
             }
 
-            if ((parsed.getDocumentTypeIdentifier() != null) && (supplied.getDocumentTypeIdentifier() != null)
-                                                             && (!supplied.getDocumentTypeIdentifier().Equals(
-                                                                     parsed.getDocumentTypeIdentifier())))
+            if ((parsed.DocumentTypeIdentifier != null) && (supplied.DocumentTypeIdentifier != null)
+                                                             && (!supplied.DocumentTypeIdentifier.Equals(
+                                                                     parsed.DocumentTypeIdentifier)))
             {
                 headers.Add("DocumentTypeIdentifier");
             }
 
 
-            if ((parsed.getProfileTypeIdentifier() != null) && (supplied.getProfileTypeIdentifier() != null)
-                                                            && (!supplied.getProfileTypeIdentifier()
-                                                                    .Equals(parsed.getProfileTypeIdentifier())))
+            if ((parsed.ProfileTypeIdentifier != null) && (supplied.ProfileTypeIdentifier != null)
+                                                            && (!supplied.ProfileTypeIdentifier
+                                                                    .Equals(parsed.ProfileTypeIdentifier)))
             {
                 headers.Add("ProfileTypeIdentifier");
             }
@@ -392,7 +392,7 @@
             PeppolStandardBusinessHeader effectivesbh)
         {
             SbdhWrapper sbdhWrapper = new SbdhWrapper();
-            return sbdhWrapper.wrap(byteArrayInputStream, effectivesbh.toVefa());
+            return sbdhWrapper.Wrap(byteArrayInputStream, effectivesbh.ToVefa());
         }
 
         /// <summary>

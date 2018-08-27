@@ -1,31 +1,31 @@
 ﻿namespace Mx.Hyperway.DocumentSniffer.Document.Parsers
 {
     using System;
+    using System.Diagnostics;
     using System.Xml.Linq;
 
     using Mx.Hyperway.DocumentSniffer.Identifier;
     using Mx.Peppol.Common.Model;
 
-    /**
-     * Abstract implementation based on the PlainUBLParser to retrieve information from PEPPOL documents.
-     * Contains common functionality to be used as a base for decoding types.
-     *
-     * @author thore
-     */
-    public abstract class AbstractDocumentParser : PEPPOLDocumentParser
+    /// <summary>
+    /// Abstract implementation based on the PlainUBLParser to retrieve information from PEPPOL documents.
+    /// Contains common functionality to be used as a base for decoding types.
+    /// </summary>
+    public abstract class AbstractDocumentParser : IPeppolDocumentParser
     {
+        protected PlainUblParser Parser;
 
-        protected PlainUBLParser parser;
-
-        public AbstractDocumentParser(PlainUBLParser parser)
+        public AbstractDocumentParser(PlainUblParser parser)
         {
-            this.parser = parser;
+            this.Parser = parser;
         }
 
-        /**
-         * Retrieves the ParticipantId which is retrieved using the supplied XPath.
-         */
-        protected ParticipantIdentifier participantId(String xPathExpr)
+        /// <summary>
+        /// Retrieves the ParticipantId which is retrieved using the supplied XPath. 
+        /// </summary>
+        /// <param name="xPathExpr"></param>
+        /// <returns></returns>
+        protected ParticipantIdentifier ParticipantId(String xPathExpr)
         {
             ParticipantId ret;
 
@@ -33,9 +33,9 @@
             XElement element;
             try
             {
-                element = this.parser.retrieveElementForXpath(xPathExpr);
+                element = this.Parser.RetrieveElementForXpath(xPathExpr);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // DOM parser throws "java.lang.IllegalStateException: No element in XPath: ..." if no Element is found
                 throw new InvalidOperationException(String.Format("No ParticipantId found at '{0}'.", xPathExpr));
@@ -43,12 +43,13 @@
 
             // get value and any schemeId given
 
-            String companyId = (element.FirstNode as XText).Value.Trim();
-            String schemeIdTextValue = element.Attribute("schemeID").Value.Trim();
+            String companyId = (element.FirstNode as XText)?.Value.Trim();
+            String schemeIdTextValue = element.Attribute("schemeID")?.Value.Trim();
 
             // check if we already have a valid participant 9908:987654321
-            if (ParticipantId.isValidParticipantIdentifierPattern(companyId))
+            if (Identifier.ParticipantId.IsValidParticipantIdentifierPattern(companyId))
             {
+                Debug.Assert(schemeIdTextValue != null, nameof(schemeIdTextValue) + " != null");
                 if (schemeIdTextValue.Length == 0)
                 {
                     // we accept participants with icd prefix if schemeId is missing ...
@@ -57,14 +58,14 @@
                 else
                 {
                     // ... or when given schemeId matches the icd code stat eg NO:VAT matches 9908 from 9908:987654321
-                    if (companyId.StartsWith(SchemeId.parse(schemeIdTextValue).getCode() + ":"))
+                    if (companyId.StartsWith(SchemeId.Parse(schemeIdTextValue).getCode() + ":"))
                     {
                         ret = new ParticipantId(companyId);
                     }
                     else
                     {
                         throw new InvalidOperationException(
-                            String.Format(
+                            string.Format(
                                 "ParticipantId at '{0}' is illegal, schemeId '{1}' and icd code prefix of '{2}' does not match",
                                 xPathExpr,
                                 schemeIdTextValue,
@@ -75,8 +76,8 @@
             else
             {
                 // try to add the given icd prefix to the participant id
-                companyId = String.Format("{0}:{1}", SchemeId.parse(schemeIdTextValue).getCode(), companyId);
-                if (!ParticipantId.isValidParticipantIdentifierPattern(companyId))
+                companyId = String.Format("{0}:{1}", SchemeId.Parse(schemeIdTextValue).getCode(), companyId);
+                if (!Identifier.ParticipantId.IsValidParticipantIdentifierPattern(companyId))
                 {
                     throw new InvalidOperationException(
                         $"ParticipantId syntax at '{xPathExpr}' evaluates to '{companyId}' and is invalid");
@@ -85,12 +86,12 @@
                 ret = new ParticipantId(companyId);
             }
 
-            return ret.toVefa();
+            return ret.ToVefa();
         }
 
-        public abstract ParticipantIdentifier getSender();
+        public abstract ParticipantIdentifier Sender { get; }
 
-        public abstract ParticipantIdentifier getReceiver();
+        public abstract ParticipantIdentifier Receiver { get; }
     }
 }
 

@@ -9,55 +9,56 @@
     using Mx.Hyperway.DocumentSniffer.Document.Parsers;
     using Mx.Peppol.Common.Model;
 
-    /**
-     * Parses UBL based documents, which are not wrapped within an SBDH, extracting data and
-     * creating a PeppolStandardBusinessHeader.
-     */
+    /// <summary>
+    /// Parses UBL based documents, which are not wrapped within an SBDH, extracting data and
+    /// creating a PeppolStandardBusinessHeader.
+    /// </summary>
     public class NoSbdhParser : IContentDetector
     {
-
-        /**
-         * Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
-         * should not be wrapped in an SBDH.
-         */
+        /// <summary>
+        /// Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
+        /// should not be wrapped in an SBDH.
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <returns></returns>
         public Header Parse(Stream inputStream)
         {
-            return this.originalParse(inputStream).toVefa();
+            return this.OriginalParse(inputStream).ToVefa();
         }
 
-        /**
-         * Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
-         * should not be wrapped in an SBDH.
-         */
-        public PeppolStandardBusinessHeader originalParse(Stream inputStream)
+        /// <summary>
+        /// Parses and extracts the data needed to create a PeppolStandardBusinessHeader object. The inputstream supplied
+        /// should not be wrapped in an SBDH.
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <returns></returns>
+        public PeppolStandardBusinessHeader OriginalParse(Stream inputStream)
         {
             try
             {
-                // DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-                
                 XDocument document = XDocument.Load(inputStream);
                 var nsResolver = new HardCodedNamespaceResolver();
 
                 PeppolStandardBusinessHeader sbdh =
-                    PeppolStandardBusinessHeader.createPeppolStandardBusinessHeaderWithNewDate();
+                    PeppolStandardBusinessHeader.CreatePeppolStandardBusinessHeaderWithNewDate();
 
                 // use the plain UBL header parser to decode format and create correct document parser
-                PlainUBLHeaderParser headerParser = new PlainUBLHeaderParser(document, nsResolver);
+                PlainUblHeaderParser headerParser = new PlainUblHeaderParser(document, nsResolver);
 
                 // make sure we actually have a UBL type document
-                if (headerParser.canParse())
+                if (headerParser.CanParse())
                 {
 
-                    sbdh.setDocumentTypeIdentifier(headerParser.fetchDocumentTypeId().toVefa());
-                    sbdh.setProfileTypeIdentifier(headerParser.fetchProcessTypeId());
+                    sbdh.DocumentTypeIdentifier = headerParser.FetchDocumentTypeId().ToVefa();
+                    sbdh.ProfileTypeIdentifier = headerParser.FetchProcessTypeId();
 
                     // try to use a specialized document parser to fetch more document details
-                    PEPPOLDocumentParser documentParser = null;
+                    IPeppolDocumentParser documentParser = null;
                     try
                     {
-                        documentParser = headerParser.createDocumentParser();
+                        documentParser = headerParser.CreateDocumentParser();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         /*
                             allow this to happen so that "unknown" PEPPOL documents still
@@ -70,18 +71,18 @@
                     {
                         try
                         {
-                            sbdh.setSenderId(documentParser.getSender());
+                            sbdh.SenderId = documentParser.Sender;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             // Continue with recipient
                         }
 
                         try
                         {
-                            sbdh.setRecipientId(documentParser.getReceiver());
+                            sbdh.RecipientId = documentParser.Receiver;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             // Just continue
                         }
