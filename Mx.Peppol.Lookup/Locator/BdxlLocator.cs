@@ -92,7 +92,7 @@ namespace Mx.Peppol.Lookup.Locator
         public override Uri lookup(ParticipantIdentifier participantIdentifier) // throws LookupException
         {
             // Create hostname for participant identifier.
-            string hostname = hostnameGenerator.generate(participantIdentifier).ReplaceAll("=*", "");
+            string hostname = hostnameGenerator.Generate(participantIdentifier).ReplaceAll("=*", "");
 
             try
             {

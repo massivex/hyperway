@@ -2,7 +2,7 @@
   "defaults": {
     "lookup": {
       "locator": {
-        "hostname": "acc.edelivery.tech.ec.europa.eu",
+        "hostname": "acc.edelivery.tech.ec.europa.eu", // "hyperway-sml.sediva.it",
         "bdxl": {
           "prefix": "",
           "algorithm": "SHA-256",

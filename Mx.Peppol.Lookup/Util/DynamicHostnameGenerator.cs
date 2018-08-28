@@ -14,39 +14,30 @@ namespace Mx.Peppol.Lookup.Util
 
     public class DynamicHostnameGenerator
     {
-
-        // TODO: Check IoC in static constructor
-        //static DynamicHostnameGenerator()
-        //{
-        //    // Make sure to register Bouncy Castle as a provider.
-        //    if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null)
-        //        Security.addProvider(new BouncyCastleProvider());
-        //}
-
         private IBaseEncoding encoding;
 
-        /**
-         * Prefix for generated hostname.
-         */
-        private String prefix;
+        /// <summary>
+        /// Prefix for generated hostname. 
+        /// </summary>
+        private string prefix;
 
-        /**
-         * Base hostname for lookup.
-         */
-        private String hostname;
+        /// <summary>
+        /// Base hostname for lookup. 
+        /// </summary>
+        private string hostname;
 
-        /**
-         * Algorithm used for geneation of hostname.
-         */
-        private String digestAlgorithm;
+        /// <summary>
+        /// Algorithm used for geneation of hostname. 
+        /// </summary>
+        private string digestAlgorithm;
 
-        public DynamicHostnameGenerator(String prefix, String hostname, String digestAlgorithm)
+        public DynamicHostnameGenerator(string prefix, string hostname, string digestAlgorithm)
         : this(prefix, hostname, digestAlgorithm, new Base16Encoding())
         {
            
         }
 
-        public DynamicHostnameGenerator(String prefix, String hostname, String digestAlgorithm, IBaseEncoding encoding)
+        public DynamicHostnameGenerator(string prefix, string hostname, string digestAlgorithm, IBaseEncoding encoding)
         {
             this.prefix = prefix;
             this.hostname = hostname;
@@ -54,7 +45,7 @@ namespace Mx.Peppol.Lookup.Util
             this.encoding = encoding;
         }
 
-        public String generate(ParticipantIdentifier participantIdentifier) // throws LookupException
+        public string Generate(ParticipantIdentifier participantIdentifier)
         {
             string receiverHash;
             try
@@ -64,16 +55,17 @@ namespace Mx.Peppol.Lookup.Util
                 byte[] digest = DigestUtilities.CalculateDigest(this.digestAlgorithm, utf8Identifier);
 
                 // Create hex of digest.
-                 receiverHash = encoding.ToString(digest).ToLowerInvariant();
+                 receiverHash = this.encoding.ToString(digest).ToLowerInvariant();
             }
             catch (Exception e)
             {
                 throw new LookupException(e.Message, e);
             }
 
-            return String.Format(
+            return string.Format(
                 "{0}{1}.{2}.{3}",
-                this.prefix, receiverHash, participantIdentifier.Scheme.Identifier, hostname);
+                this.prefix, receiverHash, participantIdentifier.Scheme.Identifier,
+                this.hostname);
         }
     }
 }

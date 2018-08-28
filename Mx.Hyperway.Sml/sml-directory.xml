@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SmlDirectory>
+  <SmpRecords>
+    <SmpRecord>
+      <Identifier>9908:810418052</Identifier>
+      <Hash>g34ngkutdowpzjay7rtrt45dgs6j3mvzu2fs3r3c7i6osh5v7v6a</Hash>
+      <Scheme>iso6523-actorid-upis</Scheme>
+      <RegExp><![CDATA[!^.*$!http://test-smp.difi.no/!]]></RegExp>
+    </SmpRecord>
+  </SmpRecords>
+</SmlDirectory>

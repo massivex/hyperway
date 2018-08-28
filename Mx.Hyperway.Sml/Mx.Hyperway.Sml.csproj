@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mx.Peppol.Lookup\Mx.Peppol.Lookup.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ARSoft.Tools.Net">
+      <HintPath>..\third-party\arsoft-tools\ARSoft.Tools.Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="sml-directory.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
