@@ -1,44 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Common.Model
+﻿namespace Mx.Peppol.Common.Model
 {
     using Mx.Peppol.Common.Api;
 
-    public abstract class AbstractSimpleIdentifier : SimpleIdentifier
+    public abstract class AbstractSimpleIdentifier : ISimpleIdentifier
     {
-
-        protected readonly String value;
-
-        protected AbstractSimpleIdentifier(String value)
+        protected AbstractSimpleIdentifier(string value)
         {
-            this.value = value == null ? null : value.Trim();
+            this.Identifier = value?.Trim();
         }
 
-        public String getIdentifier()
+        public string Identifier { get; }
+
+        public override string ToString()
         {
-            return value;
+            return this.Identifier;
         }
 
-        public override String ToString()
-        {
-            return value;
-        }
-
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is AbstractSimpleIdentifier)) return false;
 
             AbstractSimpleIdentifier that = (AbstractSimpleIdentifier)o;
 
-            return value.Equals(that.value);
+            return this.Identifier.Equals(that.Identifier);
         }
 
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return this.Identifier.GetHashCode();
         }
     }
 }

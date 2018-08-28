@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
@@ -10,20 +8,17 @@ namespace Mx.Peppol.Common.Model
 
     public class TransportProtocol : AbstractSimpleIdentifier
     {
+        private static readonly Regex Pattern = new Regex("[\\p{Upper}\\d]+", RegexOptions.Compiled);
 
-        private static readonly long serialVersionUID = -5938766453542971103L;
+        public static readonly TransportProtocol As2 = new TransportProtocol("AS2");
 
-        private static Regex pattern = new Regex("[\\p{Upper}\\d]+", RegexOptions.Compiled);
+        public static readonly TransportProtocol As4 = new TransportProtocol("AS4");
 
-        public static readonly TransportProtocol AS2 = new TransportProtocol("AS2");
+        public static readonly TransportProtocol Internal = new TransportProtocol("INTERNAL");
 
-        public static readonly TransportProtocol AS4 = new TransportProtocol("AS4");
-
-        public static readonly TransportProtocol INTERNAL = new TransportProtocol("INTERNAL");
-
-        public static TransportProtocol of(String value) // throws PeppolException
+        public static TransportProtocol Of(String value) // throws PeppolException
         {
-            if (!pattern.Match(value).Success)
+            if (!Pattern.Match(value).Success)
             {
                 throw new PeppolException("Identifier not according to pattern.");
             }
@@ -39,7 +34,7 @@ namespace Mx.Peppol.Common.Model
 
         public override string ToString()
         {
-            return "TransportProtocol{" + this.value + '}';
+            return "TransportProtocol{" + this.Identifier + '}';
         }
     }
 }

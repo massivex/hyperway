@@ -16,8 +16,8 @@
 
         private readonly SMimeDigestMethod algorithm;
 
-        public Mic(Digest digest) : this(new Base64Encoding().ToString(digest.getValue()),
-            SMimeDigestMethod.FindByDigestMethod(digest.getMethod()))
+        public Mic(Digest digest) : this(new Base64Encoding().ToString(digest.Value),
+            SMimeDigestMethod.FindByDigestMethod(digest.Method))
         {
             
         }

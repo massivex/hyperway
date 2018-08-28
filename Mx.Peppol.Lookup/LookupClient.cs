@@ -47,7 +47,7 @@ namespace Mx.Peppol.Lookup
 
             foreach (ServiceReference serviceReference in this.getServiceReferences(participantIdentifier))
             {
-                documentTypeIdentifiers.Add(serviceReference.getDocumentTypeIdentifier());
+                documentTypeIdentifiers.Add(serviceReference.DocumentTypeIdentifier);
             }
 
             return documentTypeIdentifiers;
@@ -97,11 +97,11 @@ namespace Mx.Peppol.Lookup
                     e);
             }
 
-            PotentiallySigned<ServiceMetadata> serviceMetadata = this.reader.parseServiceMetadata(fetcherResponse);
+            IPotentiallySigned<ServiceMetadata> serviceMetadata = this.reader.parseServiceMetadata(fetcherResponse);
 
             if (serviceMetadata is Signed<ServiceMetadata>)
             {
-                this.validator.validate(Service.SMP, ((Signed<ServiceMetadata>)serviceMetadata).Certificate);
+                this.validator.validate(Service.Smp, ((Signed<ServiceMetadata>)serviceMetadata).Certificate);
             }
 
             return serviceMetadata.Content;
@@ -112,9 +112,9 @@ namespace Mx.Peppol.Lookup
             ProcessIdentifier processIdentifier,
             TransportProfile[] transportProfiles) // throws PeppolSecurityException, EndpointNotFoundException
         {
-            Endpoint endpoint = serviceMetadata.getEndpoint(processIdentifier, transportProfiles);
+            Endpoint endpoint = serviceMetadata.GetEndpoint(processIdentifier, transportProfiles);
 
-            this.validator.validate(Service.AP, endpoint.getCertificate());
+            this.validator.validate(Service.Ap, endpoint.Certificate);
 
             return endpoint;
         }
@@ -132,7 +132,7 @@ namespace Mx.Peppol.Lookup
         public Endpoint
             getEndpoint(Header header, TransportProfile[] transportProfiles) // throws LookupException, PeppolSecurityException, EndpointNotFoundException
         {
-            return this.getEndpoint(header.getReceiver(), header.getDocumentType(), header.getProcess(), transportProfiles);
+            return this.getEndpoint(header.Receiver, header.DocumentType, header.Process, transportProfiles);
         }
     }
 

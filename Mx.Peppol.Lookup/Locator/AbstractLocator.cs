@@ -11,7 +11,7 @@ namespace Mx.Peppol.Lookup.Locator
     {
         public Uri lookup(String identifier) // throws LookupException
         {
-            return lookup(ParticipantIdentifier.of(identifier));
+            return lookup(ParticipantIdentifier.Of(identifier));
         }
 
         public abstract Uri lookup(ParticipantIdentifier participantIdentifier);

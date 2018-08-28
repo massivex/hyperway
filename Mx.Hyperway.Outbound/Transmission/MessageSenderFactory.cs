@@ -29,14 +29,14 @@
             this.injector = injector;
 
             this.configMap = config.Defaults.Transports.Where(x => x.Enabled).OrderBy(x => x.Weight)
-                .ToDictionary(t => TransportProfile.of(t.Profile), x => x);
+                .ToDictionary(t => TransportProfile.Of(t.Profile), x => x);
 
             this.prioritizedTransportProfiles = config.Defaults.Transports.Where(x => x.Enabled).OrderBy(x => x.Weight)
-                .Select(x => TransportProfile.of(x.Profile)).ToList();
+                .Select(x => TransportProfile.Of(x.Profile)).ToList();
 
             // Logging list of prioritized transport profiles supported.
             Logger.Info("Prioritized list of transport profiles:");
-            this.prioritizedTransportProfiles.ForEach(tp => Logger.InfoFormat("=> {0}", tp.getIdentifier()));
+            this.prioritizedTransportProfiles.ForEach(tp => Logger.InfoFormat("=> {0}", tp.Identifier));
         }
 
 
@@ -48,7 +48,7 @@
             if (!this.prioritizedTransportProfiles.Any(x => x.Equals(transportProfile)))
             {
                 throw new HyperwayTransmissionException(
-                    $"Transport protocol '{transportProfile.getIdentifier()}' not supported.");
+                    $"Transport protocol '{transportProfile.Identifier}' not supported.");
             }
 
             return this.configMap.Where(x => x.Key.Equals(transportProfile)).Select(x => x.Value.Sender).First();

@@ -2,7 +2,7 @@
   "defaults": {
     "lookup": {
       "locator": {
-        "hostname": "",
+        "hostname": "acc.edelivery.tech.ec.europa.eu",
         "bdxl": {
           "prefix": "",
           "algorithm": "SHA-256",

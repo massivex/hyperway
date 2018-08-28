@@ -31,7 +31,7 @@
 
         public FileInfo Persist(TransmissionIdentifier transmissionIdentifier, Header header, Stream inputStream)
         {
-            var identifier = FileUtils.FilterString(transmissionIdentifier.getIdentifier());
+            var identifier = FileUtils.FilterString(transmissionIdentifier.Identifier);
             var targetFolder = PersisterUtils.CreateArtifactFolders(this.inboundFolder, header).FullName;
             string targetFile = Path.Combine(targetFolder, $"{identifier}.doc.xml");
 
@@ -48,7 +48,7 @@
         public void Persist(IInboundMetadata inboundMetadata, FileInfo payloadPath)
         {
             var targetFolder = PersisterUtils.CreateArtifactFolders(this.inboundFolder, inboundMetadata.GetHeader()).FullName;
-            var identifier = FileUtils.FilterString(inboundMetadata.GetTransmissionIdentifier().getIdentifier());
+            var identifier = FileUtils.FilterString(inboundMetadata.GetTransmissionIdentifier().Identifier);
             string targetFile = Path.Combine(targetFolder, $"{identifier}.receipt.dat");
 
             using (var fs = File.Create(targetFile))

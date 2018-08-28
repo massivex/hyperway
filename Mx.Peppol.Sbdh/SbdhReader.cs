@@ -33,24 +33,24 @@ namespace Mx.Peppol.Sbdh
 
         public static Header read(StandardBusinessDocumentHeader sbdh) // throws SbdhException
         {
-            Header header = Header.newInstance();
+            Header header = Header.NewInstance();
 
             // Sender
             PartnerIdentification senderIdentifier = sbdh.Sender[0].Identifier;
-            header = header.sender(
-                ParticipantIdentifier.of(senderIdentifier.Value, Scheme.of(senderIdentifier.Authority)));
+            header = header.SetSender(
+                ParticipantIdentifier.Of(senderIdentifier.Value, Scheme.Of(senderIdentifier.Authority)));
 
             // Receiver
             PartnerIdentification receiverIdentifier = sbdh.Receiver[0].Identifier;
-            header = header.receiver(
-                ParticipantIdentifier.of(receiverIdentifier.Value, Scheme.of(receiverIdentifier.Authority)));
+            header = header.SetReceiver(
+                ParticipantIdentifier.Of(receiverIdentifier.Value, Scheme.Of(receiverIdentifier.Authority)));
 
             // Identifier
-            header = header.identifier(InstanceIdentifier.of(sbdh.DocumentIdentification.InstanceIdentifier));
+            header = header.SetIdentifier(InstanceIdentifier.Of(sbdh.DocumentIdentification.InstanceIdentifier));
 
             // InstanceType
-            header = header.instanceType(
-                InstanceType.of(
+            header = header.SetInstanceType(
+                InstanceType.Of(
                     sbdh.DocumentIdentification.Standard,
                     sbdh.DocumentIdentification.Type,
                     sbdh.DocumentIdentification.TypeVersion));
@@ -61,7 +61,7 @@ namespace Mx.Peppol.Sbdh
                 throw new SbdhException("Element 'CreationDateAndTime' is not set or contains invalid value.");
             }
 
-            header = header.creationTimestamp(sbdh.DocumentIdentification.CreationDateAndTime);
+            header = header.SetCreationTimestamp(sbdh.DocumentIdentification.CreationDateAndTime);
 
             // Scope
             foreach (Scope scope in sbdh.BusinessScope)
@@ -69,16 +69,16 @@ namespace Mx.Peppol.Sbdh
                 if (scope.Type.Equals("DOCUMENTID"))
                 {
                     Scheme scheme = scope.Identifier != null
-                                        ? Scheme.of(scope.Identifier)
-                                        : DocumentTypeIdentifier.DEFAULT_SCHEME;
-                    header = header.documentType(DocumentTypeIdentifier.of(scope.InstanceIdentifier, scheme));
+                                        ? Scheme.Of(scope.Identifier)
+                                        : DocumentTypeIdentifier.DefaultScheme;
+                    header = header.SetDocumentType(DocumentTypeIdentifier.Of(scope.InstanceIdentifier, scheme));
                 }
                 else if (scope.Type.Equals("PROCESSID"))
                 {
                     Scheme scheme = scope.Identifier != null
-                                        ? Scheme.of(scope.Identifier)
-                                        : ProcessIdentifier.DEFAULT_SCHEME;
-                    header = header.process(ProcessIdentifier.of(scope.InstanceIdentifier, scheme));
+                                        ? Scheme.Of(scope.Identifier)
+                                        : ProcessIdentifier.DefaultScheme;
+                    header = header.SetProcess(ProcessIdentifier.Of(scope.InstanceIdentifier, scheme));
                 }
             }
 

@@ -41,7 +41,7 @@ namespace Mx.Hyperway.As2.Inbound
             this.timestamp = this.timestamp.Date;
             this.transportProfile = transportProfile;
             this.digest = digest;
-            this.receipt = Receipt.of("message/disposition-notification", primaryReceipt);
+            this.receipt = Receipt.Of("message/disposition-notification", primaryReceipt);
             this.receipts = new List<Receipt>();
             this.receipts.Add(this.receipt);
             if (timestamp.GetReceipt() != null)
@@ -73,7 +73,7 @@ namespace Mx.Hyperway.As2.Inbound
 
         public TransportProtocol GetTransportProtocol()
         {
-            return TransportProtocol.AS2;
+            return TransportProtocol.As2;
         }
 
         public TransportProfile GetProtocol()

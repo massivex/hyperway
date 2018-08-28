@@ -121,7 +121,7 @@
                 // Digest method to use.
                 SMimeDigestMethod digestMethod =
                     SMimeDigestMethod.FindByTransportProfile(
-                        this.transmissionRequest.GetEndpoint().getTransportProfile());
+                        this.transmissionRequest.GetEndpoint().TransportProfile);
 
 
 
@@ -135,10 +135,10 @@
                 Debug.Assert(signedMultipart != null, nameof(signedMultipart) + " != null");
                 this.outboundMic = MimeMessageHelper.CalculateMic(signedMultipart[0], digestMethod);
                 span.Record(Annotations.Tag("mic", this.outboundMic.ToString()));
-                span.Record(Annotations.Tag("endpoint url", this.transmissionRequest.GetEndpoint().getAddress().ToString()));
+                span.Record(Annotations.Tag("endpoint url", this.transmissionRequest.GetEndpoint().Address.ToString()));
 
                 // Initiate POST request
-                httpPost = new HttpPost(this.transmissionRequest.GetEndpoint().getAddress());
+                httpPost = new HttpPost(this.transmissionRequest.GetEndpoint().Address);
 
                 foreach (var header in signedMimeMessage.Headers)
                 {
@@ -164,7 +164,7 @@
                 httpPost.Headers.Add(As2Header.As2From, this.fromIdentifier);
                 httpPost.Headers.Add(
                     As2Header.As2To,
-                    CertificateUtils.ExtractCommonName(this.transmissionRequest.GetEndpoint().getCertificate()));
+                    CertificateUtils.ExtractCommonName(this.transmissionRequest.GetEndpoint().Certificate));
                 httpPost.Headers.Add(As2Header.DispositionNotificationTo, "not.in.use@difi.no");
                 httpPost.Headers.Add(
                     As2Header.DispositionNotificationOptions,
@@ -210,7 +210,7 @@
             catch (Exception e)
             {
                 span.Record(Annotations.Tag("exception", e.Message));
-                throw new HyperwayTransmissionException(this.transmissionRequest.GetEndpoint().getAddress(), e);
+                throw new HyperwayTransmissionException(this.transmissionRequest.GetEndpoint().Address, e);
             }
             finally
             {
@@ -237,7 +237,7 @@
                     Logger.ErrorFormat(
                         "AS2 HTTP POST expected HTTP OK, but got : {0} from {1}",
                         response.StatusCode,
-                        this.transmissionRequest.GetEndpoint().getAddress());
+                        this.transmissionRequest.GetEndpoint().Address);
 
                     // Throws exception
                     this.HandleFailedRequest(response);
@@ -246,7 +246,7 @@
                 // handle normal HTTP OK response
                 Logger.DebugFormat(
                     "AS2 transmission to {0} returned HTTP OK, verify MDN response",
-                    this.transmissionRequest.GetEndpoint().getAddress());
+                    this.transmissionRequest.GetEndpoint().Address);
 
                 string contentTypeHeader = response.Headers["Content-Type"];
                 if (string.IsNullOrWhiteSpace(contentTypeHeader))
@@ -297,14 +297,13 @@
                     // the response message does not match its certificate published by the SMP
                     Debug.Assert(mimeCertificate != null, nameof(mimeCertificate) + " != null");
                     X509Certificate certificate = mimeCertificate.Certificate;
-                    if (!this.transmissionRequest.GetEndpoint().getCertificate().Equals(certificate))
+                    if (!this.transmissionRequest.GetEndpoint().Certificate.Equals(certificate))
                     {
                         throw new HyperwayTransmissionException(
                             String.Format(
                                 "Certificate in MDN ('{0}') does not match certificate from SMP ('{1}').",
                                 certificate.SubjectDN, // .getSubjectX500Principal().getName(),
-                                this.transmissionRequest.GetEndpoint().getCertificate()
-                                    .SubjectDN)); // .getSubjectX500Principal().getName()));
+                                this.transmissionRequest.GetEndpoint().Certificate                                    .SubjectDN)); // .getSubjectX500Principal().getName()));
                     }
 
                     Logger.Debug("MDN signature was verified for : " + certificate.SubjectDN);

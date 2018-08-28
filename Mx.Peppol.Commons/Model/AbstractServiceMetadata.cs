@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Peppol.Common.Model
 {
     using Mx.Peppol.Common.Api;
     using Mx.Peppol.Common.Lang;
 
-    public abstract class AbstractServiceMetadata<T> where T: SimpleEndpoint
+    public abstract class AbstractServiceMetadata<T> where T: ISimpleEndpoint
     {
-
-        private static readonly long serialVersionUID = -7523336374349545534L;
-
-        private readonly ParticipantIdentifier participantIdentifier;
-
-        private readonly DocumentTypeIdentifier documentTypeIdentifier;
-
         private readonly List<ProcessMetadata<T>> processes;
 
         protected AbstractServiceMetadata(
@@ -23,35 +14,22 @@ namespace Mx.Peppol.Common.Model
             DocumentTypeIdentifier documentTypeIdentifier,
             List<ProcessMetadata<T>> processes)
         {
-            this.participantIdentifier = participantIdentifier;
-            this.documentTypeIdentifier = documentTypeIdentifier;
+            this.ParticipantIdentifier = participantIdentifier;
+            this.DocumentTypeIdentifier = documentTypeIdentifier;
             this.processes = processes;
         }
 
-        public ParticipantIdentifier getParticipantIdentifier()
-        {
-            return participantIdentifier;
-        }
+        public ParticipantIdentifier ParticipantIdentifier { get; }
 
-        public DocumentTypeIdentifier getDocumentTypeIdentifier()
-        {
-            return documentTypeIdentifier;
-        }
+        public DocumentTypeIdentifier DocumentTypeIdentifier { get; }
 
-        public IList<ProcessMetadata<T>> getProcesses()
-        {
-            return this.processes.AsReadOnly();
-        }
-
-        public T getEndpoint(
-            ProcessIdentifier processIdentifier,
-            params TransportProfile[] transportProfiles) // throws EndpointNotFoundException
+        public T GetEndpoint(ProcessIdentifier processIdentifier, params TransportProfile[] transportProfiles)
         {
             foreach (ProcessMetadata<T> processMetadata in this.processes)
             {
-                if (processMetadata.getProcessIdentifier().Contains(processIdentifier))
+                if (processMetadata.ProcessIdentifier.Contains(processIdentifier))
                 {
-                    return processMetadata.getEndpoint(transportProfiles);
+                    return processMetadata.GetEndpoint(transportProfiles);
                 }
             }
 

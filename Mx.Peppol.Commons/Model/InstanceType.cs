@@ -1,70 +1,49 @@
-﻿using System;
-
-namespace Mx.Peppol.Common.Model
+﻿namespace Mx.Peppol.Common.Model
 {
     public class InstanceType
     {
-
-        private static readonly long serialVersionUID = -8577145245367335582L;
-
-        private readonly String standard;
-
-        private readonly String type;
-
-        private readonly String version;
-
-        public static InstanceType of(String standard, String type, String version)
+        public static InstanceType Of(string standard, string type, string version)
         {
             return new InstanceType(standard, type, version);
         }
 
-        public InstanceType(String standard, String type, String version)
+        public InstanceType(string standard, string type, string version)
         {
-            this.standard = standard;
-            this.type = type;
-            this.version = version;
+            this.Standard = standard;
+            this.Type = type;
+            this.Version = version;
         }
 
-        public String getStandard()
-        {
-            return standard;
-        }
+        public string Standard { get; }
 
-        public String getType()
-        {
-            return type;
-        }
+        public string Type { get; }
 
-        public String getVersion()
-        {
-            return version;
-        }
+        public string Version { get; }
 
-
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is InstanceType)) return false;
 
             InstanceType that = (InstanceType)o;
 
-            if (!this.standard.Equals(that.standard)) return false;
-            if (!this.type.Equals(that.type)) return false;
-            return this.version.Equals(that.version);
+            if (!this.Standard.Equals(that.Standard)) return false;
+            if (!this.Type.Equals(that.Type)) return false;
+            return this.Version.Equals(that.Version);
         }
 
         public override int GetHashCode()
         {
-            int result = this.standard.GetHashCode();
-            result = 31 * result + this.type.GetHashCode();
-            result = 31 * result + this.version.GetHashCode();
+            int result = this.Standard.GetHashCode();
+            result = 31 * result + this.Type.GetHashCode();
+            result = 31 * result + this.Version.GetHashCode();
             return result;
         }
 
 
         public override string ToString()
         {
-            return $"{this.standard}::{this.type}::{this.version}";
+            return $"{this.Standard}::{this.Type}::{this.Version}";
         }
     }
 }

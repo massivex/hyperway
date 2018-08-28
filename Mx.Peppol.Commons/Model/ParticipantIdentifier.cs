@@ -8,27 +8,24 @@ namespace Mx.Peppol.Common.Model
 
     public class ParticipantIdentifier : AbstractQualifiedIdentifier
     {
+        /// <summary>
+        /// Default scheme used when no scheme or ICD specified. 
+        /// </summary>
+        public static readonly Scheme DefaultScheme = Scheme.Of("iso6523-actorid-upis");
 
-        private static readonly long serialVersionUID = -8052874032415088055L;
-
-        /**
-         * Default scheme used when no scheme or ICD specified.
-         */
-        public static readonly Scheme DEFAULT_SCHEME = Scheme.of("iso6523-actorid-upis");
-
-        public static ParticipantIdentifier of(String value)
+        public static ParticipantIdentifier Of(string value)
         {
-            return of(value, DEFAULT_SCHEME);
+            return Of(value, DefaultScheme);
         }
 
-        public static ParticipantIdentifier of(String value, Scheme scheme)
+        public static ParticipantIdentifier Of(string value, Scheme scheme)
         {
             return new ParticipantIdentifier(value, scheme);
         }
 
-        public static ParticipantIdentifier parse(String str) // throws PeppolParsingException
+        public static ParticipantIdentifier Parse(string str) // throws PeppolParsingException
         {
-            String [] parts = str.Split(new[] { "::" }, 2, StringSplitOptions.None);
+            string[] parts = str.Split(new[] { "::" }, 2, StringSplitOptions.None);
 
             if (parts.Length != 2)
             {
@@ -36,42 +33,41 @@ namespace Mx.Peppol.Common.Model
             }
                 
 
-            return of(parts[1], Scheme.of(parts[0]));
+            return Of(parts[1], Scheme.Of(parts[0]));
         }
 
-        /**
-         * Creation of participant identifier.
-         *
-         * @param identifier Normal identifier like '9908:987654321'.
-         * @param scheme     Scheme for identifier.
-         */
-        private ParticipantIdentifier(String identifier, Scheme scheme)
+        /// <summary>
+        /// Creation of participant identifier. 
+        /// </summary>
+        /// <param name="identifier">Normal identifier like '9908:987654321'.</param>
+        /// <param name="scheme">Scheme for identifier.</param>
+        private ParticipantIdentifier(string identifier, Scheme scheme)
             : base(identifier.Trim().ToLower(CultureInfo.InvariantCulture), scheme)
         {
         }
 
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is ParticipantIdentifier)) return false;
 
             ParticipantIdentifier that = (ParticipantIdentifier)o;
 
-            if (!this.scheme.Equals(that.scheme)) return false;
-            return this.identifier.Equals(that.identifier);
+            if (!this.Scheme.Equals(that.Scheme)) return false;
+            return this.Identifier.Equals(that.Identifier);
         }
 
         public override int GetHashCode()
         {
-            int result = this.scheme.GetHashCode();
-            result = 31 * result + this.identifier.GetHashCode();
+            int result = this.Scheme.GetHashCode();
+            result = 31 * result + this.Identifier.GetHashCode();
             return result;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
-            return $"{this.scheme}::{this.identifier}";
+            return $"{this.Scheme}::{this.Identifier}";
         }
     }
 }

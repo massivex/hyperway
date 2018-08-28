@@ -4,11 +4,11 @@ namespace Mx.Peppol.Common.Lang
 {
     public class PeppolException : Exception
     {
-        public PeppolException(String message): base(message)
+        public PeppolException(string message): base(message)
         {
         }
 
-        public PeppolException(String message, Exception cause)
+        public PeppolException(string message, Exception cause)
             : base(message, cause)
         {
         }

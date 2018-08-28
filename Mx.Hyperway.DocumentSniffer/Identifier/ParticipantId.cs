@@ -170,7 +170,7 @@
 
         public ParticipantIdentifier ToVefa()
         {
-            return ParticipantIdentifier.of(this.peppolParticipantIdValue, ParticipantIdentifier.DEFAULT_SCHEME);
+            return ParticipantIdentifier.Of(this.peppolParticipantIdValue, ParticipantIdentifier.DefaultScheme);
         }
     }
 }

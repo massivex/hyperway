@@ -173,9 +173,9 @@
                 Log.Debug(
                     String.Format(
                         "Message using messageId {0} sent to {1} using {2} was assigned transmissionId {3} took {4}ms\n",
-                        transmissionResponse.GetHeader().getIdentifier().getIdentifier(),
-                        transmissionResponse.GetEndpoint().getAddress(),
-                        transmissionResponse.GetProtocol().getIdentifier(),
+                        transmissionResponse.GetHeader().Identifier.Identifier,
+                        transmissionResponse.GetEndpoint().Address,
+                        transmissionResponse.GetProtocol().Identifier,
                         transmissionResponse.GetTransmissionIdentifier(),
                         durationInMs));
 

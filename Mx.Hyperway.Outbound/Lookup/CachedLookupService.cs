@@ -65,9 +65,9 @@
 
             public HeaderStub(Header header)
             {
-                this.receiver = header.getReceiver();
-                this.documentType = header.getDocumentType();
-                this.process = header.getProcess();
+                this.receiver = header.Receiver;
+                this.documentType = header.DocumentType;
+                this.process = header.Process;
             }
 
             public ParticipantIdentifier GetReceiver()

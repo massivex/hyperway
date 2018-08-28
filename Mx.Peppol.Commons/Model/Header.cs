@@ -1,34 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
     public class Header
     {
-
-        private static readonly long serialVersionUID = -7517561747468194479L;
-
-        private ParticipantIdentifier _sender;
-
-        private ParticipantIdentifier _receiver;
-
-        private ProcessIdentifier _process;
-
-        private DocumentTypeIdentifier _documentType;
-
-        private InstanceIdentifier _identifier;
-
-        private InstanceType _instanceType;
-
-        private DateTime? _creationTimestamp;
-
-        public static Header newInstance()
+        public static Header NewInstance()
         {
             return new Header();
         }
 
-        public static Header of(
+        public static Header Of(
             ParticipantIdentifier sender,
             ParticipantIdentifier receiver,
             ProcessIdentifier process,
@@ -40,7 +21,7 @@ namespace Mx.Peppol.Common.Model
             return new Header(sender, receiver, process, documentType, identifier, instanceType, creationTimestamp);
         }
 
-        public static Header of(
+        public static Header Of(
             ParticipantIdentifier sender,
             ParticipantIdentifier receiver,
             ProcessIdentifier process,
@@ -63,144 +44,121 @@ namespace Mx.Peppol.Common.Model
             InstanceType instanceType,
             DateTime? creationTimestamp)
         {
-            this._sender = sender;
-            this._receiver = receiver;
-            this._process = process;
-            this._documentType = documentType;
-            this._identifier = identifier;
-            this._instanceType = instanceType;
-            this._creationTimestamp = creationTimestamp;
+            this.Sender = sender;
+            this.Receiver = receiver;
+            this.Process = process;
+            this.DocumentType = documentType;
+            this.Identifier = identifier;
+            this.InstanceType = instanceType;
+            this.CreationTimestamp = creationTimestamp;
         }
 
-        public ParticipantIdentifier getSender()
-        {
-            return this._sender;
-        }
+        public ParticipantIdentifier Sender { get; private set; }
 
-        public Header sender(ParticipantIdentifier sender)
+        public Header SetSender(ParticipantIdentifier value)
         {
-            Header header = this.copy();
-            header._sender = sender;
+            Header header = this.Copy();
+            header.Sender = value;
             return header;
         }
 
-        public ParticipantIdentifier getReceiver()
-        {
-            return this._receiver;
-        }
+        public ParticipantIdentifier Receiver { get; private set; }
 
-        public Header receiver(ParticipantIdentifier receiver)
+        public Header SetReceiver(ParticipantIdentifier value)
         {
-            Header header = this.copy();
-            header._receiver = receiver;
+            Header header = this.Copy();
+            header.Receiver = value;
             return header;
         }
 
-        public ProcessIdentifier getProcess()
-        {
-            return this._process;
-        }
+        public ProcessIdentifier Process { get; private set; }
 
-        public Header process(ProcessIdentifier process)
+        public Header SetProcess(ProcessIdentifier value)
         {
-            Header header = this.copy();
-            header._process = process;
+            Header header = this.Copy();
+            header.Process = value;
             return header;
         }
 
-        public DocumentTypeIdentifier getDocumentType()
-        {
-            return this._documentType;
-        }
+        public DocumentTypeIdentifier DocumentType { get; private set; }
 
-        public Header documentType(DocumentTypeIdentifier documentType)
+        public Header SetDocumentType(DocumentTypeIdentifier value)
         {
-            Header header = this.copy();
-            header._documentType = documentType;
+            Header header = this.Copy();
+            header.DocumentType = value;
             return header;
         }
 
-        public InstanceIdentifier getIdentifier()
-        {
-            return this._identifier;
-        }
+        public InstanceIdentifier Identifier { get; private set; }
 
-        public Header identifier(InstanceIdentifier identifier)
+        public Header SetIdentifier(InstanceIdentifier value)
         {
-            Header header = this.copy();
-            header._identifier = identifier;
+            Header header = this.Copy();
+            header.Identifier = value;
             return header;
         }
 
-        public InstanceType getInstanceType()
-        {
-            return this._instanceType;
-        }
+        public InstanceType InstanceType { get; private set; }
 
-        public Header instanceType(InstanceType instanceType)
+        public Header SetInstanceType(InstanceType value)
         {
-            Header header = this.copy();
-            header._instanceType = instanceType;
+            Header header = this.Copy();
+            header.InstanceType = value;
             return header;
         }
 
-        public DateTime? getCreationTimestamp()
-        {
-            return this._creationTimestamp;
-        }
+        public DateTime? CreationTimestamp { get; private set; }
 
-        public Header creationTimestamp(DateTime creationTimestamp)
+        public Header SetCreationTimestamp(DateTime value)
         {
-            Header header = this.copy();
-            header._creationTimestamp = creationTimestamp;
+            Header header = this.Copy();
+            header.CreationTimestamp = value;
             return header;
         }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is Header)) return false;
 
             Header header = (Header)o;
 
-            if (!this._sender.Equals(header._sender)) return false;
-            if (!this._receiver.Equals(header._receiver)) return false;
-            if (!this._process.Equals(header._process)) return false;
-            if (!this._documentType.Equals(header._documentType)) return false;
-            if (this._identifier != null
-                    ? !this._identifier.Equals(header._identifier)
-                    : header._identifier != null) return false;
-            if (this._instanceType != null
-                    ? !this._instanceType.Equals(header._instanceType)
-                    : header._instanceType != null)
-                return false;
-            return !(this._creationTimestamp != null
-                         ? !this._creationTimestamp.Equals(header._creationTimestamp)
-                         : header._creationTimestamp != null);
+            if (!this.Sender.Equals(header.Sender)) return false;
+            if (!this.Receiver.Equals(header.Receiver)) return false;
+            if (!this.Process.Equals(header.Process)) return false;
+            if (!this.DocumentType.Equals(header.DocumentType)) return false;
+            if (!this.Identifier?.Equals(header.Identifier) ?? header.Identifier != null) return false;
+            if (!this.InstanceType?.Equals(header.InstanceType) ?? header.InstanceType != null) return false;
+
+            return !(this.CreationTimestamp != null
+                         ? !this.CreationTimestamp.Equals(header.CreationTimestamp)
+                         : header.CreationTimestamp != null);
         }
 
         public override int GetHashCode()
         {
-            int result = this._sender.GetHashCode();
-            result = 31 * result + this._receiver.GetHashCode();
-            result = 31 * result + this._process.GetHashCode();
-            result = 31 * result + this._documentType.GetHashCode();
-            result = 31 * result + (this._identifier != null ? this._identifier.GetHashCode() : 0);
-            result = 31 * result + (this._instanceType != null ? this._instanceType.GetHashCode() : 0);
-            result = 31 * result + (this._creationTimestamp != null ? this._creationTimestamp.GetHashCode() : 0);
+            // ReSharper disable NonReadonlyMemberInGetHashCode
+            var result = this.Sender.GetHashCode();
+            result = 31 * result + this.Receiver.GetHashCode();
+            result = 31 * result + this.Process.GetHashCode();
+            result = 31 * result + this.DocumentType.GetHashCode();
+            result = 31 * result + (this.Identifier != null ? this.Identifier.GetHashCode() : 0);
+            result = 31 * result + (this.InstanceType != null ? this.InstanceType.GetHashCode() : 0);
+            result = 31 * result + (this.CreationTimestamp != null ? this.CreationTimestamp.GetHashCode() : 0);
+            // ReSharper restore NonReadonlyMemberInGetHashCode
             return result;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
-            return "Header{" + "sender=" + this._sender + ", receiver=" + this._receiver + ", process=" + this._process
-                   + ", documentType=" + this._documentType + ", identifier=" + this._identifier + ", instanceType=" + this._instanceType
-                   + ", creationTimestamp=" + this._creationTimestamp + '}';
+            return "Header{" + "sender=" + this.Sender + ", receiver=" + this.Receiver + ", process=" + this.Process
+                   + ", documentType=" + this.DocumentType + ", identifier=" + this.Identifier + ", instanceType=" + this.InstanceType
+                   + ", creationTimestamp=" + this.CreationTimestamp + '}';
         }
 
-        private Header copy()
+        private Header Copy()
         {
-            return new Header(this._sender, this._receiver, this._process, this._documentType, this._identifier, this._instanceType, this._creationTimestamp);
+            return new Header(this.Sender, this.Receiver, this.Process, this.DocumentType, this.Identifier, this.InstanceType, this.CreationTimestamp);
         }
     }
 }

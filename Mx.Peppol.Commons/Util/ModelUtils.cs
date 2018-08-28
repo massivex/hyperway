@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Peppol.Common.Util
 {
     using System.Diagnostics;
-    using System.Linq;
     using System.Web;
 
     public static class ModelUtils
     {
-        public static String urlencode(String format, params string[] args)
+        public static string Urlencode(string format, params object[] args)
         {
             try
             {
                 Debug.Assert(args != null, nameof(args) + " != null");
-                return HttpUtility.UrlEncode(String.Format(format, args), Encoding.UTF8);
+                return HttpUtility.UrlEncode(string.Format(format, args), Encoding.UTF8);
             }
             catch (InvalidOperationException e)
             {
@@ -23,7 +21,7 @@ namespace Mx.Peppol.Common.Util
             }
         }
 
-        public static String urldecode(String value)
+        public static string Urldecode(string value)
         {
             try
             {                

@@ -42,23 +42,23 @@
             {
                 RawStatisticsBuilder builder = new RawStatisticsBuilder()
                     .AccessPointIdentifier(this.ourAccessPointIdentifier).Direction(Direction.OUT)
-                    .DocumentType(transmissionResponse.GetHeader().getDocumentType())
-                    .Sender(transmissionResponse.GetHeader().getSender())
-                    .Receiver(transmissionResponse.GetHeader().getReceiver())
-                    .Profile(transmissionResponse.GetHeader().getProcess())
+                    .DocumentType(transmissionResponse.GetHeader().DocumentType)
+                    .Sender(transmissionResponse.GetHeader().Sender)
+                    .Receiver(transmissionResponse.GetHeader().Receiver)
+                    .Profile(transmissionResponse.GetHeader().Process)
                     .Date(transmissionResponse.GetTimestamp()); // Time stamp of reception of the receipt
 
                 // If we know the CN name of the destination AP, supply that
                 // as the channel id otherwise use the protocol name
-                if (transmissionRequest.GetEndpoint().getCertificate() != null)
+                if (transmissionRequest.GetEndpoint().Certificate!= null)
                 {
                     String accessPointIdentifierValue =
-                        CertificateUtils.ExtractCommonName(transmissionRequest.GetEndpoint().getCertificate());
+                        CertificateUtils.ExtractCommonName(transmissionRequest.GetEndpoint().Certificate);
                     builder.Channel(new ChannelId(accessPointIdentifierValue));
                 }
                 else
                 {
-                    String protocolName = transmissionRequest.GetEndpoint().getTransportProfile().getIdentifier();
+                    String protocolName = transmissionRequest.GetEndpoint().TransportProfile.Identifier;
                     builder.Channel(new ChannelId(protocolName));
                 }
 
@@ -84,9 +84,9 @@
             {
                 DefaultRawStatistics rawStatistics = new RawStatisticsBuilder()
                     .AccessPointIdentifier(this.ourAccessPointIdentifier).Direction(Direction.IN)
-                    .DocumentType(inboundMetadata.GetHeader().getDocumentType())
-                    .Sender(inboundMetadata.GetHeader().getSender()).Receiver(inboundMetadata.GetHeader().getReceiver())
-                    .Profile(inboundMetadata.GetHeader().getProcess()).Channel(new ChannelId("AS2")).Build();
+                    .DocumentType(inboundMetadata.GetHeader().DocumentType)
+                    .Sender(inboundMetadata.GetHeader().Sender).Receiver(inboundMetadata.GetHeader().Receiver)
+                    .Profile(inboundMetadata.GetHeader().Process).Channel(new ChannelId("AS2")).Build();
 
                 this.rawStatisticsRepository.persist(rawStatistics);
             }

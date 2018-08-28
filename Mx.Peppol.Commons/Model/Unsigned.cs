@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Common.Model
+﻿namespace Mx.Peppol.Common.Model
 {
     using Mx.Peppol.Common.Api;
 
-    public class Unsigned<T> : PotentiallySigned<T> {
-
-        private static readonly long serialVersionUID = 2731552303222094156L;
-
-        public static Unsigned<T> of(T content)
+    public class Unsigned<T> : IPotentiallySigned<T>
+    {
+        public static Unsigned<T> Of(T content)
         {
             return new Unsigned<T>(content);
         }
@@ -20,22 +14,22 @@ namespace Mx.Peppol.Common.Model
             this.Content = content;
         }
 
-        
+
         public T Content { get; }
 
-        
-        public PotentiallySigned<S> ofSubset<S>(S s)
+
+        public IPotentiallySigned<TS> OfSubset<TS>(TS s)
         {
-            return new Unsigned<S>(s);
+            return new Unsigned<TS>(s);
         }
 
-        
-        public override bool Equals(Object o)
+
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is Unsigned<T>)) return false;
 
-            Unsigned <T> unsigned = (Unsigned <T>) o;
+            Unsigned<T> unsigned = (Unsigned<T>)o;
 
             return this.Content.Equals(unsigned.Content);
 
@@ -46,11 +40,10 @@ namespace Mx.Peppol.Common.Model
             return this.Content.GetHashCode();
         }
 
-        
+
         public override string ToString()
         {
             return "Unsigned{" + "content=" + this.Content + '}';
         }
     }
-
 }

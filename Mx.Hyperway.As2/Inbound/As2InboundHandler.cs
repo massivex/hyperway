@@ -128,7 +128,7 @@ namespace Mx.Hyperway.As2.Inbound
                 // Fetch calculated digest
                 var s = SHA1.Create();
                 var hash = s.ComputeHash(headerBytes.Concat(bodyBytes).ToArray());
-                Digest calculatedDigest = Digest.of(DigestMethod.SHA1, hash);
+                Digest calculatedDigest = Digest.Of(DigestMethod.Sha1, hash);
                 mdnBuilder.AddHeader(MdnHeader.ReceivedContentMic, new Mic(calculatedDigest));
 
                 var check = this.VerifySignature(mimeMessage.Body as MultipartSigned, out var signatures);
@@ -140,7 +140,7 @@ namespace Mx.Hyperway.As2.Inbound
                 var signature = signatures[0];
                 var certificate = signature.SignerCertificate as SecureMimeDigitalCertificate;
                 Debug.Assert(certificate != null, nameof(certificate) + " != null");
-                this.certificateValidator.validate(Service.AP, certificate.Certificate);
+                this.certificateValidator.validate(Service.Ap, certificate.Certificate);
 
                 // Create receipt (MDN)
                 mdnBuilder.AddHeader(MdnHeader.Disposition, Disposition.Processed);

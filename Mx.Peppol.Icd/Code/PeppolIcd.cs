@@ -203,7 +203,7 @@ namespace Mx.Peppol.Icd.Code
 
         public static readonly PeppolIcd FR_VAT = new PeppolIcd("FR:VAT", "9957", "French VAT number");
 
-        private static readonly Scheme SCHEME = Scheme.of("iso6523-actorid-upis");
+        private static readonly Scheme SCHEME = Scheme.Of("iso6523-actorid-upis");
 
         private static List<PeppolIcd> allIcds;
 

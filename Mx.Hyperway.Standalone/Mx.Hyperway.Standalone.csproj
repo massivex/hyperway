@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="ARSoft.Tools.Net">
+      <HintPath>..\third-party\arsoft-tools\ARSoft.Tools.Net.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\third-party\BouncyCastle.Crypto.dll</HintPath>
     </Reference>

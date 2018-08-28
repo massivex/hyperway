@@ -64,10 +64,10 @@ namespace Mx.Peppol.Lookup.Reader
                     try
                     {
                         serviceReferences.Add(
-                            ServiceReference.of(
+                            ServiceReference.Of(
                                 DocumentTypeIdentifierWithUri.of(
                                     parts[1],
-                                    Scheme.of(parts[0]),
+                                    Scheme.Of(parts[0]),
                                     new Uri(reference.Href))));
                     }
                     catch (Exception e)
@@ -83,7 +83,7 @@ namespace Mx.Peppol.Lookup.Reader
             }
         }
 
-        public PotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse)
+        public IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse)
             //  throws LookupException, PeppolSecurityException
         {
             try
@@ -111,30 +111,30 @@ namespace Mx.Peppol.Lookup.Reader
                     List<Endpoint> endpoints = new List<Endpoint>();
                     foreach (EndpointType endpointType in processType.ServiceEndpointList.Endpoint) {
                         endpoints.Add(
-                            Endpoint.of(
-                                TransportProfile.of(endpointType.TransportProfile),
+                            Endpoint.Of(
+                                TransportProfile.Of(endpointType.TransportProfile),
                                 new Uri(endpointType.EndpointURI),
                                 certificateInstance(endpointType.Certificate.Data)));
                     }
 
                     processMetadatas.Add(
-                        ProcessMetadata<Endpoint>.of(
-                            ProcessIdentifier.of(
+                        ProcessMetadata<Endpoint>.Of(
+                            ProcessIdentifier.Of(
                                 processType.ProcessIdentifier.PrimitiveValue,
-                                Scheme.of(processType.ProcessIdentifier.Scheme)),
+                                Scheme.Of(processType.ProcessIdentifier.Scheme)),
                             endpoints));
                 }
 
-                return Signed<ServiceMetadata>.of(
-                    ServiceMetadata.of(
+                return Signed<ServiceMetadata>.Of(
+                    ServiceMetadata.Of(
 
-                        ParticipantIdentifier.of(
+                        ParticipantIdentifier.Of(
                             serviceInformation.ParticipantIdentifier.PrimitiveValue,
-                            Scheme.of(serviceInformation.ParticipantIdentifier.Scheme)),
+                            Scheme.Of(serviceInformation.ParticipantIdentifier.Scheme)),
 
-                        DocumentTypeIdentifier.of(
+                        DocumentTypeIdentifier.Of(
                             serviceInformation.DocumentIdentifier.PrimitiveValue,
-                            Scheme.of(serviceInformation.DocumentIdentifier.Scheme)),
+                            Scheme.Of(serviceInformation.DocumentIdentifier.Scheme)),
 
                         processMetadatas),
                     signer);

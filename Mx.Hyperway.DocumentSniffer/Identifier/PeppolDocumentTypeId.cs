@@ -101,7 +101,7 @@
 
         public DocumentTypeIdentifier ToVefa()
         {
-            return DocumentTypeIdentifier.of(this.ToString());
+            return DocumentTypeIdentifier.Of(this.ToString());
         }
     }
 }

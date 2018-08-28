@@ -80,14 +80,14 @@
             String recipientId = options.Recipient;
             if (recipientId != null)
             {
-                parameters.Receiver = ParticipantIdentifier.of(recipientId);
+                parameters.Receiver = ParticipantIdentifier.Of(recipientId);
             }
 
             // --- Sender
             String senderId = options.Sender;
             if (senderId != null)
             {
-                parameters.Sender = ParticipantIdentifier.of(senderId);
+                parameters.Sender = ParticipantIdentifier.Of(senderId);
             }
 
             // --- Document type
@@ -95,7 +95,7 @@
             if (docType != null)
             {
                 String value = options.DocumentType;
-                parameters.DocType = DocumentTypeIdentifier.of(value);
+                parameters.DocType = DocumentTypeIdentifier.Of(value);
             }
 
             // --- Process type
@@ -103,7 +103,7 @@
             if (profileType != null)
             {
                 String value = options.ProfileType; // profileType.value(optionSet);
-                parameters.ProcessIdentifier = ProcessIdentifier.of(value);
+                parameters.ProcessIdentifier = ProcessIdentifier.Of(value);
             }
 
             // --- Probe
@@ -128,7 +128,7 @@
                         certificate = Validator.GetCertificate(inputStream);
                     }
 
-                    parameters.Endpoint = Endpoint.of(
+                    parameters.Endpoint = Endpoint.Of(
                         TransportProfile.AS2_1_0,
                         new Uri(destinationString),
                         certificate);

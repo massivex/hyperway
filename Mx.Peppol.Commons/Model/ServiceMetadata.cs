@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mx.Peppol.Common.Model
 {
     public class ServiceMetadata : AbstractServiceMetadata<Endpoint>
     {
-
-        private static readonly long serialVersionUID = -7523336374349545534L;
-
-        public static ServiceMetadata of(
+        public static ServiceMetadata Of(
             ParticipantIdentifier participantIdentifier,
             DocumentTypeIdentifier documentTypeIdentifier,
             List<ProcessMetadata<Endpoint>> processes)

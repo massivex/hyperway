@@ -77,7 +77,7 @@
                     {
                         var config = c.Resolve<Mode>();
                         return config.Defaults.Transports.Where(x => x.Enabled).OrderBy(x => x.Weight)
-                            .Select(x => TransportProfile.of(x.Profile)).ToList();
+                            .Select(x => TransportProfile.Of(x.Profile)).ToList();
                     }).Keyed<List<TransportProfile>>("prioritized")
                 .As<List<TransportProfile>>();
             // prioritized

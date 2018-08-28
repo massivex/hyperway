@@ -31,16 +31,16 @@ namespace Mx.Peppol.Icd
 
         public IcdIdentifier parse(String s) // throws PeppolParsingException
         {
-            return this.parse(ParticipantIdentifier.parse(s));
+            return this.parse(ParticipantIdentifier.Parse(s));
         }
 
         public IcdIdentifier parse(ParticipantIdentifier participantIdentifier) // throws PeppolParsingException
         {
             try
             {
-                String[] parts = participantIdentifier.getIdentifier().Split(new [] { ":" }, 2, StringSplitOptions.None);
+                String[] parts = participantIdentifier.Identifier.Split(new [] { ":" }, 2, StringSplitOptions.None);
                 return IcdIdentifier.of(
-                    this.findBySchemeAndCode(participantIdentifier.getScheme(), parts[0]),
+                    this.findBySchemeAndCode(participantIdentifier.Scheme, parts[0]),
                     parts[1]);
             }
             catch (ArgumentException e)

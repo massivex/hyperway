@@ -40,7 +40,7 @@
         {
             try
             {
-                var key = $"security.validator.{service.ToString()}";
+                var key = $"security.validator.{service.ToString().ToUpperInvariant()}";
                 this.validator.Validate(this.mode.GetValue(key), certificate);
             }
             catch (CertificateValidationException e)

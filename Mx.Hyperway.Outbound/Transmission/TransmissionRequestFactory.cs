@@ -74,7 +74,7 @@
                     using (SbdReader sbdReader = SbdReader.newInstance(peekingInputStream))
                     {
                         header = sbdReader.getHeader();
-                        span.Record(Annotations.Tag("identifier", header.getIdentifier().getIdentifier()));
+                        span.Record(Annotations.Tag("identifier", header.Identifier.Identifier));
                     }
                 } catch (SbdhException e) {
                     span.Record(Annotations.Tag("exception", e.Message));
@@ -97,7 +97,7 @@
                 try
                 {
                     header = this.contentDetector.Parse(payload.ToStream());
-                    span.Record(Annotations.Tag("identifier", header.getIdentifier().getIdentifier()));
+                    span.Record(Annotations.Tag("identifier", header.Identifier.Identifier));
                 }
                 catch (HyperwayContentException ex)
                 {

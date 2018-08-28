@@ -17,7 +17,7 @@
             "SHA1withRSA",
             "SHA-1",
             OiwObjectIdentifiers.IdSha1,
-            DigestMethod.SHA1,
+            DigestMethod.Sha1,
             TransportProfile.AS2_1_0);
 
         public static readonly SMimeDigestMethod Sha512 = new SMimeDigestMethod(
@@ -25,8 +25,8 @@
             "SHA512withRSA",
             "SHA-512",
             NistObjectIdentifiers.IdSha512,
-            DigestMethod.SHA512,
-            TransportProfile.of("busdox-transport-as2-ver1p0r1"));
+            DigestMethod.Sha512,
+            TransportProfile.Of("busdox-transport-as2-ver1p0r1"));
 
         private readonly string[] identifier;
 

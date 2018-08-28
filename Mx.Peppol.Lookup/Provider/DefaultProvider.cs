@@ -12,7 +12,7 @@ namespace Mx.Peppol.Lookup.Provider
 
         public Uri resolveDocumentIdentifiers(Uri location, ParticipantIdentifier participant)
         {
-            var relativeUri = new Uri($"/{participant.urlencoded()}");
+            var relativeUri = new Uri($"/{participant.Urlencoded()}");
             return new Uri(location, relativeUri);
         }
 
@@ -22,8 +22,8 @@ namespace Mx.Peppol.Lookup.Provider
             DocumentTypeIdentifier documentTypeIdentifier)
         {
             var relativeUriText =
-                $"/{participantIdentifier.urlencoded()}/services/{documentTypeIdentifier.urlencoded()}";
-            var relativeUri = new Uri(relativeUriText);
+                $"/{participantIdentifier.Urlencoded()}/services/{documentTypeIdentifier.Urlencoded()}";
+            var relativeUri = new Uri(relativeUriText, UriKind.Relative);
             return new Uri(location, relativeUri);
 
         }

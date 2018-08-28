@@ -46,7 +46,7 @@ namespace Mx.Peppol.Lookup.Util
             throw new LookupException(String.Format("Unknown namespace: {0}", response.Namespace));
         }
 
-        public PotentiallySigned<ServiceMetadata>
+        public IPotentiallySigned<ServiceMetadata>
             parseServiceMetadata(FetcherResponse fetcherResponse) // throws LookupException, PeppolSecurityException
         {
             FetcherResponse response = fetcherResponse;

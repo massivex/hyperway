@@ -40,7 +40,7 @@
             this.transmissionIdentifier = transmissionIdentifier;
             this.transmissionRequest = transmissionRequest;
             this.digest = digest;
-            this.receipt = Receipt.of("message/disposition-notification", nativeEvidenceBytes);
+            this.receipt = Receipt.Of("message/disposition-notification", nativeEvidenceBytes);
             this.timestamp = date;
 
             List<Receipt> allReceipts = new List<Receipt>();
@@ -66,12 +66,12 @@
 
         public byte[] GetNativeEvidenceBytes()
         {
-            return this.PrimaryReceipt().getValue();
+            return this.PrimaryReceipt().Value;
         }
 
         public TransportProfile GetProtocol()
         {
-            return this.GetEndpoint().getTransportProfile();
+            return this.GetEndpoint().TransportProfile;
         }
 
         public IList<Receipt> GetReceipts()
@@ -100,7 +100,7 @@
 
         public TransportProtocol GetTransportProtocol()
         {
-            return TransportProtocol.AS2;
+            return TransportProtocol.As2;
         }
 
 

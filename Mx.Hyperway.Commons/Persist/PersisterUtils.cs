@@ -18,8 +18,8 @@
         {
             string folder = Path.Combine(
                 baseFolder.FullName,
-                FileUtils.FilterString(header.getReceiver().getIdentifier()),
-                FileUtils.FilterString(header.getSender().getIdentifier()));
+                FileUtils.FilterString(header.Receiver.Identifier),
+                FileUtils.FilterString(header.Sender.Identifier));
 
             return Directory.CreateDirectory(folder);
         }

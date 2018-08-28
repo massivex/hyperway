@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Lang
 {
 
     public class PeppolLoadingException : PeppolException
     {
-        public PeppolLoadingException(String message)
+        public PeppolLoadingException(string message)
             : base(message)
         {
 
         }
 
-        public PeppolLoadingException(String message, Exception cause)
+        public PeppolLoadingException(string message, Exception cause)
             : base(message, cause)
         {
         }

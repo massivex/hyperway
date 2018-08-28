@@ -44,7 +44,7 @@
 
         public InstanceIdentifier ToVefa()
         {
-            return InstanceIdentifier.of(this.value);
+            return InstanceIdentifier.Of(this.value);
         }
     }
 }

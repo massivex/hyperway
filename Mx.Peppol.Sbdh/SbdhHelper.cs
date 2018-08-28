@@ -49,8 +49,8 @@ namespace Mx.Peppol.Sbdh
         public static Partner createPartner(ParticipantIdentifier participant)
         {
             PartnerIdentification partnerIdentification = new PartnerIdentification();
-            partnerIdentification.Authority = participant.getScheme().getIdentifier();
-            partnerIdentification.Value = participant.getIdentifier();
+            partnerIdentification.Authority = participant.Scheme.Identifier;
+            partnerIdentification.Value = participant.Identifier;
 
             Partner partner = new Partner();
             partner.Identifier = partnerIdentification;
@@ -61,10 +61,10 @@ namespace Mx.Peppol.Sbdh
         {
             Scope scope = new Scope();
             scope.Type = "PROCESSID";
-            scope.InstanceIdentifier = processIdentifier.getIdentifier();
-            if (!processIdentifier.getScheme().Equals(ProcessIdentifier.DEFAULT_SCHEME))
+            scope.InstanceIdentifier = processIdentifier.Identifier;
+            if (!processIdentifier.Scheme.Equals(ProcessIdentifier.DefaultScheme))
             {
-                scope.Identifier = processIdentifier.getScheme().getIdentifier();
+                scope.Identifier = processIdentifier.Scheme.Identifier;
             }
 
             return scope;
@@ -74,10 +74,10 @@ namespace Mx.Peppol.Sbdh
         {
             Scope scope = new Scope();
             scope.Type = "DOCUMENTID";
-            scope.InstanceIdentifier = documentTypeIdentifier.getIdentifier();
-            if (!documentTypeIdentifier.getScheme().Equals(DocumentTypeIdentifier.DEFAULT_SCHEME))
+            scope.InstanceIdentifier = documentTypeIdentifier.Identifier;
+            if (!documentTypeIdentifier.Scheme.Equals(DocumentTypeIdentifier.DefaultScheme))
             {
-                scope.Identifier = documentTypeIdentifier.getScheme().getIdentifier();
+                scope.Identifier = documentTypeIdentifier.Scheme.Identifier;
             }
 
             return scope;

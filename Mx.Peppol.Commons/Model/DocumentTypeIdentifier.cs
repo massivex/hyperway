@@ -1,67 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
-    /**
-     * DocumentTypeIdentifier is a combination of XML type and customizationId.
-     */
+    using Mx.Peppol.Common.Lang;
+
+    /// <summary>
+    /// DocumentTypeIdentifier is a combination of XML type and customizationId. 
+    /// </summary>
     public class DocumentTypeIdentifier : AbstractQualifiedIdentifier
     {
+        public static readonly Scheme DefaultScheme = Scheme.Of("busdox-docid-qns");
 
-    private static readonly long serialVersionUID = -3748163459655880167L;
+        public static DocumentTypeIdentifier Of(string identifier)
+        {
+            return new DocumentTypeIdentifier(identifier, DefaultScheme);
+        }
 
-    public static readonly Scheme DEFAULT_SCHEME = Scheme.of("busdox-docid-qns");
+        public static DocumentTypeIdentifier Of(string identifier, Scheme scheme)
+        {
+            return new DocumentTypeIdentifier(identifier, scheme);
+        }
 
-    public static DocumentTypeIdentifier of(String identifier)
-    {
-        return new DocumentTypeIdentifier(identifier, DEFAULT_SCHEME);
+        public static DocumentTypeIdentifier Parse(string str)
+        {
+            string[] parts = str.Split(new[] { "::" }, 2, StringSplitOptions.None);
+            if (parts.Length != 2)
+            {
+                throw new PeppolParsingException("Unable to parse document type identifier '{0]'.");
+            }
+
+            return Of(parts[1], Scheme.Of(parts[0]));
+        }
+
+        protected DocumentTypeIdentifier(string value, Scheme scheme)
+            : base(value, scheme)
+        {
+
+        }
+
+        public override bool Equals(object o)
+        {
+            if (this == o) return true;
+            if (!(o is DocumentTypeIdentifier)) return false;
+
+            var that = (DocumentTypeIdentifier)o;
+
+            return this.ToString().Equals(that.ToString());
+        }
+
+
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
+
+
+        public override string ToString()
+        {
+            return $"{this.Scheme}::{this.Identifier}";
+        }
     }
-
-    public static DocumentTypeIdentifier of(String identifier, Scheme scheme)
-    {
-        return new DocumentTypeIdentifier(identifier, scheme);
-    }
-
-    public static DocumentTypeIdentifier parse(String str) // throws PeppolParsingException
-    {
-        String[] parts;
-        // TODO: different split method
-        throw new NotSupportedException();
-        // parts = str.Split(new string[] { "::" },  2);
-        // if (parts.length != 2)
-        // throw new PeppolParsingException(String.format("Unable to parse document type identifier '%s'.", str));
-        // return of(parts[1], Scheme.of(parts[0]));
-    }
-
-    protected DocumentTypeIdentifier(String value, Scheme scheme): base(value, scheme)
-    {
-        
-    }
-
-    
-    public override bool Equals(Object o)
-    {
-        if (this == o) return true;
-        if (!(o is DocumentTypeIdentifier)) return false;
-
-        DocumentTypeIdentifier that = (DocumentTypeIdentifier)o;
-
-        return this.ToString().Equals(that.ToString());
-    }
-
-
-    public override int GetHashCode()
-    {
-        return this.ToString().GetHashCode();
-    }
-
-    
-    public override String ToString()
-    {
-        return $"{this.scheme}::{this.identifier}";
-    }
-}
-
 }

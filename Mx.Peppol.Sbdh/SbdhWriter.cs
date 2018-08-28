@@ -43,22 +43,22 @@ namespace Mx.Peppol.Sbdh
                 sbdh.HeaderVersion = "1.0";
 
                 // Sender
-                sbdh.Sender = new[] { SbdhHelper.createPartner(header.getSender()) };
+                sbdh.Sender = new[] { SbdhHelper.createPartner(header.Sender) };
 
                 // Receiver
-                sbdh.Receiver = new[] { SbdhHelper.createPartner(header.getReceiver()) };
+                sbdh.Receiver = new[] { SbdhHelper.createPartner(header.Receiver) };
 
                 sbdh.DocumentIdentification = new DocumentIdentification();
                 // Standard
-                sbdh.DocumentIdentification.Standard = header.getInstanceType().getStandard();
+                sbdh.DocumentIdentification.Standard = header.InstanceType.Standard;
                 // TypeVersion
-                sbdh.DocumentIdentification.TypeVersion = header.getInstanceType().getVersion();
+                sbdh.DocumentIdentification.TypeVersion = header.InstanceType.Version;
                 // Identifier
-                sbdh.DocumentIdentification.InstanceIdentifier = header.getIdentifier().getIdentifier();
+                sbdh.DocumentIdentification.InstanceIdentifier = header.Identifier.Identifier;
                 // Type
-                sbdh.DocumentIdentification.Type = header.getInstanceType().getType();
+                sbdh.DocumentIdentification.Type = header.InstanceType.Type;
                 // CreationDateAndTime
-                var creationTime = header.getCreationTimestamp();
+                var creationTime = header.CreationTimestamp;
                 if (creationTime == null)
                 {
                     throw new InvalidOperationException("CreationTimestamp cannot be null");
@@ -68,9 +68,9 @@ namespace Mx.Peppol.Sbdh
                 sbdh.BusinessScope = new[]
                                          {
                                              // DocumentID
-                                             SbdhHelper.createScope(header.getDocumentType()),
+                                             SbdhHelper.createScope(header.DocumentType),
                                              // ProcessID
-                                             SbdhHelper.createScope(header.getProcess())
+                                             SbdhHelper.createScope(header.Process)
                                          };
 
                 XmlTools.WriteXmlFragment(streamWriter, sbdh);

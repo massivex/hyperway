@@ -168,7 +168,7 @@
                     digest = BcHelper.Hash(m.ToArray(), digestMethod.GetAlgorithm());
                 }
 
-                return Digest.of(digestMethod.GetDigestMethod(), digest);
+                return Digest.Of(digestMethod.GetDigestMethod(), digest);
             }
             catch (IOException e)
             {

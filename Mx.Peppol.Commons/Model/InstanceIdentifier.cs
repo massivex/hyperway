@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
     public class InstanceIdentifier : AbstractSimpleIdentifier
     {
-        public static InstanceIdentifier generateUUID()
+        public static InstanceIdentifier GenerateUuid()
         {
-            return of(Guid.NewGuid().ToString());
+            return Of(Guid.NewGuid().ToString());
         }
 
-        public static InstanceIdentifier of(String value)
+        public static InstanceIdentifier Of(string value)
         {
             return new InstanceIdentifier(value);
         }
 
-        public InstanceIdentifier(String value)
+        public InstanceIdentifier(string value)
             : base(value)
         {
 

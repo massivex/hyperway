@@ -31,7 +31,7 @@
     public ProcessIdentifier FetchProcessTypeId()
     {
         String value = this.RetriveValueForXpath("//cbc:ProfileID");
-        return ProcessIdentifier.of(value);
+        return ProcessIdentifier.Of(value);
     }
 
     public PeppolDocumentTypeId FetchDocumentTypeId()

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
@@ -8,16 +6,16 @@ namespace Mx.Peppol.Common.Model
 
     using Org.BouncyCastle.X509;
 
-    public class Signed<T> : PotentiallySigned<T>
+    public class Signed<T> : IPotentiallySigned<T>
     {
-        public static Signed<T> of(T content, X509Certificate certificate, DateTime? timestamp)
+        public static Signed<T> Of(T content, X509Certificate certificate, DateTime? timestamp)
         {
             return new Signed<T>(content, certificate, timestamp);
         }
 
-        public static Signed<T> of(T content, X509Certificate certificate)
+        public static Signed<T> Of(T content, X509Certificate certificate)
         {
-            return of(content, certificate, null);
+            return Of(content, certificate, null);
         }
 
         private Signed(T content, X509Certificate certificate, DateTime? timestamp)
@@ -29,9 +27,9 @@ namespace Mx.Peppol.Common.Model
 
         public T Content { get; }
 
-        public PotentiallySigned<S> ofSubset<S>(S s)
+        public IPotentiallySigned<TS> OfSubset<TS>(TS s)
         {
-            return new Signed<S>(s, this.Certificate, this.Timestamp);
+            return new Signed<TS>(s, this.Certificate, this.Timestamp);
         }
 
         public X509Certificate Certificate { get; }

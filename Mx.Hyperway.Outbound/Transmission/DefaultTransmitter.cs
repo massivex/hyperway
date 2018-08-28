@@ -90,7 +90,7 @@
                 {
                     var endpoint = this.lookupService.Lookup(transmissionMessage.GetHeader(), lookupSpan);
                     lookupSpan.Record(
-                        Annotations.Tag("transport profile", endpoint.getTransportProfile().getIdentifier()));
+                        Annotations.Tag("transport profile", endpoint.TransportProfile.Identifier));
                     transmissionRequest = new DefaultTransmissionRequest(transmissionMessage, endpoint);
                 }
                 catch (HyperwayTransmissionException e)
@@ -112,7 +112,7 @@
             ITransmissionResponse transmissionResponse;
             try
             {
-                TransportProfile transportProfile = transmissionRequest.GetEndpoint().getTransportProfile();
+                TransportProfile transportProfile = transmissionRequest.GetEndpoint().TransportProfile;
                 IMessageSender messageSender = this.messageSenderFactory.GetMessageSender(transportProfile);
                 transmissionResponse = messageSender.Send(transmissionRequest, span);
             }

@@ -6,71 +6,51 @@ namespace Mx.Peppol.Common.Model
 
     using Org.BouncyCastle.X509;
 
-    public class Endpoint : SimpleEndpoint
+    public class Endpoint : ISimpleEndpoint
     {
-
-        private static readonly long serialVersionUID = 5892469135654700883L;
-
-        private readonly TransportProfile transportProfile;
-
-        private readonly Uri address;
-
-        private readonly X509Certificate certificate;
-
-        public static Endpoint of(TransportProfile transportProfile, Uri address, X509Certificate certificate)
+        public static Endpoint Of(TransportProfile transportProfile, Uri address, X509Certificate certificate)
         {
             return new Endpoint(transportProfile, address, certificate);
         }
 
         private Endpoint(TransportProfile transportProfile, Uri address, X509Certificate certificate)
         {
-            this.transportProfile = transportProfile;
-            this.address = address;
-            this.certificate = certificate;
+            this.TransportProfile = transportProfile;
+            this.Address = address;
+            this.Certificate = certificate;
         }
 
-        public TransportProfile getTransportProfile()
-        {
-            return transportProfile;
-        }
+        public TransportProfile TransportProfile { get; }
 
-        public Uri getAddress()
-        {
-            return address;
-        }
+        public Uri Address { get; }
 
-        public X509Certificate getCertificate()
-        {
-            return certificate;
-        }
+        public X509Certificate Certificate { get; }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is Endpoint)) return false;
 
             Endpoint endpoint = (Endpoint)o;
 
-            if (!this.transportProfile.Equals(endpoint.transportProfile)) return false;
-            if (!this.address.Equals(endpoint.address)) return false;
-            return !(this.certificate != null
-                         ? !this.certificate.Equals(endpoint.certificate)
-                         : endpoint.certificate != null);
+            if (!this.TransportProfile.Equals(endpoint.TransportProfile)) return false;
+            if (!this.Address.Equals(endpoint.Address)) return false;
+            return !(!this.Certificate?.Equals(endpoint.Certificate) ?? endpoint.Certificate != null);
 
         }
 
         public override int GetHashCode()
         {
-            int result = this.transportProfile.GetHashCode();
-            result = 31 * result + this.address.GetHashCode();
-            result = 31 * result + (this.certificate != null ? this.certificate.GetHashCode() : 0);
+            int result = this.TransportProfile.GetHashCode();
+            result = 31 * result + this.Address.GetHashCode();
+            result = 31 * result + (this.Certificate != null ? this.Certificate.GetHashCode() : 0);
             return result;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
-            return "Endpoint{" + "transportProfile=" + this.transportProfile + ", address=" + this.address
-                   + ", certificate=" + this.certificate + '}';
+            return "Endpoint{" + "transportProfile=" + this.TransportProfile + ", address=" + this.Address
+                   + ", certificate=" + this.Certificate + '}';
         }
     }
 }

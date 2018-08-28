@@ -7,55 +7,45 @@ namespace Mx.Peppol.Common.Model
 
     public class Digest
     {
-        private readonly DigestMethod method;
-
-        private readonly byte[] value;
-
-        public static Digest of(DigestMethod method, byte[] value)
+        public static Digest Of(DigestMethod method, byte[] value)
         {
             return new Digest(method, value);
         }
 
         private Digest(DigestMethod method, byte[] value)
         {
-            this.method = method;
-            this.value = value;
+            this.Method = method;
+            this.Value = value;
         }
 
-        public DigestMethod getMethod()
-        {
-            return method;
-        }
+        public DigestMethod Method { get; }
 
-        public byte[] getValue()
-        {
-            return value;
-        }
+        public byte[] Value { get; }
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is Digest)) return false;
 
             Digest digest = (Digest)o;
 
-            if (this.method != digest.method) return false;
-            return Array.Equals(this.value, digest.value);
+            if (this.Method != digest.Method) return false;
+            return Array.Equals(this.Value, digest.Value);
 
         }
 
 
         public override int GetHashCode()
         {
-            int result = this.method.GetHashCode();
-            result = 31 * result + this.value.GetHashCode();
+            int result = this.Method.GetHashCode();
+            result = 31 * result + this.Value.GetHashCode();
             return result;
         }
 
 
-        public override String ToString()
+        public override string ToString()
         {
-            return "Digest{" + "method=" + this.method + ", value=" + this.value.ToStringValues() + '}';
+            return "Digest{" + "method=" + this.Method + ", value=" + this.Value.ToStringValues() + '}';
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mx.Peppol.Common.Util;
-
-namespace Mx.Peppol.Common.Model
+﻿namespace Mx.Peppol.Common.Model
 {
     using System.Linq;
 
@@ -11,64 +6,50 @@ namespace Mx.Peppol.Common.Model
 
     public class Receipt
     {
-
-        private static readonly long serialVersionUID = -2334768925814974368L;
-
-        private readonly String type;
-
-        private readonly byte[] value;
-
-        public static Receipt of(String type, byte[] value)
+        public static Receipt Of(string type, byte[] value)
         {
             return new Receipt(type, value);
         }
 
-        public static Receipt of(byte[] value)
+        public static Receipt Of(byte[] value)
         {
-            return of(null, value);
+            return Of(null, value);
         }
 
-        private Receipt(String type, byte[] value)
+        private Receipt(string type, byte[] value)
         {
-            this.type = type;
-            this.value = value;
+            this.Type = type;
+            this.Value = value;
         }
 
-        public String getType()
-        {
-            return this.type;
-        }
+        public string Type { get; }
 
-        public byte[] getValue()
-        {
-            return this.value;
-        }
+        public byte[] Value { get; }
 
-
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is Receipt)) return false;
 
             Receipt receipt = (Receipt)o;
 
-            if (!type?.Equals(receipt.type) ?? receipt.type != null) return false;
-            return this.value.SequenceEqual(receipt.value);
+            if (!this.Type?.Equals(receipt.Type) ?? receipt.Type != null) return false;
+            return this.Value.SequenceEqual(receipt.Value);
 
         }
 
 
         public override int GetHashCode()
         {
-            int result = this.type != null ? this.type.GetHashCode() : 0;
-            result = 31 * result + this.value.GetHashCode();
+            int result = this.Type != null ? this.Type.GetHashCode() : 0;
+            result = 31 * result + this.Value.GetHashCode();
             return result;
         }
 
 
         public override string ToString()
         {
-            return "Receipt{" + "type='" + this.type + '\'' + ", value=" + this.value.ToStringValues() + '}';
+            return "Receipt{" + "type='" + this.Type + '\'' + ", value=" + this.Value.ToStringValues() + '}';
         }
     }
 

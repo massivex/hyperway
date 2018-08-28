@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Common.Model
 {
@@ -8,51 +7,39 @@ namespace Mx.Peppol.Common.Model
 
     public class ServiceReference
     {
-
-        private DocumentTypeIdentifier documentTypeIdentifier;
-
-        private IEnumerable<ProcessIdentifier> processIdentifiers;
-
-        public static ServiceReference of(DocumentTypeIdentifier documentTypeIdentifier, params ProcessIdentifier[] processIdentifiers)
+        public static ServiceReference Of(DocumentTypeIdentifier documentTypeIdentifier, params ProcessIdentifier[] processIdentifiers)
         {
             return new ServiceReference(documentTypeIdentifier, processIdentifiers);
         }
 
-        public static ServiceReference of(DocumentTypeIdentifier documentTypeIdentifier, IEnumerable<ProcessIdentifier> processIdentifiers)
+        public static ServiceReference Of(DocumentTypeIdentifier documentTypeIdentifier, IEnumerable<ProcessIdentifier> processIdentifiers)
         {
             return new ServiceReference(documentTypeIdentifier, processIdentifiers);
         }
 
         private ServiceReference(DocumentTypeIdentifier documentTypeIdentifier, IEnumerable<ProcessIdentifier> processIdentifiers)
         {
-            this.documentTypeIdentifier = documentTypeIdentifier;
-            this.processIdentifiers = processIdentifiers;
+            this.DocumentTypeIdentifier = documentTypeIdentifier;
+            this.ProcessIdentifiers = processIdentifiers;
         }
 
-        public DocumentTypeIdentifier getDocumentTypeIdentifier()
-        {
-            return documentTypeIdentifier;
-        }
+        public DocumentTypeIdentifier DocumentTypeIdentifier { get; }
 
-        public IEnumerable<ProcessIdentifier> getProcessIdentifiers()
-        {
-            return processIdentifiers;
-        }
+        public IEnumerable<ProcessIdentifier> ProcessIdentifiers { get; }
 
-        
         public override bool Equals(Object o)
         {
             if (this == o) return true;
             if (!(o is ServiceReference)) return false;
 
             ServiceReference that = (ServiceReference)o;
-            return Object.Equals(documentTypeIdentifier, that.documentTypeIdentifier) &&
-                   Object.Equals(processIdentifiers, that.processIdentifiers);
+            return Object.Equals(this.DocumentTypeIdentifier, that.DocumentTypeIdentifier) &&
+                   Object.Equals(this.ProcessIdentifiers, that.ProcessIdentifiers);
         }
 
         public override int GetHashCode()
         {
-            return Objects.HashAll(documentTypeIdentifier, processIdentifiers);
+            return Objects.HashAll(this.DocumentTypeIdentifier, this.ProcessIdentifiers);
         }
     }
 

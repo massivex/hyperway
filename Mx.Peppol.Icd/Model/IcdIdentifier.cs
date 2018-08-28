@@ -39,7 +39,7 @@ namespace Mx.Peppol.Icd.Model
 
     public ParticipantIdentifier toParticipantIdentifier()
     {
-        return ParticipantIdentifier.of($"{this.icd.getCode()}:{this.identifier}", this.icd.getScheme());
+        return ParticipantIdentifier.Of($"{this.icd.getCode()}:{this.identifier}", this.icd.getScheme());
     }
 
     public String toString()

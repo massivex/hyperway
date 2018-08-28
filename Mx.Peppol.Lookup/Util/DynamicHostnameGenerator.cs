@@ -60,7 +60,7 @@ namespace Mx.Peppol.Lookup.Util
             try
             {
                 // Create digest based on participant identifier.
-                var utf8Identifier = Encoding.UTF8.GetBytes(participantIdentifier.getIdentifier());
+                var utf8Identifier = Encoding.UTF8.GetBytes(participantIdentifier.Identifier);
                 byte[] digest = DigestUtilities.CalculateDigest(this.digestAlgorithm, utf8Identifier);
 
                 // Create hex of digest.
@@ -73,7 +73,7 @@ namespace Mx.Peppol.Lookup.Util
 
             return String.Format(
                 "{0}{1}.{2}.{3}",
-                this.prefix, receiverHash, participantIdentifier.getScheme().getIdentifier(), hostname);
+                this.prefix, receiverHash, participantIdentifier.Scheme.Identifier, hostname);
         }
     }
 }

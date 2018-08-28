@@ -12,7 +12,7 @@ namespace Mx.Peppol.Lookup.Api
 
         List<ServiceReference> parseServiceGroup(FetcherResponse fetcherResponse); // throws LookupException;
 
-        PotentiallySigned<ServiceMetadata>
+        IPotentiallySigned<ServiceMetadata>
             parseServiceMetadata(FetcherResponse fetcherResponse); // throws LookupException, PeppolSecurityException;
     }
 

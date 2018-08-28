@@ -1,38 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Mx.Peppol.Common.Model
 {
     using Mx.Peppol.Common.Api;
     using Mx.Peppol.Common.Util;
 
-    public abstract class AbstractQualifiedIdentifier : QualifiedIdentifier
+    public abstract class AbstractQualifiedIdentifier : IQualifiedIdentifier
     {
-
-        protected readonly Scheme scheme;
-
-        protected readonly String identifier;
-
-        public AbstractQualifiedIdentifier(String identifier, Scheme scheme)
+        protected AbstractQualifiedIdentifier(string identifier, Scheme scheme)
         {
-            this.scheme = scheme;
-            this.identifier = identifier == null ? null : identifier.Trim();
+            this.Scheme = scheme;
+            this.Identifier = identifier?.Trim();
         }
 
-        public Scheme getScheme()
-        {
-            return scheme;
-        }
+        public Scheme Scheme { get; }
 
-        public String getIdentifier()
-        {
-            return identifier;
-        }
+        public string Identifier { get; }
 
-        public String urlencoded()
+        public string Urlencoded()
         {
-            return ModelUtils.urlencode("%s::%s", this.scheme.getIdentifier(), this.identifier);
+            return ModelUtils.Urlencode("{0}::{1}", this.Scheme.Identifier, this.Identifier);
         }
     }
 }

@@ -35,12 +35,12 @@
 
         public PeppolStandardBusinessHeader(Header header)
         {
-            this.SenderId = header.getSender();
-            this.RecipientId = header.getReceiver();
-            this.CreationDateAndTime = header.getCreationTimestamp();
-            this.DocumentTypeIdentifier = header.getDocumentType();
-            this.ProfileTypeIdentifier = header.getProcess();
-            this.InstanceId = new InstanceId(header.getIdentifier().getIdentifier());
+            this.SenderId = header.Sender;
+            this.RecipientId = header.Receiver;
+            this.CreationDateAndTime = header.CreationTimestamp;
+            this.DocumentTypeIdentifier = header.DocumentType;
+            this.ProfileTypeIdentifier = header.Process;
+            this.InstanceId = new InstanceId(header.Identifier.Identifier);
         }
 
         /// <summary>
@@ -123,15 +123,15 @@
 
         public Header ToVefa()
         {
-            PeppolDocumentTypeId documentTypeId = Identifier.PeppolDocumentTypeId.ValueOf(this.DocumentTypeIdentifier.getIdentifier());
+            PeppolDocumentTypeId documentTypeId = Identifier.PeppolDocumentTypeId.ValueOf(this.DocumentTypeIdentifier.Identifier);
 
-            return Header.of(
+            return Header.Of(
                 this.SenderId,
                 this.RecipientId,
                 this.ProfileTypeIdentifier,
                 this.DocumentTypeIdentifier,
-                this.InstanceId == null ? InstanceIdentifier.generateUUID() : this.InstanceId.ToVefa(),
-                    InstanceType.of(
+                this.InstanceId == null ? InstanceIdentifier.GenerateUuid() : this.InstanceId.ToVefa(),
+                    InstanceType.Of(
                             documentTypeId.RootNameSpace,
                             documentTypeId.LocalName,
                             documentTypeId.Version                    ),
