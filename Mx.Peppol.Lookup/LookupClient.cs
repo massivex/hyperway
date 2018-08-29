@@ -39,41 +39,6 @@ namespace Mx.Peppol.Lookup
             this.validator = validator;
         }
 
-        [Obsolete]
-        public List<DocumentTypeIdentifier>
-            getDocumentIdentifiers(ParticipantIdentifier participantIdentifier) // throws LookupException
-        {
-            List<DocumentTypeIdentifier> documentTypeIdentifiers = new List<DocumentTypeIdentifier>();
-
-            foreach (ServiceReference serviceReference in this.getServiceReferences(participantIdentifier))
-            {
-                documentTypeIdentifiers.Add(serviceReference.DocumentTypeIdentifier);
-            }
-
-            return documentTypeIdentifiers;
-        }
-
-        public List<ServiceReference>
-            getServiceReferences(ParticipantIdentifier participantIdentifier) // throws LookupException
-        {
-            Uri location = this.locator.lookup(participantIdentifier);
-            Uri provider = this.provider.resolveDocumentIdentifiers(location, participantIdentifier);
-
-            FetcherResponse fetcherResponse;
-            try
-            {
-                fetcherResponse = this.fetcher.fetch(provider);
-            }
-            catch (FileNotFoundException e)
-            {
-                throw new LookupException(
-                    String.Format("Receiver ({0}) not found.", participantIdentifier),
-                    e);
-            }
-
-            return this.reader.parseServiceGroup(fetcherResponse);
-        }
-
         public ServiceMetadata getServiceMetadata(
             ParticipantIdentifier participantIdentifier,
             DocumentTypeIdentifier documentTypeIdentifier) // throws LookupException, PeppolSecurityException

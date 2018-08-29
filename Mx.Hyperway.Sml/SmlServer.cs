@@ -2,10 +2,12 @@
 
 namespace Mx.Hyperway.Sml
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
 
+    using ARSoft.Tools.Net;
     using ARSoft.Tools.Net.Dns;
 
     public class SmlServer
@@ -14,12 +16,14 @@ namespace Mx.Hyperway.Sml
 
         private readonly DnsServer server;
 
+        private readonly IPAddress serverIP;
+
         public SmlServer(SmlServerOptions options)
         {
             this.options = options;
 
-            var ip = IPAddress.Parse(this.options.IPAddress);
-            this.server = new DnsServer(ip, 5, 5);
+            this.serverIP = IPAddress.Parse(this.options.IPAddress);
+            this.server = new DnsServer(this.serverIP, 5, 5);
             this.server.QueryReceived += this.SOnQueryReceived;
         }
 
@@ -50,7 +54,12 @@ namespace Mx.Hyperway.Sml
             var unknowQuestion = false;
             foreach (var question in dnsMessage.Questions)
             {
-                if (question.RecordType != RecordType.Naptr)
+                Console.WriteLine($"Request {question.RecordType} for {question.Name}");
+                if (question.RecordType != RecordType.Naptr
+                        && question.RecordType != RecordType.A
+                        && question.RecordType != RecordType.Txt
+                        && question.RecordType != RecordType.Ptr
+                        && question.RecordType != RecordType.Aaaa)
                 {
                     unknowQuestion = true;
                     break;
@@ -59,16 +68,37 @@ namespace Mx.Hyperway.Sml
                 var query = question.Name.ToString();
                 var smlRequest = SmlRequest.Parse(query);
                 var smpRecord = this.Find(smlRequest);
+                var response = new DnsMessage();
                 if (smpRecord != null)
                 {
-                    string services = "Meta:SMP";
-                    string flags = "U";
-                    string regExp = smpRecord.RegExp;
+                    List<DnsRecordBase> answers = new List<DnsRecordBase>();
+                    if (question.RecordType == RecordType.A
+                        || question.RecordType == RecordType.Ptr
+                        || question.RecordType == RecordType.Aaaa
+                        || question.RecordType == RecordType.Txt)
+                    {
+                        response.IsEDnsEnabled = true;
+                        response.IsRecursionDesired = true;
+                        response.IsQuery = true;
+                        response.ReturnCode = ReturnCode.NotImplemented;
+                    }
+                    else if (question.RecordType == RecordType.Naptr)
+                    {
+                        string services = "Meta:SMP";
+                        string flags = "U";
+                        string regExp = smpRecord.RegExp;
 
-                    NaptrRecord rec = new NaptrRecord(question.Name, 1000, 0, 0, flags, services, regExp, null);
+                        NaptrRecord rec = new NaptrRecord(question.Name, 1000, 0, 0, flags, services, regExp, null);
+                        answers.Add(rec);
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"RecordType not suppoerted '{question.RecordType}'");
+                    }
 
-                    var response = new DnsMessage();
-                    response.AnswerRecords.Add(rec);
+
+                    response.AnswerRecords.AddRange(answers);
+
                     eventargs.Response = response;
                 }
             }

@@ -330,7 +330,12 @@ namespace Mx.Xml.CertValidator
 //            LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.DefaultNamespaceURI = "http://www.fpml.org/2003/FpML-4-0";
 //            LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.NamespaceAliases.Add("dsig", "http://www.w3.org/2000/09/xmldsig#");
 
-            LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.NamespaceAliases.Add("xs", "http://www.w3.org/2001/XMLSchema-instance");
+            var aliases = LiquidTechnologies.Runtime.Standard20.SerializationContext.Default.NamespaceAliases;
+            if (aliases.ContainsKey("xs"))
+            {
+                aliases.Add("xs", "http://www.w3.org/2001/XMLSchema-instance");
+            }
+            
 
 // ##HAND_CODED_BLOCK_END ID="Namespace Declarations"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
 

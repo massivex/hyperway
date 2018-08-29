@@ -23,31 +23,8 @@ namespace Mx.Peppol.Lookup.Util
         {
             this.metadataReaders = metadataReaders;
         }
-        // private static readonly List<MetadataReader> METADATA_READERS = Lists.newArrayList(ServiceLoader.load(MetadataReader.class));
 
-        public List<ServiceReference> parseServiceGroup(FetcherResponse fetcherResponse) // throws LookupException
-        {
-            FetcherResponse response = fetcherResponse;
-
-            if (response.Namespace == null)
-            {
-                response = detect(response);
-            }
-
-            foreach (MetadataReader metadataReader in this.metadataReaders)
-            {
-                NamespaceAttribute nsAttr = (NamespaceAttribute) metadataReader.GetType().GetCustomAttribute(typeof(NamespaceAttribute), true);
-                if (nsAttr.Value.EqualsIgnoreCase(response.Namespace)) {
-                    return metadataReader.parseServiceGroup(response);
-                }
-
-            }
-
-            throw new LookupException(String.Format("Unknown namespace: {0}", response.Namespace));
-        }
-
-        public IPotentiallySigned<ServiceMetadata>
-            parseServiceMetadata(FetcherResponse fetcherResponse) // throws LookupException, PeppolSecurityException
+        public IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse)
         {
             FetcherResponse response = fetcherResponse;
 

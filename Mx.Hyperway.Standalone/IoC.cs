@@ -85,6 +85,9 @@
             builder.RegisterType<Bdxr201605Reader>()
                 .Keyed<Bdxr201605Reader>("reader-protocols")
                 .As<MetadataReader>();
+            builder.RegisterType<BusdoxReader>()
+                .Keyed<BusdoxReader>("reader-protocols")
+                .As<MetadataReader>();
 
 
             Container = builder.Build();

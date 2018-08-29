@@ -27,15 +27,19 @@ namespace Mx.Peppol.Lookup.Locator
      */
     public class BdxlLocator : AbstractLocator
     {
+        private readonly string sml;
 
         private DynamicHostnameGenerator hostnameGenerator;
+
+        private DnsClient dnsClient;
 
         public BdxlLocator(Mode mode)
         : this(
                 mode.GetValue("lookup.locator.bdxl.prefix"),
                 mode.GetValue("lookup.locator.hostname"),
                 mode.GetValue("lookup.locator.bdxl.algorithm"),
-                EncodingUtils.get(mode.GetValue("lookup.locator.bdxl.encoding")))
+                EncodingUtils.get(mode.GetValue("lookup.locator.bdxl.encoding")),
+                mode.GetValue("lookup.locator.sml"))
         {
            
         }
@@ -45,11 +49,11 @@ namespace Mx.Peppol.Lookup.Locator
          *
          * @param hostname Hostname used as base for lookup.
          */
-        public BdxlLocator(String hostname)
-            : this(hostname, "SHA-256")
-        {
+        //public BdxlLocator(string hostname)
+        //    : this(hostname, "SHA-256")
+        //{
 
-        }
+        //}
 
         /**
          * Initiate a new instance of BDXL lookup functionality.
@@ -57,24 +61,24 @@ namespace Mx.Peppol.Lookup.Locator
          * @param hostname        Hostname used as base for lookup.
          * @param digestAlgorithm Algorithm used for generation of hostname.
          */
-        public BdxlLocator(String hostname, String digestAlgorithm)
-            : this("", hostname, digestAlgorithm)
-        {
+        //public BdxlLocator(string hostname, string digestAlgorithm)
+        //    : this("", hostname, digestAlgorithm)
+        //{
 
-        }
+        //}
 
-        /**
-         * Initiate a new instance of BDXL lookup functionality.
-         *
-         * @param prefix          Value attached in front of calculated hash.
-         * @param hostname        Hostname used as base for lookup.
-         * @param digestAlgorithm Algorithm used for generation of hostname.
-         */
-        public BdxlLocator(String prefix, String hostname, String digestAlgorithm)
-            : this(prefix, hostname, digestAlgorithm, EncodingUtils.get(BaseEncodingType.Base32))
-        {
+        ///**
+        // * Initiate a new instance of BDXL lookup functionality.
+        // *
+        // * @param prefix          Value attached in front of calculated hash.
+        // * @param hostname        Hostname used as base for lookup.
+        // * @param digestAlgorithm Algorithm used for generation of hostname.
+        // */
+        //public BdxlLocator(string prefix, string hostname, string digestAlgorithm)
+        //    : this(prefix, hostname, digestAlgorithm, EncodingUtils.get(BaseEncodingType.Base32))
+        //{
 
-        }
+        //}
 
         /**
          * Initiate a new instance of BDXL lookup functionality.
@@ -84,15 +88,16 @@ namespace Mx.Peppol.Lookup.Locator
          * @param digestAlgorithm Algorithm used for generation of hostname.
          * @param encoding        Encoding of hash for hostname.
          */
-        public BdxlLocator(String prefix, String hostname, String digestAlgorithm, IBaseEncoding encoding)
+        private BdxlLocator(string prefix, string hostname, string digestAlgorithm, IBaseEncoding encoding, string sml)
         {
-            hostnameGenerator = new DynamicHostnameGenerator(prefix, hostname, digestAlgorithm, encoding);
+            this.sml = sml;
+            this.hostnameGenerator = new DynamicHostnameGenerator(prefix, hostname, digestAlgorithm, encoding);
         }
 
-        public override Uri lookup(ParticipantIdentifier participantIdentifier) // throws LookupException
+        public override Uri lookup(ParticipantIdentifier participantIdentifier)
         {
             // Create hostname for participant identifier.
-            string hostname = hostnameGenerator.Generate(participantIdentifier).ReplaceAll("=*", "");
+            string hostname = this.hostnameGenerator.Generate(participantIdentifier).ReplaceAll("=*", "");
 
             try
             {
@@ -100,7 +105,8 @@ namespace Mx.Peppol.Lookup.Locator
                 // Fetch all records of type NAPTR registered on hostname.
                 // Record[] records = new Lookup<,>(hostname, Type.NAPTR).run();
                 var dn = DomainName.Parse(hostname);
-                var records = DnsClient.Default.Resolve(dn, RecordType.Naptr, RecordClass.Any).AnswerRecords;
+                var client = this.GetDnsClient();
+                var records = client.Resolve(dn, RecordType.Naptr, RecordClass.Any).AnswerRecords;
                 if (records == null || records.Count == 0)
                 {
                     throw new LookupException($"Identifier '{participantIdentifier}' not registered in SML.");
@@ -116,7 +122,7 @@ namespace Mx.Peppol.Lookup.Locator
                     if ("Meta:SMP".Equals(naptrRecord.Services) && "U".EqualsIgnoreCase(naptrRecord.Flags))
                     {
                         // Create URI and return.
-                        String result = handleRegex(naptrRecord.RegExp, hostname);
+                        string result = HandleRegex(naptrRecord.RegExp, hostname);
                         if (result != null)
                         {
                             return new Uri(result);
@@ -132,9 +138,20 @@ namespace Mx.Peppol.Lookup.Locator
             throw new LookupException("Record for SMP not found in SML.");
         }
 
-        public static String handleRegex(String naptrRegex, String hostname)
+        private DnsClient GetDnsClient()
         {
-            String[] regexp = naptrRegex.Split(new [] { "!" }, StringSplitOptions.None);
+            if (this.dnsClient == null)
+            {
+                var ipEntry = System.Net.Dns.GetHostEntry(this.sml);
+                this.dnsClient = new DnsClient(ipEntry.AddressList.First(), 5000);
+            }
+
+            return this.dnsClient;
+        }
+
+        private string HandleRegex(string naptrRegex, string hostname)
+        {
+            string[] regexp = naptrRegex.Split(new [] { "!" }, StringSplitOptions.None);
 
             // Simple stupid
             if ("^.*$".Equals(regexp[1]))

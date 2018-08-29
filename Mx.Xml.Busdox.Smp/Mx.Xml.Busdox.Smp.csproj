@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="LiquidTechnologies.Runtime.Standard20">
+      <HintPath>..\third-party\liquid\LiquidTechnologies.Runtime.Standard20.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

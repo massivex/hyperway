@@ -31,21 +31,7 @@ namespace Mx.Peppol.Lookup.Reader
     {
         private static readonly ILog LOGGER = LogManager.GetLogger(typeof(Bdxr201605Reader));
 
-        //    private static JAXBContext jaxbContext;
-
         private static readonly X509CertificateParser certificateFactory = new X509CertificateParser();
-
-        //        static {
-        //        ExceptionUtil.perform(PeppolRuntimeException.class, new PerformAction()
-        //        {
-        //            @Override
-        //            public void action() throws Exception {
-        //                jaxbContext = JAXBContext.newInstance(ServiceGroupType.class, SignedServiceMetadataType.class,
-        //                        ServiceMetadataType.class);
-        //                certificateFactory = CertificateFactory.getInstance("X.509");
-        //            }
-        //});
-        //    }
 
         public List<ServiceReference> parseServiceGroup(FetcherResponse fetcherResponse) // throws LookupException
         {
@@ -84,17 +70,11 @@ namespace Mx.Peppol.Lookup.Reader
         }
 
         public IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse)
-            //  throws LookupException, PeppolSecurityException
         {
             try
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(fetcherResponse.InputStream);
-                    // Document doc = DomUtils.parse(fetcherResponse.getInputStream());
-
-                // Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-                // Object o = ((JAXBElement < ?>) unmarshaller.unmarshal(new DOMSource(doc))).getValue();
                 var o = ClassFactory.FromXmlStream(fetcherResponse.InputStream);
 
                 Mx.Peppol.Lookup.Reader.tns.ServiceMetadata serviceMatadata;

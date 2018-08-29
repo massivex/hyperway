@@ -32,6 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="conf\invoice_bii05.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="conf\invoice_003.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

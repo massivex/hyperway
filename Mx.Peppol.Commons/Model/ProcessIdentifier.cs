@@ -10,19 +10,19 @@ namespace Mx.Peppol.Common.Model
 
         public static readonly ProcessIdentifier NoProcess = Of("bdx:noprocess", Scheme.Of("bdx-procid-transport"));
 
-        public static ProcessIdentifier Of(String identifier)
+        public static ProcessIdentifier Of(string identifier)
         {
             return new ProcessIdentifier(identifier, DefaultScheme);
         }
 
-        public static ProcessIdentifier Of(String identifier, Scheme scheme)
+        public static ProcessIdentifier Of(string identifier, Scheme scheme)
         {
             return new ProcessIdentifier(identifier, scheme);
         }
 
-        public static ProcessIdentifier Parse(String str) // throws PeppolParsingException
+        public static ProcessIdentifier Parse(string str)
         {
-            String[] parts = str.Split(new[] { "::" }, 2, StringSplitOptions.None);
+            string[] parts = str.Split(new[] { "::" }, 2, StringSplitOptions.None);
 
             if (parts.Length != 2)
             {
@@ -32,13 +32,13 @@ namespace Mx.Peppol.Common.Model
             return Of(parts[1], Scheme.Of(parts[0]));
         }
 
-        private ProcessIdentifier(String value, Scheme scheme)
+        private ProcessIdentifier(string value, Scheme scheme)
             : base(value, scheme)
         {
         }
 
 
-        public override bool Equals(Object o)
+        public override bool Equals(object o)
         {
             if (this == o) return true;
             if (!(o is ProcessIdentifier)) return false;

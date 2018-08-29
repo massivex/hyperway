@@ -2,7 +2,8 @@
   "defaults": {
     "lookup": {
       "locator": {
-        "hostname": "acc.edelivery.tech.ec.europa.eu", // "hyperway-sml.sediva.it",
+        "hostname": "acc.edelivery.tech.ec.europa.eu",
+        "sml": "hyperway-sml.sediva.it",
         "bdxl": {
           "prefix": "",
           "algorithm": "SHA-256",
@@ -30,7 +31,12 @@
       }
     },
     "security": {
-      "pki": "pki-peppol-test.xml"
+      "pki": "pki-peppol-test.xml",
+      "validator": {
+        "ALL": "default",
+        "SMP": "SMP",
+        "AP": "AP"
+      } 
     },
     "hyperway": {
       "keystore": {

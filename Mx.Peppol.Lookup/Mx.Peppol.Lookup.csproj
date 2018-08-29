@@ -13,6 +13,7 @@
     <ProjectReference Include="..\Mx.Peppol.Mode\Mx.Peppol.Mode.csproj" />
     <ProjectReference Include="..\Mx.Peppol.Security\Mx.Peppol.Security.csproj" />
     <ProjectReference Include="..\Mx.Xml.BdxSmp201605\Mx.Xml.BdxSmp201605.csproj" />
+    <ProjectReference Include="..\Mx.Xml.Busdox.Smp\Mx.Xml.Busdox.Smp.csproj" />
   </ItemGroup>
 
   <ItemGroup>

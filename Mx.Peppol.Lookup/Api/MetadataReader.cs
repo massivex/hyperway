@@ -9,11 +9,7 @@ namespace Mx.Peppol.Lookup.Api
 
     public interface MetadataReader
     {
-
-        List<ServiceReference> parseServiceGroup(FetcherResponse fetcherResponse); // throws LookupException;
-
-        IPotentiallySigned<ServiceMetadata>
-            parseServiceMetadata(FetcherResponse fetcherResponse); // throws LookupException, PeppolSecurityException;
+        IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse);
     }
 
 }

@@ -1,0 +1,972 @@
+<?xml version="1.0"?>
+<MappingSchema Language="CS" CollectionMapping="Original" NamespacePrefix="Mx.Xml.Busdox">
+  <Class Name="AttributedURIType" LongName="AttributedURIType" MappedClassColName="AttributedURITypeCol" MappedClassName="AttributedURIType" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+  </Class>
+  <Class Name="CanonicalizationMethod" LongName="CanonicalizationMethod" MappedClassColName="CanonicalizationMethodCol" MappedClassName="CanonicalizationMethod" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Algorithm" DefaultValue="" MappedIsValidMember="m_IsValidAlgorithm" MappedSetValidName="SetValidAlgorithm" MappedIsValidName="IsValidAlgorithm" MappedIsNilMember="m_IsNilAlgorithm" MappedSetNilName="SetNilAlgorithm" MappedIsNilName="IsNilAlgorithm" MappedMemberName="m_Algorithm" MappedDisplayName="Algorithm" MappedSetterName="Algorithm" MappedGetterName="Algorithm" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="DigestMethod" LongName="DigestMethod" MappedClassColName="DigestMethodCol" MappedClassName="DigestMethod" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Algorithm" DefaultValue="" MappedIsValidMember="m_IsValidAlgorithm" MappedSetValidName="SetValidAlgorithm" MappedIsValidName="IsValidAlgorithm" MappedIsNilMember="m_IsNilAlgorithm" MappedSetNilName="SetNilAlgorithm" MappedIsNilName="IsNilAlgorithm" MappedMemberName="m_Algorithm" MappedDisplayName="Algorithm" MappedSetterName="Algorithm" MappedGetterName="Algorithm" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="DocumentIdentifier" LongName="DocumentIdentifier" MappedClassColName="DocumentIdentifierCol" MappedClassName="DocumentIdentifier" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="scheme" DefaultValue="" MappedIsValidMember="m_IsValidScheme" MappedSetValidName="SetValidScheme" MappedIsValidName="IsValidScheme" MappedIsNilMember="m_IsNilScheme" MappedSetNilName="SetNilScheme" MappedIsNilName="IsNilScheme" MappedMemberName="m_Scheme" MappedDisplayName="scheme" MappedSetterName="Scheme" MappedGetterName="Scheme" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="DSAKeyValue" LongName="DSAKeyValue" MappedClassColName="DSAKeyValueCol" MappedClassName="DSAKeyValue">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="DSAKeyValue_Seq" DefaultValue="" MappedIsValidMember="m_IsValidDSAKeyValue_Seq" MappedSetValidName="SetValidDSAKeyValue_Seq" MappedIsValidName="IsValidDSAKeyValue_Seq" MappedIsNilMember="m_IsNilDSAKeyValue_Seq" MappedSetNilName="SetNilDSAKeyValue_Seq" MappedIsNilName="IsNilDSAKeyValue_Seq" MappedMemberName="m_DSAKeyValue_Seq" MappedDisplayName="DSAKeyValue_Seq" MappedSetterName="DSAKeyValue_Seq" MappedGetterName="DSAKeyValue_Seq">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="G" DefaultValue="" MappedIsValidMember="m_IsValidG" MappedSetValidName="SetValidG" MappedIsValidName="IsValidG" MappedIsNilMember="m_IsNilG" MappedSetNilName="SetNilG" MappedIsNilName="IsNilG" MappedMemberName="m_G" MappedDisplayName="G" MappedSetterName="G" MappedGetterName="G" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Y" DefaultValue="" MappedIsValidMember="m_IsValidY" MappedSetValidName="SetValidY" MappedIsValidName="IsValidY" MappedIsNilMember="m_IsNilY" MappedSetNilName="SetNilY" MappedIsNilName="IsNilY" MappedMemberName="m_Y" MappedDisplayName="Y" MappedSetterName="Y" MappedGetterName="Y" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="J" DefaultValue="" MappedIsValidMember="m_IsValidJ" MappedSetValidName="SetValidJ" MappedIsValidName="IsValidJ" MappedIsNilMember="m_IsNilJ" MappedSetNilName="SetNilJ" MappedIsNilName="IsNilJ" MappedMemberName="m_J" MappedDisplayName="J" MappedSetterName="J" MappedGetterName="J" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="DSAKeyValue_SeqA" DefaultValue="" MappedIsValidMember="m_IsValidDSAKeyValue_SeqA" MappedSetValidName="SetValidDSAKeyValue_SeqA" MappedIsValidName="IsValidDSAKeyValue_SeqA" MappedIsNilMember="m_IsNilDSAKeyValue_SeqA" MappedSetNilName="SetNilDSAKeyValue_SeqA" MappedIsNilName="IsNilDSAKeyValue_SeqA" MappedMemberName="m_DSAKeyValue_SeqA" MappedDisplayName="DSAKeyValue_SeqA" MappedSetterName="DSAKeyValue_SeqA" MappedGetterName="DSAKeyValue_SeqA">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="DSAKeyValue_Seq" LongName="DSAKeyValue_Seq" MappedClassColName="DSAKeyValue_SeqCol" MappedClassName="DSAKeyValue_Seq">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="P" DefaultValue="" MappedIsValidMember="m_IsValidP" MappedSetValidName="SetValidP" MappedIsValidName="IsValidP" MappedIsNilMember="m_IsNilP" MappedSetNilName="SetNilP" MappedIsNilName="IsNilP" MappedMemberName="m_P" MappedDisplayName="P" MappedSetterName="P" MappedGetterName="P" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Q" DefaultValue="" MappedIsValidMember="m_IsValidQ" MappedSetValidName="SetValidQ" MappedIsValidName="IsValidQ" MappedIsNilMember="m_IsNilQ" MappedSetNilName="SetNilQ" MappedIsNilName="IsNilQ" MappedMemberName="m_Q" MappedDisplayName="Q" MappedSetterName="Q" MappedGetterName="Q" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="DSAKeyValue_SeqA" LongName="DSAKeyValue_SeqA" MappedClassColName="DSAKeyValue_SeqACol" MappedClassName="DSAKeyValue_SeqA">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Seed" DefaultValue="" MappedIsValidMember="m_IsValidSeed" MappedSetValidName="SetValidSeed" MappedIsValidName="IsValidSeed" MappedIsNilMember="m_IsNilSeed" MappedSetNilName="SetNilSeed" MappedIsNilName="IsNilSeed" MappedMemberName="m_Seed" MappedDisplayName="Seed" MappedSetterName="Seed" MappedGetterName="Seed" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="PgenCounter" DefaultValue="" MappedIsValidMember="m_IsValidPgenCounter" MappedSetValidName="SetValidPgenCounter" MappedIsValidName="IsValidPgenCounter" MappedIsNilMember="m_IsNilPgenCounter" MappedSetNilName="SetNilPgenCounter" MappedIsNilName="IsNilPgenCounter" MappedMemberName="m_PgenCounter" MappedDisplayName="PgenCounter" MappedSetterName="PgenCounter" MappedGetterName="PgenCounter" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="EndpointReference" LongName="EndpointReference" MappedClassColName="EndpointReferenceCol" MappedClassName="EndpointReference">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Address" DefaultValue="" MappedIsValidMember="m_IsValidAddress" MappedSetValidName="SetValidAddress" MappedIsValidName="IsValidAddress" MappedIsNilMember="m_IsNilAddress" MappedSetNilName="SetNilAddress" MappedIsNilName="IsNilAddress" MappedMemberName="m_Address" MappedDisplayName="Address" MappedSetterName="Address" MappedGetterName="Address">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ReferenceParameters" DefaultValue="" MappedIsValidMember="m_IsValidReferenceParameters" MappedSetValidName="SetValidReferenceParameters" MappedIsValidName="IsValidReferenceParameters" MappedIsNilMember="m_IsNilReferenceParameters" MappedSetNilName="SetNilReferenceParameters" MappedIsNilName="IsNilReferenceParameters" MappedMemberName="m_ReferenceParameters" MappedDisplayName="ReferenceParameters" MappedSetterName="ReferenceParameters" MappedGetterName="ReferenceParameters">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Metadata" DefaultValue="" MappedIsValidMember="m_IsValidMetadata" MappedSetValidName="SetValidMetadata" MappedIsValidName="IsValidMetadata" MappedIsNilMember="m_IsNilMetadata" MappedSetNilName="SetNilMetadata" MappedIsNilName="IsNilMetadata" MappedMemberName="m_Metadata" MappedDisplayName="Metadata" MappedSetterName="Metadata" MappedGetterName="Metadata">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="EndpointType" LongName="EndpointType" MappedClassColName="EndpointTypeCol" MappedClassName="EndpointType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="transportProfile" DefaultValue="" MappedIsValidMember="m_IsValidTransportProfile" MappedSetValidName="SetValidTransportProfile" MappedIsValidName="IsValidTransportProfile" MappedIsNilMember="m_IsNilTransportProfile" MappedSetNilName="SetNilTransportProfile" MappedIsNilName="IsNilTransportProfile" MappedMemberName="m_TransportProfile" MappedDisplayName="transportProfile" MappedSetterName="TransportProfile" MappedGetterName="TransportProfile" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="EndpointReference" DefaultValue="" MappedIsValidMember="m_IsValidEndpointReference" MappedSetValidName="SetValidEndpointReference" MappedIsValidName="IsValidEndpointReference" MappedIsNilMember="m_IsNilEndpointReference" MappedSetNilName="SetNilEndpointReference" MappedIsNilName="IsNilEndpointReference" MappedMemberName="m_EndpointReference" MappedDisplayName="EndpointReference" MappedSetterName="EndpointReference" MappedGetterName="EndpointReference">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="RequireBusinessLevelSignature" DefaultValue="" MappedIsValidMember="m_IsValidRequireBusinessLevelSignature" MappedSetValidName="SetValidRequireBusinessLevelSignature" MappedIsValidName="IsValidRequireBusinessLevelSignature" MappedIsNilMember="m_IsNilRequireBusinessLevelSignature" MappedSetNilName="SetNilRequireBusinessLevelSignature" MappedIsNilName="IsNilRequireBusinessLevelSignature" MappedMemberName="m_RequireBusinessLevelSignature" MappedDisplayName="RequireBusinessLevelSignature" MappedSetterName="RequireBusinessLevelSignature" MappedGetterName="RequireBusinessLevelSignature" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="MinimumAuthenticationLevel" DefaultValue="" MappedIsValidMember="m_IsValidMinimumAuthenticationLevel" MappedSetValidName="SetValidMinimumAuthenticationLevel" MappedIsValidName="IsValidMinimumAuthenticationLevel" MappedIsNilMember="m_IsNilMinimumAuthenticationLevel" MappedSetNilName="SetNilMinimumAuthenticationLevel" MappedIsNilName="IsNilMinimumAuthenticationLevel" MappedMemberName="m_MinimumAuthenticationLevel" MappedDisplayName="MinimumAuthenticationLevel" MappedSetterName="MinimumAuthenticationLevel" MappedGetterName="MinimumAuthenticationLevel" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ServiceActivationDate" DefaultValue="" MappedIsValidMember="m_IsValidServiceActivationDate" MappedSetValidName="SetValidServiceActivationDate" MappedIsValidName="IsValidServiceActivationDate" MappedIsNilMember="m_IsNilServiceActivationDate" MappedSetNilName="SetNilServiceActivationDate" MappedIsNilName="IsNilServiceActivationDate" MappedMemberName="m_ServiceActivationDate" MappedDisplayName="ServiceActivationDate" MappedSetterName="ServiceActivationDate" MappedGetterName="ServiceActivationDate" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ServiceExpirationDate" DefaultValue="" MappedIsValidMember="m_IsValidServiceExpirationDate" MappedSetValidName="SetValidServiceExpirationDate" MappedIsValidName="IsValidServiceExpirationDate" MappedIsNilMember="m_IsNilServiceExpirationDate" MappedSetNilName="SetNilServiceExpirationDate" MappedIsNilName="IsNilServiceExpirationDate" MappedMemberName="m_ServiceExpirationDate" MappedDisplayName="ServiceExpirationDate" MappedSetterName="ServiceExpirationDate" MappedGetterName="ServiceExpirationDate" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Certificate" DefaultValue="" MappedIsValidMember="m_IsValidCertificate" MappedSetValidName="SetValidCertificate" MappedIsValidName="IsValidCertificate" MappedIsNilMember="m_IsNilCertificate" MappedSetNilName="SetNilCertificate" MappedIsNilName="IsNilCertificate" MappedMemberName="m_Certificate" MappedDisplayName="Certificate" MappedSetterName="Certificate" MappedGetterName="Certificate" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ServiceDescription" DefaultValue="" MappedIsValidMember="m_IsValidServiceDescription" MappedSetValidName="SetValidServiceDescription" MappedIsValidName="IsValidServiceDescription" MappedIsNilMember="m_IsNilServiceDescription" MappedSetNilName="SetNilServiceDescription" MappedIsNilName="IsNilServiceDescription" MappedMemberName="m_ServiceDescription" MappedDisplayName="ServiceDescription" MappedSetterName="ServiceDescription" MappedGetterName="ServiceDescription" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="TechnicalContactUrl" DefaultValue="" MappedIsValidMember="m_IsValidTechnicalContactUrl" MappedSetValidName="SetValidTechnicalContactUrl" MappedIsValidName="IsValidTechnicalContactUrl" MappedIsNilMember="m_IsNilTechnicalContactUrl" MappedSetNilName="SetNilTechnicalContactUrl" MappedIsNilName="IsNilTechnicalContactUrl" MappedMemberName="m_TechnicalContactUrl" MappedDisplayName="TechnicalContactUrl" MappedSetterName="TechnicalContactUrl" MappedGetterName="TechnicalContactUrl" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="TechnicalInformationUrl" DefaultValue="" MappedIsValidMember="m_IsValidTechnicalInformationUrl" MappedSetValidName="SetValidTechnicalInformationUrl" MappedIsValidName="IsValidTechnicalInformationUrl" MappedIsNilMember="m_IsNilTechnicalInformationUrl" MappedSetNilName="SetNilTechnicalInformationUrl" MappedIsNilName="IsNilTechnicalInformationUrl" MappedMemberName="m_TechnicalInformationUrl" MappedDisplayName="TechnicalInformationUrl" MappedSetterName="TechnicalInformationUrl" MappedGetterName="TechnicalInformationUrl" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Extension" DefaultValue="" MappedIsValidMember="m_IsValidExtension" MappedSetValidName="SetValidExtension" MappedIsValidName="IsValidExtension" MappedIsNilMember="m_IsNilExtension" MappedSetNilName="SetNilExtension" MappedIsNilName="IsNilExtension" MappedMemberName="m_Extension" MappedDisplayName="Extension" MappedSetterName="Extension" MappedGetterName="Extension">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ExtensionType" LongName="ExtensionType" MappedClassColName="ExtensionTypeCol" MappedClassName="ExtensionType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="KeyInfo" LongName="KeyInfo" MappedClassColName="KeyInfoCol" MappedClassName="KeyInfo" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Id" DefaultValue="" MappedIsValidMember="m_IsValidId" MappedSetValidName="SetValidId" MappedIsValidName="IsValidId" MappedIsNilMember="m_IsNilId" MappedSetNilName="SetNilId" MappedIsNilName="IsNilId" MappedMemberName="m_Id" MappedDisplayName="Id" MappedSetterName="Id" MappedGetterName="Id" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="KeyInfo_Group" DefaultValue="" MappedIsValidMember="m_IsValidKeyInfo_Group" MappedSetValidName="SetValidKeyInfo_Group" MappedIsValidName="IsValidKeyInfo_Group" MappedIsNilMember="m_IsNilKeyInfo_Group" MappedSetNilName="SetNilKeyInfo_Group" MappedIsNilName="IsNilKeyInfo_Group" MappedMemberName="m_KeyInfo_Group" MappedDisplayName="KeyInfo_Group" MappedSetterName="KeyInfo_Group" MappedGetterName="KeyInfo_Group">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="KeyInfo_Group" LongName="KeyInfo_Group" MappedClassColName="KeyInfo_GroupCol" MappedClassName="KeyInfo_Group">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="KeyName" DefaultValue="" MappedIsValidMember="m_IsValidKeyName" MappedSetValidName="SetValidKeyName" MappedIsValidName="IsValidKeyName" MappedIsNilMember="m_IsNilKeyName" MappedSetNilName="SetNilKeyName" MappedIsNilName="IsNilKeyName" MappedMemberName="m_KeyName" MappedDisplayName="KeyName" MappedSetterName="KeyName" MappedGetterName="KeyName" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="KeyValue" DefaultValue="" MappedIsValidMember="m_IsValidKeyValue" MappedSetValidName="SetValidKeyValue" MappedIsValidName="IsValidKeyValue" MappedIsNilMember="m_IsNilKeyValue" MappedSetNilName="SetNilKeyValue" MappedIsNilName="IsNilKeyValue" MappedMemberName="m_KeyValue" MappedDisplayName="KeyValue" MappedSetterName="KeyValue" MappedGetterName="KeyValue">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="RetrievalMethod" DefaultValue="" MappedIsValidMember="m_IsValidRetrievalMethod" MappedSetValidName="SetValidRetrievalMethod" MappedIsValidName="IsValidRetrievalMethod" MappedIsNilMember="m_IsNilRetrievalMethod" MappedSetNilName="SetNilRetrievalMethod" MappedIsNilName="IsNilRetrievalMethod" MappedMemberName="m_RetrievalMethod" MappedDisplayName="RetrievalMethod" MappedSetterName="RetrievalMethod" MappedGetterName="RetrievalMethod">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="X509Data" DefaultValue="" MappedIsValidMember="m_IsValidX509Data" MappedSetValidName="SetValidX509Data" MappedIsValidName="IsValidX509Data" MappedIsNilMember="m_IsNilX509Data" MappedSetNilName="SetNilX509Data" MappedIsNilName="IsNilX509Data" MappedMemberName="m_X509Data" MappedDisplayName="X509Data" MappedSetterName="X509Data" MappedGetterName="X509Data">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="PGPData" DefaultValue="" MappedIsValidMember="m_IsValidPGPData" MappedSetValidName="SetValidPGPData" MappedIsValidName="IsValidPGPData" MappedIsNilMember="m_IsNilPGPData" MappedSetNilName="SetNilPGPData" MappedIsNilName="IsNilPGPData" MappedMemberName="m_PGPData" MappedDisplayName="PGPData" MappedSetterName="PGPData" MappedGetterName="PGPData">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="SPKIData" DefaultValue="" MappedIsValidMember="m_IsValidSPKIData" MappedSetValidName="SetValidSPKIData" MappedIsValidName="IsValidSPKIData" MappedIsNilMember="m_IsNilSPKIData" MappedSetNilName="SetNilSPKIData" MappedIsNilName="IsNilSPKIData" MappedMemberName="m_SPKIData" MappedDisplayName="SPKIData" MappedSetterName="SPKIData" MappedGetterName="SPKIData">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="MgmtData" DefaultValue="" MappedIsValidMember="m_IsValidMgmtData" MappedSetValidName="SetValidMgmtData" MappedIsValidName="IsValidMgmtData" MappedIsNilMember="m_IsNilMgmtData" MappedSetNilName="SetNilMgmtData" MappedIsNilName="IsNilMgmtData" MappedMemberName="m_MgmtData" MappedDisplayName="MgmtData" MappedSetterName="MgmtData" MappedGetterName="MgmtData" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="KeyValue" LongName="KeyValue" MappedClassColName="KeyValueCol" MappedClassName="KeyValue" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="DSAKeyValue" DefaultValue="" MappedIsValidMember="m_IsValidDSAKeyValue" MappedSetValidName="SetValidDSAKeyValue" MappedIsValidName="IsValidDSAKeyValue" MappedIsNilMember="m_IsNilDSAKeyValue" MappedSetNilName="SetNilDSAKeyValue" MappedIsNilName="IsNilDSAKeyValue" MappedMemberName="m_DSAKeyValue" MappedDisplayName="DSAKeyValue" MappedSetterName="DSAKeyValue" MappedGetterName="DSAKeyValue">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="RSAKeyValue" DefaultValue="" MappedIsValidMember="m_IsValidRSAKeyValue" MappedSetValidName="SetValidRSAKeyValue" MappedIsValidName="IsValidRSAKeyValue" MappedIsNilMember="m_IsNilRSAKeyValue" MappedSetNilName="SetNilRSAKeyValue" MappedIsNilName="IsNilRSAKeyValue" MappedMemberName="m_RSAKeyValue" MappedDisplayName="RSAKeyValue" MappedSetterName="RSAKeyValue" MappedGetterName="RSAKeyValue">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Metadata" LongName="Metadata" MappedClassColName="MetadataCol" MappedClassName="Metadata">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Object" LongName="Object" MappedClassColName="ObjectCol" MappedClassName="object_" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Id" DefaultValue="" MappedIsValidMember="m_IsValidId" MappedSetValidName="SetValidId" MappedIsValidName="IsValidId" MappedIsNilMember="m_IsNilId" MappedSetNilName="SetNilId" MappedIsNilName="IsNilId" MappedMemberName="m_Id" MappedDisplayName="Id" MappedSetterName="Id" MappedGetterName="Id" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="MimeType" DefaultValue="" MappedIsValidMember="m_IsValidMimeType" MappedSetValidName="SetValidMimeType" MappedIsValidName="IsValidMimeType" MappedIsNilMember="m_IsNilMimeType" MappedSetNilName="SetNilMimeType" MappedIsNilName="IsNilMimeType" MappedMemberName="m_MimeType" MappedDisplayName="MimeType" MappedSetterName="MimeType" MappedGetterName="MimeType" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Encoding" DefaultValue="" MappedIsValidMember="m_IsValidEncoding" MappedSetValidName="SetValidEncoding" MappedIsValidName="IsValidEncoding" MappedIsNilMember="m_IsNilEncoding" MappedSetNilName="SetNilEncoding" MappedIsNilName="IsNilEncoding" MappedMemberName="m_Encoding" MappedDisplayName="Encoding" MappedSetterName="Encoding" MappedGetterName="Encoding" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ParticipantIdentifier" LongName="ParticipantIdentifier" MappedClassColName="ParticipantIdentifierCol" MappedClassName="ParticipantIdentifier" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="scheme" DefaultValue="" MappedIsValidMember="m_IsValidScheme" MappedSetValidName="SetValidScheme" MappedIsValidName="IsValidScheme" MappedIsNilMember="m_IsNilScheme" MappedSetNilName="SetNilScheme" MappedIsNilName="IsNilScheme" MappedMemberName="m_Scheme" MappedDisplayName="scheme" MappedSetterName="Scheme" MappedGetterName="Scheme" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="PGPData" LongName="PGPData" MappedClassColName="PGPDataCol" MappedClassName="PGPData">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="PGPData_Seq" DefaultValue="" MappedIsValidMember="m_IsValidPGPData_Seq" MappedSetValidName="SetValidPGPData_Seq" MappedIsValidName="IsValidPGPData_Seq" MappedIsNilMember="m_IsNilPGPData_Seq" MappedSetNilName="SetNilPGPData_Seq" MappedIsNilName="IsNilPGPData_Seq" MappedMemberName="m_PGPData_Seq" MappedDisplayName="PGPData_Seq" MappedSetterName="PGPData_Seq" MappedGetterName="PGPData_Seq">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="PGPData_SeqA" DefaultValue="" MappedIsValidMember="m_IsValidPGPData_SeqA" MappedSetValidName="SetValidPGPData_SeqA" MappedIsValidName="IsValidPGPData_SeqA" MappedIsNilMember="m_IsNilPGPData_SeqA" MappedSetNilName="SetNilPGPData_SeqA" MappedIsNilName="IsNilPGPData_SeqA" MappedMemberName="m_PGPData_SeqA" MappedDisplayName="PGPData_SeqA" MappedSetterName="PGPData_SeqA" MappedGetterName="PGPData_SeqA">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="PGPData_Seq" LongName="PGPData_Seq" MappedClassColName="PGPData_SeqCol" MappedClassName="PGPData_Seq">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="PGPKeyID" DefaultValue="" MappedIsValidMember="m_IsValidPGPKeyID" MappedSetValidName="SetValidPGPKeyID" MappedIsValidName="IsValidPGPKeyID" MappedIsNilMember="m_IsNilPGPKeyID" MappedSetNilName="SetNilPGPKeyID" MappedIsNilName="IsNilPGPKeyID" MappedMemberName="m_PGPKeyID" MappedDisplayName="PGPKeyID" MappedSetterName="PGPKeyID" MappedGetterName="PGPKeyID" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="PGPKeyPacket" DefaultValue="" MappedIsValidMember="m_IsValidPGPKeyPacket" MappedSetValidName="SetValidPGPKeyPacket" MappedIsValidName="IsValidPGPKeyPacket" MappedIsNilMember="m_IsNilPGPKeyPacket" MappedSetNilName="SetNilPGPKeyPacket" MappedIsNilName="IsNilPGPKeyPacket" MappedMemberName="m_PGPKeyPacket" MappedDisplayName="PGPKeyPacket" MappedSetterName="PGPKeyPacket" MappedGetterName="PGPKeyPacket" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="PGPData_SeqA" LongName="PGPData_SeqA" MappedClassColName="PGPData_SeqACol" MappedClassName="PGPData_SeqA">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="PGPKeyPacket" DefaultValue="" MappedIsValidMember="m_IsValidPGPKeyPacket" MappedSetValidName="SetValidPGPKeyPacket" MappedIsValidName="IsValidPGPKeyPacket" MappedIsNilMember="m_IsNilPGPKeyPacket" MappedSetNilName="SetNilPGPKeyPacket" MappedIsNilName="IsNilPGPKeyPacket" MappedMemberName="m_PGPKeyPacket" MappedDisplayName="PGPKeyPacket" MappedSetterName="PGPKeyPacket" MappedGetterName="PGPKeyPacket" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ProcessIdentifier" LongName="ProcessIdentifier" MappedClassColName="ProcessIdentifierCol" MappedClassName="ProcessIdentifier" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="scheme" DefaultValue="" MappedIsValidMember="m_IsValidScheme" MappedSetValidName="SetValidScheme" MappedIsValidName="IsValidScheme" MappedIsNilMember="m_IsNilScheme" MappedSetNilName="SetNilScheme" MappedIsNilName="IsNilScheme" MappedMemberName="m_Scheme" MappedDisplayName="scheme" MappedSetterName="Scheme" MappedGetterName="Scheme" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ProcessListType" LongName="ProcessListType" MappedClassColName="ProcessListTypeCol" MappedClassName="ProcessListType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Process" DefaultValue="" MappedIsValidMember="m_IsValidProcess" MappedSetValidName="SetValidProcess" MappedIsValidName="IsValidProcess" MappedIsNilMember="m_IsNilProcess" MappedSetNilName="SetNilProcess" MappedIsNilName="IsNilProcess" MappedMemberName="m_Process" MappedDisplayName="Process" MappedSetterName="Process" MappedGetterName="Process">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ProcessType" LongName="ProcessType" MappedClassColName="ProcessTypeCol" MappedClassName="ProcessType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="ProcessIdentifier" DefaultValue="" MappedIsValidMember="m_IsValidProcessIdentifier" MappedSetValidName="SetValidProcessIdentifier" MappedIsValidName="IsValidProcessIdentifier" MappedIsNilMember="m_IsNilProcessIdentifier" MappedSetNilName="SetNilProcessIdentifier" MappedIsNilName="IsNilProcessIdentifier" MappedMemberName="m_ProcessIdentifier" MappedDisplayName="ProcessIdentifier" MappedSetterName="ProcessIdentifier" MappedGetterName="ProcessIdentifier">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ServiceEndpointList" DefaultValue="" MappedIsValidMember="m_IsValidServiceEndpointList" MappedSetValidName="SetValidServiceEndpointList" MappedIsValidName="IsValidServiceEndpointList" MappedIsNilMember="m_IsNilServiceEndpointList" MappedSetNilName="SetNilServiceEndpointList" MappedIsNilName="IsNilServiceEndpointList" MappedMemberName="m_ServiceEndpointList" MappedDisplayName="ServiceEndpointList" MappedSetterName="ServiceEndpointList" MappedGetterName="ServiceEndpointList">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Extension" DefaultValue="" MappedIsValidMember="m_IsValidExtension" MappedSetValidName="SetValidExtension" MappedIsValidName="IsValidExtension" MappedIsNilMember="m_IsNilExtension" MappedSetNilName="SetNilExtension" MappedIsNilName="IsNilExtension" MappedMemberName="m_Extension" MappedDisplayName="Extension" MappedSetterName="Extension" MappedGetterName="Extension">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="RedirectType" LongName="RedirectType" MappedClassColName="RedirectTypeCol" MappedClassName="RedirectType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="href" DefaultValue="" MappedIsValidMember="m_IsValidHref" MappedSetValidName="SetValidHref" MappedIsValidName="IsValidHref" MappedIsNilMember="m_IsNilHref" MappedSetNilName="SetNilHref" MappedIsNilName="IsNilHref" MappedMemberName="m_Href" MappedDisplayName="href" MappedSetterName="Href" MappedGetterName="Href" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CertificateUID" DefaultValue="" MappedIsValidMember="m_IsValidCertificateUID" MappedSetValidName="SetValidCertificateUID" MappedIsValidName="IsValidCertificateUID" MappedIsNilMember="m_IsNilCertificateUID" MappedSetNilName="SetNilCertificateUID" MappedIsNilName="IsNilCertificateUID" MappedMemberName="m_CertificateUID" MappedDisplayName="CertificateUID" MappedSetterName="CertificateUID" MappedGetterName="CertificateUID" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Extension" DefaultValue="" MappedIsValidMember="m_IsValidExtension" MappedSetValidName="SetValidExtension" MappedIsValidName="IsValidExtension" MappedIsNilMember="m_IsNilExtension" MappedSetNilName="SetNilExtension" MappedIsNilName="IsNilExtension" MappedMemberName="m_Extension" MappedDisplayName="Extension" MappedSetterName="Extension" MappedGetterName="Extension">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Reference" LongName="Reference" MappedClassColName="ReferenceCol" MappedClassName="Reference">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Id" DefaultValue="" MappedIsValidMember="m_IsValidId" MappedSetValidName="SetValidId" MappedIsValidName="IsValidId" MappedIsNilMember="m_IsNilId" MappedSetNilName="SetNilId" MappedIsNilName="IsNilId" MappedMemberName="m_Id" MappedDisplayName="Id" MappedSetterName="Id" MappedGetterName="Id" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="URI" DefaultValue="" MappedIsValidMember="m_IsValidURI" MappedSetValidName="SetValidURI" MappedIsValidName="IsValidURI" MappedIsNilMember="m_IsNilURI" MappedSetNilName="SetNilURI" MappedIsNilName="IsNilURI" MappedMemberName="m_URI" MappedDisplayName="URI" MappedSetterName="URI" MappedGetterName="URI" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Type" DefaultValue="" MappedIsValidMember="m_IsValidType" MappedSetValidName="SetValidType" MappedIsValidName="IsValidType" MappedIsNilMember="m_IsNilType" MappedSetNilName="SetNilType" MappedIsNilName="IsNilType" MappedMemberName="m_Type" MappedDisplayName="Type" MappedSetterName="Type" MappedGetterName="Type" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Transforms" DefaultValue="" MappedIsValidMember="m_IsValidTransforms" MappedSetValidName="SetValidTransforms" MappedIsValidName="IsValidTransforms" MappedIsNilMember="m_IsNilTransforms" MappedSetNilName="SetNilTransforms" MappedIsNilName="IsNilTransforms" MappedMemberName="m_Transforms" MappedDisplayName="Transforms" MappedSetterName="Transforms" MappedGetterName="Transforms">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="DigestMethod" DefaultValue="" MappedIsValidMember="m_IsValidDigestMethod" MappedSetValidName="SetValidDigestMethod" MappedIsValidName="IsValidDigestMethod" MappedIsNilMember="m_IsNilDigestMethod" MappedSetNilName="SetNilDigestMethod" MappedIsNilName="IsNilDigestMethod" MappedMemberName="m_DigestMethod" MappedDisplayName="DigestMethod" MappedSetterName="DigestMethod" MappedGetterName="DigestMethod">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="DigestValue" DefaultValue="" MappedIsValidMember="m_IsValidDigestValue" MappedSetValidName="SetValidDigestValue" MappedIsValidName="IsValidDigestValue" MappedIsNilMember="m_IsNilDigestValue" MappedSetNilName="SetNilDigestValue" MappedIsNilName="IsNilDigestValue" MappedMemberName="m_DigestValue" MappedDisplayName="DigestValue" MappedSetterName="DigestValue" MappedGetterName="DigestValue" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ReferenceParameters" LongName="ReferenceParameters" MappedClassColName="ReferenceParametersCol" MappedClassName="ReferenceParameters">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="RetrievalMethod" LongName="RetrievalMethod" MappedClassColName="RetrievalMethodCol" MappedClassName="RetrievalMethod">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="URI" DefaultValue="" MappedIsValidMember="m_IsValidURI" MappedSetValidName="SetValidURI" MappedIsValidName="IsValidURI" MappedIsNilMember="m_IsNilURI" MappedSetNilName="SetNilURI" MappedIsNilName="IsNilURI" MappedMemberName="m_URI" MappedDisplayName="URI" MappedSetterName="URI" MappedGetterName="URI" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Type" DefaultValue="" MappedIsValidMember="m_IsValidType" MappedSetValidName="SetValidType" MappedIsValidName="IsValidType" MappedIsNilMember="m_IsNilType" MappedSetNilName="SetNilType" MappedIsNilName="IsNilType" MappedMemberName="m_Type" MappedDisplayName="Type" MappedSetterName="Type" MappedGetterName="Type" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Transforms" DefaultValue="" MappedIsValidMember="m_IsValidTransforms" MappedSetValidName="SetValidTransforms" MappedIsValidName="IsValidTransforms" MappedIsNilMember="m_IsNilTransforms" MappedSetNilName="SetNilTransforms" MappedIsNilName="IsNilTransforms" MappedMemberName="m_Transforms" MappedDisplayName="Transforms" MappedSetterName="Transforms" MappedGetterName="Transforms">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="RSAKeyValue" LongName="RSAKeyValue" MappedClassColName="RSAKeyValueCol" MappedClassName="RSAKeyValue">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Modulus" DefaultValue="" MappedIsValidMember="m_IsValidModulus" MappedSetValidName="SetValidModulus" MappedIsValidName="IsValidModulus" MappedIsNilMember="m_IsNilModulus" MappedSetNilName="SetNilModulus" MappedIsNilName="IsNilModulus" MappedMemberName="m_Modulus" MappedDisplayName="Modulus" MappedSetterName="Modulus" MappedGetterName="Modulus" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Exponent" DefaultValue="" MappedIsValidMember="m_IsValidExponent" MappedSetValidName="SetValidExponent" MappedIsValidName="IsValidExponent" MappedIsNilMember="m_IsNilExponent" MappedSetNilName="SetNilExponent" MappedIsNilName="IsNilExponent" MappedMemberName="m_Exponent" MappedDisplayName="Exponent" MappedSetterName="Exponent" MappedGetterName="Exponent" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ServiceEndpointList" LongName="ServiceEndpointList" MappedClassColName="ServiceEndpointListCol" MappedClassName="ServiceEndpointList">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Endpoint" DefaultValue="" MappedIsValidMember="m_IsValidEndpoint" MappedSetValidName="SetValidEndpoint" MappedIsValidName="IsValidEndpoint" MappedIsNilMember="m_IsNilEndpoint" MappedSetNilName="SetNilEndpoint" MappedIsNilName="IsNilEndpoint" MappedMemberName="m_Endpoint" MappedDisplayName="Endpoint" MappedSetterName="Endpoint" MappedGetterName="Endpoint">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ServiceInformationType" LongName="ServiceInformationType" MappedClassColName="ServiceInformationTypeCol" MappedClassName="ServiceInformationType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="ParticipantIdentifier" DefaultValue="" MappedIsValidMember="m_IsValidParticipantIdentifier" MappedSetValidName="SetValidParticipantIdentifier" MappedIsValidName="IsValidParticipantIdentifier" MappedIsNilMember="m_IsNilParticipantIdentifier" MappedSetNilName="SetNilParticipantIdentifier" MappedIsNilName="IsNilParticipantIdentifier" MappedMemberName="m_ParticipantIdentifier" MappedDisplayName="ParticipantIdentifier" MappedSetterName="ParticipantIdentifier" MappedGetterName="ParticipantIdentifier">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="DocumentIdentifier" DefaultValue="" MappedIsValidMember="m_IsValidDocumentIdentifier" MappedSetValidName="SetValidDocumentIdentifier" MappedIsValidName="IsValidDocumentIdentifier" MappedIsNilMember="m_IsNilDocumentIdentifier" MappedSetNilName="SetNilDocumentIdentifier" MappedIsNilName="IsNilDocumentIdentifier" MappedMemberName="m_DocumentIdentifier" MappedDisplayName="DocumentIdentifier" MappedSetterName="DocumentIdentifier" MappedGetterName="DocumentIdentifier">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="ProcessList" DefaultValue="" MappedIsValidMember="m_IsValidProcessList" MappedSetValidName="SetValidProcessList" MappedIsValidName="IsValidProcessList" MappedIsNilMember="m_IsNilProcessList" MappedSetNilName="SetNilProcessList" MappedIsNilName="IsNilProcessList" MappedMemberName="m_ProcessList" MappedDisplayName="ProcessList" MappedSetterName="ProcessList" MappedGetterName="ProcessList">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Extension" DefaultValue="" MappedIsValidMember="m_IsValidExtension" MappedSetValidName="SetValidExtension" MappedIsValidName="IsValidExtension" MappedIsNilMember="m_IsNilExtension" MappedSetNilName="SetNilExtension" MappedIsNilName="IsNilExtension" MappedMemberName="m_Extension" MappedDisplayName="Extension" MappedSetterName="Extension" MappedGetterName="Extension">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="ServiceMetadata" LongName="ServiceMetadata" MappedClassColName="ServiceMetadataCol" MappedClassName="ServiceMetadata">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="ServiceInformation" DefaultValue="" MappedIsValidMember="m_IsValidServiceInformation" MappedSetValidName="SetValidServiceInformation" MappedIsValidName="IsValidServiceInformation" MappedIsNilMember="m_IsNilServiceInformation" MappedSetNilName="SetNilServiceInformation" MappedIsNilName="IsNilServiceInformation" MappedMemberName="m_ServiceInformation" MappedDisplayName="ServiceInformation" MappedSetterName="ServiceInformation" MappedGetterName="ServiceInformation">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Redirect" DefaultValue="" MappedIsValidMember="m_IsValidRedirect" MappedSetValidName="SetValidRedirect" MappedIsValidName="IsValidRedirect" MappedIsNilMember="m_IsNilRedirect" MappedSetNilName="SetNilRedirect" MappedIsNilName="IsNilRedirect" MappedMemberName="m_Redirect" MappedDisplayName="Redirect" MappedSetterName="Redirect" MappedGetterName="Redirect">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Signature" LongName="Signature" MappedClassColName="SignatureCol" MappedClassName="Signature">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Id" DefaultValue="" MappedIsValidMember="m_IsValidId" MappedSetValidName="SetValidId" MappedIsValidName="IsValidId" MappedIsNilMember="m_IsNilId" MappedSetNilName="SetNilId" MappedIsNilName="IsNilId" MappedMemberName="m_Id" MappedDisplayName="Id" MappedSetterName="Id" MappedGetterName="Id" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="SignedInfo" DefaultValue="" MappedIsValidMember="m_IsValidSignedInfo" MappedSetValidName="SetValidSignedInfo" MappedIsValidName="IsValidSignedInfo" MappedIsNilMember="m_IsNilSignedInfo" MappedSetNilName="SetNilSignedInfo" MappedIsNilName="IsNilSignedInfo" MappedMemberName="m_SignedInfo" MappedDisplayName="SignedInfo" MappedSetterName="SignedInfo" MappedGetterName="SignedInfo">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="SignatureValue" DefaultValue="" MappedIsValidMember="m_IsValidSignatureValue" MappedSetValidName="SetValidSignatureValue" MappedIsValidName="IsValidSignatureValue" MappedIsNilMember="m_IsNilSignatureValue" MappedSetNilName="SetNilSignatureValue" MappedIsNilName="IsNilSignatureValue" MappedMemberName="m_SignatureValue" MappedDisplayName="SignatureValue" MappedSetterName="SignatureValue" MappedGetterName="SignatureValue">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="KeyInfo" DefaultValue="" MappedIsValidMember="m_IsValidKeyInfo" MappedSetValidName="SetValidKeyInfo" MappedIsValidName="IsValidKeyInfo" MappedIsNilMember="m_IsNilKeyInfo" MappedSetNilName="SetNilKeyInfo" MappedIsNilName="IsNilKeyInfo" MappedMemberName="m_KeyInfo" MappedDisplayName="KeyInfo" MappedSetterName="KeyInfo" MappedGetterName="KeyInfo">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Object" DefaultValue="" MappedIsValidMember="m_IsValidObject" MappedSetValidName="SetValidObject" MappedIsValidName="IsValidObject" MappedIsNilMember="m_IsNilObject" MappedSetNilName="SetNilObject" MappedIsNilName="IsNilObject" MappedMemberName="m_Object" MappedDisplayName="object_" MappedSetterName="object_" MappedGetterName="object_">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="SignatureMethod" LongName="SignatureMethod" MappedClassColName="SignatureMethodCol" MappedClassName="SignatureMethod" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Algorithm" DefaultValue="" MappedIsValidMember="m_IsValidAlgorithm" MappedSetValidName="SetValidAlgorithm" MappedIsValidName="IsValidAlgorithm" MappedIsNilMember="m_IsNilAlgorithm" MappedSetNilName="SetNilAlgorithm" MappedIsNilName="IsNilAlgorithm" MappedMemberName="m_Algorithm" MappedDisplayName="Algorithm" MappedSetterName="Algorithm" MappedGetterName="Algorithm" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="HMACOutputLength" DefaultValue="" MappedIsValidMember="m_IsValidHMACOutputLength" MappedSetValidName="SetValidHMACOutputLength" MappedIsValidName="IsValidHMACOutputLength" MappedIsNilMember="m_IsNilHMACOutputLength" MappedSetNilName="SetNilHMACOutputLength" MappedIsNilName="IsNilHMACOutputLength" MappedMemberName="m_HMACOutputLength" MappedDisplayName="HMACOutputLength" MappedSetterName="HMACOutputLength" MappedGetterName="HMACOutputLength" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="SignatureValue" LongName="SignatureValue" MappedClassColName="SignatureValueCol" MappedClassName="SignatureValue" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Id" DefaultValue="" MappedIsValidMember="m_IsValidId" MappedSetValidName="SetValidId" MappedIsValidName="IsValidId" MappedIsNilMember="m_IsNilId" MappedSetNilName="SetNilId" MappedIsNilName="IsNilId" MappedMemberName="m_Id" MappedDisplayName="Id" MappedSetterName="Id" MappedGetterName="Id" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="SignedInfo" LongName="SignedInfo" MappedClassColName="SignedInfoCol" MappedClassName="SignedInfo">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Id" DefaultValue="" MappedIsValidMember="m_IsValidId" MappedSetValidName="SetValidId" MappedIsValidName="IsValidId" MappedIsNilMember="m_IsNilId" MappedSetNilName="SetNilId" MappedIsNilName="IsNilId" MappedMemberName="m_Id" MappedDisplayName="Id" MappedSetterName="Id" MappedGetterName="Id" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="CanonicalizationMethod" DefaultValue="" MappedIsValidMember="m_IsValidCanonicalizationMethod" MappedSetValidName="SetValidCanonicalizationMethod" MappedIsValidName="IsValidCanonicalizationMethod" MappedIsNilMember="m_IsNilCanonicalizationMethod" MappedSetNilName="SetNilCanonicalizationMethod" MappedIsNilName="IsNilCanonicalizationMethod" MappedMemberName="m_CanonicalizationMethod" MappedDisplayName="CanonicalizationMethod" MappedSetterName="CanonicalizationMethod" MappedGetterName="CanonicalizationMethod">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="SignatureMethod" DefaultValue="" MappedIsValidMember="m_IsValidSignatureMethod" MappedSetValidName="SetValidSignatureMethod" MappedIsValidName="IsValidSignatureMethod" MappedIsNilMember="m_IsNilSignatureMethod" MappedSetNilName="SetNilSignatureMethod" MappedIsNilName="IsNilSignatureMethod" MappedMemberName="m_SignatureMethod" MappedDisplayName="SignatureMethod" MappedSetterName="SignatureMethod" MappedGetterName="SignatureMethod">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Reference" DefaultValue="" MappedIsValidMember="m_IsValidReference" MappedSetValidName="SetValidReference" MappedIsValidName="IsValidReference" MappedIsNilMember="m_IsNilReference" MappedSetNilName="SetNilReference" MappedIsNilName="IsNilReference" MappedMemberName="m_Reference" MappedDisplayName="Reference" MappedSetterName="Reference" MappedGetterName="Reference">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="SignedServiceMetadata" LongName="SignedServiceMetadata" MappedClassColName="SignedServiceMetadataCol" MappedClassName="SignedServiceMetadata">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="ServiceMetadata" DefaultValue="" MappedIsValidMember="m_IsValidServiceMetadata" MappedSetValidName="SetValidServiceMetadata" MappedIsValidName="IsValidServiceMetadata" MappedIsNilMember="m_IsNilServiceMetadata" MappedSetNilName="SetNilServiceMetadata" MappedIsNilName="IsNilServiceMetadata" MappedMemberName="m_ServiceMetadata" MappedDisplayName="ServiceMetadata" MappedSetterName="ServiceMetadata" MappedGetterName="ServiceMetadata">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Signature" DefaultValue="" MappedIsValidMember="m_IsValidSignature" MappedSetValidName="SetValidSignature" MappedIsValidName="IsValidSignature" MappedIsNilMember="m_IsNilSignature" MappedSetNilName="SetNilSignature" MappedIsNilName="IsNilSignature" MappedMemberName="m_Signature" MappedDisplayName="Signature" MappedSetterName="Signature" MappedGetterName="Signature">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="SPKIData" LongName="SPKIData" MappedClassColName="SPKIDataCol" MappedClassName="SPKIData">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="SPKIData_Group" DefaultValue="" MappedIsValidMember="m_IsValidSPKIData_Group" MappedSetValidName="SetValidSPKIData_Group" MappedIsValidName="IsValidSPKIData_Group" MappedIsNilMember="m_IsNilSPKIData_Group" MappedSetNilName="SetNilSPKIData_Group" MappedIsNilName="IsNilSPKIData_Group" MappedMemberName="m_SPKIData_Group" MappedDisplayName="SPKIData_Group" MappedSetterName="SPKIData_Group" MappedGetterName="SPKIData_Group">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="SPKIData_Group" LongName="SPKIData_Group" MappedClassColName="SPKIData_GroupCol" MappedClassName="SPKIData_Group">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="SPKISexp" DefaultValue="" MappedIsValidMember="m_IsValidSPKISexp" MappedSetValidName="SetValidSPKISexp" MappedIsValidName="IsValidSPKISexp" MappedIsNilMember="m_IsNilSPKISexp" MappedSetNilName="SetNilSPKISexp" MappedIsNilName="IsNilSPKISexp" MappedMemberName="m_SPKISexp" MappedDisplayName="SPKISexp" MappedSetterName="SPKISexp" MappedGetterName="SPKISexp" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Transform" LongName="Transform" MappedClassColName="TransformCol" MappedClassName="Transform" FormatOverride="">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Algorithm" DefaultValue="" MappedIsValidMember="m_IsValidAlgorithm" MappedSetValidName="SetValidAlgorithm" MappedIsValidName="IsValidAlgorithm" MappedIsNilMember="m_IsNilAlgorithm" MappedSetNilName="SetNilAlgorithm" MappedIsNilName="IsNilAlgorithm" MappedMemberName="m_Algorithm" MappedDisplayName="Algorithm" MappedSetterName="Algorithm" MappedGetterName="Algorithm" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="Transform_Group" DefaultValue="" MappedIsValidMember="m_IsValidTransform_Group" MappedSetValidName="SetValidTransform_Group" MappedIsValidName="IsValidTransform_Group" MappedIsNilMember="m_IsNilTransform_Group" MappedSetNilName="SetNilTransform_Group" MappedIsNilName="IsNilTransform_Group" MappedMemberName="m_Transform_Group" MappedDisplayName="Transform_Group" MappedSetterName="Transform_Group" MappedGetterName="Transform_Group">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Transform_Group" LongName="Transform_Group" MappedClassColName="Transform_GroupCol" MappedClassName="Transform_Group">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="XPath" DefaultValue="" MappedIsValidMember="m_IsValidXPath" MappedSetValidName="SetValidXPath" MappedIsValidName="IsValidXPath" MappedIsNilMember="m_IsNilXPath" MappedSetNilName="SetNilXPath" MappedIsNilName="IsNilXPath" MappedMemberName="m_XPath" MappedDisplayName="XPath" MappedSetterName="XPath" MappedGetterName="XPath" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="Transforms" LongName="Transforms" MappedClassColName="TransformsCol" MappedClassName="Transforms">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="Transform" DefaultValue="" MappedIsValidMember="m_IsValidTransform" MappedSetValidName="SetValidTransform" MappedIsValidName="IsValidTransform" MappedIsNilMember="m_IsNilTransform" MappedSetNilName="SetNilTransform" MappedIsNilName="IsNilTransform" MappedMemberName="m_Transform" MappedDisplayName="Transform" MappedSetterName="Transform" MappedGetterName="Transform">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="X509Data" LongName="X509Data" MappedClassColName="X509DataCol" MappedClassName="X509Data">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="X509Data_Group" DefaultValue="" MappedIsValidMember="m_IsValidX509Data_Group" MappedSetValidName="SetValidX509Data_Group" MappedIsValidName="IsValidX509Data_Group" MappedIsNilMember="m_IsNilX509Data_Group" MappedSetNilName="SetNilX509Data_Group" MappedIsNilName="IsNilX509Data_Group" MappedMemberName="m_X509Data_Group" MappedDisplayName="X509Data_Group" MappedSetterName="X509Data_Group" MappedGetterName="X509Data_Group">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="X509Data_Group" LongName="X509Data_Group" MappedClassColName="X509Data_GroupCol" MappedClassName="X509Data_Group">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="X509IssuerSerial" DefaultValue="" MappedIsValidMember="m_IsValidX509IssuerSerial" MappedSetValidName="SetValidX509IssuerSerial" MappedIsValidName="IsValidX509IssuerSerial" MappedIsNilMember="m_IsNilX509IssuerSerial" MappedSetNilName="SetNilX509IssuerSerial" MappedIsNilName="IsNilX509IssuerSerial" MappedMemberName="m_X509IssuerSerial" MappedDisplayName="X509IssuerSerial" MappedSetterName="X509IssuerSerial" MappedGetterName="X509IssuerSerial">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="X509SKI" DefaultValue="" MappedIsValidMember="m_IsValidX509SKI" MappedSetValidName="SetValidX509SKI" MappedIsValidName="IsValidX509SKI" MappedIsNilMember="m_IsNilX509SKI" MappedSetNilName="SetNilX509SKI" MappedIsNilName="IsNilX509SKI" MappedMemberName="m_X509SKI" MappedDisplayName="X509SKI" MappedSetterName="X509SKI" MappedGetterName="X509SKI" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="X509SubjectName" DefaultValue="" MappedIsValidMember="m_IsValidX509SubjectName" MappedSetValidName="SetValidX509SubjectName" MappedIsValidName="IsValidX509SubjectName" MappedIsNilMember="m_IsNilX509SubjectName" MappedSetNilName="SetNilX509SubjectName" MappedIsNilName="IsNilX509SubjectName" MappedMemberName="m_X509SubjectName" MappedDisplayName="X509SubjectName" MappedSetterName="X509SubjectName" MappedGetterName="X509SubjectName" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="X509Certificate" DefaultValue="" MappedIsValidMember="m_IsValidX509Certificate" MappedSetValidName="SetValidX509Certificate" MappedIsValidName="IsValidX509Certificate" MappedIsNilMember="m_IsNilX509Certificate" MappedSetNilName="SetNilX509Certificate" MappedIsNilName="IsNilX509Certificate" MappedMemberName="m_X509Certificate" MappedDisplayName="X509Certificate" MappedSetterName="X509Certificate" MappedGetterName="X509Certificate" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="X509CRL" DefaultValue="" MappedIsValidMember="m_IsValidX509CRL" MappedSetValidName="SetValidX509CRL" MappedIsValidName="IsValidX509CRL" MappedIsNilMember="m_IsNilX509CRL" MappedSetNilName="SetNilX509CRL" MappedIsNilName="IsNilX509CRL" MappedMemberName="m_X509CRL" MappedDisplayName="X509CRL" MappedSetterName="X509CRL" MappedGetterName="X509CRL" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="AnyElement" DefaultValue="" MappedIsValidMember="m_IsValidAnyElement" MappedSetValidName="SetValidAnyElement" MappedIsValidName="IsValidAnyElement" MappedIsNilMember="m_IsNilAnyElement" MappedSetNilName="SetNilAnyElement" MappedIsNilName="IsNilAnyElement" MappedMemberName="m_AnyElement" MappedDisplayName="AnyElement" MappedSetterName="AnyElement" MappedGetterName="AnyElement">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Class Name="X509IssuerSerialType" LongName="X509IssuerSerialType" MappedClassColName="X509IssuerSerialTypeCol" MappedClassName="X509IssuerSerialType">
+    <Description>
+    </Description>
+    <Remarks>
+    </Remarks>
+    <Attribute Name="X509IssuerName" DefaultValue="" MappedIsValidMember="m_IsValidX509IssuerName" MappedSetValidName="SetValidX509IssuerName" MappedIsValidName="IsValidX509IssuerName" MappedIsNilMember="m_IsNilX509IssuerName" MappedSetNilName="SetNilX509IssuerName" MappedIsNilName="IsNilX509IssuerName" MappedMemberName="m_X509IssuerName" MappedDisplayName="X509IssuerName" MappedSetterName="X509IssuerName" MappedGetterName="X509IssuerName" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+    <Attribute Name="X509SerialNumber" DefaultValue="" MappedIsValidMember="m_IsValidX509SerialNumber" MappedSetValidName="SetValidX509SerialNumber" MappedIsValidName="IsValidX509SerialNumber" MappedIsNilMember="m_IsNilX509SerialNumber" MappedSetNilName="SetNilX509SerialNumber" MappedIsNilName="IsNilX509SerialNumber" MappedMemberName="m_X509SerialNumber" MappedDisplayName="X509SerialNumber" MappedSetterName="X509SerialNumber" MappedGetterName="X509SerialNumber" FormatOverride="">
+      <Description>
+      </Description>
+      <Remarks>
+      </Remarks>
+    </Attribute>
+  </Class>
+  <Enum Name="RelationshipType" MappedEnumColName="RelationshipTypeCol" MappedEnumName="RelationshipType">
+    <Value Value="http://www.w3.org/2005/08/addressing/reply" MappedValue="HttpColonSlashSlashwwwFullStopw3FullStoporgSlash2005Slash08SlashaddressingSlashreply" />
+  </Enum>
+  <Enum Name="FaultCodesType" MappedEnumColName="FaultCodesTypeCol" MappedEnumName="FaultCodesType">
+    <Value Value="{http://www.w3.org/2005/08/addressing}InvalidAddressingHeader" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStoporsh08SlashaddressingRBraceInvalidAddressingHeader" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}InvalidAddress" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStoporsh2005Slash08SlashaddressingRBraceInvalidAddress" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}InvalidEPR" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStoporgSlash2005Slash08SlashaddressingRBraceInvalidEPR" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}InvalidCardinality" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStopor05Slash08SlashaddressingRBraceInvalidCardinality" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}MissingAddressInEPR" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStopor5Slash08SlashaddressingRBraceMissingAddressInEPR" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}DuplicateMessageID" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStopor05Slash08SlashaddressingRBraceDuplicateMessageID" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}ActionMismatch" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStoporsh2005Slash08SlashaddressingRBraceActionMismatch" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}MessageAddressingHeaderRequired" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStoporhaddressingRBraceMessageAddressingHeaderRequired" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}DestinationUnreachable" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStoporash08SlashaddressingRBraceDestinationUnreachable" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}ActionNotSupported" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStopor05Slash08SlashaddressingRBraceActionNotSupported" />
+    <Value Value="{http://www.w3.org/2005/08/addressing}EndpointUnavailable" MappedValue="LBracehttpColonSlashSlashwwwFullStopw3FullStopor5Slash08SlashaddressingRBraceEndpointUnavailable" />
+  </Enum>
+  <Namespace SchemaNamespace="" SchemaAlias="" ClassNamespace="Mx.Xml.Busdox.Smp" />
+  <Namespace SchemaNamespace="http://busdox.org/serviceMetadata/publishing/1.0/" SchemaAlias="" ClassNamespace="Mx.Xml.Busdox.tns" />
+  <Namespace SchemaNamespace="http://busdox.org/transport/identifiers/1.0/" SchemaAlias="ids" ClassNamespace="Mx.Xml.Busdox.ids" />
+  <Namespace SchemaNamespace="http://www.w3.org/2000/09/xmldsig#" SchemaAlias="ds" ClassNamespace="Mx.Xml.Busdox.ds" />
+  <Namespace SchemaNamespace="http://www.w3.org/2005/08/addressing" SchemaAlias="wsa" ClassNamespace="Mx.Xml.Busdox.wsa" />
+</MappingSchema>
