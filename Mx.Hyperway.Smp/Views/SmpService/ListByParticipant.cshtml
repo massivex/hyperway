@@ -1,0 +1,27 @@
+﻿@model SmpServiceListModel
+
+@{
+    ViewBag.Title = "title";
+}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Service group for @Model.ParticipantIdentifier</h1>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <td>Document Type</td>
+            <td>Service metadata</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model.Services)
+        {
+            <tr>
+                <td>@p.DocumentIdentifier</td>
+                <td><a href="@p.ServiceMetadataUrl">Metadata</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

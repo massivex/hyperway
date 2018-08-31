@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CoreMvcTest</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="container clearfix header-logo-container">
+            <div class="logo_container">
+                <span class="logo_helper"></span>
+                <a href="/">
+                    <img src="http://hub.sediva.it/wp-content/uploads/2018/07/logo-hyperway-text-top.png" alt="Hub Sediva" id="logo" data-height-percentage="54" data-actual-width="400" data-actual-height="106">
+                </a>
+            </div>
+
+        </div>
+
+    </header>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2018 - <a href="http://hub.sediva.it">HYPERWAY</a></p>
+        </footer>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

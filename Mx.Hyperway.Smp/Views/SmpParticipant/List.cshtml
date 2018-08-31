@@ -1,0 +1,31 @@
+﻿@model SmpParticipantListModel
+
+@{
+    ViewBag.Title = "title";
+}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Managed participants on this SMP</h1>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <td>Participant ID</td>
+            <td>Extension?</td>
+            <td>Actions</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model.Participants)
+        {
+            <tr>
+                <td>@p.Identifier</td>
+                <td>No</td>
+                <td>
+                    <a asp-area="" asp-controller="SmpService" asp-action="ListByParticipant" asp-route-participant="@p.Identifier">Actions...</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

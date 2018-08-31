@@ -19,7 +19,7 @@ namespace Mx.Hyperway.Smp
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -40,8 +40,18 @@ namespace Mx.Hyperway.Smp
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseMvc();
+            app.UseStaticFiles();
+            app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+                    routes.MapRoute(
+                        "NotFound",
+                        "{*url:regex(^.*/services/.*)}",
+                        new { controller = "Smp", action = "GetServiceMetadata" }
+                    );
+                });
         }
     }
 }
