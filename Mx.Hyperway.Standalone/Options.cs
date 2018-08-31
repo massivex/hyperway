@@ -15,10 +15,10 @@
         [Option('p', Required = false, HelpText = "Profile type")]
         public string ProfileType { get; set; }
 
-        [Option('s', Required = true, HelpText = "sender [e.g. 9908:976098897]")]
+        [Option('s', Required = false, HelpText = "sender [e.g. 9908:976098897]")]
         public string Sender { get; set; }
 
-        [Option('r', Required = true, HelpText = "recipient [e.g. 9908:976098897]")]
+        [Option('r', Required = false, HelpText = "recipient [e.g. 9908:976098897]")]
         public string Recipient { get; set; }
 
         [Option('e', Required = false, HelpText = "Evidence storage dir")]

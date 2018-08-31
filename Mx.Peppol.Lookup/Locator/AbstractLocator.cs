@@ -9,7 +9,7 @@ namespace Mx.Peppol.Lookup.Locator
 
     public abstract class AbstractLocator : MetadataLocator
     {
-        public Uri lookup(String identifier) // throws LookupException
+        public Uri lookup(String identifier)
         {
             return lookup(ParticipantIdentifier.Of(identifier));
         }

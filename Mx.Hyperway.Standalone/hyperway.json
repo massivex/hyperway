@@ -3,7 +3,7 @@
     "lookup": {
       "locator": {
         "hostname": "acc.edelivery.tech.ec.europa.eu",
-        "sml": "hyperway-sml.sediva.it",
+        // "sml": "hyperway-sml.sediva.it",
         "bdxl": {
           "prefix": "",
           "algorithm": "SHA-256",

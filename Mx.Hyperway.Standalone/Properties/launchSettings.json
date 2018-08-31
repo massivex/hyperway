@@ -2,7 +2,7 @@
   "profiles": {
     "Mx.Hyperway.Standalone": {
       "commandName": "Project",
-      "commandLineArgs": "-f conf/invoice_bii05.xml -r 9908:810418052 -s 9908:810418052--repeat 1 --cert ./conf/openPEPPOL-digital-ID-AP.cer"
+      "commandLineArgs": "-f conf/intercenter/invoice_001.xml -s 9906:IT00962301008 -r 9921:TESTAP --repeat 1"
     }
   }
 }

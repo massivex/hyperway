@@ -58,7 +58,7 @@
             //
 
             builder.RegisterType<LookupClient>().AsSelf();
-            builder.RegisterType<BdxlLocator>().As<MetadataLocator>();
+            builder.RegisterType<BusdoxLocator>().As<MetadataLocator>();
             builder.RegisterType<MultiReader>().As<MetadataReader>();
             builder.RegisterType<DifiCertificateValidator>().As<CertificateValidator>();
 
