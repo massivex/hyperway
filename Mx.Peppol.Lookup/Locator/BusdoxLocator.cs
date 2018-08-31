@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Locator
 {
@@ -18,11 +16,11 @@ namespace Mx.Peppol.Lookup.Locator
     public class BusdoxLocator : AbstractLocator
     {
 
-        private DynamicHostnameGenerator hostnameGenerator;
+        private readonly DynamicHostnameGenerator hostnameGenerator;
 
         private DnsClient dnsClient;
 
-        private string sml;
+        private readonly string sml;
 
         public BusdoxLocator(Mode mode) : this(
             mode.GetValue("lookup.locator.busdox.prefix"),
@@ -32,18 +30,13 @@ namespace Mx.Peppol.Lookup.Locator
         {
         }
 
-        //public BusdoxLocator(string hostname) : this("B-", hostname, "MD5")
-        //{
-            
-        //}
-
         public BusdoxLocator(string prefix, string hostname, string algorithm, string sml)
         {
             this.hostnameGenerator = new DynamicHostnameGenerator(prefix, hostname, algorithm);
             this.sml = sml;
         }
 
-        public override Uri lookup(ParticipantIdentifier participantIdentifier)
+        public override Uri Lookup(ParticipantIdentifier participantIdentifier)
         {
             // Create hostname for participant identifier.
             string hostname = this.hostnameGenerator.Generate(participantIdentifier);
@@ -73,7 +66,7 @@ namespace Mx.Peppol.Lookup.Locator
             {
                 if (!string.IsNullOrWhiteSpace(this.sml))
                 {
-                    var ipEntry = System.Net.Dns.GetHostEntry(this.sml);
+                    var ipEntry = Dns.GetHostEntry(this.sml);
                     this.dnsClient = new DnsClient(ipEntry.AddressList.First(), 5000);
 
                 }

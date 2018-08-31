@@ -71,9 +71,9 @@
                 span.Record(Annotations.ServiceName("Reading SBDH"));
                 span.Record(Annotations.ClientSend());
                 try {
-                    using (SbdReader sbdReader = SbdReader.newInstance(peekingInputStream))
+                    using (SbdReader sbdReader = SbdReader.NewInstance(peekingInputStream))
                     {
-                        header = sbdReader.getHeader();
+                        header = sbdReader.Header;
                         span.Record(Annotations.Tag("identifier", header.Identifier.Identifier));
                     }
                 } catch (SbdhException e) {

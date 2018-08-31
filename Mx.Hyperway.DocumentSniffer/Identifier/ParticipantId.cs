@@ -37,7 +37,7 @@
         /// </summary>
         /// <param name="schemeId"></param>
         /// <param name="organisationId"></param>
-        public ParticipantId(Icd schemeId, string organisationId)
+        public ParticipantId(IIcd schemeId, string organisationId)
         {
 
             if (schemeId == null)
@@ -60,7 +60,7 @@
             }
 
             // Formats the organisation identifier in accordance with what PEPPOL expects.
-            this.peppolParticipantIdValue = string.Format("{0}:{1}", schemeId.getCode(), organisationId);
+            this.peppolParticipantIdValue = string.Format("{0}:{1}", schemeId.Code, organisationId);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@
         static string Parse(string participantId) // throws InvalidPeppolParticipantException
         {
             string organisationId = participantId.Trim().Replace("\\s", ""); // Squeezes out any white spaces
-            Icd schemeId = null;
+            IIcd schemeId = null;
 
             MatchCollection matches = Iso6523Pattern.Matches(organisationId);
 
@@ -106,7 +106,7 @@
                 throw new InvalidPeppolParticipantException("ICD " + icd + " is unknown");
 
             // Constructs the textual representation of the PEPPOL participant identifier
-            return $"{schemeId.getCode()}:{organisationId}";
+            return $"{schemeId.Code}:{organisationId}";
         }
 
         /// <summary>

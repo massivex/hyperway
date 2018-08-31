@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Api
 {
     using Mx.Peppol.Common.Model;
 
-    public interface MetadataProvider
+    public interface IMetadataProvider
     {
 
-        Uri resolveDocumentIdentifiers(Uri location, ParticipantIdentifier participantIdentifier);
+        Uri ResolveDocumentIdentifiers(Uri location, ParticipantIdentifier participantIdentifier);
 
-        Uri resolveServiceMetadata(Uri location, ParticipantIdentifier participantIdentifier,
+        Uri ResolveServiceMetadata(Uri location, ParticipantIdentifier participantIdentifier,
                                    DocumentTypeIdentifier documentTypeIdentifier);
     }
 

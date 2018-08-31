@@ -13,14 +13,13 @@
 
     using Org.BouncyCastle.X509;
 
-    public class DifiCertificateValidator : CertificateValidator
+    public class DifiCertificateValidator : ICertificateValidator
     {
+        private readonly ValidatorGroup validator;
 
-        private ValidatorGroup validator;
+        private readonly Mode mode;
 
-        private Mode mode;
-
-        public DifiCertificateValidator(Mode mode) // throws PeppolLoadingException
+        public DifiCertificateValidator(Mode mode)
         {
             this.mode = mode;
 
@@ -36,7 +35,7 @@
         }
 
 
-        public void validate(Service service, X509Certificate certificate)
+        public void Validate(Service service, X509Certificate certificate)
         {
             try
             {

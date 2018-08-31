@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Reader
 {
@@ -17,7 +16,6 @@ namespace Mx.Peppol.Lookup.Reader
     using Mx.Peppol.Lookup.Reader.BdxSmp201605;
     using Mx.Peppol.Lookup.Reader.tns;
     using Mx.Peppol.Security.Xmldsig;
-    using Mx.Tools;
 
     using Org.BouncyCastle.Security.Certificates;
     using Org.BouncyCastle.X509;
@@ -27,13 +25,13 @@ namespace Mx.Peppol.Lookup.Reader
     using ServiceMetadata = Mx.Peppol.Common.Model.ServiceMetadata;
 
     [Namespace("http://docs.oasis-open.org/bdxr/ns/SMP/2016/05")]
-    public class Bdxr201605Reader : MetadataReader
+    public class Bdxr201605Reader : IMetadataReader
     {
-        private static readonly ILog LOGGER = LogManager.GetLogger(typeof(Bdxr201605Reader));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Bdxr201605Reader));
 
-        private static readonly X509CertificateParser certificateFactory = new X509CertificateParser();
+        private static readonly X509CertificateParser CertificateFactory = new X509CertificateParser();
 
-        public List<ServiceReference> parseServiceGroup(FetcherResponse fetcherResponse) // throws LookupException
+        public List<ServiceReference> ParseServiceGroup(FetcherResponse fetcherResponse) // throws LookupException
         {
             try
             {
@@ -44,21 +42,21 @@ namespace Mx.Peppol.Lookup.Reader
 
                 foreach (ServiceMetadataReferenceType reference in serviceGroup.ServiceMetadataReferenceCollection.ServiceMetadataReference) {
                     
-                    String hrefDocumentTypeIdentifier = WebUtility.UrlDecode(reference.Href).Split(new string[] { "/services/" }, StringSplitOptions.None)[1];
-                    String[] parts = hrefDocumentTypeIdentifier.Split(new string[] { "::" }, 2, StringSplitOptions.None);
+                    string hrefDocumentTypeIdentifier = WebUtility.UrlDecode(reference.Href).Split(new[] { "/services/" }, StringSplitOptions.None)[1];
+                    string[] parts = hrefDocumentTypeIdentifier.Split(new[] { "::" }, 2, StringSplitOptions.None);
 
                     try
                     {
                         serviceReferences.Add(
                             ServiceReference.Of(
-                                DocumentTypeIdentifierWithUri.of(
+                                DocumentTypeIdentifierWithUri.Of(
                                     parts[1],
                                     Scheme.Of(parts[0]),
                                     new Uri(reference.Href))));
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        LOGGER.WarnFormat("Unable to parse '{0}'.", hrefDocumentTypeIdentifier);
+                        Logger.WarnFormat("Unable to parse '{0}'.", hrefDocumentTypeIdentifier);
                     }
                 }
 
@@ -69,7 +67,7 @@ namespace Mx.Peppol.Lookup.Reader
             }
         }
 
-        public IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse)
+        public IPotentiallySigned<ServiceMetadata> ParseServiceMetadata(FetcherResponse fetcherResponse)
         {
             try
             {
@@ -77,11 +75,9 @@ namespace Mx.Peppol.Lookup.Reader
                 doc.Load(fetcherResponse.InputStream);
                 var o = ClassFactory.FromXmlStream(fetcherResponse.InputStream);
 
-                Mx.Peppol.Lookup.Reader.tns.ServiceMetadata serviceMatadata;
                 X509Certificate signer = null;
                 if (o is SignedServiceMetadata) {
-                    signer = XmldsigVerifier.verify(doc);
-                    serviceMatadata = ((SignedServiceMetadata) o).ServiceMetadata;
+                    signer = XmldsigVerifier.Verify(doc);
                 }
 
                 ServiceInformationType serviceInformation = ((tns.ServiceMetadata) o).ServiceInformation;
@@ -94,7 +90,7 @@ namespace Mx.Peppol.Lookup.Reader
                             Endpoint.Of(
                                 TransportProfile.Of(endpointType.TransportProfile),
                                 new Uri(endpointType.EndpointURI),
-                                certificateInstance(endpointType.Certificate.Data)));
+                                this.CertificateInstance(endpointType.Certificate.Data)));
                     }
 
                     processMetadatas.Add(
@@ -124,9 +120,9 @@ namespace Mx.Peppol.Lookup.Reader
             }
         }
 
-        private X509Certificate certificateInstance(byte[] content) // throws CertificateException
+        private X509Certificate CertificateInstance(byte[] content) // throws CertificateException
         {
-            return certificateFactory.ReadCertificate(content);
+            return CertificateFactory.ReadCertificate(content);
         }
     }
 }

@@ -1,35 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Security
 {
     using System.Security.Cryptography.X509Certificates;
 
-    using log4net;
-
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Configuration.Json;
 
-    using Mx.Peppol.Common.Code;
     using Mx.Peppol.Common.Configuration;
-    using Mx.Peppol.Common.Lang;
     using Mx.Peppol.Mode;
-    using Mx.Peppol.Security.Api;
-    using Mx.Peppol.Security.Lang;
 
     public class ModeDetector
     {
-
-        private static readonly ILog LOGGER = LogManager.GetLogger(typeof(ModeDetector));
-
-        public static Mode detect(X509Certificate certificate) // throws PeppolLoadingException
+        public static Mode Detect(X509Certificate certificate) // throws PeppolLoadingException
         {
-            return detect(certificate, ConfigFactory.Load());
+            return Detect(certificate, ConfigFactory.Load());
         }
 
-        public static Mode detect(X509Certificate certificate, IConfigurationRoot config) // throws PeppolLoadingException
+        public static Mode Detect(X509Certificate certificate, IConfigurationRoot config) // throws PeppolLoadingException
         {
+            throw new NotImplementedException();
             // TODO: change configuration provider!
             //foreach (String token in config.getObject("mode").keySet())
             //{
@@ -50,8 +39,7 @@ namespace Mx.Peppol.Security
             //        }
             //    }
             //}
-
-            throw new PeppolLoadingException($"Unable to detect mode for certificate '{certificate.Subject}'.");
+            // throw new PeppolLoadingException($"Unable to detect mode for certificate '{certificate.Subject}'.");
         }
     }
 }

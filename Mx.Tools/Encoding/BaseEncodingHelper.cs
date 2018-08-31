@@ -32,11 +32,11 @@
 
         #region Base16
 
-        private const string _BASE16_ALPHABET = "0123456789ABCDEF";
+        private const string BASE16_ALPHABET = "0123456789ABCDEF";
 
-        private static readonly char[] _base16Alphabet = _BASE16_ALPHABET.ToCharArray();
+        private static readonly char[] Base16Alphabet = BASE16_ALPHABET.ToCharArray();
 
-        private static readonly Dictionary<char, byte> _base16ReverseAlphabet = GetAlphabet(_BASE16_ALPHABET, true);
+        private static readonly Dictionary<char, byte> Base16ReverseAlphabet = GetAlphabet(BASE16_ALPHABET, true);
 
         /// <summary>
         ///   Decodes a Base16 string as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
@@ -64,8 +64,8 @@
 
             while (inPos < offset + length)
             {
-                res[outPos++] = (byte)((_base16ReverseAlphabet[inData[inPos++]] << 4)
-                                       + _base16ReverseAlphabet[inData[inPos++]]);
+                res[outPos++] = (byte)((Base16ReverseAlphabet[inData[inPos++]] << 4)
+                                       + Base16ReverseAlphabet[inData[inPos++]]);
             }
 
             return res;
@@ -108,8 +108,8 @@
 
             while (inPos < inEnd)
             {
-                outData[outPos++] = _base16Alphabet[(inArray[inPos] >> 4) & 0x0f];
-                outData[outPos++] = _base16Alphabet[inArray[inPos++] & 0x0f];
+                outData[outPos++] = Base16Alphabet[(inArray[inPos] >> 4) & 0x0f];
+                outData[outPos++] = Base16Alphabet[inArray[inPos++] & 0x0f];
             }
 
             return new string(outData);
@@ -119,11 +119,11 @@
 
         #region Base32
 
-        private const string _BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=";
+        private const string BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=";
 
-        private static readonly char[] _base32Alphabet = _BASE32_ALPHABET.ToCharArray();
+        private static readonly char[] Base32Alphabet = BASE32_ALPHABET.ToCharArray();
 
-        private static readonly Dictionary<char, byte> _base32ReverseAlphabet = GetAlphabet(_BASE32_ALPHABET, true);
+        private static readonly Dictionary<char, byte> Base32ReverseAlphabet = GetAlphabet(BASE32_ALPHABET, true);
 
         /// <summary>
         ///   Decodes a Base32 string as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
@@ -144,7 +144,7 @@
         /// <returns> Decoded data </returns>
         public static byte[] FromBase32CharArray(this char[] inData, int offset, int length)
         {
-            return inData.FromBase32CharArray(offset, length, _base32ReverseAlphabet);
+            return inData.FromBase32CharArray(offset, length, Base32ReverseAlphabet);
         }
 
         /// <summary>
@@ -176,15 +176,15 @@
         /// <returns> Encoded string </returns>
         public static string ToBase32String(this byte[] inArray, int offset, int length)
         {
-            return inArray.ToBase32String(offset, length, _base32Alphabet);
+            return inArray.ToBase32String(offset, length, Base32Alphabet);
         }
 
-        private const string _BASE32_HEX_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUV=";
+        private const string BASE32_HEX_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUV=";
 
-        private static readonly char[] _base32HexAlphabet = _BASE32_HEX_ALPHABET.ToCharArray();
+        private static readonly char[] Base32HexAlphabet = BASE32_HEX_ALPHABET.ToCharArray();
 
-        private static readonly Dictionary<char, byte> _base32HexReverseAlphabet =
-            GetAlphabet(_BASE32_HEX_ALPHABET, true);
+        private static readonly Dictionary<char, byte> Base32HexReverseAlphabet =
+            GetAlphabet(BASE32_HEX_ALPHABET, true);
 
         /// <summary>
         ///   Decodes a Base32Hex string as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
@@ -205,7 +205,7 @@
         /// <returns> Decoded data </returns>
         public static byte[] FromBase32HexCharArray(this char[] inData, int offset, int length)
         {
-            return inData.FromBase32CharArray(offset, length, _base32HexReverseAlphabet);
+            return inData.FromBase32CharArray(offset, length, Base32HexReverseAlphabet);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@
         /// <returns> Encoded string </returns>
         public static string ToBase32HexString(this byte[] inArray, int offset, int length)
         {
-            return inArray.ToBase32String(offset, length, _base32HexAlphabet);
+            return inArray.ToBase32String(offset, length, Base32HexAlphabet);
         }
 
         private static byte[] FromBase32CharArray(
@@ -407,11 +407,11 @@
 
         #region Base64
 
-        private const string _BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        private const string BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-        private static readonly char[] _base64Alphabet = _BASE64_ALPHABET.ToCharArray();
+        private static readonly char[] Base64Alphabet = BASE64_ALPHABET.ToCharArray();
 
-        private static readonly Dictionary<char, byte> _base64ReverseAlphabet = GetAlphabet(_BASE64_ALPHABET, false);
+        private static readonly Dictionary<char, byte> Base64ReverseAlphabet = GetAlphabet(BASE64_ALPHABET, false);
 
         /// <summary>
         ///   Decodes a Base64 string as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
@@ -432,7 +432,7 @@
         /// <returns> Decoded data </returns>
         public static byte[] FromBase64CharArray(this char[] inData, int offset, int length)
         {
-            return inData.FromBase64CharArray(offset, length, _base64ReverseAlphabet);
+            return inData.FromBase64CharArray(offset, length, Base64ReverseAlphabet);
         }
 
         /// <summary>
@@ -464,15 +464,15 @@
         /// <returns> Encoded string </returns>
         public static string ToBase64String(this byte[] inArray, int offset, int length)
         {
-            return inArray.ToBase64String(offset, length, _base64Alphabet);
+            return inArray.ToBase64String(offset, length, Base64Alphabet);
         }
 
-        private const string _BASE64_URL_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
+        private const string BASE64_URL_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
 
-        private static readonly char[] _base64UrlAlphabet = _BASE64_URL_ALPHABET.ToCharArray();
+        private static readonly char[] Base64UrlAlphabet = BASE64_URL_ALPHABET.ToCharArray();
 
-        private static readonly Dictionary<char, byte> _base64UrlReverseAlphabet =
-            GetAlphabet(_BASE64_URL_ALPHABET, false);
+        private static readonly Dictionary<char, byte> Base64UrlReverseAlphabet =
+            GetAlphabet(BASE64_URL_ALPHABET, false);
 
         /// <summary>
         ///   Decodes a Base64Url string as described in <see cref="!:http://tools.ietf.org/html/rfc4648">RFC 4648</see> .
@@ -493,7 +493,7 @@
         /// <returns> Decoded data </returns>
         public static byte[] FromBase64UrlCharArray(this char[] inData, int offset, int length)
         {
-            return inData.FromBase64CharArray(offset, length, _base64UrlReverseAlphabet);
+            return inData.FromBase64CharArray(offset, length, Base64UrlReverseAlphabet);
         }
 
         /// <summary>
@@ -525,7 +525,7 @@
         /// <returns> Encoded string </returns>
         public static string ToBase64UrlString(this byte[] inArray, int offset, int length)
         {
-            return inArray.ToBase64String(offset, length, _base64UrlAlphabet);
+            return inArray.ToBase64String(offset, length, Base64UrlAlphabet);
         }
 
         private static byte[] FromBase64CharArray(

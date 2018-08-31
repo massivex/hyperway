@@ -20,7 +20,7 @@
             {
                 var xml = new XmlTextWriter(m, Encoding.UTF8);
                 xml.Formatting = Formatting.None;
-                using (SbdWriter.newInstance(m, header))
+                using (SbdWriter.NewInstance(m, header))
                 {
                     XmlTools.AddXmlFragment(inputStream, xml);
                 }

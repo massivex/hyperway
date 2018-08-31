@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Model
 {
@@ -8,22 +6,17 @@ namespace Mx.Peppol.Lookup.Model
 
     public class DocumentTypeIdentifierWithUri : DocumentTypeIdentifier
     {
+        public static DocumentTypeIdentifierWithUri Of(string identifier, Scheme scheme, Uri uri)
+        {
+            return new DocumentTypeIdentifierWithUri(identifier, scheme, uri);
+        }
 
-    private readonly Uri uri;
+        private DocumentTypeIdentifierWithUri(string identifier, Scheme scheme, Uri uri)
+            : base(identifier, scheme)
+        {
+            this.Uri = uri;
+        }
 
-    public static DocumentTypeIdentifierWithUri of(String identifier, Scheme scheme, Uri uri)
-    {
-        return new DocumentTypeIdentifierWithUri(identifier, scheme, uri);
-    }
-
-    private DocumentTypeIdentifierWithUri(String identifier, Scheme scheme, Uri uri): base(identifier, scheme)
-    {
-        this.uri = uri;
-    }
-
-    public Uri getUri()
-    {
-        return this.uri;
-    }
+        public Uri Uri { get; }
     }
 }

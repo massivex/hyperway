@@ -10,18 +10,17 @@ namespace Mx.Peppol.Icd
 
     public class Icds
     {
+        private readonly List<IIcd> values;
 
-        private readonly List<Icd> values;
-
-        public static Icds of(params Icd[] values)
+        public static Icds Of(params IIcd[] values)
         {
             return new Icds(values);
         }
 
-        private Icds(params IEnumerable<Icd>[] values)
+        private Icds(params IEnumerable<IIcd>[] values)
         {
-            List<Icd> icds = new List<Icd>();
-            foreach (IEnumerable<Icd> v in values)
+            List<IIcd> icds = new List<IIcd>();
+            foreach (IEnumerable<IIcd> v in values)
             {
                 icds.AddRange(v);
             }
@@ -29,18 +28,18 @@ namespace Mx.Peppol.Icd
             this.values = icds;
         }
 
-        public IcdIdentifier parse(String s) // throws PeppolParsingException
+        public IcdIdentifier Parse(string s)
         {
-            return this.parse(ParticipantIdentifier.Parse(s));
+            return this.Parse(ParticipantIdentifier.Parse(s));
         }
 
-        public IcdIdentifier parse(ParticipantIdentifier participantIdentifier) // throws PeppolParsingException
+        public IcdIdentifier Parse(ParticipantIdentifier participantIdentifier)
         {
             try
             {
-                String[] parts = participantIdentifier.Identifier.Split(new [] { ":" }, 2, StringSplitOptions.None);
-                return IcdIdentifier.of(
-                    this.findBySchemeAndCode(participantIdentifier.Scheme, parts[0]),
+                string[] parts = participantIdentifier.Identifier.Split(new [] { ":" }, 2, StringSplitOptions.None);
+                return IcdIdentifier.Of(
+                    this.FindBySchemeAndCode(participantIdentifier.Scheme, parts[0]),
                     parts[1]);
             }
             catch (ArgumentException e)
@@ -49,11 +48,11 @@ namespace Mx.Peppol.Icd
             }
         }
 
-        public IcdIdentifier parse(String icd, String identifier) // throws PeppolParsingException
+        public IcdIdentifier Parse(string icd, string identifier)
         {
             try
             {
-                return IcdIdentifier.of(this.findByIdentifier(icd), identifier);
+                return IcdIdentifier.Of(this.FindByIdentifier(icd), identifier);
             }
             catch (ArgumentException e)
             {
@@ -61,20 +60,20 @@ namespace Mx.Peppol.Icd
             }
         }
 
-        public Icd findBySchemeAndCode(Scheme scheme, String code)
+        public IIcd FindBySchemeAndCode(Scheme scheme, string code)
         {
-            foreach (Icd v in this.values)
-                if (v.getCode().Equals(code) && v.getScheme().Equals(scheme))
+            foreach (IIcd v in this.values)
+                if (v.Code.Equals(code) && v.Scheme.Equals(scheme))
                     return v;
 
             throw new ArgumentException($"Value '{scheme}::{code}' is not valid ICD.");
         }
 
-        public Icd findByIdentifier(String identifier)
+        public IIcd FindByIdentifier(string identifier)
         {
-            foreach (Icd v in this.values)
+            foreach (IIcd v in this.values)
             {
-                if (v.getIdentifier().Equals(identifier))
+                if (v.Identifier.Equals(identifier))
                 {
                     return v;
                 }
@@ -84,11 +83,11 @@ namespace Mx.Peppol.Icd
             throw new ArgumentException($"Value '{identifier}' is not valid ICD.");
         }
 
-        public Icd findByCode(String code)
+        public IIcd FindByCode(string code)
         {
-            foreach (Icd v in this.values)
+            foreach (IIcd v in this.values)
             {
-                if (v.getCode().Equals(code))
+                if (v.Code.Equals(code))
                 {
                     return v;
                 }

@@ -20,9 +20,9 @@
                 .As<ILookupService>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<HyperwayHttpFetcher>().As<MetadataFetcher>();
+            builder.RegisterType<HyperwayHttpFetcher>().As<IMetadataFetcher>();
 
-            builder.RegisterType<MultiReader>().As<MetadataReader>();
+            builder.RegisterType<MultiReader>().As<IMetadataReader>();
         }
     }
 }

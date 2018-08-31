@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Sbdh.Lang
 {
@@ -9,13 +7,13 @@ namespace Mx.Peppol.Sbdh.Lang
     public class SbdhException : PeppolException
     {
 
-        public SbdhException(String message)
+        public SbdhException(string message)
             : base(message)
         {
 
         }
 
-        public SbdhException(String message, Exception cause)
+        public SbdhException(string message, Exception cause)
             : base(message, cause)
         {
 

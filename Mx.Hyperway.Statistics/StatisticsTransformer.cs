@@ -2,34 +2,36 @@
 {
     using System;
 
-    public interface StatisticsTransformer
+    public interface IStatisticsTransformer
     {
+        void StartStatistics(DateTime start, DateTime end);
 
+        /// <summary>
+        /// Invoked by the transformer upon the start of a new entry (row, line, etc.) of statistical data
+        /// </summary>
+        void StartEntry();
 
-        void startStatistics(DateTime start, DateTime end);
+        void WriteAccessPointIdentifier(string accessPointIdentifier);
 
-        /** Invoked by the transformer upon the start of a new entry (row, line, etc.) of statistical data */
-        void startEntry();
+        void WritePeriod(string period);
 
-        void writeAccessPointIdentifier(String accessPointIdentifier);
+        void WriteDirection(string direction);
 
-        void writePeriod(String period);
+        void WriteParticipantIdentifier(string participantId);
 
-        void writeDirection(String direction);
+        void WriteDocumentType(string documentType);
 
-        void writeParticipantIdentifier(String participantId);
+        void WriteProfileId(string profileId);
 
-        void writeDocumentType(String documentType);
+        void WriteChannel(string channel);
 
-        void writeProfileId(String profileId);
+        void WriteCount(int count);
 
-        void writeChannel(String channel);
+        /// <summary>
+        /// Completes the current statistics entry 
+        /// </summary>
+        void EndEntry();
 
-        void writeCount(int count);
-
-        /** Completes the current statistics entry */
-        void endEntry();
-
-        void endStatistics();
+        void EndStatistics();
     }
 }

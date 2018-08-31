@@ -39,13 +39,13 @@
 
         public T Outbound()
         {
-            this.direction = Hyperway.Api.Model.Direction.OUT;
+            this.direction = Api.Model.Direction.OUT;
             return this.GetThis();
         }
 
         public T Inbound()
         {
-            this.direction = Hyperway.Api.Model.Direction.IN;
+            this.direction = Api.Model.Direction.IN;
             return this.GetThis();
         }
 
@@ -70,7 +70,7 @@
         protected void CheckRequiredFields()
         {
 
-            if (this.direction == Hyperway.Api.Model.Direction.None)
+            if (this.direction == Api.Model.Direction.None)
             {
                 throw new InvalidOperationException("Must specify the direction of the message");
             }

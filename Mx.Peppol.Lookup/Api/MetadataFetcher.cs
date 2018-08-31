@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Mx.Peppol.Lookup.Api
 {
-    public interface MetadataFetcher
+    public interface IMetadataFetcher
     {
-        FetcherResponse fetch(Uri uri); //throws LookupException, FileNotFoundException;
+        FetcherResponse Fetch(Uri uri);
     }
 }

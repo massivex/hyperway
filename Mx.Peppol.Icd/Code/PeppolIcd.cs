@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Icd.Code
 {
-    using System.ComponentModel;
-
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Icd.Api;
 
-    public class PeppolIcd : Icd
+    public class PeppolIcd : IIcd
     {
 
-        // @Deprecated
-        // NO_VAT("NO:VAT", "9909", "Norwegian VAT number (Deprecated)")
-
+        // ReSharper disable InconsistentNaming
         public static readonly PeppolIcd FR_SIRENE = new PeppolIcd(
             "FR:SIRENE",
             "0002",
@@ -204,41 +199,25 @@ namespace Mx.Peppol.Icd.Code
         public static readonly PeppolIcd FR_VAT = new PeppolIcd("FR:VAT", "9957", "French VAT number");
 
         private static readonly Scheme SCHEME = Scheme.Of("iso6523-actorid-upis");
+        // ReSharper restore InconsistentNaming
 
         private static List<PeppolIcd> allIcds;
 
-        private readonly String identifier;
-
-        private readonly String code;
-
-        private readonly String issuingAgency;
-
-        private PeppolIcd(String identifier, String code, String issuingAgency)
+        private PeppolIcd(string identifier, string code, string issuingAgency)
         {
-            this.identifier = identifier;
-            this.code = code;
-            this.issuingAgency = issuingAgency;
+            this.Identifier = identifier;
+            this.Code = code;
+            this.IssuingAgency = issuingAgency;
+            this.Scheme = SCHEME;
         }
 
-        public String getIdentifier()
-        {
-            return identifier;
-        }
+        public string Identifier { get; }
 
-        public String getCode()
-        {
-            return code;
-        }
+        public string Code { get; }
 
-        public Scheme getScheme()
-        {
-            return SCHEME;
-        }
+        public Scheme Scheme { get; }
 
-        public String getIssuingAgency()
-        {
-            return issuingAgency;
-        }
+        public string IssuingAgency { get; }
 
         public static List<PeppolIcd> Values()
         {
@@ -316,11 +295,11 @@ namespace Mx.Peppol.Icd.Code
             return allIcds;
         }
 
-        public static Icd findByCode(String icd)
+        public static IIcd FindByCode(string icd)
         {
             foreach (PeppolIcd v in Values())
             {
-                if (v.code.Equals(icd))
+                if (v.Code.Equals(icd))
                 {
                     return v;
                 }
@@ -329,11 +308,11 @@ namespace Mx.Peppol.Icd.Code
             throw new ArgumentException($"Value '{icd}' is not valid ICD.");
         }
 
-        public static Icd findByIdentifier(String icd)
+        public static IIcd FindByIdentifier(string icd)
         {
             foreach (PeppolIcd v in Values())
             {
-                if (v.identifier.Equals(icd))
+                if (v.Identifier.Equals(icd))
                 {
                     return v;
                 }

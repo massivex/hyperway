@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Fetcher
 {
     using Mx.Peppol.Lookup.Api;
     using Mx.Peppol.Mode;
 
-    public abstract class AbstractFetcher : MetadataFetcher
+    public abstract class AbstractFetcher : IMetadataFetcher
     {
+        protected int Timeout;
 
-        protected int timeout = 10000;
-
-        public AbstractFetcher(Mode mode)
+        protected AbstractFetcher(Mode mode)
         {
-            timeout = int.Parse(mode.GetValue("lookup.fetcher.timeouts"));
+            var timeoutText = mode.GetValue("lookup.fetcher.timeouts");
+            this.Timeout = !string.IsNullOrWhiteSpace(timeoutText) ? int.Parse(timeoutText) : 10000;
         }
 
-        public abstract FetcherResponse fetch(Uri uri);
+        public abstract FetcherResponse Fetch(Uri uri);
     }
 
 }

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Lookup
+﻿namespace Mx.Peppol.Lookup
 {
-    using Autofac;
-
     using Mx.Peppol.Lookup.Api;
     using Mx.Peppol.Mode;
     using Mx.Peppol.Security.Api;
@@ -14,129 +8,108 @@ namespace Mx.Peppol.Lookup
     public class LookupClientBuilder
     {
 
-        private Mode mode;
+        private readonly Mode mode;
 
-        private MetadataFetcher metadataFetcher;
+        private IMetadataFetcher metadataFetcher;
 
-        private MetadataLocator metadataLocator;
+        private IMetadataLocator metadataLocator;
 
-        private CertificateValidator _certificateValidator = EmptyCertificateValidator.INSTANCE;
+        private ICertificateValidator validator = EmptyCertificateValidator.Instance;
 
-        private MetadataProvider metadataProvider;
+        private IMetadataProvider metadataProvider;
 
-        private MetadataReader metadataReader;
+        private IMetadataReader metadataReader;
 
-        public static LookupClientBuilder newInstance(Mode mode)
+        public static LookupClientBuilder NewInstance(Mode mode)
         {
             return new LookupClientBuilder(mode);
         }
 
-        public static LookupClientBuilder forMode(Mode mode) // throws PeppolLoadingException
+        public static LookupClientBuilder ForMode(Mode mode)
         {
-            //return newInstance(mode)
-            //    .certificateValidator(mode.initiate("security.validator.class", CertificateValidator));
-            return newInstance(mode).certificateValidator();
+            return NewInstance(mode).CertificateValidator();
         }
 
-        //public static LookupClientBuilder forMode(String modeIdentifier, IContainer container) // throws PeppolLoadingException
-        //{
-        //    return forMode(Mode.of(modeIdentifier, container));
-        //}
-
-        //public static LookupClientBuilder forProduction(IContainer container) // throws PeppolLoadingException
-        //{
-        //    return forMode(Mode.PRODUCTION, container);
-        //}
-
-        //public static LookupClientBuilder forTest(IContainer container) // throws PeppolLoadingException
-        //{
-        //    return forMode(Mode.TEST, container);
-        //}
-
-        LookupClientBuilder(Mode mode)
+        private LookupClientBuilder(Mode mode)
         {
             this.mode = mode;
         }
 
-        public LookupClientBuilder fetcher(MetadataFetcher metadataFetcher)
+        public LookupClientBuilder Fetcher(IMetadataFetcher value)
         {
-            this.metadataFetcher = metadataFetcher;
+            this.metadataFetcher = value;
             return this;
         }
 
-        public LookupClientBuilder fetcher() // throws PeppolLoadingException
+        public LookupClientBuilder Fetcher()
         {
-            return this.fetcher(this.mode.initiate<MetadataFetcher>());
+            return this.Fetcher(this.mode.Resolve<IMetadataFetcher>());
         }
 
-        public LookupClientBuilder locator(MetadataLocator metadataLocator)
+        public LookupClientBuilder Locator(IMetadataLocator value)
         {
-            this.metadataLocator = metadataLocator;
+            this.metadataLocator = value;
             return this;
         }
 
-        public LookupClientBuilder locator() // throws PeppolLoadingException
+        public LookupClientBuilder Locator()
         {
-            return this.locator(this.mode.initiate<MetadataLocator>());
+            return this.Locator(this.mode.Resolve<IMetadataLocator>());
         }
 
-        public LookupClientBuilder provider(MetadataProvider metadataProvider)
+        public LookupClientBuilder Provider(IMetadataProvider value)
         {
-            this.metadataProvider = metadataProvider;
+            this.metadataProvider = value;
             return this;
         }
 
-        public LookupClientBuilder provider() // throws PeppolLoadingException
+        public LookupClientBuilder Provider()
         {
-            return this.provider(this.mode.initiate<MetadataProvider>());
+            return this.Provider(this.mode.Resolve<IMetadataProvider>());
         }
 
-        public LookupClientBuilder reader(MetadataReader metadataReader)
+        public LookupClientBuilder Reader(IMetadataReader value)
         {
-            this.metadataReader = metadataReader;
+            this.metadataReader = value;
             return this;
         }
 
-        public LookupClientBuilder reader() // throws PeppolLoadingException
+        public LookupClientBuilder Reader()
         {
-            return this.reader(this.mode.initiate<MetadataReader>());
+            return this.Reader(this.mode.Resolve<IMetadataReader>());
         }
 
-        public LookupClientBuilder certificateValidator(CertificateValidator certificateValidator)
+        public LookupClientBuilder CertificateValidator(ICertificateValidator certificateValidator)
         {
-            this._certificateValidator = certificateValidator;
+            this.validator = certificateValidator;
             return this;
         }
 
-        public LookupClientBuilder certificateValidator()
+        public LookupClientBuilder CertificateValidator()
         {
-            return this.certificateValidator(this.mode.initiate<CertificateValidator>());
+            return this.CertificateValidator(this.mode.Resolve<ICertificateValidator>());
         }
 
-        public LookupClient build() // throws PeppolLoadingException
+        public LookupClient Build()
         {
             if (this.metadataLocator == null)
             {
-                // locator(mode.initiate("lookup.locator.class", MetadataLocator.class));
-                this.locator();
+                this.Locator();
             }
 
             if (this.metadataProvider == null)
             {
-                // provider(mode.initiate("lookup.provider.class", MetadataProvider.class));
-                this.provider();
+                this.Provider();
     }
 
             if (this.metadataFetcher == null)
             {
-                // fetcher(mode.initiate("lookup.fetcher.class", MetadataFetcher.class));
-                this.fetcher();
+                this.Fetcher();
             }
 
             if (this.metadataReader == null)
             {
-                // reader(mode.initiate("lookup.reader.class", MetadataReader.class));
-                this.reader();
+                this.Reader();
             }
 
             return new LookupClient(
@@ -144,7 +117,7 @@ namespace Mx.Peppol.Lookup
                 this.metadataProvider,
                 this.metadataFetcher,
                 this.metadataReader,
-                this._certificateValidator);
+                this.validator);
         }
     }
 

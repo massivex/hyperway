@@ -42,7 +42,7 @@ namespace Mx.Hyperway.As2.Inbound
 
         private readonly ITransmissionVerifier transmissionVerifier;
 
-        private readonly CertificateValidator certificateValidator;
+        private readonly ICertificateValidator certificateValidator;
 
         private readonly SMimeMessageFactory sMimeMessageFactory;
 
@@ -50,7 +50,7 @@ namespace Mx.Hyperway.As2.Inbound
 
         public As2InboundHandler(
             ITimestampProvider timestampProvider,
-            CertificateValidator certificateValidator,
+            ICertificateValidator certificateValidator,
             IPersisterHandler persisterHandler,
             ITransmissionVerifier transmissionVerifier,
             SMimeMessageFactory sMimeMessageFactory,
@@ -108,9 +108,9 @@ namespace Mx.Hyperway.As2.Inbound
             // Extract SBDH
             Mx.Peppol.Common.Model.Header header;
             bodyStream.Seek(0, SeekOrigin.Begin);
-            using (var sbdReader = SbdReader.newInstance(bodyStream))
+            using (var sbdReader = SbdReader.NewInstance(bodyStream))
             {
-                header = sbdReader.getHeader();
+                header = sbdReader.Header;
 
                 // Perform validation of SBDH
                 this.transmissionVerifier.Verify(header, Direction.IN);
@@ -140,7 +140,7 @@ namespace Mx.Hyperway.As2.Inbound
                 var signature = signatures[0];
                 var certificate = signature.SignerCertificate as SecureMimeDigitalCertificate;
                 Debug.Assert(certificate != null, nameof(certificate) + " != null");
-                this.certificateValidator.validate(Service.Ap, certificate.Certificate);
+                this.certificateValidator.Validate(Service.Ap, certificate.Certificate);
 
                 // Create receipt (MDN)
                 mdnBuilder.AddHeader(MdnHeader.Disposition, Disposition.Processed);

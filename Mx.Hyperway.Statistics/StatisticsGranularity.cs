@@ -6,27 +6,27 @@
 
     public class StatisticsGranularity
     {
-        public static readonly StatisticsGranularity YEAR = new StatisticsGranularity("Y");
+        public static readonly StatisticsGranularity Year = new StatisticsGranularity("Y");
 
-        public static readonly StatisticsGranularity MONTH = new StatisticsGranularity("M");
+        public static readonly StatisticsGranularity Month = new StatisticsGranularity("M");
 
-        public static readonly StatisticsGranularity DAY = new StatisticsGranularity("D");
+        public static readonly StatisticsGranularity Day = new StatisticsGranularity("D");
 
-        public static readonly StatisticsGranularity HOUR = new StatisticsGranularity("H");
+        public static readonly StatisticsGranularity Hour = new StatisticsGranularity("H");
 
-        private readonly String abbreviation;
+        private readonly string abbreviation;
 
-        StatisticsGranularity(String abbreviation)
+        StatisticsGranularity(string abbreviation)
         {
             this.abbreviation = abbreviation;
         }
 
-        public String getAbbreviation()
+        public string GetAbbreviation()
         {
             return this.abbreviation;
         }
 
-        public static StatisticsGranularity valueForAbbreviation(String abbreviation)
+        public static StatisticsGranularity ValueForAbbreviation(string abbreviation)
         {
             if (abbreviation == null)
             {
@@ -34,7 +34,7 @@
                     "null string is an invalid abbreviation for statistics granularity");
             }
 
-            foreach (StatisticsGranularity granularity in values())
+            foreach (StatisticsGranularity granularity in Values())
             {
                 if (granularity.abbreviation.EqualsIgnoreCase(abbreviation))
                 {
@@ -45,9 +45,9 @@
             throw new ArgumentException("Invalid abbreviation for statistics granularity: " + abbreviation);
         }
 
-        private static StatisticsGranularity[] values()
+        private static StatisticsGranularity[] Values()
         {
-            return new[] { YEAR, MONTH, DAY, HOUR };
+            return new[] { Year, Month, Day, Hour };
         }
     }
 

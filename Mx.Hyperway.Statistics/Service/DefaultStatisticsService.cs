@@ -18,13 +18,13 @@
     public class DefaultStatisticsService : IStatisticsService
     {
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(DefaultStatisticsService));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(DefaultStatisticsService));
 
-        private readonly RawStatisticsRepository rawStatisticsRepository;
+        private readonly IRawStatisticsRepository rawStatisticsRepository;
 
         private readonly AccessPointIdentifier ourAccessPointIdentifier;
 
-        public DefaultStatisticsService(RawStatisticsRepository rawStatisticsRepository, X509Certificate certificate)
+        public DefaultStatisticsService(IRawStatisticsRepository rawStatisticsRepository, X509Certificate certificate)
         {
             this.rawStatisticsRepository = rawStatisticsRepository;
             this.ourAccessPointIdentifier = new AccessPointIdentifier(CertificateUtils.ExtractCommonName(certificate));
@@ -63,12 +63,12 @@
                 }
 
                 DefaultRawStatistics rawStatistics = builder.Build();
-                this.rawStatisticsRepository.persist(rawStatistics);
+                this.rawStatisticsRepository.Persist(rawStatistics);
             }
             catch (Exception ex)
             {
                 span.Record(Annotations.Tag("exception", ex.Message));
-                logger.Error($"Persisting DefaultRawStatistics about oubound transmission failed : {ex.Message}", ex);
+                Logger.Error($"Persisting DefaultRawStatistics about oubound transmission failed : {ex.Message}", ex);
             }
             finally
             {
@@ -88,11 +88,11 @@
                     .Sender(inboundMetadata.GetHeader().Sender).Receiver(inboundMetadata.GetHeader().Receiver)
                     .Profile(inboundMetadata.GetHeader().Process).Channel(new ChannelId("AS2")).Build();
 
-                this.rawStatisticsRepository.persist(rawStatistics);
+                this.rawStatisticsRepository.Persist(rawStatistics);
             }
             catch (Exception e)
             {
-                logger.Error($"Unable to persist statistics for {inboundMetadata}\n {e.Message}", e);
+                Logger.Error($"Unable to persist statistics for {inboundMetadata}\n {e.Message}", e);
             }
         }
     }

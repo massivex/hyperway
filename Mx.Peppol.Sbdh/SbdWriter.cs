@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Mx.Peppol.Sbdh
 {
@@ -12,62 +11,41 @@ namespace Mx.Peppol.Sbdh
     public class SbdWriter : IDisposable
     {
 
-        private XmlTextWriter writer;
+        private readonly XmlTextWriter writer;
 
-        public static SbdWriter newInstance(Stream outputStream, Header header) // throws SbdhException
+        public static SbdWriter NewInstance(Stream outputStream, Header header)
         {
             return new SbdWriter(outputStream, header);
         }
 
-        private SbdWriter(Stream outputStream, Header header) // throws SbdhException
+        private SbdWriter(Stream outputStream, Header header)
         {
             this.writer = new XmlTextWriter(outputStream, XmlTools.Utf8NoBom);
-            this.initiateDocument(header);
+            this.InitiateDocument(header);
         }
 
-        private void initiateDocument(Header header) // throws SbdhException
+        private void InitiateDocument(Header header)
         {
             this.writer.WriteStartDocument();
-            // writer.WriteStartDocument("UTF-8", "1.0");
             this.writer.WriteStartElement("", Ns.QNAME_SBD.LocalPart, Ns.QNAME_SBD.NamespaceUri);
-            // this.writer.WriteStartElement("", Ns.QNAME_SBDH.LocalPart, Ns.QNAME_SBDH.NamespaceUri);
-            //this.writer.WriteQualifiedName(
-            //    Ns.QNAME_SBDH.LocalPart,
-            //    Ns.QNAME_SBDH.NamespaceUri); // .WriteDefaultNamespace(Ns.SBDH);
-            SbdhWriter.write(this.writer, header);
+            SbdhWriter.Write(this.writer, header);
         }
 
         public void AddFragment(Stream s)
         {
             XmlTools.AddXmlFragment(s, this.writer);
         }
-        //public Stream binaryWriter(String mimeType) // throws XMLStreamException
-        //{
-        //    return this.binaryWriter(mimeType, null);
-        //}
 
-        //public Stream binaryWriter(String mimeType, String encoding) // throws XMLStreamException
-        //{
-        //    return new XMLBinaryOutputStream(xmlWriter(), mimeType, encoding);
-        //}
-
-        //public Stream textWriter(String mimeType) // throws XMLStreamException
-        //{
-        //    return new XMLTextOutputStream(xmlWriter(), mimeType);
-        //}
-
-        private void finalizeDocument() // throws SbdhException
+        private void FinalizeDocument()
         {
             this.writer.WriteRaw("</StandardBusinessDocument>");
             this.writer.Flush();
-            //this.writer.WriteEndElement();
-            //this.writer.WriteEndDocument();
         }
 
 
-        public void Dispose() // throws IOException
+        public void Dispose()
         {
-            this.finalizeDocument();
+            this.FinalizeDocument();
             // you MUST keep input stream open for further tasks
         }
     }

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Security.Util
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Text.RegularExpressions;
 
     using log4net;
-
-    using Microsoft.Extensions.FileSystemGlobbing;
 
     public class XmlUtils
     {
@@ -20,7 +15,7 @@ namespace Mx.Peppol.Security.Util
 
         private static readonly Regex NAMESPACE_PATTERN = new Regex("xmlns:{0,1}([A-Za-z0-9]*)\\w*=\\w*\"(.+?)\"", RegexOptions.Multiline);
 
-        public static String extractRootNamespace(String xmlContent)
+        public static string ExtractRootNamespace(String xmlContent)
         {
             Match matcher = ROOT_TAG_PATTERN.Match(xmlContent);
             if (matcher.Success)

@@ -15,41 +15,41 @@ namespace Mx.Peppol.Lookup.Util
     using Mx.Peppol.Security.Util;
     using Mx.Tools;
 
-    public class MultiReader : MetadataReader
+    public class MultiReader : IMetadataReader
     {
-        private readonly IList<MetadataReader> metadataReaders;
+        private readonly IList<IMetadataReader> metadataReaders;
 
-        public MultiReader([KeyFilter("reader-protocols")] IList<MetadataReader> metadataReaders)
+        public MultiReader([KeyFilter("reader-protocols")] IList<IMetadataReader> metadataReaders)
         {
             this.metadataReaders = metadataReaders;
         }
 
-        public IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse)
+        public IPotentiallySigned<ServiceMetadata> ParseServiceMetadata(FetcherResponse fetcherResponse)
         {
             FetcherResponse response = fetcherResponse;
 
             if (response.Namespace == null)
             {
-                response = detect(response);
+                response = this.Detect(response);
             }
 
-            foreach (MetadataReader metadataReader in this.metadataReaders) {
+            foreach (IMetadataReader metadataReader in this.metadataReaders) {
                 NamespaceAttribute nsAttr = (NamespaceAttribute)metadataReader.GetType().GetCustomAttribute(typeof(NamespaceAttribute), true);
                 if (nsAttr.Value.EqualsIgnoreCase(response.Namespace)) {
-                    return metadataReader.parseServiceMetadata(response);
+                    return metadataReader.ParseServiceMetadata(response);
                 }
             }
 
             throw new LookupException(String.Format("Unknown namespace: {0}", response.Namespace));
         }
 
-        public FetcherResponse detect(FetcherResponse fetcherResponse) // throws LookupException
+        public FetcherResponse Detect(FetcherResponse fetcherResponse) // throws LookupException
         {
             try
             {
                 byte[] fileContent = fetcherResponse.InputStream.ToBuffer();
 
-                String ns = XmlUtils.extractRootNamespace(Encoding.UTF8.GetString(fileContent));
+                String ns = XmlUtils.ExtractRootNamespace(Encoding.UTF8.GetString(fileContent));
                 if (ns != null)
                 return new FetcherResponse(fileContent.ToStream(),  ns);
 

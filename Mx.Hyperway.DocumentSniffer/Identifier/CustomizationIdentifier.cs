@@ -1,7 +1,5 @@
 ﻿namespace Mx.Hyperway.DocumentSniffer.Identifier
 {
-    using System;
-
     /// <summary>
     /// Represents a PEPPOL Customization Identifier contained within a PEPPOL Document Identifier. 
     /// </summary>

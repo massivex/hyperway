@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Tools.Cache
 {
@@ -17,18 +15,8 @@ namespace Mx.Tools.Cache
                                                  ExpirationScanFrequency = TimeSpan.FromSeconds(5),
                                                  SizeLimit = 1000
                                              });
-
-//         this.cache = CacheBuilder.newBuilder()
-// .maximumSize(1000)
-// .expireAfterWrite(5, TimeUnit.MINUTES)
-// .build(this);
         }
 
         public TValue this[TKey key] => this.cache.Get<TValue>(key);
-    }
-
-    public class CacheLoaderOptions
-    {
-        private TimeSpan DefaultExpiration { get; set; }
     }
 }

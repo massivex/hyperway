@@ -1,13 +1,11 @@
 ﻿namespace Mx.Hyperway.Statistics
 {
-    using System;
-
     public class ChannelId
     {
 
-        String value;
+        string value;
 
-        public ChannelId(String channelId)
+        public ChannelId(string channelId)
         {
             if (channelId == null)
             {
@@ -17,13 +15,13 @@
                 this.value = channelId;
         }
 
-        public String stringValue()
+        public string StringValue()
         {
             return this.ToString();
         }
 
 
-        public String ToString()
+        public override string ToString()
         {
             return this.value;
         }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Util
 {
-    using ARSoft.Tools.Net;
-
     using Mx.Tools.Encoding;
 
     public enum BaseEncodingType
@@ -19,7 +15,7 @@ namespace Mx.Peppol.Lookup.Util
     public class EncodingUtils
     {
 
-        public static IBaseEncoding get(BaseEncodingType type)
+        public static IBaseEncoding Get(BaseEncodingType type)
         {
             switch (type)
             {
@@ -37,7 +33,7 @@ namespace Mx.Peppol.Lookup.Util
             }
         }
 
-        public static IBaseEncoding get(String identifier)
+        public static IBaseEncoding Get(String identifier)
         {
             switch (identifier)
             {

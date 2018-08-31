@@ -26,7 +26,7 @@
 
             try
             {
-                using (SbdWriter sbdWriter = SbdWriter.newInstance(m, headers))
+                using (SbdWriter sbdWriter = SbdWriter.NewInstance(m, headers))
                 {
                     sbdWriter.AddFragment(inputStream);
                 }

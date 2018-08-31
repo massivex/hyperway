@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mx.Peppol.Lookup.Util
 {
-    using System.Security.Cryptography;
-
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup.Api;
     using Mx.Tools.Encoding;

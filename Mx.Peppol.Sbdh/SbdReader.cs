@@ -15,37 +15,30 @@ namespace Mx.Peppol.Sbdh
 
         private XmlTextReader reader;
 
-        private Header header;
-
-        public static SbdReader newInstance(Stream inputStream)
+        public static SbdReader NewInstance(Stream inputStream)
         {
             using (var txt = new XmlTextReader(inputStream))
             {
-                return newInstance(txt);
+                return NewInstance(txt);
             }
         }
 
-        public static SbdReader newInstance(XmlTextReader xmlStreamReader) // throws SbdhException
+        public static SbdReader NewInstance(XmlTextReader xmlStreamReader)
         {
             return new SbdReader(xmlStreamReader);
         }
 
-        private SbdReader(XmlTextReader reader) // throws SbdhException
+        private SbdReader(XmlTextReader reader)
         {
             this.reader = reader;
 
             try
             {
                 // First element, SBD expected.
-
                 while (reader.NodeType != XmlNodeType.Element)
                 {
                     reader.Read();
                 }
-
-                //if (reader.getEventType() != XMLStreamConstants.START_ELEMENT)
-                //    reader.nextTag();
-
 
                 if (!reader.IsElement(Ns.QNAME_SBD))
                 {
@@ -60,7 +53,7 @@ namespace Mx.Peppol.Sbdh
                         "Element 'StandardBusinessDocumentHeader' not found as first element in 'StandardBusinessDocument'.");
                 }
 
-                this.header = SbdhReader.read(reader);
+                this.Header = SbdhReader.Read(reader);
 
                 // Go to payload
                 var found = reader.ReadToNextElement();
@@ -75,57 +68,37 @@ namespace Mx.Peppol.Sbdh
             }
         }
 
-        public Header getHeader()
+        public Header Header { get; }
+
+        public SbdReaderType Type
         {
-            return this.header;
+            get
+            {
+                if (this.reader.IsElement(Ns.QNAME_BINARY_CONTENT))
+                {
+                    return SbdReaderType.Binary;
+                }
+                else if (this.reader.IsElement(Ns.QNAME_TEXT_CONTENT))
+                {
+                    return SbdReaderType.Text;
+                }
+
+                else
+                {
+                    return SbdReaderType.Xml;
+                }
+            }
         }
 
-        public Type getType()
-        {
-            if (this.reader.IsElement(Ns.QNAME_BINARY_CONTENT))
-            {
-                return Type.BINARY;
-            }
-            else if (this.reader.IsElement(Ns.QNAME_TEXT_CONTENT))
-            {
-                return Type.TEXT;
-            }
-
-            else
-            {
-                return Type.XML;
-            }
-        }
-
-        public XElement xmlReader()
+        public XElement XmlReader()
         {
             XElement el = XNode.ReadFrom(this.reader) as XElement;
             return el;
         }
 
-        //public Stream binaryReader() // throws XMLStreamException
-        //{
-        //    return new Base64InputStream(new XMLTextInputStream(xmlReader()));
-        //}
-
-        //public InputStream textReader() // throws XMLStreamException
-        //{
-        //    return new XMLTextInputStream(xmlReader());
-        //}
-
         public void Dispose()
         {
             this.reader.Close();
         }
-
-        public enum Type
-        {
-            BINARY,
-
-            TEXT,
-
-            XML
-        }
     }
-
 }

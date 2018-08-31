@@ -58,7 +58,8 @@
                 else
                 {
                     // ... or when given schemeId matches the icd code stat eg NO:VAT matches 9908 from 9908:987654321
-                    if (companyId.StartsWith(SchemeId.Parse(schemeIdTextValue).getCode() + ":"))
+                    Debug.Assert(companyId != null, nameof(companyId) + " != null");
+                    if (companyId.StartsWith(SchemeId.Parse(schemeIdTextValue).Code+ ":"))
                     {
                         ret = new ParticipantId(companyId);
                     }
@@ -76,7 +77,7 @@
             else
             {
                 // try to add the given icd prefix to the participant id
-                companyId = String.Format("{0}:{1}", SchemeId.Parse(schemeIdTextValue).getCode(), companyId);
+                companyId = String.Format("{0}:{1}", SchemeId.Parse(schemeIdTextValue).Code, companyId);
                 if (!Identifier.ParticipantId.IsValidParticipantIdentifierPattern(companyId))
                 {
                     throw new InvalidOperationException(

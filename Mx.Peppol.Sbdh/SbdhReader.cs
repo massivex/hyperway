@@ -17,13 +17,13 @@ namespace Mx.Peppol.Sbdh
 
         }
 
-        public static Header read(XmlTextReader xmlStreamReader) // throws SbdhException
+        public static Header Read(XmlTextReader xmlStreamReader) // throws SbdhException
         {
             try
             {
                 XmlSerializer s = new XmlSerializer(typeof(StandardBusinessDocumentHeader));
                 var sbdh = (StandardBusinessDocumentHeader)s.Deserialize(xmlStreamReader);
-                return read(sbdh);
+                return Read(sbdh);
             }
             catch (Exception e)
             {
@@ -31,7 +31,7 @@ namespace Mx.Peppol.Sbdh
             }
         }
 
-        public static Header read(StandardBusinessDocumentHeader sbdh) // throws SbdhException
+        public static Header Read(StandardBusinessDocumentHeader sbdh) // throws SbdhException
         {
             Header header = Header.NewInstance();
 

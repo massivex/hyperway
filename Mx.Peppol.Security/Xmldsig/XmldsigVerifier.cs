@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Security.Xmldsig
 {
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Security.Cryptography;
     using System.Security.Cryptography.Xml;
     using System.Xml;
-    using System.Xml.Linq;
 
     using Mx.Peppol.Security.Lang;
 
@@ -18,7 +12,7 @@ namespace Mx.Peppol.Security.Xmldsig
     public class XmldsigVerifier
     {
 
-        public static X509Certificate verify(XmlDocument document) // throws PeppolSecurityException
+        public static X509Certificate Verify(XmlDocument document)
         {
             try
             {
@@ -46,7 +40,7 @@ namespace Mx.Peppol.Security.Xmldsig
                 X509Certificate certificate = p.ReadCertificate(Convert.FromBase64String(base64Certificate));
                 return certificate;
             }
-            catch (Exception e) // (XMLSignatureException | MarshalException e)
+            catch (Exception e)
             {
                 throw new PeppolSecurityException("Unable to verify document signature.", e);
             }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Mode
+﻿namespace Mx.Peppol.Mode
 {
     using Autofac;
 

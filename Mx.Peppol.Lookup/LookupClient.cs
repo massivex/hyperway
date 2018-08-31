@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup
 {
@@ -15,22 +13,22 @@ namespace Mx.Peppol.Lookup
     public class LookupClient
     {
 
-        private MetadataLocator locator;
+        private readonly IMetadataLocator locator;
 
-        private MetadataProvider provider;
+        private readonly IMetadataProvider provider;
 
-        private MetadataFetcher fetcher;
+        private readonly IMetadataFetcher fetcher;
 
-        private MetadataReader reader;
+        private readonly IMetadataReader reader;
 
-        private CertificateValidator validator;
+        private readonly ICertificateValidator validator;
 
         public LookupClient(
-            MetadataLocator locator,
-            MetadataProvider provider,
-            MetadataFetcher fetcher,
-            MetadataReader reader,
-            CertificateValidator validator)
+            IMetadataLocator locator,
+            IMetadataProvider provider,
+            IMetadataFetcher fetcher,
+            IMetadataReader reader,
+            ICertificateValidator validator)
         {
             this.locator = locator;
             this.provider = provider;
@@ -39,12 +37,12 @@ namespace Mx.Peppol.Lookup
             this.validator = validator;
         }
 
-        public ServiceMetadata getServiceMetadata(
+        public ServiceMetadata GetServiceMetadata(
             ParticipantIdentifier participantIdentifier,
             DocumentTypeIdentifier documentTypeIdentifier) // throws LookupException, PeppolSecurityException
         {
-            Uri location = this.locator.lookup(participantIdentifier);
-            Uri provider = this.provider.resolveServiceMetadata(
+            Uri location = this.locator.Lookup(participantIdentifier);
+            Uri providerUrl = this.provider.ResolveServiceMetadata(
                 location,
                 participantIdentifier,
                 documentTypeIdentifier);
@@ -52,7 +50,7 @@ namespace Mx.Peppol.Lookup
             FetcherResponse fetcherResponse;
             try
             {
-                fetcherResponse = this.fetcher.fetch(provider);
+                fetcherResponse = this.fetcher.Fetch(providerUrl);
             }
             catch (FileNotFoundException e)
             {
@@ -62,42 +60,42 @@ namespace Mx.Peppol.Lookup
                     e);
             }
 
-            IPotentiallySigned<ServiceMetadata> serviceMetadata = this.reader.parseServiceMetadata(fetcherResponse);
+            IPotentiallySigned<ServiceMetadata> serviceMetadata = this.reader.ParseServiceMetadata(fetcherResponse);
 
             if (serviceMetadata is Signed<ServiceMetadata>)
             {
-                this.validator.validate(Service.Smp, ((Signed<ServiceMetadata>)serviceMetadata).Certificate);
+                this.validator.Validate(Service.Smp, ((Signed<ServiceMetadata>)serviceMetadata).Certificate);
             }
 
             return serviceMetadata.Content;
         }
 
-        public Endpoint getEndpoint(
+        public Endpoint GetEndpoint(
             ServiceMetadata serviceMetadata,
             ProcessIdentifier processIdentifier,
             TransportProfile[] transportProfiles) // throws PeppolSecurityException, EndpointNotFoundException
         {
             Endpoint endpoint = serviceMetadata.GetEndpoint(processIdentifier, transportProfiles);
 
-            this.validator.validate(Service.Ap, endpoint.Certificate);
+            this.validator.Validate(Service.Ap, endpoint.Certificate);
 
             return endpoint;
         }
 
-        public Endpoint getEndpoint(
+        public Endpoint GetEndpoint(
             ParticipantIdentifier participantIdentifier,
             DocumentTypeIdentifier documentTypeIdentifier,
             ProcessIdentifier processIdentifier,
             TransportProfile[] transportProfiles) // throws LookupException, PeppolSecurityException, EndpointNotFoundException
         {
-            ServiceMetadata serviceMetadata = this.getServiceMetadata(participantIdentifier, documentTypeIdentifier);
-            return getEndpoint(serviceMetadata, processIdentifier, transportProfiles);
+            ServiceMetadata serviceMetadata = this.GetServiceMetadata(participantIdentifier, documentTypeIdentifier);
+            return this.GetEndpoint(serviceMetadata, processIdentifier, transportProfiles);
         }
 
         public Endpoint
-            getEndpoint(Header header, TransportProfile[] transportProfiles) // throws LookupException, PeppolSecurityException, EndpointNotFoundException
+            GetEndpoint(Header header, TransportProfile[] transportProfiles) // throws LookupException, PeppolSecurityException, EndpointNotFoundException
         {
-            return this.getEndpoint(header.Receiver, header.DocumentType, header.Process, transportProfiles);
+            return this.GetEndpoint(header.Receiver, header.DocumentType, header.Process, transportProfiles);
         }
     }
 

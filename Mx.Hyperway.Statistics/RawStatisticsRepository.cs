@@ -2,18 +2,23 @@
 {
     using System;
 
-    public interface RawStatisticsRepository
+    public interface IRawStatisticsRepository
     {
+        /// <summary>
+        /// Persists another raw statistics entry into table {@code raw_stats} 
+        /// </summary>
+        /// <param name="rawStatistics"></param>
+        /// <returns></returns>
+        int Persist(IRawStatistics rawStatistics);
 
-        /**
-         * Persists another raw statistics entry into table {@code raw_stats}
-         */
-        int persist(IRawStatistics rawStatistics);
-
-        /**
-         * Retrieves data from table <code>raw_stats</code> and transforms it into an appropriate XML document
-         */
-        void fetchAndTransformRawStatistics(StatisticsTransformer transformer, DateTime start, DateTime end,
+        /// <summary>
+        /// Retrieves data from table <code>raw_stats</code> and transforms it into an appropriate XML document 
+        /// </summary>
+        /// <param name="transformer"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="granularity"></param>
+        void FetchAndTransformRawStatistics(IStatisticsTransformer transformer, DateTime start, DateTime end,
                                             StatisticsGranularity granularity);
 
     }

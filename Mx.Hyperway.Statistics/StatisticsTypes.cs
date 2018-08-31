@@ -1,28 +1,25 @@
 ﻿namespace Mx.Hyperway.Statistics
 {
-    using System;
-
     public class StatisticsTypes
     {
+        public const string StatisticsDocumentStartElementName = "peppol-ap-statistics";
 
-        public const String STATISTICS_DOCUMENT_START_ELEMENT_NAME = "peppol-ap-statistics";
+        public const string EntryStartElementName = "entry";
 
-        public const String ENTRY_START_ELEMENT_NAME = "entry";
+        public const string AccessPointIdElementName = "access-point-id";
 
-        public const String ACCESS_POINT_ID_ELEMENT_NAME = "access-point-id";
+        public const string ParticipantIdElementName = "participant-id";
 
-        public const String PARTICIPANT_ID_ELEMENT_NAME = "participant-id";
+        public const string DocumentTypeElementName = "document-type";
 
-        public const String DOCUMENT_TYPE_ELEMENT_NAME = "document-type";
+        public const string ProfileIdElementName = "profile-id";
 
-        public const String PROFILE_ID_ELEMENT_NAME = "profile-id";
+        public const string ChannelElementName = "channel";
 
-        public const String CHANNEL_ELEMENT_NAME = "channel";
+        public const string CountElementName = "count";
 
-        public const String COUNT_ELEMENT_NAME = "count";
+        public const string PeriodElementName = "period";
 
-        public const String PERIOD_ELEMENT_NAME = "period";
-
-        public const String DIRECTION_ELEMENT_NAME = "direction";
+        public const string DirectionElementName = "direction";
     }
 }

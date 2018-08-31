@@ -17,16 +17,15 @@
 
     public class DefaultLookupService : ILookupService
     {
-
-        /**
-         * LookupClient provided by VEFA PEPPOL project.
-         */
+        /// <summary>
+        /// LookupClient provided by VEFA PEPPOL project. 
+        /// </summary>
         private readonly LookupClient lookupClient;
 
-        /**
-         * Prioritized list of supported transport profiles detected in
-         * {@link eu.peppol.outbound.transmission.MessageSenderFactory}.
-         */
+        /// <summary>
+        /// Prioritized list of supported transport profiles detected in
+        /// <see cref="Transmission.MessageSenderFactory" />
+        /// </summary>
         private readonly TransportProfile[] transportProfiles;
 
         public DefaultLookupService(
@@ -41,7 +40,7 @@
         {
             try
             {
-                return this.lookupClient.getEndpoint(header, this.transportProfiles);
+                return this.lookupClient.GetEndpoint(header, this.transportProfiles);
             }
             catch (Exception e) when (e is LookupException || e is PeppolSecurityException || e is EndpointNotFoundException) {
                 throw new HyperwayTransmissionException(e.Message, e);

@@ -11,25 +11,28 @@ namespace Mx.Peppol.Mode
 
     public class Mode
     {
+        private readonly IComponentContext context;
 
-        public const string PRODUCTION = "PRODUCTION";
+        public const string Production = "PRODUCTION";
 
-        public const string TEST = "TEST";
+        public const string Test = "TEST";
 
-        private IConfigurationRoot config;
+        private readonly IConfigurationRoot config;
 
-        private String identifier;
-
-        private IContainer container;
-
-        public Mode()
+        public Mode(IComponentContext context)
         {
+            this.context = context;
             this.config = new ConfigurationBuilder().AddJsonFile("hyperway.json").Build();
             this.Parse();
         }
 
 
         public HyperwayConfig Defaults { get; set; }
+
+        public T Resolve<T>()
+        {
+            return this.context.Resolve<T>();
+        }
 
         public string GetValue(string key)
         {
@@ -98,122 +101,7 @@ namespace Mx.Peppol.Mode
 
         private string GetString(IList<IConfigurationSection> sections, string key)
         {
-            return sections.Where(x => x.Key == key).Select(x => x?.Value).FirstOrDefault();
-        }
-
-        //public static Mode of(String identifier, IContainer container)
-        //{
-        //    var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.json");
-        //    var config = builder.Build();
-        //    return of(config, identifier, container);
-        //}
-
-        //public static Mode of(IConfigurationRoot config, String identifier, IContainer container)
-        //{
-        //    // Config referenceConfig = ConfigFactory.defaultReference();
-
-        //    // Config result = ConfigFactory.systemProperties().withFallback(config).withFallback(referenceConfig);
-
-        //    // Loading configuration based on identifier.
-        //    //if (identifier != null)
-        //    //{
-        //    //    if (referenceConfig.hasPath(String.format("mode.%s", identifier)))
-        //    //    {
-        //    //        result = result.withFallback(referenceConfig.getConfig(String.Format("mode.{0}", identifier)));
-        //    //    }
-        //    //}
-
-        //    //// Load inherited configuration.
-        //    //if (result.hasPath("inherit"))
-        //    //{
-        //    //    result = result.withFallback(
-        //    //        referenceConfig.getConfig(String.Format("mode.{0}", result.getString("inherit"))));
-        //    //}
-
-        //    //// Load default configuration.
-        //    //if (referenceConfig.hasPath("mode.default"))
-        //    //{
-        //    //    result = result.withFallback(referenceConfig.getConfig("mode.default"));
-        //    //}
-
-        //    return new Mode(config, identifier, container);
-        //}
-
-        //private Mode(IConfigurationRoot config, String identifier, IContainer container)
-        //{
-        //    this.config = config;
-        //    this.identifier = identifier;
-        //    this.container = container;
-        //}
-
-        public String getIdentifier()
-        {
-            return this.identifier;
-        }
-
-        //public String getString(String key)
-        //{
-
-        //}
-
-        //public Config getConfig()
-        //{
-        //    return config;
-        //}
-
-        //@SuppressWarnings({ "unchecked", "unused"})
-        public T initiate<T>()
-        {
-            return this.container.Resolve<T>();
+            return sections.Where(x => x.Key == key).Select(x => x.Value).FirstOrDefault();
         }
     }
-    //        public T initiate<T>(String key) where T : class // throws PeppolLoadingException
-    //        {
-    //            try
-    //            {
-    //                var typeName = getString(
-    //                return this.container.Resolve<>())
-    //                var typeName = getString(key);
-    //                var targetType = Type.GetType(typeName);
-    //                return (T) Activator.CreateInstance(targetType ?? throw new InvalidOperationException());
-    ////                return (T)initiate(Class.forName(getString(key)));
-    //            } catch (Exception e) {
-    //                throw new PeppolLoadingException(String.Format("Unable to initiate '{0}'", this.getString(key)), e);
-    //            }
-    //        }
-
-    //public <T> T initiate(Class<T> cls) throws PeppolLoadingException
-    //{
-    //        try {
-    //        try
-    //        {
-    //            return cls.getConstructor(Mode.class).newInstance(this);
-    //            } catch (NoSuchMethodException e) {
-    //                return cls.newInstance();
-    //            }
-    //        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-    //            throw new PeppolLoadingException(String.format("Unable to initiate '%s'", cls), e);
-    //        }
-    //    }
-    //}
-
-    public class HyperwayConfig
-    {
-        public List<TransportConfig> Transports { get; set; }
-    }
-
-    public class TransportConfig
-    {
-        public TransportConfig()
-        {
-            // Default behaviour
-            this.Enabled = true;
-        }
-        public string Profile { get; set; }
-        public string Sender { get; set; }
-        public int Weight { get; set; }
-        public bool Enabled { get; set; }
-    }
-
 }

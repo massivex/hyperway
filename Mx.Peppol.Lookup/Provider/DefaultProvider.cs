@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Provider
 {
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup.Api;
 
-    public class DefaultProvider : MetadataProvider
+    public class DefaultProvider : IMetadataProvider
     {
 
-        public Uri resolveDocumentIdentifiers(Uri location, ParticipantIdentifier participant)
+        public Uri ResolveDocumentIdentifiers(Uri location, ParticipantIdentifier participant)
         {
             var relativeUri = new Uri($"/{participant.Urlencoded()}");
             return new Uri(location, relativeUri);
         }
 
-        public Uri resolveServiceMetadata(
+        public Uri ResolveServiceMetadata(
             Uri location,
             ParticipantIdentifier participantIdentifier,
             DocumentTypeIdentifier documentTypeIdentifier)

@@ -19,15 +19,15 @@ namespace Mx.Peppol.Lookup.Fetcher
         }
 
 
-        public override FetcherResponse fetch(Uri uri) // throws LookupException, FileNotFoundException
+        public override FetcherResponse Fetch(Uri uri)
         {
             try
             {
                 HttpWebRequest wr = WebRequest.CreateHttp(uri);
                 wr.AllowAutoRedirect = false;
-                wr.Timeout = this.timeout;
-                wr.ContinueTimeout = this.timeout;
-                wr.ReadWriteTimeout = this.timeout;
+                wr.Timeout = this.Timeout;
+                wr.ContinueTimeout = this.Timeout;
+                wr.ReadWriteTimeout = this.Timeout;
                 wr.Method = "GET";
 
                 byte[] content;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Security.Lang
 {
@@ -8,16 +6,13 @@ namespace Mx.Peppol.Security.Lang
 
     public class PeppolSecurityException : PeppolException
     {
-
-        private static readonly long serialVersionUID = 6928682319726226728L;
-
-        public PeppolSecurityException(String message)
+        public PeppolSecurityException(string message)
             : base(message)
         {
 
         }
 
-        public PeppolSecurityException(String message, Exception cause)
+        public PeppolSecurityException(string message, Exception cause)
             : base(message, cause)
         {
 

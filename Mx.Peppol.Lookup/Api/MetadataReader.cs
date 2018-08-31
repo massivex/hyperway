@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Lookup.Api
+﻿namespace Mx.Peppol.Lookup.Api
 {
     using Mx.Peppol.Common.Api;
     using Mx.Peppol.Common.Model;
 
-    public interface MetadataReader
+    public interface IMetadataReader
     {
-        IPotentiallySigned<ServiceMetadata> parseServiceMetadata(FetcherResponse fetcherResponse);
+        IPotentiallySigned<ServiceMetadata> ParseServiceMetadata(FetcherResponse fetcherResponse);
     }
 
 }

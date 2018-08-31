@@ -1,15 +1,13 @@
 ﻿namespace Mx.Tools
 {
-    using System;
-
     public class QName
     {
-        public QName(String namespaceUri, String localPart)
+        public QName(string namespaceUri, string localPart)
             : this(namespaceUri, localPart, null)
         {
         }
 
-        public QName(String namespaceUri, String localPart, String prefix)
+        public QName(string namespaceUri, string localPart, string prefix)
         {
             this.NamespaceUri = namespaceUri;
             this.LocalPart = localPart;

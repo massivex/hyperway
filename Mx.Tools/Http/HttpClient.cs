@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Tools.Http
 {
@@ -75,7 +73,7 @@ namespace Mx.Tools.Http
 
         public string GetText()
         {
-            return Encoding.GetString(this.Content);
+            return this.Encoding.GetString(this.Content);
         }
     }
 }

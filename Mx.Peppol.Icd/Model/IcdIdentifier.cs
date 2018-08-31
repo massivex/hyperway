@@ -1,52 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mx.Peppol.Icd.Model
+﻿namespace Mx.Peppol.Icd.Model
 {
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Icd.Api;
 
     public class IcdIdentifier
     {
+        public static IcdIdentifier Of(IIcd icd, string identifier)
+        {
+            return new IcdIdentifier(icd, identifier);
+        }
 
-    private static readonly long serialVersionUID = -7908081727801249085L;
+        private IcdIdentifier(IIcd icd, string identifier)
+        {
+            this.Icd = icd;
+            this.Identifier = identifier;
+        }
 
-    private readonly Icd icd;
+        public IIcd Icd { get; }
 
-    private readonly String identifier;
+        public string Identifier { get; }
 
-    public static IcdIdentifier of(Icd icd, String identifier)
-    {
-        return new IcdIdentifier(icd, identifier);
+        public ParticipantIdentifier ToParticipantIdentifier()
+        {
+            return ParticipantIdentifier.Of($"{this.Icd.Code}:{this.Identifier}", this.Icd.Scheme);
+        }
+
+        public override string ToString()
+        {
+            return $"{this.Icd.Scheme}::{this.Icd.Code}:{this.Identifier}";
+        }
     }
-
-    private IcdIdentifier(Icd icd, String identifier)
-    {
-        this.icd = icd;
-        this.identifier = identifier;
-    }
-
-    public Icd getIcd()
-    {
-        return this.icd;
-    }
-
-    public String getIdentifier()
-    {
-        return this.identifier;
-    }
-
-    public ParticipantIdentifier toParticipantIdentifier()
-    {
-        return ParticipantIdentifier.Of($"{this.icd.getCode()}:{this.identifier}", this.icd.getScheme());
-    }
-
-    public String toString()
-    {
-        return $"{this.icd.getScheme()}::{this.icd.getCode()}:{this.identifier}";
-    }
-    }
-
-
 }

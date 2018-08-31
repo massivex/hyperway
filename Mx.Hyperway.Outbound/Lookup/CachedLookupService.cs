@@ -45,9 +45,9 @@
             return this.Lookup(header);
         }
 
-        public Endpoint Load(HeaderStub header) // throws Exception
+        public Endpoint Load(HeaderStub header)
         {
-            return this.lookupClient.getEndpoint(
+            return this.lookupClient.GetEndpoint(
                 header.GetReceiver(),
                 header.GetDocumentType(),
                 header.GetProcess(),

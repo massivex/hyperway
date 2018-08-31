@@ -7,54 +7,32 @@ namespace Mx.Peppol.Icd.Code
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Icd.Api;
 
-    public class GenericIcd : Icd
+    public class GenericIcd : IIcd
     {
-
-        private readonly String identifier;
-
-        private readonly String code;
-
-        private readonly Scheme scheme;
-
-        private readonly String issuingAgency;
-
-        public static Icd of(String identifier, String code, Scheme scheme)
+        public static IIcd Of(string identifier, string code, Scheme scheme)
         {
             return new GenericIcd(identifier, code, scheme, null);
         }
 
-        public static Icd of(String identifier, String code, Scheme scheme, String issuingAgency)
+        public static IIcd Of(string identifier, string code, Scheme scheme, string issuingAgency)
         {
             return new GenericIcd(identifier, code, scheme, issuingAgency);
         }
 
-        private GenericIcd(String identifier, String code, Scheme scheme, String issuingAgency)
+        private GenericIcd(string identifier, string code, Scheme scheme, string issuingAgency)
         {
-            this.identifier = identifier;
-            this.code = code;
-            this.scheme = scheme;
-            this.issuingAgency = issuingAgency;
+            this.Identifier = identifier;
+            this.Code = code;
+            this.Scheme = scheme;
+            this.IssuingAgency = issuingAgency;
         }
 
-        public string getIdentifier()
-        {
-            return identifier;
-        }
+        public string Identifier { get; }
 
+        public string Code { get; }
 
-        public String getCode()
-        {
-            return code;
-        }
+        public Scheme Scheme { get; }
 
-        public Scheme getScheme()
-        {
-            return scheme;
-        }
-
-        public String getIssuingAgency()
-        {
-            return null;
-        }
+        public string IssuingAgency { get; }
     }
 }

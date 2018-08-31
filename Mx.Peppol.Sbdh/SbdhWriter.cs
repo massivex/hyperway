@@ -1,31 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Sbdh
 {
     using System.IO;
     using System.Xml;
-    using System.Xml.Serialization;
 
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Sbdh.Lang;
-    using Mx.Peppol.Xml;
     using Mx.Peppol.Xml.Sbdh;
     using Mx.Tools;
 
     public class SbdhWriter
     {
 
-        public static void write(Stream outputStream, Header header) // throws SbdhException
+        public static void Write(Stream outputStream, Header header)
         {
             try
             {
-                //                XmlTextWriter streamWriter = SbdhHelper.XML_OUTPUT_FACTORY.createXMLStreamWriter(outputStream, "UTF-8");
-
                 XmlTextWriter streamWriter = new XmlTextWriter(outputStream, XmlTools.Utf8NoBom);
                 streamWriter.WriteStartDocument();
-                write(streamWriter, header);
+                Write(streamWriter, header);
                 streamWriter.WriteEndDocument();
                 streamWriter.Dispose();
             }
@@ -35,7 +29,7 @@ namespace Mx.Peppol.Sbdh
             }
         }
 
-        public static void write(XmlTextWriter streamWriter, Header header) // throws SbdhException
+        public static void Write(XmlTextWriter streamWriter, Header header)
         {
             try
             {
@@ -43,10 +37,10 @@ namespace Mx.Peppol.Sbdh
                 sbdh.HeaderVersion = "1.0";
 
                 // Sender
-                sbdh.Sender = new[] { SbdhHelper.createPartner(header.Sender) };
+                sbdh.Sender = new[] { SbdhHelper.CreatePartner(header.Sender) };
 
                 // Receiver
-                sbdh.Receiver = new[] { SbdhHelper.createPartner(header.Receiver) };
+                sbdh.Receiver = new[] { SbdhHelper.CreatePartner(header.Receiver) };
 
                 sbdh.DocumentIdentification = new DocumentIdentification();
                 // Standard
@@ -68,9 +62,9 @@ namespace Mx.Peppol.Sbdh
                 sbdh.BusinessScope = new[]
                                          {
                                              // DocumentID
-                                             SbdhHelper.createScope(header.DocumentType),
+                                             SbdhHelper.CreateScope(header.DocumentType),
                                              // ProcessID
-                                             SbdhHelper.createScope(header.Process)
+                                             SbdhHelper.CreateScope(header.Process)
                                          };
 
                 XmlTools.WriteXmlFragment(streamWriter, sbdh);

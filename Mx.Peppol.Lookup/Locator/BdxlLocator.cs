@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mx.Peppol.Lookup.Locator
 {
     using System.Linq;
-    using System.Net;
     using System.Text.RegularExpressions;
 
     using ARSoft.Tools.Net;
     using ARSoft.Tools.Net.Dns;
-
-    using Microsoft.Extensions.FileSystemGlobbing;
 
     using Mx.Peppol.Common.Model;
     using Mx.Peppol.Lookup.Api;
@@ -20,11 +15,10 @@ namespace Mx.Peppol.Lookup.Locator
     using Mx.Tools;
     using Mx.Tools.Encoding;
 
-    /**
-     * Implementation of Business Document Metadata Service Location Version 1.0.
-     *
-     * @see <a href="http://docs.oasis-open.org/bdxr/BDX-Location/v1.0/BDX-Location-v1.0.html">Specification</a>
-     */
+    /// <summary>
+    /// Implementation of Business Document Metadata Service Location Version 1.0.
+    /// <a href="http://docs.oasis-open.org/bdxr/BDX-Location/v1.0/BDX-Location-v1.0.html">Specification</a>
+    /// </summary>
     public class BdxlLocator : AbstractLocator
     {
         private readonly string sml;
@@ -34,76 +28,37 @@ namespace Mx.Peppol.Lookup.Locator
         private DnsClient dnsClient;
 
         public BdxlLocator(Mode mode)
-        : this(
+            : this(
                 mode.GetValue("lookup.locator.bdxl.prefix"),
                 mode.GetValue("lookup.locator.hostname"),
                 mode.GetValue("lookup.locator.bdxl.algorithm"),
-                EncodingUtils.get(mode.GetValue("lookup.locator.bdxl.encoding")),
+                EncodingUtils.Get(mode.GetValue("lookup.locator.bdxl.encoding")),
                 mode.GetValue("lookup.locator.sml"))
         {
-           
+
         }
 
-        /**
-         * Initiate a new instance of BDXL lookup functionality using SHA-224 for hashing.
-         *
-         * @param hostname Hostname used as base for lookup.
-         */
-        //public BdxlLocator(string hostname)
-        //    : this(hostname, "SHA-256")
-        //{
-
-        //}
-
-        /**
-         * Initiate a new instance of BDXL lookup functionality.
-         *
-         * @param hostname        Hostname used as base for lookup.
-         * @param digestAlgorithm Algorithm used for generation of hostname.
-         */
-        //public BdxlLocator(string hostname, string digestAlgorithm)
-        //    : this("", hostname, digestAlgorithm)
-        //{
-
-        //}
-
-        ///**
-        // * Initiate a new instance of BDXL lookup functionality.
-        // *
-        // * @param prefix          Value attached in front of calculated hash.
-        // * @param hostname        Hostname used as base for lookup.
-        // * @param digestAlgorithm Algorithm used for generation of hostname.
-        // */
-        //public BdxlLocator(string prefix, string hostname, string digestAlgorithm)
-        //    : this(prefix, hostname, digestAlgorithm, EncodingUtils.get(BaseEncodingType.Base32))
-        //{
-
-        //}
-
-        /**
-         * Initiate a new instance of BDXL lookup functionality.
-         *
-         * @param prefix          Value attached in front of calculated hash.
-         * @param hostname        Hostname used as base for lookup.
-         * @param digestAlgorithm Algorithm used for generation of hostname.
-         * @param encoding        Encoding of hash for hostname.
-         */
+        /// <summary>
+        /// Initiate a new instance of BDXL lookup functionality. 
+        /// </summary>
+        /// <param name="prefix">Value attached in front of calculated hash.</param>
+        /// <param name="hostname">Hostname used as base for lookup.</param>
+        /// <param name="digestAlgorithm">Algorithm used for generation of hostname.</param>
+        /// <param name="encoding">Encoding of hash for hostname.</param>
+        /// <param name="sml">Custom DNS Server</param>
         private BdxlLocator(string prefix, string hostname, string digestAlgorithm, IBaseEncoding encoding, string sml)
         {
             this.sml = sml;
             this.hostnameGenerator = new DynamicHostnameGenerator(prefix, hostname, digestAlgorithm, encoding);
         }
 
-        public override Uri lookup(ParticipantIdentifier participantIdentifier)
+        public override Uri Lookup(ParticipantIdentifier participantIdentifier)
         {
             // Create hostname for participant identifier.
             string hostname = this.hostnameGenerator.Generate(participantIdentifier).ReplaceAll("=*", "");
 
             try
             {
-                // var records = System.Net.Dns.GetHostAddresses(hostname);
-                // Fetch all records of type NAPTR registered on hostname.
-                // Record[] records = new Lookup<,>(hostname, Type.NAPTR).run();
                 var dn = DomainName.Parse(hostname);
                 var client = this.GetDnsClient();
                 var records = client.Resolve(dn, RecordType.Naptr, RecordClass.Any).AnswerRecords;
@@ -122,7 +77,7 @@ namespace Mx.Peppol.Lookup.Locator
                     if ("Meta:SMP".Equals(naptrRecord.Services) && "U".EqualsIgnoreCase(naptrRecord.Flags))
                     {
                         // Create URI and return.
-                        string result = HandleRegex(naptrRecord.RegExp, hostname);
+                        string result = this.HandleRegex(naptrRecord.RegExp, hostname);
                         if (result != null)
                         {
                             return new Uri(result);
@@ -151,7 +106,7 @@ namespace Mx.Peppol.Lookup.Locator
 
         private string HandleRegex(string naptrRegex, string hostname)
         {
-            string[] regexp = naptrRegex.Split(new [] { "!" }, StringSplitOptions.None);
+            string[] regexp = naptrRegex.Split(new[] { "!" }, StringSplitOptions.None);
 
             // Simple stupid
             if ("^.*$".Equals(regexp[1]))
@@ -172,5 +127,4 @@ namespace Mx.Peppol.Lookup.Locator
             return null;
         }
     }
-
 }

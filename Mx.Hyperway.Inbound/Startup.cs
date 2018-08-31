@@ -52,7 +52,7 @@
             builder.RegisterModule(new PersisterModule());
             builder.RegisterType<DefaultTransmissionVerifier>().As<ITransmissionVerifier>();
             builder.RegisterType<DefaultPersisterHandler>().As<IPersisterHandler>();
-            builder.RegisterType<DifiCertificateValidator>().As<CertificateValidator>();
+            builder.RegisterType<DifiCertificateValidator>().As<ICertificateValidator>();
             builder.RegisterType<SMimeMessageFactory>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<As2InboundHandler>().AsSelf();
             builder.RegisterType<NoopStatisticsService>().As<IStatisticsService>();

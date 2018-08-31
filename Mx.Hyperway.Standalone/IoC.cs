@@ -58,11 +58,11 @@
             //
 
             builder.RegisterType<LookupClient>().AsSelf();
-            builder.RegisterType<BusdoxLocator>().As<MetadataLocator>();
-            builder.RegisterType<MultiReader>().As<MetadataReader>();
-            builder.RegisterType<DifiCertificateValidator>().As<CertificateValidator>();
+            builder.RegisterType<BusdoxLocator>().As<IMetadataLocator>();
+            builder.RegisterType<MultiReader>().As<IMetadataReader>();
+            builder.RegisterType<DifiCertificateValidator>().As<ICertificateValidator>();
 
-            builder.RegisterType<MetadataProvider>().AsSelf();
+            builder.RegisterType<IMetadataProvider>().AsSelf();
             
 
             builder.RegisterType<MessageSenderFactory>().AsSelf();
@@ -70,7 +70,7 @@
             builder.RegisterType<DefaultTransmissionVerifier>().As<ITransmissionVerifier>();
             builder.RegisterType<TransmissionRequestBuilder>().AsSelf();
 
-            builder.RegisterType<Mx.Peppol.Lookup.Provider.DefaultProvider>().As<MetadataProvider>();
+            builder.RegisterType<Mx.Peppol.Lookup.Provider.DefaultProvider>().As<IMetadataProvider>();
 
             builder.Register(
                 (c) =>
@@ -84,10 +84,10 @@
 
             builder.RegisterType<Bdxr201605Reader>()
                 .Keyed<Bdxr201605Reader>("reader-protocols")
-                .As<MetadataReader>();
+                .As<IMetadataReader>();
             builder.RegisterType<BusdoxReader>()
                 .Keyed<BusdoxReader>("reader-protocols")
-                .As<MetadataReader>();
+                .As<IMetadataReader>();
 
 
             Container = builder.Build();

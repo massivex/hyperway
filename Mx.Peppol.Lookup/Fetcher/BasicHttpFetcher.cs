@@ -19,15 +19,15 @@ namespace Mx.Peppol.Lookup.Fetcher
         }
 
 
-        public override FetcherResponse fetch(Uri uri)
+        public override FetcherResponse Fetch(Uri uri)
         {
             try
             {
                 HttpWebRequest wr = WebRequest.CreateHttp(uri.AbsoluteUri);
                 wr.AllowAutoRedirect = false;
-                wr.Timeout = this.timeout;
-                wr.ContinueTimeout = this.timeout;
-                wr.ReadWriteTimeout = this.timeout;
+                wr.Timeout = this.Timeout;
+                wr.ContinueTimeout = this.Timeout;
+                wr.ReadWriteTimeout = this.Timeout;
                 wr.Method = "GET";
                 using (var response = (HttpWebResponse)wr.GetResponse())
                 {
@@ -50,10 +50,6 @@ namespace Mx.Peppol.Lookup.Fetcher
             catch (Exception ex) when (ex is SocketException || ex is WebException)
             {
                 throw new LookupException($"Unable to fetch '{uri}'", ex);
-            }
-            catch (Exception ex) when (ex is LookupException || ex is FileNotFoundException e)
-            {
-                throw ex;
             }
             catch (Exception e)
             {

@@ -28,9 +28,9 @@
         {
             try
             {
-                using (SbdReader sbdReader = SbdReader.newInstance(inputStream))
+                using (SbdReader sbdReader = SbdReader.NewInstance(inputStream))
                 {
-                    return sbdReader.getHeader();
+                    return sbdReader.Header;
                 }
             }
             catch (Exception ex) when (ex is SbdhException || ex is IOException)

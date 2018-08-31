@@ -123,7 +123,7 @@
 
         public Header ToVefa()
         {
-            PeppolDocumentTypeId documentTypeId = Identifier.PeppolDocumentTypeId.ValueOf(this.DocumentTypeIdentifier.Identifier);
+            PeppolDocumentTypeId documentTypeId = PeppolDocumentTypeId.ValueOf(this.DocumentTypeIdentifier.Identifier);
 
             return Header.Of(
                 this.SenderId,

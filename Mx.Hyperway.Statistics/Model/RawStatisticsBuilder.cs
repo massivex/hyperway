@@ -20,15 +20,15 @@
             return this.receiver;
         }
 
-        public RawStatisticsBuilder Sender(ParticipantIdentifier sender)
+        public RawStatisticsBuilder Sender(ParticipantIdentifier value)
         {
-            this.sender = sender;
+            this.sender = value;
             return this.GetThis();
         }
 
-        public RawStatisticsBuilder Receiver(ParticipantIdentifier receiver)
+        public RawStatisticsBuilder Receiver(ParticipantIdentifier value)
         {
-            this.receiver = receiver;
+            this.receiver = value;
             return this.GetThis();
         }
 

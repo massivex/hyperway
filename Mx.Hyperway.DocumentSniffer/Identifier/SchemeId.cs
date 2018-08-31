@@ -23,8 +23,8 @@
     public class SchemeId
     {
 
-        private static readonly Icds Icds = Icds.of(
-            PeppolIcd.Values().OfType<Icd>().ToArray()
+        private static readonly Icds Icds = Icds.Of(
+            PeppolIcd.Values().OfType<IIcd>().ToArray()
         );
 
         /// <summary>
@@ -33,9 +33,9 @@
         /// </summary>
         /// <param name="schemeId">textual representation of scheme, i.e. NO:ORGNR</param>
         /// <returns>instance of SchemeId if found</returns>
-        public static Icd Parse(String schemeId)
+        public static IIcd Parse(String schemeId)
         {
-            return Icds.findByIdentifier(schemeId);
+            return Icds.FindByIdentifier(schemeId);
         }
 
         /// <summary>
@@ -44,9 +44,9 @@
         /// </summary>
         /// <param name="code"></param>
         /// <returns>the scheme id if found null otherwise.</returns>
-        public static Icd FromIso6523(String code)
+        public static IIcd FromIso6523(String code)
         {
-            return Icds.findByCode(code);
+            return Icds.FindByCode(code);
         }
     }
 
